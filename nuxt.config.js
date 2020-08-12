@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   /*
    ** Nuxt rendering mode
@@ -27,7 +25,7 @@ export default {
         content: process.env.npm_package_description || '',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }],
   },
   /*
    ** Global CSS
@@ -79,14 +77,15 @@ export default {
     theme: {
       light: true,
       themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
+        light: {
+          primary: '#30588C', // 菖蒲色, Iris Ensata https://colors.japanesewithanime.com/japanese-colors/%E8%8F%96%E8%92%B2%E8%89%B2-shoubuiro
+          secondary: '#752EFF', // https://waaffle.com/
+          tertiary: '#BF3111',
+          accent: '#5698c3', // 晴蓝
+          error: '#ec2b24', // 秋海棠红
+          info: '#2775b6', // 景泰蓝
+          success: '#12a182', // 蓝绿
+          warning: '#fc6315', // 燕颔红
         },
       },
     },

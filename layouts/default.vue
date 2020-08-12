@@ -1,9 +1,16 @@
 <template>
   <v-app dark>
     <v-app-bar app>
-      <v-toolbar-title width="300px" class="mr-5">
+      <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer;">
-          <span class="app-bar-title display-1">{{ title }}</span>
+          <img
+            width="180px"
+            max-width="180px"
+            height="40px"
+            max-height="40px"
+            class="mt-2"
+            src="img/iris3_logo_clip2.svg"
+          />
         </router-link>
       </v-toolbar-title>
       <v-toolbar-items class="hidden-xs-only mx-5">
@@ -105,7 +112,7 @@ export default {
 
 <style scoped>
 .v-btn--active {
-  -webkit-box-shadow: 0 -2px 0 #3740ff inset;
-  box-shadow: 0 -2px 0 #3740ff inset;
+  -webkit-box-shadow: 0 -3px 0 #30588c inset;
+  box-shadow: 0 -3px 0 #30588c inset;
 }
 </style>
