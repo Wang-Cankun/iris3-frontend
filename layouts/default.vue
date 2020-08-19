@@ -34,10 +34,26 @@
 
       <v-toolbar-items class="hidden-xs-only mx-5">
         <v-btn v-if="searchJobId" color="primary" clearable> Search</v-btn>
-        <v-btn v-for="item in menuRight" :key="item.title" :to="item.path" text>
-          <v-icon left dark>{{ item.icon }}</v-icon>
-          {{ item.title }}
-        </v-btn>
+        <template v-if="isAuthenticated">
+          <v-btn to="/profile" text>
+            <v-icon left dark>mdi-face</v-icon>
+            My Profile
+          </v-btn>
+          <v-btn text @click="logout">
+            <v-icon left dark>mdi-lock-open</v-icon>
+            Logout
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn to="/register" text>
+            <v-icon left dark>mdi-account-plus</v-icon>
+            Register
+          </v-btn>
+          <v-btn to="/login" text>
+            <v-icon left dark>mdi-lock-open</v-icon>
+            Login
+          </v-btn>
+        </template>
       </v-toolbar-items>
     </v-app-bar>
     <v-main>
@@ -63,6 +79,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -92,20 +109,16 @@ export default {
           path: '/contact',
         },
       ],
-      menuRight: [
-        {
-          icon: 'mdi-face',
-          title: 'Sign Up',
-          path: '/signup',
-        },
-        {
-          icon: 'mdi-lock-open',
-          title: 'Sign In',
-          path: '/signin',
-        },
-      ],
       title: 'IRIS3',
     }
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated', 'loggedInUser']),
+  },
+  methods: {
+    async logout() {
+      await this.$auth.logout()
+    },
   },
 }
 </script>
