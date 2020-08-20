@@ -70,10 +70,17 @@ export default {
           },
         })
         this.$router.push('/')
-        this.SET_SNACK(true)
+        this.$notifier.showMessage({
+          content: 'Login success!',
+          color: 'success',
+        })
       } catch (e) {
         this.statusCode = e.response.data.statusCode
         this.error = e.response.data.message
+        this.$notifier.showMessage({
+          content: 'Login failed!',
+          color: 'error',
+        })
       }
     },
   },
