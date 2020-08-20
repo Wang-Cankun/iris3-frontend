@@ -57,7 +57,7 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-main>
@@ -75,12 +75,17 @@
         {{ new Date().getFullYear() }}
       </v-col>
     </v-footer>
+    <Snackbar></Snackbar>
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Snackbar from '~/components/utils/Snackbar'
 export default {
+  components: {
+    Snackbar,
+  },
   data() {
     return {
       clipped: false,
@@ -117,6 +122,10 @@ export default {
   },
   methods: {
     async logout() {
+      this.$notifier.showMessage({
+        content: 'Logged out.',
+        color: '',
+      })
       await this.$auth.logout()
     },
   },
