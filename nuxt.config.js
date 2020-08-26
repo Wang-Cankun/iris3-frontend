@@ -35,7 +35,10 @@ export default {
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: ['~/plugins/notifier.js'],
+  plugins: [
+    '~/plugins/notifier.js',
+    { src: '~/plugins/plotly.js', mode: 'client' },
+  ],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
@@ -90,6 +93,13 @@ export default {
    */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
+    defaultAssets: {
+      font: {
+        family: 'Poppins',
+        size: '18px',
+      },
+    },
     theme: {
       light: true,
       themes: {
