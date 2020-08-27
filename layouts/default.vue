@@ -73,16 +73,16 @@
         {{ new Date().getFullYear() }}
       </v-col>
     </v-footer>
-    <Snackbar></Snackbar>
+    <snackbar></snackbar>
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Snackbar from '~/components/utils/Snackbar'
+import snackbar from '~/components/utils/Snackbar'
 export default {
   components: {
-    Snackbar,
+    snackbar,
   },
   data() {
     return {
