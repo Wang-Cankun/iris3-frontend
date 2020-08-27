@@ -17,7 +17,8 @@
 
 <script>
 export default {
-  data() {
+  name: 'Snackbar',
+  data: () => {
     return {
       show: false,
       message: '',

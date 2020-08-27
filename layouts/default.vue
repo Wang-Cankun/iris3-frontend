@@ -79,10 +79,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import snackbar from '~/components/utils/Snackbar'
+import Snackbar from '~/components/utils/Snackbar.vue'
 export default {
   components: {
-    snackbar,
+    snackbar: Snackbar,
   },
   data() {
     return {
