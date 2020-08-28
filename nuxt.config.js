@@ -43,6 +43,10 @@ export default {
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
    */
+  router: {
+    base: '/iris3',
+    linkActiveClass: 'active-link',
+  },
   components: true,
   /*
    ** Nuxt.js dev-modules
@@ -52,6 +56,7 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
   ],
+
   /*
    ** Nuxt.js modules
    */
