@@ -73,19 +73,31 @@
         {{ new Date().getFullYear() }}
       </v-col>
     </v-footer>
-    <snackbar></snackbar>
+    <v-snackbar v-model="show" :color="color" top>
+      <div class="text-subtitle-1 font-weight-bold">{{ message }}</div>
+      <v-spacer></v-spacer>
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          outlined
+          color="grey lighten-5"
+          v-bind="attrs"
+          @click="show = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Snackbar from '~/components/utils/Snackbar.vue'
 export default {
-  components: {
-    snackbar: Snackbar,
-  },
   data() {
     return {
+      show: false,
+      message: '',
+      color: '',
       clipped: false,
       drawer: false,
       fixed: false,
@@ -117,6 +129,15 @@ export default {
   },
   computed: {
     ...mapGetters(['isAuthenticated', 'loggedInUser']),
+  },
+  created() {
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'snackbar/showMessage') {
+        this.message = state.snackbar.content
+        this.color = state.snackbar.color
+        this.show = true
+      }
+    })
   },
   methods: {
     async logout() {
