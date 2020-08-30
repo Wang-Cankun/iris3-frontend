@@ -2,6 +2,6 @@
   "semi": false,
   "arrowParens": "always",
   "singleQuote": true,
-  "endOfLine": "auto",
+  "endOfLine": "lf",
   "useTabs": false
 }

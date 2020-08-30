@@ -20,7 +20,7 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        useTabs: false,
+        endOfLine: 'lf',
       },
     ],
   },
