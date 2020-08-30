@@ -16,5 +16,16 @@ module.exports = {
   ],
   plugins: ['prettier'],
   // add your custom rules here
-  rules: { 'prettier/prettier': 'error' },
+  rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        semi: false,
+        arrowParens: 'always',
+        singleQuote: true,
+        endOfLine: 'auto',
+        useTabs: false,
+      },
+    ],
+  },
 }
