@@ -55,6 +55,7 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv',
   ],
 
   /*
@@ -71,7 +72,7 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: { baseUrl: `http://bmi-bmbl-vp01.bmi.osumc.edu:3838/` },
+  axios: { baseUrl: 'https://bmbls.bmi.osumc.edu' },
   auth: {
     strategies: {
       local: {
