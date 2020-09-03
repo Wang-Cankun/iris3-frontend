@@ -70,6 +70,8 @@ export default {
           },
         })
         this.$router.push('/')
+        this.$store.commit('SET_TOKEN', this.$auth.getToken('local'))
+        this.$axios.setToken(this.$auth.getToken('local'))
         this.$notifier.showMessage({
           content: 'Login success!',
           color: 'success',

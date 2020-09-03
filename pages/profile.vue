@@ -10,120 +10,16 @@
             <v-card-text>
               <p>
                 <span class="text-h5 text--primary">Email: </span>
-                <span class="text-h5 text--primary">{{
-                  loggedInUser.info.username
-                }}</span>
+                <span class="text-h5 text--primary">{{ profile.email }}</span>
               </p>
               <p>
-                <span class="text-h5 text--primary">Info: </span>
-                <span class="text-h5 text--primary">{{
-                  loggedInUser.info.info
-                }}</span>
+                <span class="text-h5 text--primary">Name: </span>
+                <span class="text-h5 text--primary"
+                  >{{ profile.firstName }} {{ profile.lastName }}</span
+                >
               </p>
             </v-card-text>
             <v-divider></v-divider>
-            <v-card-text>
-              <p><span class="text-h5 text--primary">Public Jobs </span></p>
-              <div class="d-flex flex-row">
-                <v-card
-                  v-for="(n, i) in loggedInUser.info.jobid_private.length"
-                  :key="n"
-                  class="mr-3"
-                >
-                  <v-hover v-slot:default="{ hover }" open-delay="0">
-                    <v-card
-                      :elevation="hover ? 2 : 0"
-                      :class="{ 'on-hover': hover }"
-                    >
-                      <v-card-title primary-title>
-                        ID: {{ loggedInUser.info.jobid_private[i] }}
-                      </v-card-title>
-                      <v-card-text>
-                        <p class="my-2">
-                          <span class="text--secondary">Species: </span>
-                          <span class="text--primary">Human</span>
-                        </p>
-                        <p class="my-2">
-                          <span class="text--secondary">Status: </span>
-                          <span class="text--primary">Complete</span>
-                        </p>
-                        <span class="text--primary"
-                          >Description message xxxxx
-                        </span>
-                      </v-card-text>
-                      <v-card-actions>
-                        <a
-                          :href="
-                            'https://bmbl.bmi.osumc.edu/iris3/results.php?jobid=' +
-                            loggedInUser.info.jobid_private[i]
-                          "
-                          target="_blank"
-                          style="text-decoration: none;"
-                          ><v-btn color="secondary" text>Open</v-btn></a
-                        >
-
-                        <v-btn color="secondary" text>
-                          Manage
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-hover>
-                </v-card>
-              </div>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <p><span class="text-h5 text--primary">Private Jobs </span></p>
-              <div class="d-flex flex-row">
-                <v-card
-                  v-for="(n, i) in loggedInUser.info.jobid_private.length"
-                  :key="n"
-                  class="mr-3"
-                >
-                  <v-hover v-slot:default="{ hover }" open-delay="0">
-                    <v-card
-                      :elevation="hover ? 2 : 0"
-                      :class="{ 'on-hover': hover }"
-                    >
-                      <v-card-title primary-title>
-                        ID: {{ loggedInUser.info.jobid_private[i] }}
-                      </v-card-title>
-                      <v-card-text>
-                        <p class="my-2">
-                          <span class="text--secondary">Species: </span>
-                          <span class="text--primary">Human</span>
-                        </p>
-                        <p class="my-2">
-                          <span class="text--secondary">Status: </span>
-                          <span class="text--primary">Complete</span>
-                        </p>
-                        <p class="my-2">
-                          <span class="text--secondary">Description: </span>
-                          <span class="text--primary"
-                            >Description message xxxxx
-                          </span>
-                        </p>
-                      </v-card-text>
-                      <v-card-actions>
-                        <a
-                          :href="
-                            'https://bmbl.bmi.osumc.edu/iris3/results.php?jobid=' +
-                            loggedInUser.info.jobid_private[i]
-                          "
-                          target="_blank"
-                          style="text-decoration: none;"
-                          ><v-btn color="secondary" text>Open</v-btn></a
-                        >
-
-                        <v-btn color="secondary" text>
-                          Manage
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-hover>
-                </v-card>
-              </div>
-            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -132,12 +28,25 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
+import { mapGetters, mapState } from 'vuex'
 export default {
+  async fetch() {
+    await this.$store.dispatch('fetchProfile', this.loggedInUser.email)
+  },
+  data() {
+    return {
+      email: '',
+    }
+  },
   middleware: 'auth',
   computed: {
     ...mapGetters(['loggedInUser']),
+    ...mapState({
+      profile: (state) => state.profile,
+    }),
+    authData() {
+      return this.$auth.getToken('local')
+    },
   },
 }
 </script>

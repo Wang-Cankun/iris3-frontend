@@ -85,15 +85,15 @@
 
 <script>
 export default {
-  methods: {
-    showSnackbar(msg, col) {
-      this.$notifier.showMessage({ content: msg, color: col })
-    },
-  },
   data() {
     return {
       searchJobId: '',
     }
+  },
+  methods: {
+    showSnackbar(msg, col) {
+      this.$notifier.showMessage({ content: msg, color: col })
+    },
   },
   head() {
     return {

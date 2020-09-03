@@ -1,31 +1,23 @@
-import User from '~/services/User.js'
-
 export const state = () => ({
-  user: [],
-  token: [],
+  profile: [],
   snack: '',
+  token: '',
 })
 export const mutations = {
-  SET_USER(state, users) {
-    state.user = users
-  },
-  SET_TOKEN(state, token) {
-    state.token = token
+  SET_PROFILE(state, profile) {
+    state.profile = profile
   },
   SET_SNACK(state, snack) {
     state.snack = snack
   },
+  SET_TOKEN(state, token) {
+    state.token = token
+  },
 }
 export const actions = {
-  fetchToken({ commit }) {
-    return User.getToken().then((response) => {
-      commit('SET_TOKEN', response.data)
-    })
-  },
-  fetchProfile({ commit }) {
-    return User.getProfile().then((response) => {
-      commit('SET_USER', response.data)
-    })
+  async fetchProfile({ commit }, email) {
+    const profile = await this.$axios.$get('/users/' + email)
+    commit('SET_PROFILE', profile)
   },
 }
 

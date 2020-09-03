@@ -71,7 +71,7 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: { baseURL: 'http://localhost:3000' },
+  axios: { baseUrl: `http://bmi-bmbl-vp01.bmi.osumc.edu:3838/` },
   auth: {
     strategies: {
       local: {
