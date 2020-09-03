@@ -2,9 +2,9 @@
   <v-container fluid>
     <v-layout row wrap>
       <v-flex xs12 mt-5>
-        <h1 class="text-center">Sign in</h1>
+        <h1 class="text-center">Reset password</h1>
       </v-flex>
-      <v-flex xs12 sm4 offset-sm4 mt-3>
+      <v-flex xs12 sm6 offset-sm3 mt-3>
         <v-alert v-if="error" prominent type="error" dismissible>
           <v-row align="center">
             <v-col class="grow">Error code {{ statusCode }}: {{ error }}</v-col>
@@ -23,29 +23,14 @@
                 required
               ></v-text-field>
             </v-flex>
-            <v-flex>
-              <v-text-field
-                id="password"
-                v-model="password"
-                name="password"
-                label="Password"
-                type="password"
-                required
-              ></v-text-field>
-            </v-flex>
             <v-flex class="text-xs-center" mt-5>
               <v-btn color="primary" type="submit">
                 Submit
               </v-btn>
+              <p>
+                You will receive an email to reset your password.
+              </p>
             </v-flex>
-            <p>
-              Don't have an account?
-              <nuxt-link to="/register">Register</nuxt-link>
-            </p>
-            <p>
-              Forgot your password?
-              <nuxt-link to="/login/forgot">Reset password</nuxt-link>
-            </p>
           </v-layout>
         </form>
       </v-flex>
