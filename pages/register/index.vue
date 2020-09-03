@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout row wrap>
-      <v-flex xs12 class="text-xs-center" mt-5>
+      <v-flex xs12 class="text-xs-center" my-5>
         <h1 class="text-center">Sign up</h1>
       </v-flex>
       <v-flex xs12 sm4 offset-sm4 mt-3>
@@ -91,17 +91,17 @@
                       By checking this option, you would like to receive
                       information emails from IRIS3 adminsitrators (new feature
                       announcements, unplanned site maintenance, general
-                      notices, etc.)..
+                      notices, etc.)
                     </v-tooltip>
                   </div>
                 </template>
               </v-checkbox>
             </v-flex>
-            <v-flex class="text-xs-center" mt-5>
+            <v-flex class="text-xs-center" my-5>
               <v-btn color="primary" type="submit">Sign Up</v-btn>
               <div class="has-text-centered" style="margin-top: 20px;">
                 Already got an account?
-                <nuxt-link to="/login">Login</nuxt-link>
+                <nuxt-link to="/login">Sign in</nuxt-link>
               </div>
             </v-flex>
           </v-layout>
@@ -171,7 +171,10 @@ export default {
             password: this.password,
           },
         })
-
+        this.$notifier.showMessage({
+          content: 'Sign up success!',
+          color: 'success',
+        })
         this.$router.push('/')
       } catch (e) {
         this.statusCode = e.response.data.statusCode

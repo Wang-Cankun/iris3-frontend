@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout row wrap>
-      <v-flex xs12 mt-5>
+      <v-flex xs12 my-5>
         <h1 class="text-center">Sign in</h1>
       </v-flex>
       <v-flex xs12 sm4 offset-sm4 mt-3>
@@ -10,7 +10,6 @@
             <v-col class="grow">Error code {{ statusCode }}: {{ error }}</v-col>
           </v-row>
         </v-alert>
-
         <form method="post" @submit.prevent="login">
           <v-layout column>
             <v-flex>
@@ -33,14 +32,14 @@
                 required
               ></v-text-field>
             </v-flex>
-            <v-flex class="text-xs-center" mt-5>
+            <v-flex class="text-xs-center" my-5>
               <v-btn color="primary" type="submit">
                 Submit
               </v-btn>
             </v-flex>
             <p>
               Don't have an account?
-              <nuxt-link to="/register">Register</nuxt-link>
+              <nuxt-link to="/register">Sign up</nuxt-link>
             </p>
             <p>
               Forgot your password?
@@ -77,7 +76,7 @@ export default {
         this.$store.commit('SET_TOKEN', this.$auth.getToken('local'))
         this.$axios.setToken(this.$auth.getToken('local'))
         this.$notifier.showMessage({
-          content: 'Login success!',
+          content: 'Sign in success!',
           color: 'success',
         })
       } catch (e) {

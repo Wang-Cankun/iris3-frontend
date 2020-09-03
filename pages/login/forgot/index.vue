@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout row wrap>
-      <v-flex xs12 mt-5>
+      <v-flex xs12 my-5>
         <h1 class="text-center">Reset password</h1>
       </v-flex>
       <v-flex xs12 sm6 offset-sm3 mt-3>
@@ -23,7 +23,7 @@
                 required
               ></v-text-field>
             </v-flex>
-            <v-flex class="text-xs-center" mt-5>
+            <v-flex class="text-xs-center" my-5>
               <v-btn color="primary" type="submit">
                 Submit
               </v-btn>
