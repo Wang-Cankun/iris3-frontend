@@ -32,7 +32,6 @@
                 <span class="text-h6 text--primary">{{ newsletter }}</span>
               </p>
               <v-btn color="primary" @click="isModify = true">Modify</v-btn>
-              <v-btn @click="isModify = false">Cancel</v-btn>
             </v-card-text>
             <v-card-text v-show="isModify">
               <v-form
@@ -92,6 +91,7 @@
                   </v-flex>
                   <v-flex class="text-xs-center" my-5>
                     <v-btn color="primary" type="submit">Modify</v-btn>
+                    <v-btn @click="isModify = false">Cancel</v-btn>
                   </v-flex>
                 </v-layout>
               </v-form>
