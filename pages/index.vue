@@ -7,7 +7,7 @@
         <v-col lg="10"
           ><img width="530px" src="img/iris3_logo_clip2.svg" />
           <p class="text-h5">
-            Integrated Cell-type-specific Regulon Inference Server from
+            Integrated Cell-type-specific Regulon ssss Inference Server from
             Single-cell RNA-Seq
           </p></v-col
         >
