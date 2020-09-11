@@ -1,4 +1,7 @@
 export default {
+  env: {
+    API_URL: process.env.API_URL || 'https://bmbls.bmi.osumc.edu',
+  },
   /*
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
@@ -72,7 +75,7 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: { baseUrl: 'https://bmbls.bmi.osumc.edu' },
+  axios: { baseUrl: process.env.API_URL },
   auth: {
     strategies: {
       local: {
@@ -82,7 +85,7 @@ export default {
             method: 'post',
             propertyName: 'access_token',
           },
-          user: { url: 'profile', method: 'get', propertyName: 'info' },
+          user: { url: 'auth/profile', method: 'get', propertyName: 'info' },
           logout: false,
         },
       },

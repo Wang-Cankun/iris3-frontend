@@ -7,7 +7,7 @@
       <v-flex xs12 sm4 offset-sm4 mt-3>
         <v-alert v-if="error" prominent type="error" dismissible>
           <v-row align="center">
-            <v-col class="grow">Error code {{ statusCode }}: {{ error }}</v-col>
+            <v-col class="grow">Error: {{ error }}</v-col>
           </v-row>
         </v-alert>
         <form method="post" @submit.prevent="login">
@@ -39,7 +39,7 @@
             </v-flex>
             <p>
               Don't have an account?
-              <nuxt-link to="/register">Sign up</nuxt-link>
+              <nuxt-link to="/register">Submit</nuxt-link>
             </p>
             <p>
               Forgot your password?

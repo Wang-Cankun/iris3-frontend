@@ -13,9 +13,8 @@
           />
         </router-link>
       </v-toolbar-title>
-      <v-toolbar-items class="hidden-xs-only mx-5">
+      <v-toolbar-items class="hidden-xs-only mx-1">
         <v-btn v-for="item in menuLeft" :key="item.title" :to="item.path" text>
-          <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
       </v-toolbar-items>
@@ -92,22 +91,18 @@ export default {
       searchJobId: '',
       menuLeft: [
         {
-          icon: 'mdi-chart-bubble',
           title: 'Submit',
           path: '/submit',
         },
         {
-          icon: 'mdi-account-question',
           title: 'Tutorial',
           path: '/tutorial',
         },
         {
-          icon: 'mdi-newspaper',
           title: 'News',
           path: '/news',
         },
         {
-          icon: 'mdi-account-box',
           title: 'Contact',
           path: '/contact',
         },

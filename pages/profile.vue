@@ -8,7 +8,7 @@
               Profile
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text v-show="!isModify">
+            <v-card-text v-show="!isModify && !isChangePassword">
               <p>
                 <span class="text-h6 text--primary">Email: </span>
                 <span class="text-h6 text--primary">{{ profile.email }}</span>
@@ -31,7 +31,59 @@
                 </span>
                 <span class="text-h6 text--primary">{{ newsletter }}</span>
               </p>
-              <v-btn color="primary" @click="isModify = true">Modify</v-btn>
+              <v-btn color="primary" @click="isModify = true"
+                >Modify Profile</v-btn
+              >
+              <v-btn color="primary" @click="isChangePassword = true"
+                >Change Password</v-btn
+              >
+            </v-card-text>
+            <v-card-text v-show="isChangePassword">
+              <v-form
+                ref="form"
+                v-model="valid"
+                lazy-validation
+                method="post"
+                @submit.prevent="changePassword"
+              >
+                <v-layout column>
+                  <v-flex>
+                    <v-text-field
+                      id="oldPassword"
+                      v-model="oldPassword"
+                      name="oldPassword"
+                      label="Old password"
+                      type="password"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex>
+                    <v-text-field
+                      id="newPassword"
+                      v-model="newPassword"
+                      name="newPassword"
+                      label="newPassword"
+                      type="password"
+                      required
+                      :rules="passwordRules"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex>
+                    <v-text-field
+                      id="confirmNewPassword"
+                      name="confirmNewPassword"
+                      label="Confirm New Password"
+                      type="password"
+                      :rules="confirmPasswordRules"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex class="text-xs-center" my-5>
+                    <v-btn color="primary" type="submit">Submit</v-btn>
+                    <v-btn @click="isChangePassword = false">Cancel</v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-form>
             </v-card-text>
             <v-card-text v-show="isModify">
               <v-form
@@ -43,6 +95,15 @@
               >
                 <v-layout column>
                   <v-flex>
+                    <v-text-field
+                      id="email"
+                      v-model="formProfile.email"
+                      name="email"
+                      label="Email"
+                      type="string"
+                      :rules="emailRules"
+                      required
+                    ></v-text-field>
                     <v-text-field
                       id="firstName"
                       v-model="formProfile.firstName"
@@ -114,16 +175,33 @@
 import { mapGetters, mapState } from 'vuex'
 export default {
   async fetch() {
-    await this.$store.dispatch('fetchProfile', this.loggedInUser.email)
+    await this.$store.dispatch('fetchProfile', this.loggedInUser.info)
   },
   data() {
     return {
       valid: true,
       isModify: false,
+      isChangePassword: false,
+      oldPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+      emailRules: [
+        (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
+      ],
       nameRules: [
         (v) => !!v || 'Field is required',
         (v) => (v && v.length <= 30) || 'Field must be less than 30 characters',
         (v) => (v && v.length > 1) || 'Field must be more than 1 characters',
+      ],
+      passwordRules: [
+        (value) => !!value || 'Please type password.',
+        (value) => (value && value.length >= 6) || 'minimum 6 characters',
+      ],
+      confirmPasswordRules: [
+        (value) => !!value || 'Please type confirm password',
+        (value) =>
+          value === this.newPassword ||
+          'The password confirmation does not match.',
       ],
     }
   },
@@ -154,10 +232,33 @@ export default {
           content: 'Profile updated!',
           color: 'success',
         })
+        this.isChangePassword = false
         this.$router.push('/profile')
       } catch (e) {
         this.$notifier.showMessage({
           content: 'Profile update failed!',
+          color: 'error',
+        })
+        this.statusCode = e.response.data.statusCode
+        this.error = e.response.data.message
+      }
+    },
+    async changePassword() {
+      if (!this.$refs.form.validate()) return
+      try {
+        await this.$axios.post('auth/password/change', {
+          email: this.formProfile.email,
+          currentPassword: this.oldPassword,
+          newPassword: this.newPassword,
+        })
+        this.$notifier.showMessage({
+          content: 'Password changed!',
+          color: 'success',
+        })
+        this.$router.push('/profile')
+      } catch (e) {
+        this.$notifier.showMessage({
+          content: 'Change password failed!',
           color: 'error',
         })
         this.statusCode = e.response.data.statusCode

@@ -11,7 +11,13 @@
           </v-row>
         </v-alert>
 
-        <form method="post" @submit.prevent="login">
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+          method="post"
+          @submit.prevent="sendEmail"
+        >
           <v-layout column>
             <v-flex>
               <v-text-field
@@ -20,6 +26,7 @@
                 name="email"
                 label="Email"
                 type="email"
+                :rules="emailRules"
                 required
               ></v-text-field>
             </v-flex>
@@ -32,7 +39,7 @@
               </p>
             </v-flex>
           </v-layout>
-        </form>
+        </v-form>
       </v-flex>
     </v-layout>
   </v-container>
@@ -41,37 +48,36 @@
 <script>
 export default {
   middleware: 'guest',
-  data: () => ({
-    email: '',
-    password: '',
-    statusCode: '',
-    error: '',
-    snackbar: null,
-  }),
-
+  data() {
+    return {
+      valid: true,
+      email: '',
+      statusCode: '',
+      error: null,
+      emailRules: [
+        (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
+      ],
+    }
+  },
   methods: {
-    async login() {
+    validate() {
+      this.$refs.form.validate()
+    },
+    async sendEmail() {
+      if (!this.$refs.form.validate()) return
       try {
-        await this.$auth.loginWith('local', {
-          data: {
-            username: this.email,
-            password: this.password,
-          },
+        await this.$axios.post('auth/forgot', {
+          email: this.email,
         })
-        this.$router.push('/')
-        this.$store.commit('SET_TOKEN', this.$auth.getToken('local'))
-        this.$axios.setToken(this.$auth.getToken('local'))
+
         this.$notifier.showMessage({
-          content: 'Login success!',
+          content: 'An email has been sent to: ' + this.email,
           color: 'success',
         })
+        this.$router.push('/')
       } catch (e) {
         this.statusCode = e.response.data.statusCode
         this.error = e.response.data.message
-        this.$notifier.showMessage({
-          content: 'Login failed!',
-          color: 'error',
-        })
       }
     },
   },
