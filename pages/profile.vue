@@ -222,7 +222,8 @@ export default {
     async modifyProfile() {
       if (!this.$refs.form.validate()) return
       try {
-        await this.$axios.post('users/' + this.formProfile.email, {
+        await this.$axios.patch('users/update/' + this.profile.email, {
+          email: this.formProfile.email,
           firstName: this.formProfile.firstName,
           lastName: this.formProfile.lastName,
           institution: this.formProfile.institution,
@@ -232,7 +233,7 @@ export default {
           content: 'Profile updated!',
           color: 'success',
         })
-        this.isChangePassword = false
+        this.isModify = false
         this.$router.push('/profile')
       } catch (e) {
         this.$notifier.showMessage({
@@ -255,6 +256,7 @@ export default {
           content: 'Password changed!',
           color: 'success',
         })
+        this.isChangePassword = false
         this.$router.push('/profile')
       } catch (e) {
         this.$notifier.showMessage({
