@@ -4,12 +4,12 @@
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer;">
           <img
-            width="180px"
-            max-width="180px"
+            width="150px"
+            max-width="150px"
             height="40px"
             max-height="40px"
             class="mt-2"
-            src="img/iris3_logo_clip2.svg"
+            src="img/iris3_logo_v2.png"
           />
         </router-link>
       </v-toolbar-title>
@@ -47,11 +47,11 @@
         <template v-else>
           <v-btn to="/register" text>
             <v-icon left dark>mdi-account-plus</v-icon>
-            Register
+            Sign up
           </v-btn>
           <v-btn to="/login" text>
             <v-icon left dark>mdi-lock-open</v-icon>
-            Login
+            Sign in
           </v-btn>
         </template>
       </v-toolbar-items>
@@ -92,23 +92,23 @@ export default {
       searchJobId: '',
       menuLeft: [
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Submit',
+          title: 'Start',
           path: '/submit',
         },
         {
-          icon: 'mdi-account-question',
+          title: 'Public data',
+          path: '/public',
+        },
+        {
           title: 'Tutorial',
           path: '/tutorial',
         },
         {
-          icon: 'mdi-newspaper',
-          title: 'News',
-          path: '/news',
+          title: 'FAQ',
+          path: '/FAQ',
         },
         {
-          icon: 'mdi-account-box',
-          title: 'Contact',
+          title: 'About',
           path: '/contact',
         },
       ],

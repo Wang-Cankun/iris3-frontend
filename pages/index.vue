@@ -1,72 +1,121 @@
 <template>
   <v-container>
     <v-row>
+      <!-- Header Text -->
       <v-col md="0" lg="1"></v-col>
       <v-row>
         <v-col sm="0" md="0" lg="1"></v-col>
-        <v-col lg="10"
-          ><img width="530px" src="img/iris3_logo_clip2.svg" />
-          <p class="text-h5">
-            Integrated Cell-type-specific Regulon Inference Server from
-            Single-cell RNA-Seq
-          </p></v-col
+        <v-col lg="10">
+          <p class="text-h4 text-center">
+            IRIS3: Integrated Cell-type-specific Regulon Inference Server from
+            Single-cell sequencing data
+          </p>
+        </v-col>
+      </v-row>
+
+      <!-- three buttons -->
+      <v-row align="center" justify="space-around">
+        <v-btn
+          to="/newproject"
+          color="primary"
+          rounded="true"
+          height="100"
+          width="300"
+          x-large="true"
+          >Create new project</v-btn
+        >
+        <v-btn
+          to="/public"
+          color="primary"
+          rounded="true"
+          height="100"
+          width="300"
+          x-large="true"
+          >Public data</v-btn
+        >
+        <v-btn
+          to="/tutorial"
+          color="primary"
+          rounded="true"
+          height="100"
+          width="300"
+          x-large="true"
+          >Tutorial</v-btn
         >
       </v-row>
-      <v-row>
-        <v-col lg="2"></v-col>
-        <v-col lg="5">
-          <img width="500px" src="img/abstract_workflow.jpg"
-        /></v-col>
-        <v-col lg="5">
-          <v-layout column justify-center align-center>
-            <v-flex class="text-xs-center" mt-3>
-              <v-flex mb-5
-                ><p class="title">Find your submitted job</p>
-                <v-text-field
-                  v-model="searchJobId"
-                  width="400px"
-                  solo-inverted
-                  flat
-                  clearble
-                  hide-details
-                  label="Search you job ID"
-                  type="search"
-                  prepend-inner-icon="mdi-magnify"
-                  class="shrink"
-                />
-                <v-btn color="primary"> Search</v-btn></v-flex
-              >
-              <v-flex mb-5
-                ><p class="title">New job</p>
-                <p class="text-subtitle-1">
-                  Submit your data to IRIS3 or check out the example result.
-                </p>
-                <v-btn to="/submit" color="primary"> Submit</v-btn></v-flex
-              >
-              <v-flex mb-5>
-                <p class="title">Tutorial</p>
-                <p class="text-subtitle-1">
-                  New to IRIS3? Our detailed tutorial will guide you through the
-                  process of using IRIS3.
-                </p>
-                <v-btn to="/tutorial" color="primary">
-                  Learn more</v-btn
-                ></v-flex
-              >
 
-              <v-flex mb-5
-                ><p class="title">News</p>
-                <p class="text-subtitle-1">
-                  Posted: 8/27/2020
-                </p>
-                <p>
-                  IRIS3 is online!
-                </p>
-                <v-btn to="/news" color="primary"> More changes</v-btn></v-flex
-              >
-            </v-flex>
-          </v-layout></v-col
-        ></v-row
+      <!-- Display window  -->
+      <v-row>
+        <v-col sm="0" md="0" lg="1"></v-col>
+        <v-col lg="5">
+          <v-carousel
+            cycle
+            height="400"
+            hide-delimiter-background
+            show-arrows-on-hover
+          >
+            <v-carousel-item v-for="(slide, i) in slides" :key="i">
+              <v-sheet :color="colors[i]" height="100%">
+                <v-row class="fill-height" align="center" justify="center">
+                  <div class="display-3">{{ slide }} Slide</div>
+                </v-row>
+              </v-sheet>
+            </v-carousel-item>
+          </v-carousel>
+        </v-col>
+
+        <!-- Intro Card  -->
+        <v-col lg="5">
+          <v-card color="blue lighten-3" height="140"
+            ><p class="title-h4 text-center">
+              Single-cell and cell-type regulon (Intro)
+            </p></v-card
+          >
+          <v-card color="white" height="20" outlined></v-card>
+          <v-card color="blue lighten-3" height="140"
+            ><p class="title-h4 text-center">IRIS3 functions (Intro)</p></v-card
+          >
+          <v-card color="white" height="25" outlined
+            ><p class="text-left color:blue">
+              # of submitted jobs
+            </p></v-card
+          >
+          <v-card color="white" height="25" outlined
+            ><p class="text-left color:blue">
+              # of created projects
+            </p></v-card
+          >
+          <v-card color="white" height="25" outlined
+            ><p class="text-left color:blue">
+              # of public data
+            </p></v-card
+          >
+          <v-card color="white" height="25" outlined
+            ><p class="text-left color:blue">
+              # of visits
+            </p></v-card
+          >
+        </v-col>
+      </v-row>
+    </v-row>
+    <v-row>
+      <v-col sm="0" md="0" lg="1"></v-col>
+      <v-card color="blue lighten-3" height="140" width="990"
+        ><p class="title-h4 text-center">
+          News
+        </p></v-card
+      >
+    </v-row>
+    <v-row>
+      <v-col sm="0" md="0" lg="1"></v-col>
+      <v-card color="white" height="20" width="990" outlined></v-card>
+    </v-row>
+    <v-row>
+      <v-col sm="0" md="0" lg="1"></v-col>
+      <v-card color="blue lighten-3" height="140" width="990"
+        ><p class="title-h4 text-center">
+          Changing logs
+        </p></v-card
       >
     </v-row>
     <v-layout justify-center align-center>
@@ -87,7 +136,14 @@
 export default {
   data() {
     return {
-      searchJobId: '',
+      colors: [
+        'indigo',
+        'warning',
+        'pink darken-2',
+        'red lighten-1',
+        'deep-purple accent-4',
+      ],
+      slides: ['First', 'Second', 'Third', 'Fourth', 'Fifth'],
     }
   },
   methods: {
