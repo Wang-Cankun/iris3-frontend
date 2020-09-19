@@ -37,7 +37,9 @@
 
       <v-stepper-items>
         <v-stepper-content step="1">
-          <v-row><upload-data-form></upload-data-form></v-row>
+          <v-row
+            ><no-ssr><upload-data-form></upload-data-form></no-ssr
+          ></v-row>
 
           <v-btn color="primary" @click="e1 = 2">
             Continue
