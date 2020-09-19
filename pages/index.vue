@@ -13,7 +13,7 @@
     <!-- three buttons -->
     <v-row justify="space-between">
       <v-btn
-        to="/newproject"
+        to="/submit"
         color="primary"
         rounded
         height="100"
