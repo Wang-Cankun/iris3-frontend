@@ -157,7 +157,7 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation()
     },
-    submit() {
+    async submit() {
       if (!this.$refs.form.validate()) return
       this.dialog = true
       this.uploadStatus = 'Uploading ...'
@@ -166,8 +166,24 @@ export default {
       formData.append('name', 'list')
       formData.append('Content-Type', 'multipart/form-data')
       formData.append('email', this.email)
-
+      formData.append('species', this.speciesSelect)
+      formData.append('description', this.description)
+      formData.append('file', this.expFile[0])
       // this.form.submit()
+
+      await this.$axios
+        .post('iris3/api/upload/expression/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((response) => {
+          console.log({ response })
+          this.$refs.form.reset()
+        })
+        .catch((error) => {
+          console.log({ error })
+        })
     },
     addMultipleDataset() {
       this.multipleDatasetsLength++
