@@ -1,73 +1,120 @@
 <template>
-  <v-container fluid>
-    <v-tabs v-model="tab" background-color="white" color="primary">
-      <v-tab href="#tab-1">
-        Upload data
-      </v-tab>
-      <v-tab href="#tab-2">
-        Pre-process
-      </v-tab>
-      <v-tab>
-        Cell clustering
-      </v-tab>
-      <v-tab>
-        DGE analysis
-      </v-tab>
-      <v-tab>
-        Regulon
-      </v-tab>
-      <v-tab>
-        Job summary
-      </v-tab>
-    </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item value="tab-1">
-        <v-row no-gutters
-          ><no-ssr
-            ><upload-data-form></upload-data-form
-            ><upload-data-results></upload-data-results></no-ssr></v-row
-      ></v-tab-item>
-      <v-tab-item value="tab-2"
-        ><no-ssr><preprocess-form></preprocess-form></no-ssr
-      ></v-tab-item>
-      <v-tab-item></v-tab-item>
-      <v-tab-item>Page 4</v-tab-item>
-      <v-tab-item>Page 5</v-tab-item>
-      <v-tab-item>Page 6</v-tab-item>
-    </v-tabs-items>
-  </v-container>
+  <div>
+    <v-stepper v-model="e1" alt-labels>
+      <v-stepper-header>
+        <v-stepper-step :complete="e1 > 1" step="1">Upload data</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="e1 > 2" step="2"
+          >Preprocessing</v-stepper-step
+        >
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="e1 > 3" step="3"
+          >Cell clustering</v-stepper-step
+        >
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="e1 > 4" step="4"
+          >DGE analysis</v-stepper-step
+        >
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="e1 > 5" step="5">Regulon</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="e1 > 6" step="6">Job summary</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step step="7">Results</v-stepper-step>
+      </v-stepper-header>
+
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <v-row><upload-data-form></upload-data-form></v-row>
+
+          <v-btn color="primary" @click="e1 = 2">
+            Continue
+          </v-btn>
+
+          <v-btn text>Cancel</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="2">
+          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+
+          <v-btn color="primary" @click="e1 = 3">
+            Continue
+          </v-btn>
+
+          <v-btn text @click="e1 = 1">Previous</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="3">
+          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+
+          <v-btn color="primary" @click="e1 = 4">
+            Continue
+          </v-btn>
+
+          <v-btn text @click="e1 = 2">Previous</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="4">
+          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+
+          <v-btn color="primary" @click="e1 = 5">
+            Continue
+          </v-btn>
+
+          <v-btn text @click="e1 = 3">Previous</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="5">
+          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+
+          <v-btn color="primary" @click="e1 = 6">
+            Continue
+          </v-btn>
+
+          <v-btn text @click="e1 = 4">Previous</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="6">
+          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+
+          <v-btn color="primary" @click="e1 = 7">
+            Continue
+          </v-btn>
+
+          <v-btn text @click="e1 = 5">Previous</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="7">
+          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+          <v-btn text @click="e1 = 1">Startover</v-btn>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
+  </div>
 </template>
+
 <script>
 import UploadData from '@/components/forms/UploadData.vue'
-import PreProcess from '@/components/forms/PreProcess.vue'
-
-import UploadDataResults from '@/components/results/UploadDataResults.vue'
 
 export default {
   components: {
     'upload-data-form': UploadData,
-    'preprocess-form': PreProcess,
-    'upload-data-results': UploadDataResults,
   },
   data() {
     return {
-      tab: null,
-      search: '',
-    }
-  },
-  methods: {},
-  head() {
-    return {
-      title: 'Job submission',
-      meta: [
-        {
-          hid: 'submission',
-          name: 'submission',
-          content: 'Submit your single-cell datasets to scREAD.',
-        },
-      ],
+      e1: 1,
     }
   },
 }
 </script>
-<style></style>
