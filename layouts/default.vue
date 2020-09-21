@@ -68,6 +68,123 @@
       width="auto"
     >
       <v-col class="text-center" cols="12">
+        <v-row>
+          <v-col>
+            <p class="title" color="Primary">
+              Help
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title" color="Primary">
+              About
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title" color="Primary">
+              Dev
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title" color="Primary">
+              Social
+            </p>
+          </v-col>
+        </v-row>
+
+        <v-row justify="space-around">
+          <v-col>
+            <p class="title-h4" color="Primary">
+              Tutorial
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              Publication
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              Roadmap
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+        </v-row>
+        <v-row justify="space-around">
+          <v-col>
+            <p class="title-h4" color="Primary">
+              Videos
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              News
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              Team
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+        </v-row>
+        <v-row justify="space-around">
+          <v-col>
+            <p class="title-h4" color="Primary">
+              FAQ
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              History logs
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              GitHub
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+        </v-row>
+        <v-row justify="space-around">
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              Fundings
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+        </v-row>
+        <v-row justify="space-around">
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary">
+              Contact
+            </p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+          <v-col>
+            <p class="title-h4" color="Primary"></p>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col class="text-center" cols="12">
         IRIS3 is developed by <a href="https://u.osu.edu/bmbl/">BMBL</a>, it is
         free and open to all users. |
         {{ new Date().getFullYear() }}

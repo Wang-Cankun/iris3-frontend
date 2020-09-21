@@ -7,32 +7,32 @@
         <v-divider></v-divider>
 
         <v-stepper-step :complete="e1 > 2" step="2"
-          >Preprocessing</v-stepper-step
+          >Quality Check</v-stepper-step
         >
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 3" step="3"
-          >Cell clustering</v-stepper-step
+        <v-stepper-step :complete="e1 > 3" step="3">Integration</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="e1 > 4" step="4">Clustering</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="e1 > 5" step="5"
+          >Biclustering</v-stepper-step
         >
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 4" step="4"
-          >DGE analysis</v-stepper-step
+        <v-stepper-step :complete="e1 > 6" step="6"
+          >CTSR identification</v-stepper-step
         >
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 5" step="5">Regulon</v-stepper-step>
-
-        <v-divider></v-divider>
-
-        <v-stepper-step :complete="e1 > 6" step="6">Job summary</v-stepper-step>
-
-        <v-divider></v-divider>
-
-        <v-stepper-step step="7">Results</v-stepper-step>
+        <v-stepper-step step="7">Final report</v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
@@ -46,7 +46,7 @@
           <v-btn text>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+          <v-row><preprocessing-form></preprocessing-form></v-row>
 
           <v-btn color="primary" @click="e1 = 3">
             Continue
@@ -106,10 +106,12 @@
 
 <script>
 import UploadData from '@/components/forms/UploadData.vue'
+import Preprocessing from '@/components/forms/QualityCheck.vue'
 
 export default {
   components: {
     'upload-data-form': UploadData,
+    'preprocessing-form': Preprocessing,
   },
   data() {
     return {

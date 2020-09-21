@@ -16,7 +16,7 @@
       <!-- Upload data  -->
       <v-card outlined hover color="primary">
         <v-col cols="12">
-          <v-row justify-content="flex-start">
+          <v-row justify="space-between">
             <p class="title">
               Upload data
             </p>
