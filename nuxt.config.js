@@ -1,6 +1,7 @@
 export default {
   env: {
     API_URL: process.env.API_URL || 'https://bmbls.bmi.osumc.edu',
+    WS_URL: process.env.WS_URL || 'http://localhost:9005',
   },
   /*
    ** Nuxt rendering mode
@@ -70,7 +71,16 @@ export default {
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     '@nuxtjs/auth',
+    'nuxt-socket-io',
   ],
+  io: {
+    // module options
+    sockets: [
+      {
+        url: process.env.WS_URL,
+      },
+    ],
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
