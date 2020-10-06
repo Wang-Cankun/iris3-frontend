@@ -17,7 +17,7 @@
       <v-card outlined hover color="primary">
         <v-col cols="12">
           <v-row justify="space-between">
-            <p class="title">
+            <p class="title white--text">
               Upload data
             </p>
             <v-btn>Load example data</v-btn>
@@ -94,12 +94,10 @@
         v-model="labelFile"
         color="primary"
         counter
-        :rules="fileRules"
         label="Click to upload (txt, tsv, csv)"
         prepend-icon="mdi-paperclip"
         outlined
         :show-size="1000"
-        required
       ></v-file-input>
 
       <p class="title">
@@ -120,6 +118,11 @@
       <v-textarea v-model="description" outlined label="Description:" clearable>
       </v-textarea>
     </v-form>
+    <v-row justify="center">
+      <v-btn color="Primary" width="300" rounded @click="submit()"
+        >Upload</v-btn
+      >
+    </v-row>
   </v-col>
 </template>
 
@@ -164,22 +167,31 @@ export default {
       const formData = new FormData()
       formData.append('method', 'post')
       formData.append('name', 'list')
-      formData.append('Content-Type', 'multipart/form-data')
+      formData.append('title', this.title)
       formData.append('email', this.email)
       formData.append('species', this.speciesSelect)
       formData.append('description', this.description)
       formData.append('file', this.expFile[0])
-      // this.form.submit()
-
+      console.log(this.expFile[0])
+      this.$notifier.showMessage({
+        content: 'Uploading data...',
+        color: 'accent',
+      })
       await this.$axios
-        .post('iris3/api/upload/expression/', formData, {
+        .post('iris3/api/queue/expression/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         })
         .then((response) => {
           console.log({ response })
-          this.$refs.form.reset()
+          setTimeout(() => {
+            this.$notifier.showMessage({
+              content: 'Upload success!',
+              color: 'success',
+            })
+          }, 3000)
+          // this.$refs.form.reset()
         })
         .catch((error) => {
           console.log({ error })

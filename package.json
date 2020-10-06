@@ -17,8 +17,11 @@
     "@statnett/vue-plotly": "^0.3.2",
     "form-data": "^3.0.0",
     "nuxt": "^2.14.1",
+    "nuxt-socket-io": "^1.1.11",
     "nuxt-start": "^2.14.1",
-    "plotly.js": "^1.54.7"
+    "plotly.js": "^1.54.7",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",

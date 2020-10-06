@@ -90,23 +90,28 @@
         </v-card>
       </v-form>
     </v-col>
+    <v-col xs="12" lg="9">
+      <p>nPC: {{ nPCs }}</p>
+      <p>Clustering resolution: {{ nResolution }}</p>
+      <v-img :src="umap_url" aspect-ratio="1" max-width="600px"></v-img>
+    </v-col>
   </v-row>
 </template>
 
 <script>
-import FormData from 'form-data'
-
 export default {
   name: 'PreProcessForm',
   data: () => ({
     form: {},
     isRemoveRibosome: false,
+    nMitoGenes: 0.1,
     nPCs: 10,
     nResolution: 0.8,
     isImputation: false,
     nVariableGenes: '2000',
     expFile: null,
     speciesSelect: '',
+    umap_url: '',
     nameRules: [
       (v) => !!v || 'Field is required',
       (v) => (v && v.length <= 20) || 'Name must be less than 20 characters',
@@ -127,17 +132,26 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation()
     },
-    submit() {
+    async submit() {
       if (!this.$refs.form.validate()) return
       this.dialog = true
       this.uploadStatus = 'Uploading ...'
-      const formData = new FormData()
-      formData.append('method', 'post')
-      formData.append('name', 'list')
-      formData.append('Content-Type', 'multipart/form-data')
-      formData.append('email', this.email)
-
-      // this.form.submit()
+      this.umap_url = 'https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp'
+      await this.$axios
+        .post('iris3/api/command/preprocess/', {
+          nPCs: this.nPCs,
+          nResolution: this.nResolution,
+        })
+        .then((response) => {
+          console.log({ response })
+          setTimeout(() => {
+            this.umap_url = 'http://localhost:9005/umap_cluster_plot.png'
+          }, 4000)
+          // this.$refs.form.reset()
+        })
+        .catch((error) => {
+          console.log({ error })
+        })
     },
     openJob(id) {
       this.$router.push('submit/' + id)

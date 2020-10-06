@@ -39,12 +39,19 @@
             </v-flex>
             <p>
               Don't have an account?
-              <nuxt-link to="/register">Submit</nuxt-link>
+              <nuxt-link to="/register">Register</nuxt-link>
             </p>
             <p>
               Forgot your password?
               <nuxt-link to="/login/forgot">Reset password</nuxt-link>
             </p>
+            <a href="http://localhost:9005/iris3/api/auth/google" target="blank"
+              ><v-img
+                max-width="180px"
+                src="img/btn_google_signin_dark_normal_web.png"
+              >
+              </v-img
+            ></a>
           </v-layout>
         </form>
       </v-flex>

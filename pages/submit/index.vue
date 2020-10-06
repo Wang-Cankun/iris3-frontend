@@ -12,27 +12,23 @@
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 3" step="3">Integration</v-stepper-step>
+        <v-stepper-step :complete="e1 > 3" step="3">Clustering</v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 4" step="4">Clustering</v-stepper-step>
-
-        <v-divider></v-divider>
-
-        <v-stepper-step :complete="e1 > 5" step="5"
+        <v-stepper-step :complete="e1 > 4" step="4"
           >Biclustering</v-stepper-step
         >
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 6" step="6"
+        <v-stepper-step :complete="e1 > 5" step="5"
           >CTSR identification</v-stepper-step
         >
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="7">Final report</v-stepper-step>
+        <v-stepper-step step="6">Final report</v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
@@ -48,7 +44,7 @@
           <v-btn text>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-row><preprocessing-form></preprocessing-form></v-row>
+          <v-row><qc-form></qc-form></v-row>
 
           <v-btn color="primary" @click="e1 = 3">
             Continue
@@ -58,7 +54,7 @@
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+          <v-row><cell-cluster-form></cell-cluster-form></v-row>
 
           <v-btn color="primary" @click="e1 = 4">
             Continue
@@ -108,12 +104,14 @@
 
 <script>
 import UploadData from '@/components/forms/UploadData.vue'
-import Preprocessing from '@/components/forms/QualityCheck.vue'
+import QualityCheck from '@/components/forms/QualityCheck.vue'
+import CellCluster from '@/components/forms/CellCluster.vue'
 
 export default {
   components: {
     'upload-data-form': UploadData,
-    'preprocessing-form': Preprocessing,
+    'qc-form': QualityCheck,
+    'cell-cluster-form': CellCluster,
   },
   data() {
     return {
