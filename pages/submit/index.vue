@@ -17,12 +17,6 @@
         <v-divider></v-divider>
 
         <v-stepper-step :complete="e1 > 4" step="4"
-          >Biclustering</v-stepper-step
-        >
-
-        <v-divider></v-divider>
-
-        <v-stepper-step :complete="e1 > 5" step="5"
           >CTSR identification</v-stepper-step
         >
 
@@ -62,16 +56,6 @@
         </v-stepper-content>
 
         <v-stepper-content step="4">
-          <v-row><bicluster-form></bicluster-form></v-row>
-
-          <v-btn color="primary" @click="e1 = 5">
-            Continue
-          </v-btn>
-
-          <v-btn text @click="e1 = 3">Previous</v-btn>
-        </v-stepper-content>
-
-        <v-stepper-content step="5">
           <v-row><regulon-form></regulon-form></v-row>
 
           <v-btn color="primary" @click="e1 = 6">
@@ -89,7 +73,6 @@
 import UploadData from '@/components/forms/UploadData.vue'
 import QualityCheck from '@/components/forms/QualityCheck.vue'
 import CellCluster from '@/components/forms/CellCluster_tmp.vue'
-import Bicluster from '@/components/forms/Bicluster.vue'
 import Regulon from '@/components/forms/Regulon.vue'
 
 export default {
@@ -97,7 +80,6 @@ export default {
     'upload-data-form': UploadData,
     'qc-form': QualityCheck,
     'cell-cluster-form': CellCluster,
-    'bicluster-form': Bicluster,
     'regulon-form': Regulon,
   },
   data() {
