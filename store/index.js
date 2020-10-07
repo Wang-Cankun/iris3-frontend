@@ -2,6 +2,7 @@ export const state = () => ({
   profile: [],
   snack: '',
   token: '',
+  jobid: '',
 })
 export const mutations = {
   SET_PROFILE(state, profile) {
@@ -12,6 +13,9 @@ export const mutations = {
   },
   SET_TOKEN(state, token) {
     state.token = token
+  },
+  SET_JOBID(state, jobid) {
+    state.jobid = jobid
   },
 }
 export const actions = {

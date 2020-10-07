@@ -27,8 +27,6 @@
         >
 
         <v-divider></v-divider>
-
-        <v-stepper-step step="6">Final report</v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
@@ -64,7 +62,7 @@
         </v-stepper-content>
 
         <v-stepper-content step="4">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+          <v-row><bicluster-form></bicluster-form></v-row>
 
           <v-btn color="primary" @click="e1 = 5">
             Continue
@@ -74,28 +72,13 @@
         </v-stepper-content>
 
         <v-stepper-content step="5">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+          <v-row><regulon-form></regulon-form></v-row>
 
           <v-btn color="primary" @click="e1 = 6">
             Continue
           </v-btn>
 
           <v-btn text @click="e1 = 4">Previous</v-btn>
-        </v-stepper-content>
-
-        <v-stepper-content step="6">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-
-          <v-btn color="primary" @click="e1 = 7">
-            Continue
-          </v-btn>
-
-          <v-btn text @click="e1 = 5">Previous</v-btn>
-        </v-stepper-content>
-
-        <v-stepper-content step="7">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-          <v-btn text @click="e1 = 1">Startover</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -105,13 +88,17 @@
 <script>
 import UploadData from '@/components/forms/UploadData.vue'
 import QualityCheck from '@/components/forms/QualityCheck.vue'
-import CellCluster from '@/components/forms/CellCluster.vue'
+import CellCluster from '@/components/forms/CellCluster_tmp.vue'
+import Bicluster from '@/components/forms/Bicluster.vue'
+import Regulon from '@/components/forms/Regulon.vue'
 
 export default {
   components: {
     'upload-data-form': UploadData,
     'qc-form': QualityCheck,
     'cell-cluster-form': CellCluster,
+    'bicluster-form': Bicluster,
+    'regulon-form': Regulon,
   },
   data() {
     return {
