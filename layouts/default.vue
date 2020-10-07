@@ -59,135 +59,41 @@
       <nuxt />
     </v-main>
     <v-footer
+      color="primary"
       app
       inset
       absolute
       class="font-weight-light"
       heigth="200"
       width="auto"
+      padless
     >
-      <v-col class="text-center" cols="12">
-        <v-row>
-          <v-col>
-            <p class="title" color="Primary">
-              Help
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title" color="Primary">
-              About
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title" color="Primary">
-              Dev
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title" color="Primary">
-              Social
-            </p>
-          </v-col>
-        </v-row>
+      <v-row justify="center" no-gutters>
+        <v-btn
+          v-for="link in links"
+          :key="link"
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          {{ link }}
+        </v-btn>
 
-        <v-row justify="space-around">
-          <v-col>
-            <p class="title-h4" color="Primary">
-              Tutorial
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              Publication
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              Roadmap
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-        </v-row>
-        <v-row justify="space-around">
-          <v-col>
-            <p class="title-h4" color="Primary">
-              Videos
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              News
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              Team
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-        </v-row>
-        <v-row justify="space-around">
-          <v-col>
-            <p class="title-h4" color="Primary">
-              FAQ
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              History logs
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              GitHub
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-        </v-row>
-        <v-row justify="space-around">
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              Fundings
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-        </v-row>
-        <v-row justify="space-around">
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary">
-              Contact
-            </p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-          <v-col>
-            <p class="title-h4" color="Primary"></p>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col class="text-center" cols="12">
-        IRIS3 is developed by <a href="https://u.osu.edu/bmbl/">BMBL</a>, it is
-        free and open to all users. |
-        {{ new Date().getFullYear() }}
-      </v-col>
+        <v-col class="primary lighten-4 py-4 text-center white--text" cols="12">
+          Get connected with us on social networks!
+
+          <v-btn v-for="icon in icons" :key="icon" class="mx-4" dark icon>
+            <v-icon size="24px">
+              {{ icon }}
+            </v-icon>
+          </v-btn>
+        </v-col>
+        <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
+          IRIS3 is developed by <a href="https://u.osu.edu/bmbl/">BMBL</a>, it
+          is free and open to all users. | {{ new Date().getFullYear() }}
+        </v-col>
+      </v-row>
     </v-footer>
     <snackbar></snackbar>
   </v-app>
@@ -227,6 +133,22 @@ export default {
           title: 'About',
           path: '/contact',
         },
+      ],
+      links: [
+        'Video',
+        'Publication',
+        'Roadmap',
+        'Team',
+        'Github',
+        'Fundings',
+        'Contact us',
+      ],
+      icons: [
+        'mdi-google',
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-youtube',
+        'mdi-github',
       ],
       title: 'IRIS3',
     }
