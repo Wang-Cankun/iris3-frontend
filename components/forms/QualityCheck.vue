@@ -170,19 +170,23 @@ export default {
       })
       await this.$axios
         .post('iris3/api/queue/load/', {
-          filename: 'Yan_2013_expression.csv',
+          filename: 'Zeisel_expression.fst',
           type: 'CellGene',
           min_cells: this.cellFilter,
           min_genes: this.geneFilter,
           nVariableFeatures: this.nVariableFeatures,
         })
         .then((response) => {
+          let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
               .get('iris3/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.qcResult = response.data.returnvalue
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
                   clearInterval(checkComplete)
                 }
               })
@@ -199,6 +203,7 @@ export default {
       await this.$axios
         .post('iris3/api/queue/qcplot/')
         .then((response) => {
+          let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
               .get('iris3/api/queue/' + response.data.id)
@@ -208,6 +213,9 @@ export default {
                   this.timeElapsed =
                     (response.data.finishedOn - response.data.processedOn) /
                     1000
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
                   clearInterval(checkComplete)
                 }
               })
@@ -224,6 +232,7 @@ export default {
       await this.$axios
         .post('iris3/api/queue/var-genes-plot/')
         .then((response) => {
+          let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
               .get('iris3/api/queue/' + response.data.id)
@@ -237,6 +246,9 @@ export default {
                     content: 'Calculate QC metrics success!',
                     color: 'success',
                   })
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
                   clearInterval(checkComplete)
                 }
               })

@@ -24,7 +24,7 @@
             <p class="title white--text">
               Upload data
             </p>
-            <v-btn>Load example data</v-btn>
+            <v-btn @click="loadExample()">Load example data</v-btn>
           </v-row>
         </v-col>
 
@@ -48,7 +48,6 @@
                 :label="'Upload sample ' + n"
                 prepend-icon="mdi-paperclip"
                 outlined
-                :show-size="1000"
                 required
                 multiple
               ></v-file-input>
@@ -64,10 +63,10 @@
               v-model="labelFile"
               color="primary"
               counter
+              chips
               label="Click to upload (txt, tsv, csv)"
               prepend-icon="mdi-paperclip"
               outlined
-              :show-size="1000"
             ></v-file-input>
           </v-tab-item>
           <v-tab-item>
@@ -83,7 +82,6 @@
               label="Upload scRNA-seq dataset"
               prepend-icon="mdi-paperclip"
               outlined
-              :show-size="1000"
               required
               multiple
             ></v-file-input>
@@ -96,7 +94,6 @@
               label="Upload scATAC-seq dataset"
               prepend-icon="mdi-paperclip"
               outlined
-              :show-size="1000"
               required
               multiple
             ></v-file-input>
@@ -127,12 +124,27 @@
         >Upload</v-btn
       >
     </v-row>
-    <p>Your Job ID: {{ jobid }}, please continue.</p>
+
+    <p v-if="jobid != ''">Your Job ID: {{ jobid }}, please continue.</p>
   </v-col>
 </template>
 
 <script>
 import FormData from 'form-data'
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(',')
+  const mime = arr[0].match(/:(.*?);/)[1]
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+
+  return new File([u8arr], filename, { type: mime })
+}
+
 export default {
   data: () => ({
     title: '',
@@ -159,6 +171,19 @@ export default {
     ],
   }),
   methods: {
+    loadExample() {
+      this.multipleDatasetsLength = 1
+      this.expFile = []
+      this.expFile[0] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'Zeisel et al. 2015.'
+      )
+      this.labelFile = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'Zeisel et al. 2015.'
+      )
+    },
+
     validate() {
       this.$refs.form.validate()
     },

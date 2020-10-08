@@ -58,11 +58,7 @@
         <v-stepper-content step="4">
           <v-row><regulon-form></regulon-form></v-row>
 
-          <v-btn color="primary" @click="e1 = 6">
-            Continue
-          </v-btn>
-
-          <v-btn text @click="e1 = 4">Previous</v-btn>
+          <v-btn text @click="e1 = 3">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -72,7 +68,7 @@
 <script>
 import UploadData from '@/components/forms/UploadData.vue'
 import QualityCheck from '@/components/forms/QualityCheck.vue'
-import CellCluster from '@/components/forms/CellCluster_tmp.vue'
+import CellCluster from '@/components/forms/CellCluster.vue'
 import Regulon from '@/components/forms/Regulon.vue'
 
 export default {

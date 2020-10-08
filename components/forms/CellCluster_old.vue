@@ -12,7 +12,7 @@
                 <p class="title text-center">Cell clustering Prarmeters</p>
                 <div v-if="idents != ''">
                   <p class="subtitle-1 font-weight-bold text--primary">
-                    Set Cell Identity for CTSR identification:
+                    Set Identity:
                   </p>
                   <v-autocomplete
                     v-model="currentIdent"
@@ -34,6 +34,22 @@
                   outlined
                   background-color="white"
                 ></v-text-field>
+                <div v-if="genes != ''">
+                  <p class="subtitle-1 font-weight-bold text--primary">
+                    Gene expression<v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon color="primary" dark v-bind="attrs" v-on="on"
+                          >mdi-help-circle-outline</v-icon
+                        >
+                      </template>
+                    </v-tooltip>
+                  </p>
+                  <v-autocomplete
+                    v-model="gene"
+                    :items="genes"
+                    label="Select or search genes"
+                  ></v-autocomplete>
+                </div>
                 <v-row justify="center">
                   <v-btn
                     color="Primary"
@@ -43,61 +59,15 @@
                     >Update</v-btn
                   >
                 </v-row>
-
-                <div v-if="clusterResult != ''">
-                  <p class="ml-4 title-h4">
-                    Bicluster overlap rate
-                  </p>
-                  <v-text-field
-                    v-model="qubic_f"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Maximum bicluster number
-                  </p>
-                  <v-text-field
-                    v-model="qubic_o"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Minimum cell number
-                  </p>
-                  <v-text-field
-                    v-model="qubic_k"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Motif finding upstream promoter region
-                  </p>
-                  <v-text-field
-                    v-model="promoter_length"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <v-row justify="center">
-                    <v-btn
-                      color="Primary"
-                      width="300"
-                      rounded
-                      @click="runQubic()"
-                      >Run CTSR identification</v-btn
-                    >
-                  </v-row>
-                </div>
               </v-card></v-col
             >
             <v-col cols="8">
-              <div v-if="clusterResult == '1'">
+              <div v-if="clusterResult !== ''">
                 <p>Number of clusters: {{ clusterResult.n_seurat_clusters }}</p>
               </div>
               <div><img :src="umapCluster" /></div>
+              <div><img :src="umapGene" /><img :src="violinGene" /></div>
+              <div></div>
             </v-col>
           </v-row>
         </v-card>
@@ -112,21 +82,19 @@ export default {
     title: '',
     nPCs: '20',
     resolution: '0.8',
-    qubic_f: '0.7',
-    qubic_o: '500',
-    qubic_k: '20',
-    promoter_length: '1000',
     timeElapsed: 0,
     qcResult: null,
     umapCluster: '',
     umapGene: '',
     violinGene: '',
     clusterResult: '',
-    gene: '',
+    gene: 'BRCA1',
     genes: '',
     currentIdent: 'seurat_clusters',
     idents: '',
   }),
+
+  mounted() {},
   methods: {
     async runCellCluster() {
       this.$notifier.showMessage({
@@ -266,12 +234,6 @@ export default {
       })
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
         this.idents = response.data
-      })
-    },
-    runQubic() {
-      this.$notifier.showMessage({
-        content: 'Start CTSR identification!',
-        color: 'accent',
       })
     },
   },
