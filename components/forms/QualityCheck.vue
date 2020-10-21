@@ -28,7 +28,6 @@
                   </p>
                   <p class="title text-center">
                     Current data statistics:
-                    {{ qcResult.raw_n_cells[0] }}
                   </p>
                   <p class="ml-4 title-h4">
                     Cell number: {{ qcResult.filter_n_cells[0] }}
@@ -53,15 +52,15 @@
               </v-card>
 
               <v-card class="mt-6" outlined hover color="grey lighten-1">
-                <p class="title text-center">Preprocessing Prarmeters</p>
-                <p class="ml-4 title-h4">Min Cells filter</p>
+                <p class="title text-center">Preprocessing parameters</p>
+                <p class="ml-4 title-h4">Min cells filter</p>
                 <v-text-field
                   v-model="cellFilter"
                   class="px-6"
                   outlined
                   background-color="white"
                 ></v-text-field>
-                <p class="ml-4 title-h4">Min Genes filter</p>
+                <p class="ml-4 title-h4">Min genes filter</p>
                 <v-text-field
                   v-model="geneFilter"
                   class="px-6"
@@ -87,7 +86,9 @@
               </v-card>
             </v-col>
             <v-col cols="8"
-              ><p>Execute time: {{ timeElapsed }} seconds</p>
+              ><p v-if="timeElapsed != ''">
+                Execute time: {{ timeElapsed }} seconds
+              </p>
               <div><img :src="qcViolin" /></div>
               <div><img :src="varGenesScatter" /></div>
             </v-col>

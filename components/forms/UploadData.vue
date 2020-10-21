@@ -182,6 +182,10 @@ export default {
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
         'Zeisel et al. 2015.'
       )
+      this.$notifier.showMessage({
+        content: 'Example dataset loaded: Zeisel et al. 2015.',
+        color: 'success',
+      })
     },
 
     validate() {
