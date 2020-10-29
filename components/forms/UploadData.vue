@@ -218,6 +218,7 @@ export default {
         content: 'Uploading data...',
         color: 'accent',
       })
+
       const uploadRes = await this.$axios.post(
         'iris3/api/queue/upload/',
         formData,

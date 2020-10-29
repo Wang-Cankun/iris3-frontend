@@ -137,7 +137,7 @@
             <v-icon left dark>mdi-account-plus</v-icon>
             Sign up
           </v-btn>
-          <v-btn to="/login" text>
+          <v-btn text @click="openLoginDialog">
             <v-icon left dark>mdi-lock-open</v-icon>
             Sign in
           </v-btn>
@@ -227,6 +227,10 @@
         <a href="https://u.osu.edu/bmbl/">BMBL</a>, it is free and open to all
         users. | {{ new Date().getFullYear() }}
       </v-col>
+      <login-dialog
+        :dialog.sync="dialog"
+        @close="dialog = false"
+      ></login-dialog>
     </v-footer>
     <snackbar></snackbar>
   </v-app>
@@ -235,12 +239,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import Snackbar from '../components/utils/SnackBar'
+import LoginDialog from '../components/utils/LoginDialog'
 export default {
   components: {
     snackbar: Snackbar,
+    'login-dialog': LoginDialog,
   },
   data() {
     return {
+      dialog: false,
       clipped: false,
       drawer: false,
       fixed: false,
@@ -341,6 +348,9 @@ export default {
         color: '',
       })
       await this.$auth.logout()
+    },
+    openLoginDialog() {
+      this.dialog = true
     },
   },
 }
