@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
     <v-app-bar app>
+      <!-- logo image -->
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer;">
           <img
@@ -13,10 +14,98 @@
           />
         </router-link>
       </v-toolbar-title>
+
+      <!-- dropdown menu -->
       <v-toolbar-items class="hidden-xs-only mx-1">
-        <v-btn v-for="item in menuLeft" :key="item.title" :to="item.path" text>
-          {{ item.title }}
-        </v-btn>
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" elevation="0" v-on="on">
+              Explore
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="item in exploremenu"
+              :key="item.title"
+              :to="item.path"
+              link
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" elevation="0" v-on="on">
+              Help
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="item in helpmenu"
+              :key="item.title"
+              :to="item.path"
+              link
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" elevation="0" v-on="on">
+              News
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="item in newsmenu"
+              :key="item.title"
+              :to="item.path"
+              link
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" elevation="0" v-on="on">
+              Development
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="item in developmenu"
+              :key="item.title"
+              :to="item.path"
+              link
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" elevation="0" v-on="on">
+              About
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="item in aboutmenu"
+              :key="item.title"
+              :to="item.path"
+              link
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-text-field
@@ -64,36 +153,80 @@
       inset
       absolute
       class="font-weight-light"
-      heigth="200"
       width="auto"
       padless
     >
-      <v-row justify="center" no-gutters>
-        <v-btn
-          v-for="link in links"
-          :key="link"
-          color="white"
-          text
-          rounded
-          class="my-2"
-        >
-          {{ link }}
-        </v-btn>
-
-        <v-col class="primary lighten-4 py-4 text-center white--text" cols="12">
-          Get connected with us on social networks!
-
-          <v-btn v-for="icon in icons" :key="icon" class="mx-4" dark icon>
+      <v-row class="mx-16">
+        <v-col col="2">
+          <p style="color: white; font-family: Fantasy;">EXPLORE</p>
+          <p v-for="item in exploremenu" :key="item.title">
+            <nuxt-link
+              :to="item.path"
+              style="color: white; text-decoration: none;"
+            >
+              {{ item.title }}</nuxt-link
+            >
+          </p>
+        </v-col>
+        <v-col col="2">
+          <p style="color: white; font-family: Fantasy;">HELP</p>
+          <p v-for="item in helpmenu" :key="item.title">
+            <nuxt-link
+              :to="item.path"
+              style="color: white; text-decoration: none;"
+            >
+              {{ item.title }}</nuxt-link
+            >
+          </p>
+          <p><v-spacer></v-spacer></p>
+        </v-col>
+        <v-col col="2">
+          <p style="color: white; font-family: Fantasy;">NEWS</p>
+          <p v-for="item in newsmenu" :key="item.title">
+            <nuxt-link
+              :to="item.path"
+              style="color: white; text-decoration: none;"
+            >
+              {{ item.title }}</nuxt-link
+            >
+          </p>
+        </v-col>
+        <v-col col="2">
+          <p style="color: white; font-family: Fantasy;">DEVELOPMENT</p>
+          <p v-for="item in developmenu" :key="item.title">
+            <nuxt-link
+              :to="item.path"
+              style="color: white; text-decoration: none;"
+            >
+              {{ item.title }}</nuxt-link
+            >
+          </p>
+        </v-col>
+        <v-col col="2">
+          <p style="color: white; font-family: Fantasy;">ABOUT</p>
+          <p v-for="item in aboutmenu" :key="item.title">
+            <nuxt-link
+              :to="item.path"
+              style="color: white; text-decoration: none;"
+            >
+              {{ item.title }}</nuxt-link
+            >
+          </p>
+        </v-col>
+        <v-col col="2">
+          <p style="color: white; font-family: Fantasy;">SOCIAL</p>
+          <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon dark left>
             <v-icon size="24px">
               {{ icon }}
             </v-icon>
           </v-btn>
         </v-col>
-        <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
-          IRIS3 is developed by <a href="https://u.osu.edu/bmbl/">BMBL</a>, it
-          is free and open to all users. | {{ new Date().getFullYear() }}
-        </v-col>
       </v-row>
+      <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
+        IRIS3 (Version V1.2.2) is developed by
+        <a href="https://u.osu.edu/bmbl/">BMBL</a>, it is free and open to all
+        users. | {{ new Date().getFullYear() }}
+      </v-col>
     </v-footer>
     <snackbar></snackbar>
   </v-app>
@@ -112,44 +245,89 @@ export default {
       drawer: false,
       fixed: false,
       searchJobId: '',
-      menuLeft: [
+      exploremenu: [
         {
-          title: 'Start',
+          title: 'scRNA-Seq',
           path: '/submit',
         },
         {
-          title: 'Public data',
+          title: 'Multiple scRNA-Seq',
+          path: '/submit',
+        },
+        {
+          title: 'scRNA-Seq and scATAC-Seq',
+          path: '/submit',
+        },
+        {
+          title: 'Public IRIS3 projects',
           path: '/public',
         },
         {
+          title: 'Search',
+          path: '/search',
+        },
+      ],
+      helpmenu: [
+        {
           title: 'Tutorial',
           path: '/tutorial',
+        },
+        {
+          title: 'Video',
+          path: '/video',
         },
         {
           title: 'FAQ',
           path: '/FAQ',
         },
         {
-          title: 'About',
-          path: '/contact',
+          title: 'User group',
+          path: '/usergroup',
         },
       ],
-      links: [
-        'Video',
-        'Publication',
-        'Roadmap',
-        'Team',
-        'Github',
-        'Fundings',
-        'Contact us',
+      newsmenu: [
+        {
+          title: 'News',
+          path: '/news',
+        },
+        {
+          title: 'Changing logs',
+          path: '/changinglogs',
+        },
       ],
-      icons: [
-        'mdi-google',
-        'mdi-facebook',
-        'mdi-twitter',
-        'mdi-youtube',
-        'mdi-github',
+      developmenu: [
+        {
+          title: 'Roadmap',
+          path: '/roadmap',
+        },
+        {
+          title: 'Team',
+          path: '/team',
+        },
+        {
+          title: 'Collaboration',
+          path: '/collaboration',
+        },
+        {
+          title: 'Github',
+          path: '/github',
+        },
       ],
+      aboutmenu: [
+        {
+          title: 'Publication',
+          path: '/publication',
+        },
+        {
+          title: 'Contact',
+          path: '/contact',
+        },
+        {
+          title: 'Acknowledgement',
+          path: '/acknowledgement',
+        },
+      ],
+      icons: ['mdi-github', 'mdi-youtube', 'mdi-twitter'],
       title: 'IRIS3',
     }
   },
