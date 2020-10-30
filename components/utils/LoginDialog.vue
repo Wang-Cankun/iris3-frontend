@@ -2,7 +2,7 @@
   <div>
     <v-dialog v-model="dialog" max-width="700">
       <v-card>
-        <v-card-title>Login</v-card-title>
+        <v-card-title>Sign in</v-card-title>
         <v-divider class="my-2 py-2"></v-divider>
         <v-card-text>
           <form method="post" @submit.prevent="login">
@@ -40,7 +40,7 @@
                 Forgot your password?
                 <nuxt-link to="/login/forgot">Reset password</nuxt-link>
               </p>
-              <a
+              <!--<a
                 href="http://localhost:9005/iris3/api/auth/google"
                 target="blank"
                 ><v-img
@@ -48,7 +48,7 @@
                   src="img/btn_google_signin_dark_normal_web.png"
                 >
                 </v-img
-              ></a>
+              ></a>-->
             </v-layout>
           </form>
         </v-card-text>
@@ -77,29 +77,21 @@ export default {
   data() {
     return {
       value: 1,
+      email: '',
+      password: '',
+      statusCode: '',
+      error: '',
+      snackbar: null,
     }
   },
-  computed: {
-    dialogState: {
-      get() {
-        return this.dialog
-      },
-      set(val) {
-        this.$emit('updateDialog', false)
-      },
-    },
-  },
+  computed: {},
   methods: {
     login() {
-      this.dialog = false
+      this.$emit('close')
       return 1
     },
     close() {
       this.$emit('close')
-    },
-    updateStatus(dialog) {
-      this.dialog = false
-      this.$emit('update:dialog', dialog)
     },
   },
 }

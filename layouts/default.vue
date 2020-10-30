@@ -25,7 +25,7 @@
           </template>
           <v-list>
             <v-list-item
-              v-for="item in exploremenu"
+              v-for="item in exploreMenu"
               :key="item.title"
               :to="item.path"
               link
@@ -133,7 +133,7 @@
           </v-btn>
         </template>
         <template v-else>
-          <v-btn to="/register" text>
+          <v-btn text @click="openRegisterDialog">
             <v-icon left dark>mdi-account-plus</v-icon>
             Sign up
           </v-btn>
@@ -158,8 +158,8 @@
     >
       <v-row class="mx-16">
         <v-col col="2">
-          <p style="color: white; font-family: Fantasy;">EXPLORE</p>
-          <p v-for="item in exploremenu" :key="item.title">
+          <p class="font-weight-bold" style="color: white;">EXPLORE</p>
+          <p v-for="item in exploreMenu" :key="item.title">
             <nuxt-link
               :to="item.path"
               style="color: white; text-decoration: none;"
@@ -169,7 +169,7 @@
           </p>
         </v-col>
         <v-col col="2">
-          <p style="color: white; font-family: Fantasy;">HELP</p>
+          <p class="font-weight-bold" style="color: white;">HELP</p>
           <p v-for="item in helpmenu" :key="item.title">
             <nuxt-link
               :to="item.path"
@@ -181,7 +181,7 @@
           <p><v-spacer></v-spacer></p>
         </v-col>
         <v-col col="2">
-          <p style="color: white; font-family: Fantasy;">NEWS</p>
+          <p class="font-weight-bold" style="color: white;">NEWS</p>
           <p v-for="item in newsmenu" :key="item.title">
             <nuxt-link
               :to="item.path"
@@ -192,7 +192,7 @@
           </p>
         </v-col>
         <v-col col="2">
-          <p style="color: white; font-family: Fantasy;">DEVELOPMENT</p>
+          <p class="font-weight-bold" style="color: white;">DEVELOPMENT</p>
           <p v-for="item in developmenu" :key="item.title">
             <nuxt-link
               :to="item.path"
@@ -203,7 +203,7 @@
           </p>
         </v-col>
         <v-col col="2">
-          <p style="color: white; font-family: Fantasy;">ABOUT</p>
+          <p class="font-weight-bold" style="color: white;">ABOUT</p>
           <p v-for="item in aboutmenu" :key="item.title">
             <nuxt-link
               :to="item.path"
@@ -214,7 +214,7 @@
           </p>
         </v-col>
         <v-col col="2">
-          <p style="color: white; font-family: Fantasy;">SOCIAL</p>
+          <p class="font-weight-bold" style="color: white;">SOCIAL</p>
           <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon dark left>
             <v-icon size="24px">
               {{ icon }}
@@ -223,14 +223,18 @@
         </v-col>
       </v-row>
       <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
-        IRIS3 (Version V1.2.2) is developed by
+        IRIS3 (v1.2.2) is developed by
         <a href="https://u.osu.edu/bmbl/">BMBL</a>, it is free and open to all
         users. | {{ new Date().getFullYear() }}
       </v-col>
       <login-dialog
-        :dialog.sync="dialog"
-        @close="dialog = false"
+        :dialog.sync="loginDialog"
+        @close="loginDialog = false"
       ></login-dialog>
+      <register-dialog
+        :dialog.sync="registerDialog"
+        @close="registerDialog = false"
+      ></register-dialog>
     </v-footer>
     <snackbar></snackbar>
   </v-app>
@@ -240,30 +244,33 @@
 import { mapGetters } from 'vuex'
 import Snackbar from '../components/utils/SnackBar'
 import LoginDialog from '../components/utils/LoginDialog'
+import RegisterDialog from '../components/utils/RegisterDialog'
 export default {
   components: {
     snackbar: Snackbar,
     'login-dialog': LoginDialog,
+    'register-dialog': RegisterDialog,
   },
   data() {
     return {
-      dialog: false,
+      loginDialog: false,
+      registerDialog: false,
       clipped: false,
       drawer: false,
       fixed: false,
       searchJobId: '',
-      exploremenu: [
+      exploreMenu: [
         {
           title: 'scRNA-Seq',
-          path: '/submit',
+          path: '/upload',
         },
         {
           title: 'Multiple scRNA-Seq',
-          path: '/submit',
+          path: '/upload',
         },
         {
           title: 'scRNA-Seq and scATAC-Seq',
-          path: '/submit',
+          path: '/upload',
         },
         {
           title: 'Public IRIS3 projects',
@@ -350,7 +357,10 @@ export default {
       await this.$auth.logout()
     },
     openLoginDialog() {
-      this.dialog = true
+      this.loginDialog = true
+    },
+    openRegisterDialog() {
+      this.registerDialog = true
     },
   },
 }
