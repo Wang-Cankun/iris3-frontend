@@ -1,82 +1,83 @@
 <template>
   <div>
+    <project-info></project-info>
     <v-stepper v-model="e1" alt-labels>
       <v-stepper-header>
-        <v-stepper-step :complete="e1 > 1" step="1">Upload data</v-stepper-step>
-
-        <v-divider></v-divider>
-
-        <v-stepper-step :complete="e1 > 2" step="2"
-          >Quality Check</v-stepper-step
+        <v-stepper-step :complete="e1 > 1" step="1"
+          >Quality control</v-stepper-step
         >
-
         <v-divider></v-divider>
-
-        <v-stepper-step :complete="e1 > 3" step="3">Clustering</v-stepper-step>
-
+        <v-stepper-step :complete="e1 > 2" step="2"
+          >Cell clustering</v-stepper-step
+        >
         <v-divider></v-divider>
-
+        <v-stepper-step :complete="e1 > 3" step="3">Gene set</v-stepper-step>
+        <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 4" step="4"
+          >Motif finding</v-stepper-step
+        >
+        <v-divider></v-divider>
+        <v-stepper-step :complete="e1 > 5" step="5"
           >CTSR identification</v-stepper-step
         >
-
+        <v-divider></v-divider>
+        <v-stepper-step :complete="e1 > 6" step="6">Report</v-stepper-step>
         <v-divider></v-divider>
       </v-stepper-header>
-
       <v-stepper-items>
         <v-stepper-content step="1">
-          <v-row
-            ><no-ssr><upload-data-form></upload-data-form></no-ssr
-          ></v-row>
-
+          <v-row><qc-form></qc-form></v-row>
           <v-btn color="primary" @click="e1 = 2">
             Continue
           </v-btn>
-
-          <v-btn text>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-row><qc-form></qc-form></v-row>
-
           <v-btn color="primary" @click="e1 = 3">
             Continue
           </v-btn>
-
           <v-btn text @click="e1 = 1">Previous</v-btn>
         </v-stepper-content>
-
         <v-stepper-content step="3">
           <v-row><cell-cluster-form></cell-cluster-form></v-row>
-
           <v-btn color="primary" @click="e1 = 4">
             Continue
           </v-btn>
-
           <v-btn text @click="e1 = 2">Previous</v-btn>
         </v-stepper-content>
-
         <v-stepper-content step="4">
-          <v-row><regulon-form></regulon-form></v-row>
-
+          <v-row></v-row>
+          <v-btn color="primary" @click="e1 = 5">
+            Continue
+          </v-btn>
           <v-btn text @click="e1 = 3">Previous</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="5">
+          <v-row></v-row>
+          <v-btn color="primary" @click="e1 = 6">
+            Continue
+          </v-btn>
+          <v-btn text @click="e1 = 4">Previous</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="6">
+          <v-row><regulon-form></regulon-form></v-row>
+          <v-btn text @click="e1 = 5">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
   </div>
 </template>
-
 <script>
-import UploadData from '@/components/forms/UploadData.vue'
 import QualityCheck from '@/components/forms/QualityCheck.vue'
 import CellCluster from '@/components/forms/CellCluster.vue'
 import Regulon from '@/components/forms/Regulon.vue'
+import ProjectInfo from '~/components/forms/ProjectInfo'
 
 export default {
   components: {
-    'upload-data-form': UploadData,
     'qc-form': QualityCheck,
     'cell-cluster-form': CellCluster,
     'regulon-form': Regulon,
+    'project-info': ProjectInfo,
   },
   data() {
     return {

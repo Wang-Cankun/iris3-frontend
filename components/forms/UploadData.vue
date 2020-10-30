@@ -2,116 +2,176 @@
   <v-col class="mb-2" cols="12">
     <v-form ref="form" v-model="valid" lazy-validation>
       <!-- Title  -->
-      <p class="title">Project title</p>
+
+      <v-col cols="12">
+        <v-row justify="space-between">
+          <p class="title">Project title</p>
+
+          <v-switch
+            v-model="isPrivateProject"
+            :label="isPrivateProject ? 'Private project' : 'Public project'"
+          ></v-switch>
+        </v-row>
+      </v-col>
       <v-text-field
         v-model="title"
         :rules="rules"
         counter="25"
         label="Title:"
         outlined
-      ></v-text-field>
-      <v-select
-        v-model="speciesSelect"
-        :items="species"
-        label="Select species:"
-        :rules="fileRules"
         required
-      ></v-select>
-      <!-- Upload data  -->
-      <v-card outlined hover color="primary">
-        <v-col cols="12">
-          <v-row justify="space-between">
-            <p class="title white--text">
-              Upload data
-            </p>
-            <v-btn @click="loadExample()">Load example data</v-btn>
-          </v-row>
-        </v-col>
-
-        <v-tabs v-model="tab" background-color="white" grow>
-          <v-tab>scRNA-Seq data only </v-tab>
-          <v-tab>scRNA-Seq + scATAC-seq data </v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tab">
-          <v-tab-item>
-            <p class="title ma-0">
-              Upload scRNA-seq data
-            </p>
-            <div v-for="(n, i) in multipleDatasetsLength" :key="n">
-              <v-file-input
-                v-model="expFile[i]"
-                color="primary"
-                counter
-                chips
-                :rules="fileRules"
-                :label="'Upload sample ' + n"
-                prepend-icon="mdi-paperclip"
-                outlined
-                required
-                multiple
-              ></v-file-input>
-            </div>
-            <v-btn @click="addMultipleDataset">Add a row</v-btn>
-            <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
-
-            <p class="title">
-              Upload metadata (Optional)
-            </p>
-
-            <v-file-input
-              v-model="labelFile"
-              color="primary"
-              counter
-              chips
-              label="Click to upload (txt, tsv, csv)"
-              prepend-icon="mdi-paperclip"
-              outlined
-            ></v-file-input>
-          </v-tab-item>
-          <v-tab-item>
-            <p class="title ma-0">
-              Upload scRNA-seq and scATAC-seq data
-            </p>
-            <v-file-input
-              v-model="expFile[0]"
-              color="primary"
-              counter
-              chips
-              :rules="fileRules"
-              label="Upload scRNA-seq dataset"
-              prepend-icon="mdi-paperclip"
-              outlined
-              required
-              multiple
-            ></v-file-input>
-            <v-file-input
-              v-model="expFile[1]"
-              color="primary"
-              counter
-              chips
-              :rules="fileRules"
-              label="Upload scATAC-seq dataset"
-              prepend-icon="mdi-paperclip"
-              outlined
-              required
-              multiple
-            ></v-file-input>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
-
-      <p class="title mt-3">
-        Email (Optional)
-      </p>
-
-      <v-text-field
-        v-model="email"
-        outlined
-        label="E-mail"
-        hint="Optional: You will be notified by email when the job is done."
-        persistent-hint
       ></v-text-field>
+      <v-col cols="12">
+        <v-row justify="space-between">
+          <p class="title">
+            Upload data
+          </p>
+        </v-row>
+      </v-col>
+      <v-col cols="3" class="ma-0 pa-0"
+        ><v-select
+          v-model="speciesSelect"
+          :items="species"
+          label="Select species:"
+          :rules="fileRules"
+          required
+        ></v-select
+      ></v-col>
+      <v-tabs v-model="tab" background-color="white" grow>
+        <v-tab>scRNA-Seq data </v-tab>
+        <v-tab>Multiple scRNA-Seq data </v-tab>
+        <v-tab>scRNA-Seq & scATAC-seq data </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="tab">
+        <v-tab-item>
+          <v-file-input
+            v-model="expFile[0]"
+            color="primary"
+            counter
+            chips
+            :rules="fileRules"
+            label="Click to upload (txt, tsv, csv)"
+            prepend-icon="mdi-paperclip"
+            outlined
+            required
+            class="mt-5"
+          ></v-file-input>
+          <v-col cols="3" class="ma-0 pa-0"
+            ><v-menu close-on-click>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on">
+                  Example
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item @click="loadExample">
+                  <v-list-item-title>{{
+                    singleExample[0].item
+                  }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="singleExample[1].link"
+                    >
+                      {{ singleExample[1].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="singleExample[2].link"
+                    >
+                      {{ singleExample[2].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+              </v-list>
+            </v-menu></v-col
+          >
+          <p class="title mt-5">
+            Upload metadata (Optional)
+          </p>
+
+          <v-file-input
+            v-model="labelFile"
+            color="primary"
+            counter
+            chips
+            label="Click to upload (txt, tsv, csv)"
+            prepend-icon="mdi-paperclip"
+            outlined
+          ></v-file-input>
+        </v-tab-item>
+        <v-tab-item>
+          <p class="title ma-0">
+            Upload scRNA-seq data
+          </p>
+          <div v-for="(n, i) in multipleDatasetsLength" :key="n">
+            <v-file-input
+              v-model="expFile[i]"
+              color="primary"
+              counter
+              chips
+              :rules="fileRules"
+              :label="'Upload sample ' + n"
+              prepend-icon="mdi-paperclip"
+              outlined
+              required
+              multiple
+            ></v-file-input>
+          </div>
+          <v-btn @click="addMultipleDataset">Add a row</v-btn>
+          <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
+
+          <p class="title">
+            Upload metadata (Optional)
+          </p>
+
+          <v-file-input
+            v-model="labelFile"
+            color="primary"
+            counter
+            chips
+            label="Click to upload (txt, tsv, csv)"
+            prepend-icon="mdi-paperclip"
+            outlined
+          ></v-file-input>
+        </v-tab-item>
+        <v-tab-item>
+          <p class="title ma-0">
+            Upload scRNA-seq and scATAC-seq data
+          </p>
+          <v-file-input
+            v-model="expFile[0]"
+            color="primary"
+            counter
+            chips
+            :rules="fileRules"
+            label="Upload scRNA-seq dataset"
+            prepend-icon="mdi-paperclip"
+            outlined
+            required
+            multiple
+          ></v-file-input>
+          <v-file-input
+            v-model="expFile[1]"
+            color="primary"
+            counter
+            chips
+            :rules="fileRules"
+            label="Upload scATAC-seq dataset"
+            prepend-icon="mdi-paperclip"
+            outlined
+            required
+            multiple
+          ></v-file-input>
+        </v-tab-item>
+      </v-tabs-items>
 
       <p class="title">
         Project description (Optional)
@@ -119,13 +179,23 @@
       <v-textarea v-model="description" outlined label="Description:" clearable>
       </v-textarea>
     </v-form>
+
+    <p class="title mt-3">
+      Email (Optional)
+    </p>
+
+    <v-text-field
+      v-model="email"
+      outlined
+      label="E-mail"
+      hint="Optional: You will be notified by email when the job is done."
+      persistent-hint
+    ></v-text-field>
     <v-row justify="center">
       <v-btn color="Primary" width="300" rounded @click="submit()"
-        >Upload</v-btn
+        >Create project</v-btn
       >
     </v-row>
-
-    <p v-if="jobid != ''">Your Job ID: {{ jobid }}, please continue.</p>
   </v-col>
 </template>
 
@@ -148,6 +218,7 @@ function dataURLtoFile(dataurl, filename) {
 export default {
   data: () => ({
     title: '',
+    isPrivateProject: true,
     tab: null,
     jobid: '',
     valid: true,
@@ -156,10 +227,25 @@ export default {
     labelFile: null,
     species: ['Human', 'Mouse'],
     speciesSelect: '',
+    singleExample: [
+      { item: 'Load example (Zeisel et al, 2015)' },
+      {
+        item: 'Download gene expression matrix (Zeisel et al, 2015) ',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_expression.csv',
+      },
+      {
+        item: 'Download cell label file (Zeisel et al, 2015)',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_index_label.csv',
+      },
+    ],
     email: '',
     description: '',
     multipleDatasetsLength: 1,
-    rules: [(v) => v.length <= 25 || 'Max 25 characters'],
+    rules: [
+      (v) =>
+        (v && v.length <= 50) ||
+        'Project tiile is required (Max 50 characters)',
+    ],
     nameRules: [
       (v) => !!v || 'Field is required',
       (v) => (v && v.length <= 20) || 'Name must be less than 20 characters',
@@ -182,6 +268,8 @@ export default {
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
         'Zeisel et al. 2015.'
       )
+      this.speciesSelect = 'Mouse'
+      this.title = 'Example data (Zeisel et al. 2015.)'
       this.$notifier.showMessage({
         content: 'Example dataset loaded: Zeisel et al. 2015.',
         color: 'success',
@@ -234,6 +322,9 @@ export default {
           this.$notifier.showMessage({
             content: 'Jobid: ' + this.jobid + ' Upload success!',
             color: 'success',
+          })
+          this.$router.push({
+            path: '/submit',
           })
         }, 3000)
       }

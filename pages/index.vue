@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-col cols="8" offset="2">
     <v-row class="my-14">
       <!-- Header Text -->
       <v-row>
@@ -12,7 +12,7 @@
 
     <!-- three buttons -->
     <v-row class="my-12" justify="space-between">
-      <v-btn to="/submit" color="primary" width="240" rounded x-large>
+      <v-btn to="/upload" color="primary" width="240" rounded x-large>
         new project
       </v-btn>
       <v-btn to="/public" color="primary" width="240" rounded x-large>
@@ -42,7 +42,7 @@
       <v-col>
         <v-card class="mb-8" height="290" outlined loading>
           <v-card-title>
-            Sign In To My Account
+            Sign In
           </v-card-title>
           <v-text-field
             v-model="email"
@@ -57,8 +57,8 @@
             label="Password"
           ></v-text-field>
           <v-row justify="space-around" class="mb-2">
-            <v-btn rounded>Forget password</v-btn>
             <v-btn color="primary" rounded>Sign in</v-btn>
+            <v-btn rounded>Forgot password</v-btn>
             <v-btn rounded>Create an account</v-btn>
           </v-row>
         </v-card>
@@ -132,13 +132,15 @@
         </client-only>
       </v-layout>
     </v-row>
-  </v-container>
+  </v-col>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      email: '',
+      password: '',
       newsdate: '5/2/2020',
       newscontent:
         'The manuscript IRIS3: Integrated Cell-type-specific Regulon Inference Server from Single-cell RNA-Seq has been officially accepted by Nucleic Acids Research!',
