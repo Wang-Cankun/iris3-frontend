@@ -40,7 +40,7 @@
 
       <!-- Login  -->
       <v-col>
-        <v-card class="mb-8" height="290" outlined loading>
+        <v-card class="mb-8" height="290" outlined>
           <v-card-title>
             Sign In To My Account
           </v-card-title>

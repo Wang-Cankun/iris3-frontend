@@ -13,7 +13,7 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-card class="my-12" outlined color="accent" height="380" rounded="lg">
+        <v-card class="my-12" outlined rounded="lg">
           <v-card-title class="justify-center">Project title</v-card-title>
           <v-card outlined class="mx-10" height="100" rounded="lg">
             <v-card-subtitle>Here are project description</v-card-subtitle>
@@ -46,25 +46,17 @@
             >
           </v-row>
           <v-row class="ma-6" justify="space-around">
-            <v-card color="warning" outlined rounded="pill" width="340"
-              ><v-card-title class="justify-center"
-                >0 Pending jobs</v-card-title
-              ></v-card
+            <v-btn color="warning" rounded="pill" width="340"
+              >0 Pending jobs</v-btn
             >
-            <v-card color="success" outlined rounded="pill" width="340"
-              ><v-card-title class="justify-center"
-                >1 Completed jobs</v-card-title
-              ></v-card
+            <v-btn color="success" rounded="pill" width="340"
+              >1 Completed jobs</v-btn
             >
-            <v-card color="error" outlined rounded="pill" width="340"
-              ><v-card-title class="justify-center"
-                >0 Error jobs</v-card-title
-              ></v-card
-            >
+            <v-btn color="error" rounded="pill" width="340">0 Error jobs</v-btn>
           </v-row>
         </v-card>
 
-        <v-card outlined class="my-12" color="accent" height="380" rounded="lg">
+        <v-card outlined class="my-12" rounded="lg">
           <v-card-title class="justify-center">Project title</v-card-title>
           <v-card outlined class="mx-10" height="100" rounded="lg">
             <v-card-subtitle>Here are project description</v-card-subtitle>
@@ -97,21 +89,13 @@
             >
           </v-row>
           <v-row class="ma-6" justify="space-around">
-            <v-card color="warning" outlined rounded="pill" width="340"
-              ><v-card-title class="justify-center"
-                >1 Pending jobs</v-card-title
-              ></v-card
+            <v-btn color="warning" rounded="pill" width="340"
+              >1 Pending jobs</v-btn
             >
-            <v-card color="success" outlined rounded="pill" width="340"
-              ><v-card-title class="justify-center"
-                >1 Completed jobs</v-card-title
-              ></v-card
+            <v-btn color="success" rounded="pill" width="340"
+              >1 Completed jobs</v-btn
             >
-            <v-card color="error" outlined rounded="pill" width="340"
-              ><v-card-title class="justify-center"
-                >1 Error jobs</v-card-title
-              ></v-card
-            >
+            <v-btn color="error" rounded="pill" width="340">1 Error jobs</v-btn>
           </v-row>
         </v-card>
       </v-tab-item>
