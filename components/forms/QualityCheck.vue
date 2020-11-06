@@ -89,46 +89,118 @@
               </v-card>
 
               <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
-                <p class="title text-center">Preprocessing parameters</p>
-                <p class="ml-4 title-h4">Cell filter</p>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Preprocessing parameters
+                </p>
+                <v-row class="ml-4"
+                  ><p class="mt-4 title-h4">Cell filter</p>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                    </template>
+                    <p>
+                      Cells with zero values in more than # genes are removed
+                    </p>
+                  </v-tooltip></v-row
+                >
                 <v-text-field
                   v-model="cellFilter"
                   class="px-6"
                   outlined
                   background-color="white"
                 ></v-text-field>
-                <p class="ml-4 title-h4">Gene filter</p>
+                <v-row class="ml-4"
+                  ><p class="mt-4 title-h4">Gene filter</p>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                    </template>
+                    <p>
+                      Genes with zero values in more than # cells are removed
+                    </p>
+                  </v-tooltip></v-row
+                >
                 <v-text-field
                   v-model="geneFilter"
                   class="px-6"
                   outlined
                   background-color="white"
                 ></v-text-field>
-                <p class="ml-4 title-h4">Mitochondrial percentage filter</p>
+                <v-row class="ml-4"
+                  ><p class="mt-4 title-h4">Mitochondrial percentage filter</p>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                    </template>
+                    <p>
+                      Cells with more than # percent mitochondrial counts are
+                      removed
+                    </p>
+                  </v-tooltip></v-row
+                >
                 <v-text-field
                   v-model="mitoFilter"
                   class="px-6"
                   outlined
                   background-color="white"
                 ></v-text-field>
-                <p class="ml-4 title-h4">Variable features</p>
+                <v-row class="ml-4"
+                  ><p class="mt-4 title-h4">Variable features</p>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                    </template>
+                    <p>
+                      Select a subset of features that exhibit high cell-to-cell
+                      variation in the dataset
+                    </p>
+                  </v-tooltip></v-row
+                >
                 <v-text-field
                   v-model="nVariableFeatures"
                   class="px-6"
                   outlined
                   background-color="white"
                 ></v-text-field>
-                <v-col class="ml-4" cols="11"
+                <v-row class="ml-4 mb-0 py-0"
+                  ><p class="mt-4 title-h4">Normalization</p>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                    </template>
+                    <p>
+                      Data Normalization methods:
+                    </p>
+                    <p>
+                      LogNormalize: Seurat's default method which Normalizes the
+                      gene expression measurements for each cell by the total
+                      expression, multiplies this by a scale factor (10,000 by
+                      default), and log-transforms the result.
+                    </p>
+                  </v-tooltip></v-row
+                >
+                <v-col class="ml-4 py-0" cols="11"
                   ><v-select
                     v-model="normalizeSelect"
                     :items="normalizeMethods"
-                    label="Normalization method:"
+                    label=""
                   ></v-select
                 ></v-col>
+
                 <v-checkbox v-model="removeRibosome" class="ml-4">
                   <template v-slot:label>
                     <div>
-                      Ribosome genes removal.
+                      Ribosome genes removal
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <v-icon color="primary" dark v-on="on"
@@ -152,18 +224,41 @@
                 </v-row>
               </v-card>
             </v-col>
-            <v-col v-if="qcResult !== null" cols="8"
+            <v-col v-if="qcResult !== null" cols="9"
               ><p v-if="timeElapsed != ''">
                 Execute time: {{ timeElapsed }} seconds
               </p>
+
               <resize-image
-                :src="qcViolin"
-                title="Violin plot for genes, RNA counts, percentage of
-                    mitochondrial genes and ribosome genes"
+                :src="qcViolin1"
+                title="Number of genes detected in each cell"
+                :x="position.qcViolin1.x"
+                :y="position.qcViolin1.y"
+              ></resize-image>
+              <resize-image
+                :src="qcViolin2"
+                title="Total number of molecules detected within a cell"
+                :x="position.qcViolin2.x"
+                :y="position.qcViolin2.y"
+              ></resize-image>
+              <resize-image
+                :src="qcViolin3"
+                title="Mitocondrial genes percent"
+                :x="position.qcViolin3.x"
+                :y="position.qcViolin3.y"
+              ></resize-image>
+              <resize-image
+                :src="qcViolin4"
+                title="Ribosome genes percent"
+                :x="position.qcViolin4.x"
+                :y="position.qcViolin4.y"
               ></resize-image>
               <resize-image
                 :src="varGenesScatter"
-                title="Scatter plot"
+                title="Highly variable genes"
+                :x="position.varGenesScatter.x"
+                :y="position.varGenesScatter.y"
+                :w="position.varGenesScatter.w"
               ></resize-image>
             </v-col>
             <v-col cols="7"> </v-col>
@@ -187,14 +282,40 @@ export default {
       cellFilter: '0',
       geneFilter: '0',
       mitoFilter: '0',
-      normalization: 'Seurat',
+      normalization: 'LogNormalize',
       nVariableFeatures: '2000',
       timeElapsed: '',
-      normalizeSelect: 'Seurat',
-      normalizeMethods: ['Seurat'],
+      normalizeSelect: 'LogNormalize',
+      normalizeMethods: ['LogNormalize'],
       qcResult: null,
-      qcViolin: '',
+      qcViolin1: '',
+      qcViolin2: '',
+      qcViolin3: '',
+      qcViolin4: '',
       varGenesScatter: '',
+      position: {
+        qcViolin1: {
+          x: 0,
+          y: 0,
+        },
+        qcViolin2: {
+          x: 500,
+          y: 0,
+        },
+        qcViolin3: {
+          x: 1000,
+          y: 0,
+        },
+        qcViolin4: {
+          x: 0,
+          y: 500,
+        },
+        varGenesScatter: {
+          x: 500,
+          y: 500,
+          w: 1000,
+        },
+      },
     }
   },
   methods: {
@@ -230,15 +351,14 @@ export default {
           }, 1000)
         })
         .catch((error) => {
-          console.log({ error })
           this.$notifier.showMessage({
-            content: 'Calculate QC metrics error!',
+            content: 'Calculate QC metrics error: ' + error,
             color: 'error',
           })
         })
 
       await this.$axios
-        .post('iris3/api/queue/qcplot/')
+        .post('iris3/api/queue/qcplot1/')
         .then((response) => {
           let i = 0
           const checkComplete = setInterval(async () => {
@@ -246,13 +366,13 @@ export default {
               .get('iris3/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
-                  this.qcViolin = response.data.returnvalue
+                  this.qcViolin1 = response.data.returnvalue
                   this.timeElapsed =
                     (response.data.finishedOn - response.data.processedOn) /
                     1000
                   clearInterval(checkComplete)
                 }
-                if (++i === 10) {
+                if (++i === 15) {
                   clearInterval(checkComplete)
                 }
               })
@@ -266,6 +386,92 @@ export default {
           })
         })
 
+      await this.$axios
+        .post('iris3/api/queue/qcplot2/')
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.qcViolin2 = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                }
+                if (++i === 15) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot QC violin error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/qcplot3/')
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.qcViolin3 = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                }
+                if (++i === 15) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot QC violin error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/qcplot4/')
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.qcViolin4 = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                }
+                if (++i === 15) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot QC violin error!',
+            color: 'error',
+          })
+        })
       await this.$axios
         .post('iris3/api/queue/var-genes-plot/')
         .then((response) => {

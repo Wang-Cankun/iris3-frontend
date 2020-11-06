@@ -6,11 +6,20 @@
       <v-col cols="12">
         <v-row justify="space-between">
           <p class="title">Project title</p>
-
+          <v-spacer></v-spacer>
           <v-switch
             v-model="isPrivateProject"
             :label="isPrivateProject ? 'Private project' : 'Public project'"
           ></v-switch>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon color="primary" dark v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>Public project: anyone can access project through Job ID.</p>
+            <p>Private project: project is only avaiable with shared users.</p>
+          </v-tooltip>
         </v-row>
       </v-col>
       <v-text-field
@@ -22,21 +31,42 @@
         required
       ></v-text-field>
       <v-col cols="12">
-        <v-row justify="space-between">
-          <p class="title">
+        <v-row>
+          <p class="title mt-4">
             Upload data
           </p>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon color="primary" dark v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            A gene expression file with genes as rows and cells as columns.
+            Users can provide normalized or non-normalized file (Read counts)
+            for the submission. Accept txt, csv, and tsv format for text gene
+            expression matrix, 10X hdf5 or gene-barcode matrices.
+          </v-tooltip>
         </v-row>
       </v-col>
-      <v-col cols="3" class="ma-0 pa-0"
-        ><v-select
-          v-model="speciesSelect"
-          :items="species"
-          label="Select species:"
-          :rules="fileRules"
-          required
-        ></v-select
-      ></v-col>
+      <v-col cols="3" class="">
+        <v-row
+          ><v-select
+            v-model="speciesSelect"
+            :items="species"
+            label="Select species:"
+            :rules="fileRules"
+            required
+          ></v-select>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon color="primary" dark v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            Specify the species belonging to your gene expression matrix.
+          </v-tooltip></v-row
+        >
+      </v-col>
       <v-tabs v-model="tab" background-color="white" grow>
         <v-tab>scRNA-Seq data </v-tab>
         <v-tab>Multiple scRNA-Seq data </v-tab>
@@ -91,11 +121,30 @@
                   >
                 </v-list-item>
               </v-list>
-            </v-menu></v-col
+            </v-menu>
+          </v-col>
+          <v-col cols="12"
+            ><v-row>
+              <p class="title mt-4">
+                Upload metadata (Optional)
+              </p>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon color="primary" dark v-on="on"
+                    >mdi-help-circle-outline</v-icon
+                  >
+                </template>
+                <p>
+                  Provide cell labels for regulon identification (Cell label
+                  should be at least two factors).
+                </p>
+                <p>
+                  This file contains two columns: cell names and cell labels.
+                  Regulons will be predicted based on the provided cell labels.
+                </p>
+              </v-tooltip></v-row
+            ></v-col
           >
-          <p class="title mt-5">
-            Upload metadata (Optional)
-          </p>
 
           <v-file-input
             v-model="labelFile"
@@ -173,16 +222,52 @@
         </v-tab-item>
       </v-tabs-items>
 
-      <p class="title">
+      <v-col cols="12"
+        ><v-row>
+          <p class="title mt-4">
+            Project description (Optional)
+          </p>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon color="primary" dark v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>
+              Set descripting here
+            </p>
+          </v-tooltip></v-row
+        ></v-col
+      >
+      <p class="title mt-4">
         Project description (Optional)
       </p>
       <v-textarea v-model="description" outlined label="Description:" clearable>
       </v-textarea>
     </v-form>
 
-    <p class="title mt-3">
-      Email (Optional)
-    </p>
+    <v-col cols="12"
+      ><v-row>
+        <p class="title mt-4">
+          Email (Optional)
+        </p>
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-icon color="primary" dark v-on="on"
+              >mdi-help-circle-outline</v-icon
+            >
+          </template>
+          <p>
+            The running time usually takes a few hours, and can be more than 10
+            hours if there are more than 5000 cells in your data.
+          </p>
+          <p>
+            Hence, we strongly recommend you to leave your email, and you will
+            be notified by email when the job is done.
+          </p>
+        </v-tooltip></v-row
+      ></v-col
+    >
 
     <v-text-field
       v-model="email"
