@@ -1,21 +1,23 @@
 <template>
   <v-col class="mb-2" cols="12">
     <v-tabs v-model="tab" color="primary" slider-color="purple">
-      <v-tab>Dataset 1 </v-tab>
+      <v-tab title font-weight-bold text-center>Dataset 1 </v-tab>
       <v-tab v-show="false">Dataset 2 </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-card outlined>
           <v-row>
-            <v-col cols="3">
+            <v-col cols="2">
               <v-card
                 v-if="qcResult !== null"
                 outlined
                 hover
                 color="blue-grey lighten-5"
               >
-                <p class="title text-center">Original data statistics</p>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Original data statistics
+                </p>
 
                 <p class="ml-4 title-h4">
                   Cell number: {{ qcResult.raw_n_cells[0] }}
@@ -31,7 +33,7 @@
                   Zero expression percentage:
                   {{ qcResult.raw_percent_zero[0] }}
                 </p>
-                <p class="title text-center">
+                <p class="subtitle-1 font-weight-bold text-center">
                   Current data statistics:
                 </p>
                 <p class="ml-4 title-h4">
@@ -224,7 +226,7 @@
                 </v-row>
               </v-card>
             </v-col>
-            <v-col v-if="qcResult !== null" cols="9"
+            <v-col v-if="qcResult !== null" cols="10"
               ><p v-if="timeElapsed != ''">
                 Execute time: {{ timeElapsed }} seconds
               </p>
@@ -260,8 +262,15 @@
                 :y="position.varGenesScatter.y"
                 :w="position.varGenesScatter.w"
               ></resize-image>
+              <resize-table
+                :src="varGenesList"
+                title="Highly variable genes"
+                :x="position.varGenesList.x"
+                :y="position.varGenesList.y"
+                :w="position.varGenesList.w"
+              ></resize-table>
             </v-col>
-            <v-col cols="7"> </v-col>
+            <v-col cols="7"></v-col>
           </v-row>
         </v-card>
       </v-tab-item>
@@ -270,9 +279,11 @@
 </template>
 <script>
 import ResizeImage from '~/components/utils/ResizeImage'
+import ResizeTable from '~/components/utils/ResizeTable'
 export default {
   components: {
     'resize-image': ResizeImage,
+    'resize-table': ResizeTable,
   },
   data() {
     return {
@@ -293,27 +304,33 @@ export default {
       qcViolin3: '',
       qcViolin4: '',
       varGenesScatter: '',
+      varGenesList: [],
       position: {
         qcViolin1: {
           x: 0,
           y: 0,
         },
         qcViolin2: {
-          x: 500,
+          x: 520,
           y: 0,
         },
         qcViolin3: {
-          x: 1000,
+          x: 1040,
           y: 0,
         },
         qcViolin4: {
           x: 0,
-          y: 500,
+          y: 520,
         },
         varGenesScatter: {
-          x: 500,
-          y: 500,
+          x: 520,
+          y: 520,
           w: 1000,
+        },
+        varGenesList: {
+          x: 1040,
+          y: 520,
+          w: 300,
         },
       },
     }
@@ -501,6 +518,39 @@ export default {
           console.log({ error })
           this.$notifier.showMessage({
             content: 'Plot Variable genes error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/var-genes-list/')
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.varGenesList = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  this.$notifier.showMessage({
+                    content: 'Calculate QC metrics success!',
+                    color: 'success',
+                  })
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Get Variable genes list error!',
             color: 'error',
           })
         })
