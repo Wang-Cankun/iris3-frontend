@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import vPlotly from '@statnett/vue-plotly'
-import vdr from 'vue-draggable-resizable-gorkys'
-
-import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
+import VueGridLayout from 'vue-grid-layout'
 
 const VuePlotly = {
   install(Vue) {
@@ -11,6 +9,7 @@ const VuePlotly = {
 }
 Vue.use(VuePlotly)
 Vue.component('downloadExcel')
+Vue.component('grid-layout', VueGridLayout.GridLayout)
+Vue.component('grid-item', VueGridLayout.GridItem)
 
-Vue.component('vdr', vdr)
 export default { VuePlotly }

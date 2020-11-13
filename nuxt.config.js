@@ -41,7 +41,7 @@ export default {
    */
   plugins: [
     '~/plugins/notifier.js',
-    { src: '~/plugins/plotly.js', mode: 'client' },
+    { src: '~/plugins/plugin.js', mode: 'client' },
   ],
   /*
    ** Auto import components
