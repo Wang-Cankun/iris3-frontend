@@ -15,42 +15,43 @@
                 hover
                 color="blue-grey lighten-5"
               >
-                <p class="subtitle-1 font-weight-bold text-center">
-                  Original data statistics
-                </p>
+                <v-card-text>
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Original data statistics
+                  </p>
 
-                <p class="ml-4 title-h4">
-                  Cell number: {{ qcResult.raw_n_cells[0] }}
-                </p>
-                <p class="ml-4 title-h4">
-                  Gene number: {{ qcResult.raw_n_genes[0] }}
-                </p>
-                <p class="ml-4 title-h4">
-                  Average expression level:
-                  {{ qcResult.raw_mean_expr[0] }}
-                </p>
-                <p class="ml-4 title-h4">
-                  Zero expression percentage:
-                  {{ qcResult.raw_percent_zero[0] }}
-                </p>
-                <p class="subtitle-1 font-weight-bold text-center">
-                  Current data statistics:
-                </p>
-                <p class="ml-4 title-h4">
-                  Cell number: {{ qcResult.filter_n_cells[0] }}
-                </p>
-                <p class="ml-4 title-h4">
-                  Gene number: {{ qcResult.filter_n_genes[0] }}
-                </p>
-                <p class="ml-4 title-h4">
-                  Average expression level:
-                  {{ qcResult.filter_mean_expr[0] }}
-                </p>
-                <p class="ml-4 title-h4">
-                  Zero expression percentage:
-                  {{ qcResult.filter_percent_zero[0] }}
-                </p>
-
+                  <p class="text--secondary">
+                    Cell number: {{ qcResult.raw_n_cells[0] }}
+                  </p>
+                  <p class="text--secondary">
+                    Gene number: {{ qcResult.raw_n_genes[0] }}
+                  </p>
+                  <p class="text--secondary">
+                    Average expression level:
+                    {{ qcResult.raw_mean_expr[0] }}
+                  </p>
+                  <p class="text--secondary">
+                    Zero expression percentage:
+                    {{ qcResult.raw_percent_zero[0] }}
+                  </p>
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Current data statistics:
+                  </p>
+                  <p class="text--secondary">
+                    Cell number: {{ qcResult.filter_n_cells[0] }}
+                  </p>
+                  <p class="text--secondary">
+                    Gene number: {{ qcResult.filter_n_genes[0] }}
+                  </p>
+                  <p class="text--secondary">
+                    Average expression level:
+                    {{ qcResult.filter_mean_expr[0] }}
+                  </p>
+                  <p class="text--secondary">
+                    Zero expression percentage:
+                    {{ qcResult.filter_percent_zero[0] }}
+                  </p>
+                </v-card-text>
                 <v-row justify="center">
                   <div class="mb-2">
                     <v-menu close-on-click>
@@ -217,7 +218,7 @@
                 <v-row justify="center">
                   <v-btn
                     color="Primary"
-                    width="300"
+                    width="200"
                     rounded
                     class="mb-2"
                     @click="runPreProcess()"
@@ -230,45 +231,86 @@
               ><p v-if="timeElapsed != ''">
                 Execute time: {{ timeElapsed }} seconds
               </p>
-
-              <resize-image
-                :src="qcViolin1"
-                title="Number of genes detected in each cell"
-                :x="position.qcViolin1.x"
-                :y="position.qcViolin1.y"
-              ></resize-image>
-              <resize-image
-                :src="qcViolin2"
-                title="Total number of molecules detected within a cell"
-                :x="position.qcViolin2.x"
-                :y="position.qcViolin2.y"
-              ></resize-image>
-              <resize-image
-                :src="qcViolin3"
-                title="Mitocondrial genes percent"
-                :x="position.qcViolin3.x"
-                :y="position.qcViolin3.y"
-              ></resize-image>
-              <resize-image
-                :src="qcViolin4"
-                title="Ribosome genes percent"
-                :x="position.qcViolin4.x"
-                :y="position.qcViolin4.y"
-              ></resize-image>
-              <resize-image
-                :src="varGenesScatter"
-                title="Highly variable genes"
-                :x="position.varGenesScatter.x"
-                :y="position.varGenesScatter.y"
-                :w="position.varGenesScatter.w"
-              ></resize-image>
-              <resize-table
-                :src="varGenesList"
-                title="Highly variable genes"
-                :x="position.varGenesList.x"
-                :y="position.varGenesList.y"
-                :w="position.varGenesList.w"
-              ></resize-table>
+              <grid-layout
+                :layout.sync="layout"
+                :col-num="6"
+                :row-height="300"
+                :is-draggable="true"
+                :is-resizable="true"
+                :is-mirrored="false"
+                :vertical-compact="true"
+                :margin="[10, 10]"
+                :use-css-transforms="true"
+              >
+                <resize-image
+                  :key="layout[0].i"
+                  :x="layout[0].x"
+                  :y="layout[0].y"
+                  :w="layout[0].w"
+                  :h="layout[0].h"
+                  :i="layout[0].i"
+                  :src="qcViolin1"
+                  :title="layout[0].title"
+                >
+                </resize-image>
+                <resize-image
+                  :key="layout[1].i"
+                  :x="layout[1].x"
+                  :y="layout[1].y"
+                  :w="layout[1].w"
+                  :h="layout[1].h"
+                  :i="layout[1].i"
+                  :src="qcViolin2"
+                  :title="layout[1].title"
+                >
+                </resize-image>
+                <resize-image
+                  :key="layout[2].i"
+                  :x="layout[2].x"
+                  :y="layout[2].y"
+                  :w="layout[2].w"
+                  :h="layout[2].h"
+                  :i="layout[2].i"
+                  :src="qcViolin3"
+                  :title="layout[2].title"
+                >
+                </resize-image>
+                <resize-image
+                  :key="layout[3].i"
+                  :x="layout[3].x"
+                  :y="layout[3].y"
+                  :w="layout[3].w"
+                  :h="layout[3].h"
+                  :i="layout[3].i"
+                  :src="qcViolin4"
+                  :title="layout[3].title"
+                >
+                </resize-image>
+                <resize-image
+                  :key="layout[4].i"
+                  :x="layout[4].x"
+                  :y="layout[4].y"
+                  :w="layout[4].w"
+                  :h="layout[4].h"
+                  :i="layout[4].i"
+                  :src="varGenesScatter"
+                  :imagew="420"
+                  :imageh="210"
+                  :title="layout[4].title"
+                >
+                </resize-image>
+                <resize-table
+                  :key="layout[5].i"
+                  :x="layout[5].x"
+                  :y="layout[5].y"
+                  :w="layout[5].w"
+                  :h="layout[5].h"
+                  :i="layout[5].i"
+                  :src="varGenesList"
+                  :title="layout[5].title"
+                >
+                </resize-table>
+              </grid-layout>
             </v-col>
             <v-col cols="7"></v-col>
           </v-row>
@@ -280,6 +322,7 @@
 <script>
 import ResizeImage from '~/components/utils/ResizeImage'
 import ResizeTable from '~/components/utils/ResizeTable'
+
 export default {
   components: {
     'resize-image': ResizeImage,
@@ -287,6 +330,56 @@ export default {
   },
   data() {
     return {
+      layout: [
+        {
+          x: 0,
+          y: 0,
+          w: 1,
+          h: 1,
+          i: '0',
+          title: 'Number of genes detected in each cell',
+        },
+        {
+          x: 1,
+          y: 0,
+          w: 1,
+          h: 1,
+          i: '1',
+          title: 'Total number of molecules detected within a cell',
+        },
+        {
+          x: 2,
+          y: 0,
+          w: 1,
+          h: 1,
+          i: '2',
+          title: 'Mitocondrial genes percent',
+        },
+        {
+          x: 3,
+          y: 0,
+          w: 1,
+          h: 1,
+          i: '3',
+          title: 'Ribosome genes percent',
+        },
+        {
+          x: 0,
+          y: 1,
+          w: 2,
+          h: 1,
+          i: '4',
+          title: 'Highly variable genes',
+        },
+        {
+          x: 4,
+          y: 0,
+          w: 2,
+          h: 1,
+          i: '5',
+          title: 'Variable genes table',
+        },
+      ],
       tab: null,
       removeRibosome: false,
       title: '',
@@ -305,34 +398,6 @@ export default {
       qcViolin4: '',
       varGenesScatter: '',
       varGenesList: [],
-      position: {
-        qcViolin1: {
-          x: 0,
-          y: 0,
-        },
-        qcViolin2: {
-          x: 520,
-          y: 0,
-        },
-        qcViolin3: {
-          x: 1040,
-          y: 0,
-        },
-        qcViolin4: {
-          x: 0,
-          y: 520,
-        },
-        varGenesScatter: {
-          x: 520,
-          y: 520,
-          w: 1000,
-        },
-        varGenesList: {
-          x: 1040,
-          y: 520,
-          w: 300,
-        },
-      },
     }
   },
   methods: {

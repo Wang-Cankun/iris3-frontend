@@ -7,9 +7,11 @@
       <v-tab-item>
         <v-card outlined hover>
           <v-row>
-            <v-col cols="3">
-              <v-card class="mt-6" outlined hover color="grey lighten-1">
-                <p class="title text-center">Cell clustering Prarmeters</p>
+            <v-col cols="2">
+              <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Cell clustering Prarmeters
+                </p>
                 <div v-if="idents != ''">
                   <p class="subtitle-1 font-weight-bold text--primary">
                     Set Cell Identity for CTSR identification:
@@ -37,14 +39,14 @@
                 <v-row justify="center">
                   <v-btn
                     color="Primary"
-                    width="300"
+                    width="200"
                     rounded
                     @click="runCellCluster()"
                     >Update</v-btn
                   >
                 </v-row>
 
-                <div v-if="clusterResult != ''">
+                <div v-if="clusterResult !== ''">
                   <p class="ml-4 title-h4">
                     Bicluster overlap rate
                   </p>
@@ -81,7 +83,7 @@
                     outlined
                     background-color="white"
                   ></v-text-field>
-                  <v-row justify="center">
+                  <!--<v-row justify="center">
                     <v-btn
                       color="Primary"
                       width="300"
@@ -89,15 +91,37 @@
                       @click="runQubic()"
                       >Run CTSR identification</v-btn
                     >
-                  </v-row>
+                  </v-row>-->
                 </div>
               </v-card></v-col
             >
-            <v-col cols="8">
-              <div v-if="clusterResult == '1'">
+            <v-col cols="9">
+              <div v-if="clusterResult !== ''">
                 <p>Number of clusters: {{ clusterResult.n_seurat_clusters }}</p>
+                <grid-layout
+                  :layout.sync="layout"
+                  :col-num="6"
+                  :row-height="300"
+                  :is-draggable="true"
+                  :is-resizable="true"
+                  :is-mirrored="false"
+                  :vertical-compact="true"
+                  :margin="[10, 10]"
+                  :use-css-transforms="true"
+                >
+                  <resize-image
+                    :key="layout[0].i"
+                    :x="layout[0].x"
+                    :y="layout[0].y"
+                    :w="layout[0].w"
+                    :h="layout[0].h"
+                    :i="layout[0].i"
+                    :src="umapCluster"
+                    :title="layout[0].title"
+                  >
+                  </resize-image>
+                </grid-layout>
               </div>
-              <div><img :src="umapCluster" /></div>
             </v-col>
           </v-row>
         </v-card>
@@ -108,6 +132,16 @@
 <script>
 export default {
   data: () => ({
+    layout: [
+      {
+        x: 0,
+        y: 0,
+        w: 3,
+        h: 3,
+        i: '0',
+        title: 'UMAP plot',
+      },
+    ],
     tab: null,
     title: '',
     nPCs: '20',
