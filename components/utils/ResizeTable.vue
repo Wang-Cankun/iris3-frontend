@@ -1,18 +1,7 @@
 <template>
-  <vdr
-    :w="width"
-    :h="height"
-    :x="x"
-    :y="y"
-    :min-width="300"
-    :min-height="400"
-    :grid="[100, 100]"
-    :is-conflict-check="false"
-    :parent="true"
-    @dragging="onDrag"
-  >
-    <v-card class="mx-auto"
-      ><v-card-title ref="titleBox" class="primary white--text subtitle-1"
+  <v-card class="ma-0"
+    ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
+      <v-card-title class="primary white--text caption px-2 py-1"
         >{{ title }} <v-spacer></v-spacer>
         <v-menu bottom left>
           <template v-slot:activator="{ on, attrs }">
@@ -28,24 +17,48 @@
           </v-list>
         </v-menu></v-card-title
       >
-
-      <v-data-table
-        :headers="headers"
-        :items="genes"
-        :items-per-page="7"
-        class="elevation-1"
-      ></v-data-table>
-    </v-card>
-  </vdr>
+      <v-simple-table class="elevation-1" height="246">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                Gene
+              </th>
+              <th class="text-left">
+                Mean
+              </th>
+              <th class="text-left">
+                Min
+              </th>
+              <th class="text-left">
+                Max
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in src[0]" :key="index">
+              <td>{{ item.gene }}</td>
+              <td>{{ item.mean }}</td>
+              <td>{{ item.min }}</td>
+              <td>{{ item.max }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </grid-item></v-card
+  >
 </template>
 
 <script>
 export default {
   props: {
-    src: { type: String, required: true },
+    src: { type: Array, required: true },
     title: { type: String, required: true },
-    x: { type: Number, required: true },
-    y: { type: Number, required: true },
+    w: { type: Number, required: true, default: 2 },
+    h: { type: Number, required: true, default: 2 },
+    x: { type: Number, required: true, default: 0 },
+    y: { type: Number, required: true, default: 0 },
+    i: { type: String, required: true, default: '0' },
   },
   data() {
     return {
@@ -57,35 +70,10 @@ export default {
           value: 'data',
         },
       ],
-      width: 300,
-      height: 400,
-      titleHeight: 60,
     }
   },
-  mounted() {
-    this.matchHeight()
-  },
-  computed: {
-    genes() {
-      return this.src.map((item) => ({
-        data: item,
-      }))
-    },
-  },
+
   methods: {
-    matchHeight() {
-      this.titleHeight = this.$refs.titleBox.clientHeight + 15
-    },
-    onResize(x, y, width, height) {
-      this.x = x
-      this.y = y
-      this.width = width
-      this.height = height
-    },
-    onDrag(x, y) {
-      this.x = x
-      this.y = y
-    },
     downloadPNG() {
       const link = document.createElement('a')
       link.href = this.src
@@ -96,8 +84,32 @@ export default {
     downloadPDF() {
       return 1
     },
+    resizeEvent(i, newH, newW, newHPx, newWPx) {
+      console.log(
+        'RESIZE i=' +
+          i +
+          ', H=' +
+          newH +
+          ', W=' +
+          newW +
+          ', H(px)=' +
+          newHPx +
+          ', W(px)=' +
+          newWPx
+      )
+    },
   },
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.grid-item-border {
+  border: 1px solid #d3d3d3;
+  flex-direction: column;
+  position: relative;
+  display: flex;
+  height: 100%;
+  border-radius: 4px;
+  background: white;
+}
+</style>
