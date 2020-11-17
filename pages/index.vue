@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="8" offset="2">
+  <v-container>
     <v-row class="my-14">
       <!-- Header Text -->
       <v-row>
@@ -40,7 +40,7 @@
 
       <!-- Login  -->
       <v-col>
-        <v-card class="mb-8" height="290" outlined>
+        <v-card class="mb-8" color="#BBDEFB" height="290" outlined>
           <v-card-title>
             Sign In
           </v-card-title>
@@ -56,8 +56,8 @@
             outlined
             label="Password"
           ></v-text-field>
-          <v-row justify="space-around" class="mb-2">
-            <v-btn color="primary" rounded>Sign in</v-btn>
+          <v-row justify="center" class="mb-2">
+            <v-btn color="primary" rounded to="/Workspace">Sign in</v-btn>
             <v-btn rounded>Forgot password</v-btn>
             <v-btn rounded>Create an account</v-btn>
           </v-row>
@@ -132,7 +132,7 @@
         </client-only>
       </v-layout>
     </v-row>
-  </v-col>
+  </v-container>
 </template>
 
 <script>
