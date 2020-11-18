@@ -112,7 +112,7 @@
         v-model="searchJobId"
         solo-inverted
         flat
-        clearble
+        clearable
         hide-details
         label="Search Job ID"
         type="search"
