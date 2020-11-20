@@ -310,6 +310,16 @@
                   :title="layout[5].title"
                 >
                 </resize-table>
+                <resize-image
+                  :key="layout[6].i"
+                  :x="layout[6].x"
+                  :y="layout[6].y"
+                  :w="layout[6].w"
+                  :h="layout[6].h"
+                  :i="layout[6].i"
+                  :src="pie1"
+                  :title="layout[6].title"
+                ></resize-image>
               </grid-layout>
             </v-col>
             <v-col cols="7"></v-col>
@@ -337,7 +347,7 @@ export default {
           w: 1,
           h: 1,
           i: '0',
-          title: 'Number of genes detected in each cell',
+          title: 'Number of genes per cell',
         },
         {
           x: 1,
@@ -345,7 +355,7 @@ export default {
           w: 1,
           h: 1,
           i: '1',
-          title: 'Total number of molecules detected within a cell',
+          title: 'Total number of molecules per cell',
         },
         {
           x: 2,
@@ -379,6 +389,14 @@ export default {
           i: '5',
           title: 'Variable genes table',
         },
+        {
+          x: 2,
+          y: 1,
+          w: 1,
+          h: 1,
+          i: '6',
+          title: 'Metadata',
+        },
       ],
       tab: null,
       removeRibosome: false,
@@ -396,6 +414,7 @@ export default {
       qcViolin2: '',
       qcViolin3: '',
       qcViolin4: '',
+      pie1: '',
       varGenesScatter: '',
       varGenesList: [],
     }
@@ -406,6 +425,9 @@ export default {
         content: 'Running QC metrics...',
         color: 'accent',
       })
+      this.varGenesList = []
+      this.pie1 = this.qcViolin1 = this.qcViolin2 = this.qcViolin3 = this.qcViolin4 = this.varGenesScatter =
+        'https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp'
       await this.$axios
         .post('iris3/api/queue/load/', {
           filename: 'Zeisel_expression.fst',
@@ -583,6 +605,39 @@ export default {
           console.log({ error })
           this.$notifier.showMessage({
             content: 'Plot Variable genes error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/pie-meta/')
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.pie1 = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  this.$notifier.showMessage({
+                    content: 'Ploting metadata success!',
+                    color: 'success',
+                  })
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot metadata error!',
             color: 'error',
           })
         })
