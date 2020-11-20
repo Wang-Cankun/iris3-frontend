@@ -28,6 +28,9 @@
                 Mean
               </th>
               <th class="text-left">
+                SD
+              </th>
+              <th class="text-left">
                 Min
               </th>
               <th class="text-left">
@@ -39,6 +42,7 @@
             <tr v-for="(item, index) in src[0]" :key="index">
               <td>{{ item.gene }}</td>
               <td>{{ item.mean }}</td>
+              <td>{{ item.std }}</td>
               <td>{{ item.min }}</td>
               <td>{{ item.max }}</td>
             </tr>
