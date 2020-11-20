@@ -33,8 +33,8 @@ export default {
     x: { type: Number, required: true, default: 0 },
     y: { type: Number, required: true, default: 0 },
     i: { type: String, required: true, default: '0' },
-    imagew: { type: Number, required: false, default: 200 },
-    imageh: { type: Number, required: false, default: 200 },
+    imagew: { type: Number, required: false, default: 240 },
+    imageh: { type: Number, required: false, default: 250 },
   },
   data() {
     return {}
