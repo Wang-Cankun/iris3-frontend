@@ -7,6 +7,7 @@ export default {
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
    */
+  loading: false,
   mode: 'universal',
   /*
    ** Nuxt target
