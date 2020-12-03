@@ -19,7 +19,7 @@
               <v-card outlined class="mx-9" height="100" rounded="lg">
                 <v-card-subtitle>Here are project description</v-card-subtitle>
               </v-card>
-              <v-row class="my-4" justify="space-around">
+              <v-row class="my-2" justify="space-around">
                 <v-card outlined rounded="lg"
                   ><v-card-subtitle class="justify-center"
                     >ID: P00001</v-card-subtitle
@@ -56,14 +56,7 @@
                     >0 Pending jobs</v-btn
                   >
                   <v-expand-transition>
-                    <v-row>
-                      <v-card
-                        v-show="expand"
-                        color="warning"
-                        width="340"
-                        height="100"
-                      ></v-card>
-                    </v-row>
+                    <v-card v-show="expand" height="100"></v-card>
                   </v-expand-transition>
                 </v-col>
                 <v-col>
@@ -75,9 +68,7 @@
                     >1 Completed jobs</v-btn
                   >
                   <v-expand-transition>
-                    <v-row>
-                      <v-card v-show="expand1" height="100"></v-card>
-                    </v-row>
+                    <v-card v-show="expand1" height="100"></v-card>
                   </v-expand-transition>
                 </v-col>
                 <v-col>
@@ -89,9 +80,7 @@
                     >0 Error jobs</v-btn
                   >
                   <v-expand-transition>
-                    <v-row>
-                      <v-card v-show="expand2" height="100"></v-card>
-                    </v-row>
+                    <v-card v-show="expand2" height="100"></v-card>
                   </v-expand-transition>
                 </v-col>
               </v-row>
