@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import vPlotly from '@statnett/vue-plotly'
 import VueGridLayout from 'vue-grid-layout'
+import * as d3 from 'd3'
 
 const VuePlotly = {
   install(Vue) {
@@ -12,4 +13,4 @@ Vue.component('downloadExcel')
 Vue.component('grid-layout', VueGridLayout.GridLayout)
 Vue.component('grid-item', VueGridLayout.GridItem)
 
-export default { VuePlotly }
+export default { VuePlotly, d3 }
