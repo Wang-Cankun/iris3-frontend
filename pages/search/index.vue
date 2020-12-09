@@ -1,14 +1,6 @@
 <template>
   <v-container>
-    <v-row class="my-12 justify-center">
-      <v-row class="justify-center">
-        <p class="text-h4">
-          Search
-        </p>
-      </v-row>
-    </v-row>
-
-    <v-row class="px-7">
+    <v-row class="mt-12 px-7">
       <p class="title">Search</p>
       <v-btn class="ml-10" color="primary">Admain search</v-btn>
     </v-row>
@@ -24,35 +16,35 @@
       <v-btn class="ml-2" color="primary" height="56">Go</v-btn>
     </v-row>
     <v-row class="justify-center">
-      <v-card class="my-12" color="#BBDEFB" outlined rounded="lg">
+      <v-card class="my-12" color="#ECEFF1" outlined rounded="lg">
         <v-card-title class="justify-center">Project title</v-card-title>
         <v-card outlined class="mx-9" height="100" rounded="lg">
           <v-card-subtitle>Here are project description</v-card-subtitle>
         </v-card>
-        <v-row class="ma-4" justify="space-around">
+        <v-row class="my-4" justify="space-around">
           <v-card outlined rounded="lg"
-            ><v-card-title class="justify-center"
-              >ID: P00001</v-card-title
+            ><v-card-subtitle class="justify-center"
+              >ID: P00001</v-card-subtitle
             ></v-card
           >
           <v-card outlined rounded="lg"
-            ><v-card-title class="justify-center"
-              >Owner: XXXX</v-card-title
+            ><v-card-subtitle class="justify-center"
+              >Owner: XXXX</v-card-subtitle
             ></v-card
           >
           <v-card outlined rounded="lg"
-            ><v-card-title class="justify-center"
-              >Created: 10/29/2020</v-card-title
+            ><v-card-subtitle class="justify-center"
+              >Created: 10/29/2020</v-card-subtitle
             ></v-card
           >
           <v-card outlined rounded="lg"
-            ><v-card-title class="justify-center"
-              >Species: Human</v-card-title
+            ><v-card-subtitle class="justify-center"
+              >Species: Human</v-card-subtitle
             ></v-card
           >
           <v-card outlined rounded="lg"
-            ><v-card-title class="justify-center"
-              >scRNA-Seq</v-card-title
+            ><v-card-subtitle class="justify-center"
+              >scRNA-Seq</v-card-subtitle
             ></v-card
           >
         </v-row>
@@ -63,11 +55,8 @@
               rounded="pill"
               width="340"
               @click="expand = !expand"
-              >0 Pending jobs</v-btn
+              >1 Pending jobs</v-btn
             >
-            <v-expand-transition>
-              <v-card v-show="expand" height="100" width="340"></v-card>
-            </v-expand-transition>
           </v-col>
           <v-col>
             <v-btn
@@ -77,9 +66,6 @@
               @click="expand1 = !expand1"
               >1 Completed jobs</v-btn
             >
-            <v-expand-transition>
-              <v-card v-show="expand1" height="100" width="340"></v-card>
-            </v-expand-transition>
           </v-col>
           <v-col>
             <v-btn
@@ -87,21 +73,236 @@
               rounded="pill"
               width="340"
               @click="expand2 = !expand2"
-              >0 Error jobs</v-btn
+              >1 Error jobs</v-btn
             >
-            <v-expand-transition>
-              <v-card v-show="expand2" height="100" width="340"></v-card>
-            </v-expand-transition>
           </v-col>
+        </v-row>
+        <v-row class="px-12">
+          <v-expand-transition>
+            <v-card v-show="expand" class="mx-auto my-4" width="1060" outlined>
+              <v-toolbar color="warning" short dark>
+                <v-toolbar-title class="mx-auto">P00001-XX001</v-toolbar-title>
+              </v-toolbar>
+              <v-row class="ma-2">
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-icon>mdi-account-circle</v-icon>
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >Admin</v-card-subtitle
+                      ></v-card
+                    >
+                  </v-row>
+                </v-col>
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-icon>mdi-calendar-month-outline</v-icon>
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >12/1/2020</v-card-subtitle
+                      >
+                    </v-card></v-row
+                  ></v-col
+                >
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >Public</v-card-subtitle
+                      >
+                    </v-card></v-row
+                  >
+                </v-col>
+              </v-row>
+              <v-row class="mb-4" justify="center">
+                <v-stepper>
+                  <v-stepper-header>
+                    <v-stepper-step complete step="1">
+                      QC
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step complete editable step="2">
+                      Cluster
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="3" complete editable>
+                      Gene set
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="4">
+                      Motif
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="5">
+                      Regulon
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="6">
+                      Result
+                    </v-stepper-step>
+                  </v-stepper-header>
+                </v-stepper>
+              </v-row>
+              <v-row class="mb-4" justify="center">
+                <v-btn color="primary">Add to workspace</v-btn>
+              </v-row>
+            </v-card>
+          </v-expand-transition>
+        </v-row>
+        <!-- Completed jobs  -->
+        <v-row class="px-10">
+          <v-expand-transition>
+            <v-card v-show="expand1" class="mx-auto my-4" width="1060" outlined>
+              <v-toolbar color="success" short dark>
+                <v-toolbar-title class="mx-auto">P00002-XX008</v-toolbar-title>
+              </v-toolbar>
+              <v-row class="ma-2">
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-icon>mdi-account-circle</v-icon>
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >Shaopeng</v-card-subtitle
+                      ></v-card
+                    >
+                  </v-row>
+                </v-col>
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-icon>mdi-calendar-month-outline</v-icon>
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >12/2/2020</v-card-subtitle
+                      >
+                    </v-card></v-row
+                  ></v-col
+                >
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >Private</v-card-subtitle
+                      >
+                    </v-card></v-row
+                  >
+                </v-col>
+              </v-row>
+              <v-row class="mb-4" justify="center">
+                <v-stepper>
+                  <v-stepper-header>
+                    <v-stepper-step complete step="1">
+                      QC
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step complete editable step="2">
+                      Cluster
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="3" complete editable>
+                      Gene set
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="4" complete editable>
+                      Motif
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="5" complete editable>
+                      Regulon
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="6" complete editable>
+                      Result
+                    </v-stepper-step>
+                  </v-stepper-header>
+                </v-stepper>
+              </v-row>
+              <v-row class="mb-4" justify="center">
+                <v-btn color="primary">Archive</v-btn>
+              </v-row>
+            </v-card>
+          </v-expand-transition>
+        </v-row>
+        <!-- Error jobs  -->
+        <v-row class="px-8">
+          <v-expand-transition>
+            <v-card v-show="expand2" class="mx-auto my-4" width="1060" outlined>
+              <v-toolbar color="error" short dark>
+                <v-toolbar-title class="mx-auto">P00005-XX007</v-toolbar-title>
+              </v-toolbar>
+              <v-row class="ma-2">
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-icon>mdi-account-circle</v-icon>
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >Shaopeng</v-card-subtitle
+                      ></v-card
+                    >
+                  </v-row>
+                </v-col>
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-icon>mdi-calendar-month-outline</v-icon>
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >11/30/2020</v-card-subtitle
+                      >
+                    </v-card></v-row
+                  ></v-col
+                >
+                <v-col justify="center">
+                  <v-row justify="center">
+                    <v-card class="ml-2" outlined rounded="lg"
+                      ><v-card-subtitle class="justify-center"
+                        >Private</v-card-subtitle
+                      >
+                    </v-card></v-row
+                  >
+                </v-col>
+              </v-row>
+              <v-row class="mb-4" justify="center">
+                <v-stepper>
+                  <v-stepper-header>
+                    <v-stepper-step complete step="1">
+                      QC
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step editable :rules="[() => false]" step="2">
+                      Cluster
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="3">
+                      Gene set
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="4">
+                      Motif
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="5">
+                      Regulon
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="6">
+                      Result
+                    </v-stepper-step>
+                  </v-stepper-header>
+                </v-stepper>
+              </v-row>
+              <v-row class="mb-4" justify="center">
+                <v-btn color="primary">Add to workspace</v-btn>
+              </v-row>
+            </v-card>
+          </v-expand-transition>
         </v-row>
       </v-card>
     </v-row>
     <v-row class="my-12 justify-center">
-      <v-card class="my-12" color="error" outlined rounded="lg" width="1140">
+      <v-card class="my-12" color="#ECEFF1" outlined rounded="lg" width="1140">
         <v-row justify="center">
           <v-icon x-large>mdi-alert-circle</v-icon>
         </v-row>
-        <v-card-title class="justify-center">No Project Found</v-card-title>
+        <v-card-title class="justify-center">No Project Found!</v-card-title>
       </v-card>
     </v-row>
   </v-container>
