@@ -193,7 +193,7 @@
         </v-tab-item>
         <v-tab-item>
           <p class="title ma-0">
-            Upload scRNA-seq and scATAC-seq data
+            Upload scRNA-seq and scATAC-seq data: 10x multiome
           </p>
           <v-file-input
             v-model="expFile[0]"
@@ -201,11 +201,10 @@
             counter
             chips
             :rules="fileRules"
-            label="Upload scRNA-seq dataset"
+            label="Upload count matrix (.h5)"
             prepend-icon="mdi-paperclip"
             outlined
             required
-            multiple
           ></v-file-input>
           <v-file-input
             v-model="expFile[1]"
@@ -213,12 +212,68 @@
             counter
             chips
             :rules="fileRules"
-            label="Upload scATAC-seq dataset"
+            label="Upload ATAC fragment file (.tsv.gz)"
             prepend-icon="mdi-paperclip"
             outlined
             required
-            multiple
           ></v-file-input>
+          <v-file-input
+            v-model="expFile[2]"
+            color="primary"
+            counter
+            chips
+            :rules="fileRules"
+            label="Upload ATAC fragment file index (.tsv.gz.tbi)"
+            prepend-icon="mdi-paperclip"
+            outlined
+            required
+          ></v-file-input>
+          <v-col cols="3" class="ma-0 pa-0"
+            ><v-menu close-on-click>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on">
+                  Example
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item @click="loadMultiomeExample">
+                  <v-list-item-title>{{
+                    multiomeExample[0].item
+                  }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="singleExample[1].link"
+                    >
+                      {{ multiomeExample[1].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="multiomeExample[2].link"
+                    >
+                      {{ multiomeExample[2].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="multiomeExample[3].link"
+                    >
+                      {{ multiomeExample[3].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
         </v-tab-item>
       </v-tabs-items>
 
@@ -239,9 +294,6 @@
           </v-tooltip></v-row
         ></v-col
       >
-      <p class="title mt-4">
-        Project description (Optional)
-      </p>
       <v-textarea v-model="description" outlined label="Description:" clearable>
       </v-textarea>
     </v-form>
@@ -323,6 +375,24 @@ export default {
         link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_index_label.csv',
       },
     ],
+    multiomeExample: [
+      { item: 'Load example (10X Human PBMC)' },
+      {
+        item: 'Download 10X Human PBMC count matrix ',
+        link:
+          'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5',
+      },
+      {
+        item: 'Download 10X Human PBMC ATAC fragment file ',
+        link:
+          'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz',
+      },
+      {
+        item: 'Download 10X Human PBMC ATAC fragment file index',
+        link:
+          'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz',
+      },
+    ],
     email: '',
     description: '',
     multipleDatasetsLength: 1,
@@ -360,7 +430,28 @@ export default {
         color: 'success',
       })
     },
-
+    loadMultiomeExample() {
+      this.multipleDatasetsLength = 1
+      this.expFile = []
+      this.expFile[0] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'PBMC count matrix'
+      )
+      this.expFile[1] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'ATAC fragment'
+      )
+      this.expFile[2] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'ATAC fragment index'
+      )
+      this.speciesSelect = 'Human'
+      this.title = '10x Genomics for human PBMCs'
+      this.$notifier.showMessage({
+        content: 'Example dataset loaded: 10x Genomics for human PBMCs',
+        color: 'success',
+      })
+    },
     validate() {
       this.$refs.form.validate()
     },
@@ -408,9 +499,15 @@ export default {
             content: 'Jobid: ' + this.jobid + ' Upload success!',
             color: 'success',
           })
-          this.$router.push({
-            path: '/submit',
-          })
+          if (this.title === '10x Genomics for human PBMCs') {
+            this.$router.push({
+              path: '/submit/multiome',
+            })
+          } else {
+            this.$router.push({
+              path: '/submit',
+            })
+          }
         }, 3000)
       }
     },

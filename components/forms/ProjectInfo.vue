@@ -63,8 +63,8 @@ export default {
     return {
       projectTitle: 'Example title1',
       projectDescription: 'Example description1',
-      projectCreateDate: '11/19/2020',
-      jobCreateDate: '11/19/2020',
+      projectCreateDate: '12/03/2020',
+      jobCreateDate: '12/03/2020',
       projectCreator: 'Admin',
       jobCreator: 'Admin',
       projectId: 'P000001',
