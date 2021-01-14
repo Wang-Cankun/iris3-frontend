@@ -46,6 +46,7 @@
                   ></v-card
                 >
               </v-row>
+              <!-- pending jobs  -->
               <v-row class="px-8">
                 <v-col>
                   <v-btn
@@ -55,19 +56,6 @@
                     @click="expand = !expand"
                     >1 Pending jobs</v-btn
                   >
-<<<<<<< HEAD
-=======
-                  <v-expand-transition>
-                    <v-row>
-                      <v-card
-                        v-show="expand"
-                        color="warning"
-                        width="340"
-                        height="100"
-                      ></v-card>
-                    </v-row>
-                  </v-expand-transition>
->>>>>>> 0175f257522064334aea0ffaa55f745efe1fd2f4
                 </v-col>
                 <v-col>
                   <v-btn
@@ -77,14 +65,11 @@
                     @click="expand1 = !expand1"
                     >1 Completed jobs</v-btn
                   >
-<<<<<<< HEAD
-=======
                   <v-expand-transition>
                     <v-row>
                       <v-card v-show="expand1" height="100"></v-card>
                     </v-row>
                   </v-expand-transition>
->>>>>>> 0175f257522064334aea0ffaa55f745efe1fd2f4
                 </v-col>
                 <v-col>
                   <v-btn
@@ -94,14 +79,12 @@
                     @click="expand2 = !expand2"
                     >1 Error jobs</v-btn
                   >
-<<<<<<< HEAD
-=======
+
                   <v-expand-transition>
                     <v-row>
                       <v-card v-show="expand2" height="100"></v-card>
                     </v-row>
                   </v-expand-transition>
->>>>>>> 0175f257522064334aea0ffaa55f745efe1fd2f4
                 </v-col>
               </v-row>
               <v-row class="px-12">
