@@ -201,7 +201,7 @@
                       <v-row>
                         <v-col cols="6">
                           <p class="ml-4 mb-0 title-h4">
-                            Min cell pct
+                            Min cell percent
                             <v-tooltip top>
                               <template v-slot:activator="{ on }">
                                 <v-icon color="primary" dark v-on="on"
@@ -269,7 +269,120 @@
                         class="elevation-1"
                       ></v-data-table></grid-item
                   ></v-card>
+                  <v-card class="ma-0"
+                    ><grid-item
+                      :x="layout[2].x"
+                      :y="layout[2].y"
+                      :w="layout[2].w"
+                      :h="layout[2].h"
+                      :i="layout[2].i"
+                      class="grid-item-border"
+                    >
+                      <v-card-title
+                        class="primary white--text caption px-2 py-1"
+                        >Gene plots<v-spacer></v-spacer>
+                        <v-menu bottom left>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn dark icon v-bind="attrs" v-on="on">
+                              <v-icon>mdi-dots-vertical</v-icon>
+                            </v-btn>
+                          </template>
+
+                          <v-list>
+                            <v-list-item @click="downloadPDF">
+                              <v-list-item-title
+                                >Download Table</v-list-item-title
+                              >
+                            </v-list-item>
+                          </v-list>
+                        </v-menu></v-card-title
+                      >
+                      <v-row
+                        ><v-col cols="6">
+                          <v-autocomplete
+                            v-model="gene"
+                            class="ml-4"
+                            :items="genes"
+                            label="Gene"
+                          ></v-autocomplete>
+                        </v-col>
+                        <v-col cols="6">
+                          <div v-if="idents != ''">
+                            <p class="subtitle-2 text--primary mx-4">
+                              Split the violin plots by:
+                            </p>
+                            <v-autocomplete
+                              v-model="violinSplit"
+                              class="ml-4"
+                              :items="violinSplitItems"
+                              label="Select identity"
+                            ></v-autocomplete>
+                          </div>
+                        </v-col>
+                      </v-row>
+                      <v-row justify="center" class="mx-2 mb-2 mt-0">
+                        <v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          width="200"
+                          rounded
+                          @click="runGenePlot()"
+                          >Plot</v-btn
+                        >
+                      </v-row>
+                      <v-row v-if="violinGene">
+                        <img :src="violinGene" :width="400" :height="350" />
+                        <img :src="featureGene" :width="400" :height="350" />
+                      </v-row> </grid-item
+                  ></v-card>
                 </grid-layout>
+                <!--
+                <div v-if="deg">
+                  <v-data-table
+                    dense
+                    :search="keggSearch"
+                    :headers="enrichHeaders"
+                    :items="keggResult"
+                    :items-per-page="10"
+                    item-key="index"
+                    class="elevation-1"
+                    :expanded.sync="expandedKegg"
+                    show-expand
+                  >
+                    <template v-slot:top>
+                      <v-toolbar flat>
+                        <v-toolbar-title>
+                          <download-excel :data="keggResult" type="csv">
+                            <v-btn color="primary"> Download</v-btn
+                            ><v-tooltip top>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                  color="primary"
+                                  dark
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  >mdi-help-circle-outline</v-icon
+                                >
+                              </template>
+                              <span
+                                >KEGG Pathway enrichment analysis using the DE
+                                genes above. The results are calculated
+                                real-time using Enrichr.</span
+                              >
+                            </v-tooltip>
+                          </download-excel></v-toolbar-title
+                        >
+                        <v-spacer></v-spacer>
+                      </v-toolbar>
+                    </template>
+                    <template v-slot:expanded-item="{ item }">
+                      <td :colspan="headers.length">
+                        {{ item.genes.join(',') }}
+                      </td>
+                    </template>
+                  </v-data-table>
+                </div>
+                -->
               </div>
             </v-col>
           </v-row>
@@ -279,6 +392,7 @@
   </v-col>
 </template>
 <script>
+import _ from 'lodash'
 export default {
   data: () => ({
     layout: [
@@ -296,7 +410,15 @@ export default {
         w: 2,
         h: 2,
         i: '1',
-        title: 'DE testing',
+        title: 'Differential gene expression',
+      },
+      {
+        x: 0,
+        y: 2,
+        w: 3,
+        h: 2,
+        i: '2',
+        title: 'Plotting genes',
       },
     ],
     degList: [
@@ -319,6 +441,15 @@ export default {
       { text: 'LogFC', value: 'avg_logFC' },
       { text: 'Adj.p.value', value: 'p_val_adj' },
     ],
+    enrichHeaders: [
+      { text: 'Index', value: 'index' },
+      { text: 'Name', value: 'name' },
+      { text: 'Adjusted p-value', value: 'adjPvalue' },
+      { text: 'Odds ratio', value: 'odd' },
+      { text: 'Combined score', value: 'score' },
+      { text: '', value: 'data-table-expand' },
+    ],
+    expandedKegg: [],
     tab: null,
     title: '',
     nPCs: '20',
@@ -332,17 +463,20 @@ export default {
     umapCluster: '',
     umapGene: '',
     violinGene: '',
+    featureGene: '',
     clusterResult: '',
-    gene: '',
+    gene: 'Gad1',
     genes: '',
     currentIdent: 'seurat_clusters',
     idents: '',
+    violinSplit: 'Sex',
     resHistory: [],
     ident1: 1,
     ident2: 2,
     minPct: 0.2,
     minLfc: 0.8,
     deResult: [],
+    deg: [],
   }),
   computed: {
     identList() {
@@ -362,6 +496,13 @@ export default {
           (_, index) => index + 1
         )
       else return [1, 2]
+    },
+  },
+  watch: {
+    deg() {
+      if (this.deg) {
+        this.sendKegg(this.deg)
+      }
     },
   },
   methods: {
@@ -449,7 +590,7 @@ export default {
             color: 'error',
           })
         })
-
+      /*
       await this.$axios
         .post('iris3/api/queue/umap-gene/', {
           gene: this.gene,
@@ -476,35 +617,14 @@ export default {
             color: 'error',
           })
         })
-
-      await this.$axios
-        .post('iris3/api/queue/violin-gene/', {
-          gene: this.gene,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                this.violinGene = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Variable genes error!',
-            color: 'error',
-          })
-        })
-
+*/
       await this.$axios.post('iris3/api/queue/genes/').then((response) => {
         this.genes = response.data
       })
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
         this.idents = response.data
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
       })
     },
     async runDeg() {
@@ -524,7 +644,11 @@ export default {
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.deResult = response.data.returnvalue[0]
-                  console.log('runDeg -> this.deResult', this.deResult)
+                  this.deg = _.map(this.deResult, 'gene')
+                  this.$notifier.showMessage({
+                    content: 'Running DE testing...',
+                    color: 'accent',
+                  })
 
                   clearInterval(checkComplete)
                 }
@@ -541,15 +665,107 @@ export default {
           })
         })
       this.$notifier.showMessage({
-        content: 'Start DE testing!',
+        content: 'Running DE testing...',
         color: 'accent',
       })
+    },
+    async runGenePlot() {
+      this.$notifier.showMessage({
+        content: `Plotting ${this.gene} gene...`,
+        color: 'accent',
+      })
+      await this.$axios
+        .post('iris3/api/queue/violin-gene/', {
+          gene: this.gene,
+          split: this.violinSplit,
+        })
+        .then((response) => {
+          setTimeout(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                this.violinGene = response.data.returnvalue
+                this.timeElapsed =
+                  (response.data.finishedOn - response.data.processedOn) / 1000
+              })
+          }, 3000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot gene error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/feature-gene/', {
+          gene: this.gene,
+        })
+        .then((response) => {
+          setTimeout(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                this.featureGene = response.data.returnvalue
+                this.timeElapsed =
+                  (response.data.finishedOn - response.data.processedOn) / 1000
+              })
+          }, 3000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot genes error!',
+            color: 'error',
+          })
+        })
+    },
+    async sendKegg(genes) {
+      const geneSetLibrary = 'KEGG_2019_Mouse'
+      const formData = new FormData()
+      formData.append('method', 'post')
+      formData.append('name', 'list')
+      formData.append('enctype', 'multipart/form-data')
+      formData.append('list', genes.join('\n'))
+      formData.append('description', 'test test')
+      const geneListEnrichrId = await this.$axios
+        .post('https://amp.pharm.mssm.edu/Enrichr/addList', formData)
+        .then(function (response) {
+          return response.data.userListId
+        })
+      const enrichrResult = await this.$axios
+        .get(
+          'https://amp.pharm.mssm.edu/Enrichr/enrich?userListId=' +
+            geneListEnrichrId +
+            '&backgroundType=' +
+            geneSetLibrary
+        )
+        .then(function (response) {
+          return response.data
+        })
+
+      this.keggResult = enrichrResult.KEGG_2019_Mouse.map((value) => ({
+        index: value[0],
+        name: value[1],
+        pvalue: value[2],
+        odd: value[3].toFixed(2),
+        score: value[4].toFixed(2),
+        genes: value[5],
+        adjPvalue: value[6].toExponential(4),
+        key8: value[7],
+      }))
+
+      return enrichrResult
     },
     runQubic() {
       this.$notifier.showMessage({
         content: 'Start CTSR identification!',
         color: 'accent',
       })
+    },
+    downloadPDF() {
+      console.log('donlowad PDF ... ')
     },
   },
 }

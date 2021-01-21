@@ -11,14 +11,16 @@
           >Cell clustering</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 3" step="3">Gene set</v-stepper-step>
+        <v-stepper-step :complete="e1 > 3" step="3"
+          >Co-expressed gene modules</v-stepper-step
+        >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 4" step="4"
           >Motif finding</v-stepper-step
         >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 5" step="5"
-          >CTSR identification</v-stepper-step
+          >Regulon identification</v-stepper-step
         >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 6" step="6">Report</v-stepper-step>
@@ -39,6 +41,7 @@
           <v-btn text @click="e1 = 1">Previous</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
+          <v-row><combine-regulon-form></combine-regulon-form></v-row>
           <v-btn color="primary" @click="e1 = 4">
             Continue
           </v-btn>
@@ -70,6 +73,7 @@
 import QualityCheck from '@/components/forms/QualityCheck.vue'
 import CellCluster from '@/components/forms/CellCluster.vue'
 import Regulon from '@/components/forms/Regulon.vue'
+import CombineRegulon from '@/components/forms/CombineRegulon.vue'
 import ProjectInfo from '~/components/forms/ProjectInfo'
 
 export default {
@@ -77,6 +81,7 @@ export default {
     'qc-form': QualityCheck,
     'cell-cluster-form': CellCluster,
     'regulon-form': Regulon,
+    'combine-regulon-form': CombineRegulon,
     'project-info': ProjectInfo,
   },
   data() {
