@@ -121,7 +121,14 @@
       />
 
       <v-toolbar-items class="hidden-xs-only mx-5">
-        <v-btn v-if="searchJobId" color="primary" clearable> Search</v-btn>
+        <v-btn
+          v-if="searchJobId"
+          color="primary"
+          clearable
+          @click="openJobUrl(searchJobId)"
+        >
+          Search</v-btn
+        >
         <template v-if="isAuthenticated">
           <v-btn to="/profile" text>
             <v-icon left dark>mdi-face</v-icon>
@@ -361,6 +368,9 @@ export default {
     },
     openRegisterDialog() {
       this.registerDialog = true
+    },
+    openJobUrl(url) {
+      this.$router.push(`submit/${url}`)
     },
   },
 }

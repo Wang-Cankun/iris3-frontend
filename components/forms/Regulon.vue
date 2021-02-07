@@ -11,9 +11,12 @@ export default {
     jobid: '2020041684528',
   }),
   computed: {
+    jobId() {
+      return this.$route.params.id
+    },
     regulonFrame() {
       return (
-        'https://bmbl.bmi.osumc.edu/iris3/results_iris3.php?jobid=' + this.jobid
+        'https://bmbl.bmi.osumc.edu/iris3/results_iris3.php?jobid=' + this.jobId
       )
     },
   },

@@ -504,9 +504,7 @@ export default {
               path: '/submit/multiome',
             })
           } else {
-            this.$router.push({
-              path: '/submit',
-            })
+            this.$router.push(`submit/${this.jobid}`)
           }
         }, 3000)
       }

@@ -10,7 +10,47 @@
             <v-col cols="2">
               <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
                 <p class="subtitle-1 font-weight-bold text-center">
-                  Regulon inference
+                  Jobs
+                </p>
+                <p class="ml-4 title-h4">
+                  Bicluster overlap rate
+                </p>
+                <v-text-field
+                  v-model="qubic_f"
+                  class="px-6"
+                  outlined
+                  background-color="white"
+                ></v-text-field>
+                <p class="ml-4 title-h4">
+                  Maximum bicluster number
+                </p>
+                <v-text-field
+                  v-model="qubic_o"
+                  class="px-6"
+                  outlined
+                  background-color="white"
+                ></v-text-field>
+                <p class="ml-4 title-h4">
+                  Minimum cell number
+                </p>
+                <v-text-field
+                  v-model="qubic_k"
+                  class="px-6"
+                  outlined
+                  background-color="white"
+                ></v-text-field>
+                <p class="ml-4 title-h4">
+                  Motif finding upstream promoter region
+                </p>
+                <v-text-field
+                  v-model="promoter_length"
+                  class="px-6"
+                  outlined
+                  background-color="white"
+                ></v-text-field>
+
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Jobs
                 </p>
                 <v-row justify="center">
                   <v-btn
@@ -18,8 +58,16 @@
                     color="Primary"
                     width="200"
                     rounded
-                    @click="runCombineRegulon()"
-                    >Update</v-btn
+                    @click="runV1(jobId)"
+                    >Start IRIS3 v1</v-btn
+                  >
+                  <v-btn
+                    class="ma-2"
+                    color="Primary"
+                    width="200"
+                    rounded
+                    @click="runCombineRegulon(jobId)"
+                    >Update result</v-btn
                   >
                 </v-row>
               </v-card></v-col
@@ -81,14 +129,25 @@ export default {
     ],
     tab: null,
     regulon: [],
+    v1Result: [],
+    checkResult: '',
+    qubic_f: '0.7',
+    qubic_o: '500',
+    qubic_k: '20',
+    promoter_length: '1000',
   }),
-  computed: {},
+  computed: {
+    jobId() {
+      return this.$route.params.id
+    },
+  },
   methods: {
-    async runCombineRegulon() {
+    async runCombineRegulon(jobId) {
       this.regulon = []
+      console.log(jobId)
       await this.$axios
         .post('iris3/api/queue/combine-regulon/', {
-          id: 123,
+          jobid: jobId,
         })
         .then((response) => {
           let i = 0
@@ -118,9 +177,70 @@ export default {
           })
         })
       this.$notifier.showMessage({
-        content: 'Running regulon inference...',
+        content: 'Loading regulon results...',
         color: 'accent',
       })
+    },
+    async runV1(jobId) {
+      await this.$axios
+        .post('iris3/api/queue/run-v1/', {
+          jobid: jobId,
+        })
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.v1Result = response.data.returnvalue[0]
+                  if (this.v1Result) {
+                    this.$notifier.showMessage({
+                      content: 'Start job:' + jobId,
+                      color: 'accent',
+                    })
+                  } else {
+                    this.$notifier.showMessage({
+                      content: 'Job already exist: ' + jobId,
+                      color: 'error',
+                    })
+                  }
+
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          this.$notifier.showMessage({
+            content: 'Job exist: ' + error,
+            color: 'error',
+          })
+        })
+      this.$notifier.showMessage({
+        content: 'Checking job status...',
+        color: 'accent',
+      })
+    },
+    async checkJobIdExist(jobId) {
+      console.log(jobId)
+      await this.$axios
+        .get('https://bmbl.bmi.osumc.edu/iris3/data/202004168452')
+        .then((response) => {
+          if (response.data.returnvalue !== null) {
+            this.checkResult = response.data.returnvalue[0]
+          }
+        })
+        .catch((error) => {
+          this.$notifier.showMessage({
+            content: 'Link error: ' + error,
+            color: 'error',
+          })
+        })
+      return true
     },
     downloads() {
       console.log('donlowad PDF ... ')

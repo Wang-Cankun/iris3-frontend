@@ -76,53 +76,7 @@
                   >
                 </v-row>
                 <!--
-                <div v-if="clusterResult !== ''">
-                  <p class="ml-4 title-h4">
-                    Bicluster overlap rate
-                  </p>
-                  <v-text-field
-                    v-model="qubic_f"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Maximum bicluster number
-                  </p>
-                  <v-text-field
-                    v-model="qubic_o"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Minimum cell number
-                  </p>
-                  <v-text-field
-                    v-model="qubic_k"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Motif finding upstream promoter region
-                  </p>
-                  <v-text-field
-                    v-model="promoter_length"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <v-row justify="center">
-                    <v-btn
-                      color="Primary"
-                      width="300"
-                      rounded
-                      @click="runQubic()"
-                      >Run CTSR identification</v-btn
-                    >
-                  </v-row>
-                </div>
+                
                 -->
               </v-card></v-col
             >
@@ -335,7 +289,159 @@
                         <img :src="featureGene" :width="400" :height="350" />
                       </v-row> </grid-item
                   ></v-card>
+                  <v-card class="ma-0"
+                    ><grid-item
+                      :x="layout[3].x"
+                      :y="layout[3].y"
+                      :w="layout[3].w"
+                      :h="layout[3].h"
+                      :i="layout[3].i"
+                      class="grid-item-border"
+                    >
+                      <v-card-title
+                        class="primary white--text caption px-2 py-1"
+                        >Cell type annotation<v-spacer></v-spacer>
+                        <v-menu bottom left>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn dark icon v-bind="attrs" v-on="on">
+                              <v-icon>mdi-dots-vertical</v-icon>
+                            </v-btn>
+                          </template>
+
+                          <v-list>
+                            <v-list-item @click="downloadPDF">
+                              <v-list-item-title
+                                >Download Table</v-list-item-title
+                              >
+                            </v-list-item>
+                          </v-list>
+                        </v-menu></v-card-title
+                      >
+                      <v-row
+                        ><v-col cols="6">
+                          <v-autocomplete
+                            v-model="currentIdent"
+                            class="ml-4"
+                            :items="idents"
+                            label="Select cluster identity"
+                          ></v-autocomplete>
+                        </v-col>
+                      </v-row>
+                      <v-row justify="center" class="mx-2 mb-2 mt-0">
+                        <v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          width="200"
+                          rounded
+                          @click="showDotPlot()"
+                          >Show dot plot</v-btn
+                        ><v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          rounded
+                          @click="openMetadataDiaglog()"
+                          >Annotate manually</v-btn
+                        >
+                        <v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          rounded
+                          @click="openAddTransferMetadataDialog()"
+                          >Map from reference</v-btn
+                        >
+                      </v-row>
+
+                      <v-row v-if="dotPlot">
+                        <!--
+                        <v-row justify="center" class="mx-2 mb-2 mt-0">
+                          Number of annotated cell type :
+                          {{ annotateResult.n_annotate_cell_type }}
+                        </v-row>
+                        <v-row justify="center" class="mx-2 mb-2 mt-0">
+                          Annotated cell type :
+                          {{ annotateResult.annotate_cell_type }}
+                        </v-row> -->
+                        <img :src="dotPlot" :width="550" :height="400" />
+                      </v-row> </grid-item
+                  ></v-card>
                 </grid-layout>
+                <v-dialog v-model="addMetadataDialog" max-width="1200">
+                  <v-card>
+                    <v-card-title>Annotate cell type</v-card-title>
+                    <v-divider class="my-2 py-2"></v-divider>
+                    <v-card-text>
+                      <v-row
+                        class="my-0 py-0"
+                        v-for="(item, index) in cellClusterArray"
+                        :key="item.index"
+                      >
+                        <v-col class="my-0 py-0" cols="4"
+                          >Cluster: {{ item.index }}
+                        </v-col>
+                        <v-col class="my-0 py-0" cols="6"
+                          >Cell type:
+                          <v-text-field
+                            v-model="newCellType[index]"
+                            outlined
+                            background-color="white"
+                          ></v-text-field
+                        ></v-col>
+                      </v-row>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn
+                        class="mx-2"
+                        color="primary"
+                        dark
+                        @click="addMetadata()"
+                      >
+                        Apply
+                      </v-btn>
+                      <v-btn
+                        color="grey darken-1"
+                        text
+                        @click="addMetadataDialog = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="addTransferMetadataDialog" max-width="1200">
+                  <v-card>
+                    <v-card-title
+                      >Reference based cell type annotation</v-card-title
+                    >
+                    <v-divider class="my-2 py-2"></v-divider>
+                    <v-card-text>
+                      <v-autocomplete
+                        v-model="currentAtlas"
+                        class="ml-4"
+                        :items="atlas"
+                        label="Select atlas data"
+                      ></v-autocomplete>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn
+                        class="mx-2"
+                        color="primary"
+                        dark
+                        @click="addReference()"
+                      >
+                        Apply
+                      </v-btn>
+                      <v-btn
+                        color="grey darken-1"
+                        text
+                        @click="addTransferMetadataDialog = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
                 <!--
                 <div v-if="deg">
                   <v-data-table
@@ -420,6 +526,14 @@ export default {
         i: '2',
         title: 'Plotting genes',
       },
+      {
+        x: 3,
+        y: 2,
+        w: 3,
+        h: 2,
+        i: '3',
+        title: 'Cell type annotation',
+      },
     ],
     degList: [
       {
@@ -454,21 +568,25 @@ export default {
     title: '',
     nPCs: '20',
     resolution: '0.5',
-    qubic_f: '0.7',
-    qubic_o: '500',
-    qubic_k: '20',
-    promoter_length: '1000',
     timeElapsed: 0,
     qcResult: null,
     umapCluster: '',
     umapGene: '',
     violinGene: '',
     featureGene: '',
+    dotPlot: '',
     clusterResult: '',
+    annotateResult: '',
+    newCellType: [],
     gene: 'Gad1',
     genes: '',
     currentIdent: 'seurat_clusters',
-    idents: '',
+    currentAtlas: '',
+    atlas: [
+      'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
+      'to-be-added',
+    ],
+    idents: [],
     violinSplit: 'Sex',
     resHistory: [],
     ident1: 1,
@@ -477,6 +595,10 @@ export default {
     minLfc: 0.8,
     deResult: [],
     deg: [],
+    addTransferMetadataDialog: false,
+    addMetadataDialog: false,
+    // Add metadata
+    displayAddMetadata: '',
   }),
   computed: {
     identList() {
@@ -496,6 +618,35 @@ export default {
           (_, index) => index + 1
         )
       else return [1, 2]
+    },
+    cellClusterArray() {
+      return [
+        { index: 0, value: '' },
+        { index: 1, value: '' },
+        { index: 2, value: '' },
+        { index: 3, value: '' },
+        { index: 4, value: '' },
+        { index: 5, value: '' },
+        { index: 6, value: '' },
+        { index: 7, value: '' },
+        { index: 8, value: '' },
+        { index: 9, value: '' },
+        { index: 10, value: '' },
+        { index: 11, value: '' },
+        { index: 12, value: '' },
+        { index: 13, value: '' },
+        { index: 14, value: '' },
+        { index: 15, value: '' },
+        { index: 16, value: '' },
+        { index: 17, value: '' },
+        { index: 18, value: '' },
+      ]
+      // return [
+      //   ...Array(this.clusterResult.n_seurat_clusters)
+      //     .fill(0)
+      //     .map((x) => ({ index: '', value: '' })),
+      // ]
+      // return [...Array(this.clusterResult.n_seurat_clusters).keys()]
     },
   },
   watch: {
@@ -697,17 +848,18 @@ export default {
             color: 'error',
           })
         })
-
+    },
+    async showDotPlot() {
       await this.$axios
-        .post('iris3/api/queue/feature-gene/', {
-          gene: this.gene,
+        .post('iris3/api/queue/dot-plot/', {
+          top: 3,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
               .get('iris3/api/queue/' + response.data.id)
               .then((response) => {
-                this.featureGene = response.data.returnvalue
+                this.dotPlot = response.data.returnvalue
                 this.timeElapsed =
                   (response.data.finishedOn - response.data.processedOn) / 1000
               })
@@ -720,6 +872,35 @@ export default {
             color: 'error',
           })
         })
+    },
+    async annotateCellType() {
+      await this.$axios
+        .post('iris3/api/queue/dot-plot/', {
+          top: 3,
+        })
+        .then((response) => {
+          setTimeout(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                this.dotPlot = response.data.returnvalue
+                this.timeElapsed =
+                  (response.data.finishedOn - response.data.processedOn) / 1000
+              })
+          }, 3000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot genes error!',
+            color: 'error',
+          })
+        })
+      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+        this.idents = response.data
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
     },
     async sendKegg(genes) {
       const geneSetLibrary = 'KEGG_2019_Mouse'
@@ -764,8 +945,85 @@ export default {
         color: 'accent',
       })
     },
+    openMetadataDiaglog() {
+      this.addMetadataDialog = true
+    },
+    openAddTransferMetadataDialog() {
+      this.addTransferMetadataDialog = true
+    },
     downloadPDF() {
       console.log('donlowad PDF ... ')
+    },
+    async addMetadata() {
+      this.$notifier.showMessage({
+        content: `Applying cell type...`,
+        color: 'accent',
+      })
+      this.addMetadataDialog = false
+      await this.$axios
+        .post('iris3/api/queue/annotate-cell-type/', {
+          gene: this.gene,
+        })
+        .then((response) => {
+          setTimeout(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                this.annotateResult = response.data.returnvalue
+                this.timeElapsed =
+                  (response.data.finishedOn - response.data.processedOn) / 1000
+              })
+          }, 3000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Annotate error!',
+            color: 'error',
+          })
+        })
+      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+        this.idents = response.data
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
+    },
+    async addReference() {
+      this.$notifier.showMessage({
+        content: `Transfering cell type based on reference dataset...`,
+        color: 'accent',
+      })
+      this.addTransferMetadataDialog = false
+      await this.$axios
+        .post('iris3/api/queue/transfer-cell-type/', {
+          gene: this.gene,
+        })
+        .then((response) => {
+          setTimeout(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                this.annotateResult = response.data.returnvalue
+                this.timeElapsed =
+                  (response.data.finishedOn - response.data.processedOn) / 1000
+              })
+          }, 3000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Annotate error!',
+            color: 'error',
+          })
+        })
+      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+        this.idents = response.data
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
+    },
+    resetAddMetadata() {
+      console.log(' ~ file: CellCluster.vue ~ line 944 ~ resetAddMetadata ~ ')
     },
   },
 }
