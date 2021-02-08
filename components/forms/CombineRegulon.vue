@@ -58,7 +58,7 @@
                     color="Primary"
                     width="200"
                     rounded
-                    @click="runV1(jobId)"
+                    @click="runV1(jobId, qubic_k, qubic_f, qubic_o)"
                     >Start IRIS3 v1</v-btn
                   >
                   <v-btn
@@ -181,10 +181,13 @@ export default {
         color: 'accent',
       })
     },
-    async runV1(jobId) {
+    async runV1(jobId, k, f, o) {
       await this.$axios
         .post('iris3/api/queue/run-v1/', {
           jobid: jobId,
+          k_arg: k,
+          f_arg: f,
+          o_arg: o,
         })
         .then((response) => {
           let i = 0

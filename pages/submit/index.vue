@@ -12,10 +12,12 @@
         >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 3" step="3"
-          >Regulon inference</v-stepper-step
+          >Regulon (v1)</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 4" step="4">Todo</v-stepper-step>
+        <v-stepper-step :complete="e1 > 4" step="4"
+          >Regulon (lisa)</v-stepper-step
+        >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 5" step="5">Todo</v-stepper-step>
         <v-divider></v-divider>
@@ -60,6 +62,10 @@
         <v-stepper-content step="6">
           <v-row><regulon-form></regulon-form></v-row>
           <v-btn text @click="e1 = 5">Previous</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="7">
+          <v-row><regulon-form></regulon-form></v-row>
+          <v-btn text @click="e1 = 6">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
