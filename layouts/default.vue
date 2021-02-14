@@ -144,15 +144,16 @@
         </template>
       </v-toolbar-items>
     </v-app-bar>
+    <!-- Change main width for all pages -->
     <v-main>
       <nuxt />
     </v-main>
     <v-footer
+      class="mx-30 font-weight-light"
       color="primary"
       app
       inset
       absolute
-      class="font-weight-light"
       width="auto"
       padless
     >

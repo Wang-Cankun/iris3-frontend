@@ -64,6 +64,7 @@ export default {
           stacked: true,
           events: {
             selection(chart, e) {
+              // eslint-disable-next-line no-console
               console.log(new Date(e.xaxis.min))
             },
           },
