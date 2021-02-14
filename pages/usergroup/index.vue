@@ -1,214 +1,38 @@
 <template>
   <v-container>
-    <div>
-      <fusioncharts
-        :type="type"
-        :width="width"
-        :height="height"
-        :data-format="dataFormat"
-        :data-source="dataSource"
-      ></fusioncharts>
-    </div>
+    <head>
+      <meta charset="utf-8" />
+      <!-- 引入 ECharts 文件 -->
+      <script src="echarts.min.js"></script>
+    </head>
+    <body>
+      <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+      <div id="main" style="width: 600px; height: 400px;"></div>
+    </body>
   </v-container>
 </template>
 
 <script>
-import FusionCharts from 'fusioncharts'
-import Charts from 'fusioncharts/fusioncharts.charts'
-import { FCComponent } from 'vue-fusioncharts'
+import * as echarts from 'echarts'
 
-// Resolves charts dependency
-Charts(FusionCharts)
-
-const dataSource = {
-  chart: {
-    caption: 'Bilateral Trade Volume, 2013',
-    subcaption:
-      'A Horizontal Sankey with options to configure the flow representation',
-    theme: 'fusion',
-    orientation: 'horizontal',
-    linkalpha: 30,
-    linkhoveralpha: 60,
-    nodelabelposition: 'start',
+// 基于准备好的dom，初始化echarts实例
+const myChart = echarts.init(document.getElementById('main'))
+// 绘制图表
+myChart.setOption({
+  title: {
+    text: 'ECharts 入门示例',
   },
-  nodes: [
+  tooltip: {},
+  xAxis: {
+    data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子'],
+  },
+  yAxis: {},
+  series: [
     {
-      label: 'Netherlands',
-    },
-    {
-      label: 'Canada',
-    },
-    {
-      label: 'Belgium',
-    },
-    {
-      label: 'Italy',
-    },
-    {
-      label: 'Mexico',
-    },
-    {
-      label: 'Russia',
-    },
-    {
-      label: 'Spain',
-    },
-    {
-      label: 'South Korea',
-    },
-    {
-      label: 'Germany',
-    },
-    {
-      label: 'China',
-    },
-    {
-      label: 'European Union',
-    },
-    {
-      label: 'Japan',
-    },
-    {
-      label: 'United Kingdom',
-    },
-    {
-      label: 'United States',
-    },
-    {
-      label: 'France',
-    },
-    {
-      label: 'Hong Kong',
-    },
-    {
-      label: 'Switzerland',
-    },
-    {
-      label: 'Austria',
-    },
-    {
-      label: 'Sweden',
+      name: '销量',
+      type: 'bar',
+      data: [5, 20, 36, 10, 10, 20],
     },
   ],
-  links: [
-    {
-      from: 'Netherlands',
-      to: 'European Union',
-      value: 798744,
-    },
-    {
-      from: 'Germany',
-      to: 'European Union',
-      value: 1468990,
-    },
-    {
-      from: 'European Union',
-      to: 'France',
-      value: 745931,
-    },
-    {
-      from: 'European Union',
-      to: 'United States',
-      value: 660541,
-    },
-    {
-      from: 'Canada',
-      to: 'United States',
-      value: 594546,
-    },
-    {
-      from: 'Belgium',
-      to: 'European Union',
-      value: 628796,
-    },
-    {
-      from: 'China',
-      to: 'Hong Kong',
-      value: 400571,
-    },
-    {
-      from: 'China',
-      to: 'United States',
-      value: 526454,
-    },
-    {
-      from: 'European Union',
-      to: 'United Kingdom',
-      value: 520318,
-    },
-    {
-      from: 'China',
-      to: 'European Union',
-      value: 560536,
-    },
-    {
-      from: 'Italy',
-      to: 'European Union',
-      value: 539556,
-    },
-    {
-      from: 'Mexico',
-      to: 'United States',
-      value: 492715,
-    },
-    {
-      from: 'Russia',
-      to: 'European Union',
-      value: 385778,
-    },
-    {
-      from: 'Spain',
-      to: 'European Union',
-      value: 365191,
-    },
-    {
-      from: 'China',
-      to: 'Japan',
-      value: 312062,
-    },
-    {
-      from: 'European Union',
-      to: 'Switzerland',
-      value: 328609,
-    },
-    {
-      from: 'South Korea',
-      to: 'China',
-      value: 229073,
-    },
-    {
-      from: 'European Union',
-      to: 'Austria',
-      value: 244913,
-    },
-    {
-      from: 'Japan',
-      to: 'United States',
-      value: 206091,
-    },
-    {
-      from: 'European Union',
-      to: 'Sweden',
-      value: 204849,
-    },
-    {
-      from: 'Germany',
-      to: 'United States',
-      value: 184287,
-    },
-  ],
-}
-
-export default {
-  components: {
-    fusioncharts: FCComponent,
-  },
-  data: () => ({
-    type: 'sankey',
-    width: '100%',
-    height: '100%',
-    dataFormat: 'json',
-    dataSource,
-  }),
-}
+})
 </script>
