@@ -160,11 +160,11 @@
       inset
       absolute
       class="font-weight-light"
-      width="auto"
+      width="70%"
       padless
     >
       <v-row class="mx-16">
-        <v-col col="2">
+        <v-col col="1">
           <p class="font-weight-bold" style="color: white;">EXPLORE</p>
           <p v-for="item in exploreMenu" :key="item.title">
             <nuxt-link
