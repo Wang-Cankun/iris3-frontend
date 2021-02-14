@@ -145,13 +145,41 @@
               </v-tooltip></v-row
             ></v-col
           >
-
           <v-file-input
             v-model="labelFile"
             color="primary"
             counter
             chips
             label="Click to upload (txt, tsv, csv)"
+            prepend-icon="mdi-paperclip"
+            outlined
+          ></v-file-input>
+          <v-col cols="12"
+            ><v-row>
+              <p class="title mt-4">
+                Upload BAM file (Optional)
+              </p>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon color="primary" dark v-on="on"
+                    >mdi-help-circle-outline</v-icon
+                  >
+                </template>
+                <p>
+                  Provide BAM files for RNA velocity.
+                </p>
+                <p>
+                  BAM files are used to calculate RNA velocity.
+                </p>
+              </v-tooltip></v-row
+            ></v-col
+          >
+          <v-file-input
+            v-model="labelFile"
+            color="primary"
+            counter
+            chips
+            label="Click to upload (.bam)"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
@@ -187,6 +215,35 @@
             counter
             chips
             label="Click to upload (txt, tsv, csv)"
+            prepend-icon="mdi-paperclip"
+            outlined
+          ></v-file-input>
+          <v-col cols="12"
+            ><v-row>
+              <p class="title mt-4">
+                Upload BAM file (Optional)
+              </p>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon color="primary" dark v-on="on"
+                    >mdi-help-circle-outline</v-icon
+                  >
+                </template>
+                <p>
+                  Provide BAM files for RNA velocity.
+                </p>
+                <p>
+                  BAM files are used to calculate RNA velocity.
+                </p>
+              </v-tooltip></v-row
+            ></v-col
+          >
+          <v-file-input
+            v-model="labelFile"
+            color="primary"
+            counter
+            chips
+            label="Click to upload (.bam)"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
@@ -227,6 +284,35 @@
             prepend-icon="mdi-paperclip"
             outlined
             required
+          ></v-file-input>
+          <v-col cols="12"
+            ><v-row>
+              <p class="title mt-4">
+                Upload BAM file (Optional)
+              </p>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon color="primary" dark v-on="on"
+                    >mdi-help-circle-outline</v-icon
+                  >
+                </template>
+                <p>
+                  Provide BAM files for RNA velocity.
+                </p>
+                <p>
+                  BAM files are used to calculate RNA velocity.
+                </p>
+              </v-tooltip></v-row
+            ></v-col
+          >
+          <v-file-input
+            v-model="labelFile"
+            color="primary"
+            counter
+            chips
+            label="Click to upload (.bam)"
+            prepend-icon="mdi-paperclip"
+            outlined
           ></v-file-input>
           <v-col cols="3" class="ma-0 pa-0"
             ><v-menu close-on-click>
