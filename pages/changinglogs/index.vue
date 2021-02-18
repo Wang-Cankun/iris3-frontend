@@ -1,111 +1,56 @@
 <template>
-  <v-container>
-    <div id="chart">
-      <apexchart
-        type="area"
-        height="350"
-        :options="chartOptions"
-        :series="series"
-      ></apexchart>
-    </div>
-  </v-container>
+  <ECharts ref="chart" :option="option" />
 </template>
 
 <script>
-import VueApexCharts from 'vue-apexcharts'
-import Vue from 'vue'
-Vue.use(VueApexCharts)
-
-Vue.component('apexchart', VueApexCharts)
+import * as echarts from 'echarts'
+import { createComponent } from 'echarts-for-vue'
 
 export default {
-  name: 'App',
+  components: {
+    ECharts: createComponent({ echarts }), // use as a component
+  },
   data() {
     return {
-      series: [
-        {
-          name: 'South',
-          data: this.generateDayWiseTimeSeries(
-            new Date('11 Feb 2017 GMT').getTime(),
-            20,
-            {
-              min: 10,
-              max: 60,
-            }
-          ),
-        },
-        {
-          name: 'North',
-          data: this.generateDayWiseTimeSeries(
-            new Date('11 Feb 2017 GMT').getTime(),
-            20,
-            {
-              min: 10,
-              max: 20,
-            }
-          ),
-        },
-        {
-          name: 'Central',
-          data: this.generateDayWiseTimeSeries(
-            new Date('11 Feb 2017 GMT').getTime(),
-            20,
-            {
-              min: 10,
-              max: 15,
-            }
-          ),
-        },
-      ],
-      chartOptions: {
-        chart: {
-          type: 'area',
-          height: 350,
-          stacked: true,
-          events: {
-            selection(chart, e) {
-              // eslint-disable-next-line no-console
-              console.log(new Date(e.xaxis.min))
+      option: {
+        dataset: [
+          {
+            dimensions: ['name', 'age', 'profession', 'score', 'date'],
+            source: [
+              [' Hannah Krause ', 41, 'Engineer', 314, '2011-02-12'],
+              ['Zhao Qian ', 20, 'Teacher', 351, '2011-03-01'],
+              [' Jasmin Krause ', 52, 'Musician', 287, '2011-02-14'],
+              ['Li Lei', 37, 'Teacher', 219, '2011-02-18'],
+              [' Karle Neumann ', 25, 'Engineer', 253, '2011-04-02'],
+              [' Adrian Groß', 19, 'Teacher', null, '2011-01-16'],
+              ['Mia Neumann', 71, 'Engineer', 165, '2011-03-19'],
+              [' Böhm Fuchs', 36, 'Musician', 318, '2011-02-24'],
+              ['Han Meimei ', 67, 'Engineer', 366, '2011-03-12'],
+            ],
+          },
+          {
+            transform: {
+              type: 'sort',
+              config: { dimension: 'score', order: 'desc' },
             },
           },
+        ],
+        xAxis: {
+          type: 'category',
+          axisLabel: { interval: 0, rotate: 30 },
         },
-        colors: ['#008FFB', '#00E396', '#CED4DC'],
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth',
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            opacityFrom: 0.6,
-            opacityTo: 0.8,
-          },
-        },
-        legend: {
-          position: 'top',
-          horizontalAlign: 'left',
-        },
-        xaxis: {
-          type: 'datetime',
+        yAxis: {},
+        series: {
+          type: 'bar',
+          encode: { x: 'name', y: 'score' },
+          datasetIndex: 1,
         },
       },
     }
   },
   methods: {
-    generateDayWiseTimeSeries(baseval, count, yrange) {
-      let i = 0
-      const series = []
-      while (i < count) {
-        const x = baseval
-        const y =
-          Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
-        series.push([x, y])
-        baseval += 86400000
-        i++
-      }
-      return series
+    doSomething() {
+      this.$refs.chart.inst.getWidth() // call the method of ECharts instance
     },
   },
 }
