@@ -12,7 +12,6 @@ export default {
   },
   data() {
     return {
-<<<<<<< HEAD
       option: {
         dataset: [
           {
@@ -28,53 +27,6 @@ export default {
               [' Böhm Fuchs', 36, 'Musician', 318, '2011-02-24'],
               ['Han Meimei ', 67, 'Engineer', 366, '2011-03-12'],
             ],
-=======
-      series: [
-        {
-          name: 'South',
-          data: this.generateDayWiseTimeSeries(
-            new Date('11 Feb 2017 GMT').getTime(),
-            20,
-            {
-              min: 10,
-              max: 60,
-            }
-          ),
-        },
-        {
-          name: 'North',
-          data: this.generateDayWiseTimeSeries(
-            new Date('11 Feb 2017 GMT').getTime(),
-            20,
-            {
-              min: 10,
-              max: 20,
-            }
-          ),
-        },
-        {
-          name: 'Central',
-          data: this.generateDayWiseTimeSeries(
-            new Date('11 Feb 2017 GMT').getTime(),
-            20,
-            {
-              min: 10,
-              max: 15,
-            }
-          ),
-        },
-      ],
-      chartOptions: {
-        chart: {
-          type: 'area',
-          height: 350,
-          stacked: true,
-          events: {
-            selection(chart, e) {
-              // eslint-disable-next-line no-console
-              console.log(new Date(e.xaxis.min))
-            },
->>>>>>> 9a2708777a69783c01fb9715136922db350ecb61
           },
           {
             transform: {
