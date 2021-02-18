@@ -1,10 +1,13 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex class="text-xs-center" mt-5>
-      <h1>Publication</h1>
-      <img src="" alt="Red dot" />
-    </v-flex>
-  </v-layout>
+  <v-container>
+    <v-row class="my-12 justify-center">
+      <v-row class="justify-center">
+        <p class="text-h4">
+          Publication
+        </p>
+      </v-row>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

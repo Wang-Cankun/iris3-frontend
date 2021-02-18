@@ -306,6 +306,10 @@ export default {
           title: 'User group',
           path: '/usergroup',
         },
+        {
+          title: 'Pi chart',
+          path: '/pichart',
+        },
       ],
       newsmenu: [
         {
@@ -315,6 +319,18 @@ export default {
         {
           title: 'Changing logs',
           path: '/changinglogs',
+        },
+        {
+          title: 'Bar plot',
+          path: '/barplot',
+        },
+        {
+          title: 'Sanky plot',
+          path: '/sankey',
+        },
+        {
+          title: 'Regression curve',
+          path: '/regression',
         },
       ],
       developmenu: [
@@ -334,6 +350,10 @@ export default {
           title: 'Github',
           path: '/github',
         },
+        {
+          title: 'Clustering plot',
+          path: '/clustering',
+        },
       ],
       aboutmenu: [
         {
@@ -347,6 +367,14 @@ export default {
         {
           title: 'Acknowledgement',
           path: '/acknowledgement',
+        },
+        {
+          title: 'Heatmap',
+          path: '/heatmap',
+        },
+        {
+          title: 'Box plot',
+          path: '/boxplot',
         },
       ],
       icons: ['mdi-github', 'mdi-youtube', 'mdi-twitter'],
