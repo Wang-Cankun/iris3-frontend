@@ -80,12 +80,8 @@
           ></v-col>
 
           <v-card-actions
-            ><v-btn color="primary" @click.stop.prevent="submit">
-              Run
-            </v-btn>
-            <v-btn color="primary" @click="reset">
-              Reset
-            </v-btn>
+            ><v-btn color="primary" @click.stop.prevent="submit"> Run </v-btn>
+            <v-btn color="primary" @click="reset"> Reset </v-btn>
           </v-card-actions>
         </v-card>
       </v-form>

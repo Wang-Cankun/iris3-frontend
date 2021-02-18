@@ -2,9 +2,7 @@
   <v-container>
     <v-row class="my-12 justify-center">
       <v-row class="justify-center">
-        <p class="text-h4">
-          Public IRIS3 Projects
-        </p>
+        <p class="text-h4">Public IRIS3 Projects</p>
       </v-row>
 
       <v-tabs v-model="tab">
@@ -146,17 +144,11 @@
                             Gene set
                           </v-stepper-step>
                           <v-divider></v-divider>
-                          <v-stepper-step step="4">
-                            Motif
-                          </v-stepper-step>
+                          <v-stepper-step step="4"> Motif </v-stepper-step>
                           <v-divider></v-divider>
-                          <v-stepper-step step="5">
-                            Regulon
-                          </v-stepper-step>
+                          <v-stepper-step step="5"> Regulon </v-stepper-step>
                           <v-divider></v-divider>
-                          <v-stepper-step step="6">
-                            Result
-                          </v-stepper-step>
+                          <v-stepper-step step="6"> Result </v-stepper-step>
                         </v-stepper-header>
                       </v-stepper>
                     </v-row>
@@ -306,21 +298,13 @@
                             Cluster
                           </v-stepper-step>
                           <v-divider></v-divider>
-                          <v-stepper-step step="3">
-                            Gene set
-                          </v-stepper-step>
+                          <v-stepper-step step="3"> Gene set </v-stepper-step>
                           <v-divider></v-divider>
-                          <v-stepper-step step="4">
-                            Motif
-                          </v-stepper-step>
+                          <v-stepper-step step="4"> Motif </v-stepper-step>
                           <v-divider></v-divider>
-                          <v-stepper-step step="5">
-                            Regulon
-                          </v-stepper-step>
+                          <v-stepper-step step="5"> Regulon </v-stepper-step>
                           <v-divider></v-divider>
-                          <v-stepper-step step="6">
-                            Result
-                          </v-stepper-step>
+                          <v-stepper-step step="6"> Result </v-stepper-step>
                         </v-stepper-header>
                       </v-stepper>
                     </v-row>

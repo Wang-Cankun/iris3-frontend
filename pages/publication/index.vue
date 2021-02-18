@@ -2,9 +2,7 @@
   <v-container>
     <v-row class="my-12 justify-center">
       <v-row class="justify-center">
-        <p class="text-h4">
-          Publication
-        </p>
+        <p class="text-h4">Publication</p>
       </v-row>
     </v-row>
   </v-container>

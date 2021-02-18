@@ -99,9 +99,7 @@
         <v-card-actions>
           <v-btn class="mx-2" color="primary" dark @click="login()">
             sign up </v-btn
-          ><v-btn color="grey darken-1" text @click="close()">
-            cancel
-          </v-btn>
+          ><v-btn color="grey darken-1" text @click="close()"> cancel </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>

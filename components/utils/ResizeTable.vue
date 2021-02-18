@@ -21,21 +21,11 @@
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left">
-                Gene
-              </th>
-              <th class="text-left">
-                Mean
-              </th>
-              <th class="text-left">
-                SD
-              </th>
-              <th class="text-left">
-                Min
-              </th>
-              <th class="text-left">
-                Max
-              </th>
+              <th class="text-left">Gene</th>
+              <th class="text-left">Mean</th>
+              <th class="text-left">SD</th>
+              <th class="text-left">Min</th>
+              <th class="text-left">Max</th>
             </tr>
           </thead>
           <tbody>

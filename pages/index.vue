@@ -41,9 +41,7 @@
       <!-- Login  -->
       <v-col>
         <v-card class="mb-8" color="#BBDEFB" height="290" outlined>
-          <v-card-title>
-            Sign In
-          </v-card-title>
+          <v-card-title> Sign In </v-card-title>
           <v-text-field
             v-model="email"
             class="mx-6"
@@ -66,9 +64,7 @@
         <!-- news  -->
         <v-card height="220" outlined>
           <!-- THe most updated news add here -->
-          <v-card-title class="mb-4">
-            News
-          </v-card-title>
+          <v-card-title class="mb-4"> News </v-card-title>
 
           <v-card-subtitle>
             <p class="text-h8">
@@ -76,9 +72,7 @@
             </p>
           </v-card-subtitle>
           <v-card-actions>
-            <v-btn outlined rounded to="/news">
-              More+
-            </v-btn>
+            <v-btn outlined rounded to="/news"> More+ </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -97,9 +91,7 @@
             </p>
           </v-card-subtitle>
           <v-card-actions class="justify-center">
-            <v-btn outlined rounded to="/public">
-              Explore
-            </v-btn>
+            <v-btn outlined rounded to="/public"> Explore </v-btn>
           </v-card-actions></v-card
         >
       </v-col>

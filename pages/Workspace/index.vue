@@ -6,15 +6,9 @@
           <v-toolbar-title>User Workspace</v-toolbar-title>
         </v-toolbar>
         <v-tabs vertical>
-          <v-tab>
-            My Workspace
-          </v-tab>
-          <v-tab>
-            My Profile
-          </v-tab>
-          <v-tab>
-            Change Password
-          </v-tab>
+          <v-tab> My Workspace </v-tab>
+          <v-tab> My Profile </v-tab>
+          <v-tab> Change Password </v-tab>
           <!-- Workspace tab -->
           <v-tab-item
             ><v-tabs v-model="tab">

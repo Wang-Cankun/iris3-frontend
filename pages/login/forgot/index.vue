@@ -31,12 +31,8 @@
               ></v-text-field>
             </v-flex>
             <v-flex class="text-xs-center" my-5>
-              <v-btn color="primary" type="submit">
-                Submit
-              </v-btn>
-              <p>
-                You will receive an email to reset your password.
-              </p>
+              <v-btn color="primary" type="submit"> Submit </v-btn>
+              <p>You will receive an email to reset your password.</p>
             </v-flex>
           </v-layout>
         </v-form>

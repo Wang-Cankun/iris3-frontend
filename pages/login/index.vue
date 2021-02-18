@@ -33,9 +33,7 @@
               ></v-text-field>
             </v-flex>
             <v-flex class="text-xs-center" my-5>
-              <v-btn color="primary" type="submit">
-                Submit
-              </v-btn>
+              <v-btn color="primary" type="submit"> Submit </v-btn>
             </v-flex>
             <p>
               Don't have an account?

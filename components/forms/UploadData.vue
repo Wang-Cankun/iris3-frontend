@@ -32,9 +32,7 @@
       ></v-text-field>
       <v-col cols="12">
         <v-row>
-          <p class="title mt-4">
-            Upload data
-          </p>
+          <p class="title mt-4">Upload data</p>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-icon color="primary" dark v-on="on"
@@ -90,9 +88,7 @@
           <v-col cols="3" class="ma-0 pa-0"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn v-bind="attrs" v-on="on">
-                  Example
-                </v-btn>
+                <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
               </template>
               <v-list>
                 <v-list-item @click="loadExample">
@@ -125,9 +121,7 @@
           </v-col>
           <v-col cols="12"
             ><v-row>
-              <p class="title mt-4">
-                Upload metadata (Optional)
-              </p>
+              <p class="title mt-4">Upload metadata (Optional)</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
@@ -156,21 +150,15 @@
           ></v-file-input>
           <v-col cols="12"
             ><v-row>
-              <p class="title mt-4">
-                Upload BAM file (Optional)
-              </p>
+              <p class="title mt-4">Upload BAM file (Optional)</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
                     >mdi-help-circle-outline</v-icon
                   >
                 </template>
-                <p>
-                  Provide BAM files for RNA velocity.
-                </p>
-                <p>
-                  BAM files are used to calculate RNA velocity.
-                </p>
+                <p>Provide BAM files for RNA velocity.</p>
+                <p>BAM files are used to calculate RNA velocity.</p>
               </v-tooltip></v-row
             ></v-col
           >
@@ -185,9 +173,7 @@
           ></v-file-input>
         </v-tab-item>
         <v-tab-item>
-          <p class="title ma-0">
-            Upload scRNA-seq data
-          </p>
+          <p class="title ma-0">Upload scRNA-seq data</p>
           <div v-for="(n, i) in multipleDatasetsLength" :key="n">
             <v-file-input
               v-model="expFile[i]"
@@ -205,9 +191,7 @@
           <v-btn @click="addMultipleDataset">Add a row</v-btn>
           <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
 
-          <p class="title">
-            Upload metadata (Optional)
-          </p>
+          <p class="title">Upload metadata (Optional)</p>
 
           <v-file-input
             v-model="labelFile"
@@ -220,21 +204,15 @@
           ></v-file-input>
           <v-col cols="12"
             ><v-row>
-              <p class="title mt-4">
-                Upload BAM file (Optional)
-              </p>
+              <p class="title mt-4">Upload BAM file (Optional)</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
                     >mdi-help-circle-outline</v-icon
                   >
                 </template>
-                <p>
-                  Provide BAM files for RNA velocity.
-                </p>
-                <p>
-                  BAM files are used to calculate RNA velocity.
-                </p>
+                <p>Provide BAM files for RNA velocity.</p>
+                <p>BAM files are used to calculate RNA velocity.</p>
               </v-tooltip></v-row
             ></v-col
           >
@@ -287,21 +265,15 @@
           ></v-file-input>
           <v-col cols="12"
             ><v-row>
-              <p class="title mt-4">
-                Upload BAM file (Optional)
-              </p>
+              <p class="title mt-4">Upload BAM file (Optional)</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
                     >mdi-help-circle-outline</v-icon
                   >
                 </template>
-                <p>
-                  Provide BAM files for RNA velocity.
-                </p>
-                <p>
-                  BAM files are used to calculate RNA velocity.
-                </p>
+                <p>Provide BAM files for RNA velocity.</p>
+                <p>BAM files are used to calculate RNA velocity.</p>
               </v-tooltip></v-row
             ></v-col
           >
@@ -317,9 +289,7 @@
           <v-col cols="3" class="ma-0 pa-0"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn v-bind="attrs" v-on="on">
-                  Example
-                </v-btn>
+                <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
               </template>
               <v-list>
                 <v-list-item @click="loadMultiomeExample">
@@ -365,18 +335,14 @@
 
       <v-col cols="12"
         ><v-row>
-          <p class="title mt-4">
-            Project description (Optional)
-          </p>
+          <p class="title mt-4">Project description (Optional)</p>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-icon color="primary" dark v-on="on"
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>
-              Set descripting here
-            </p>
+            <p>Set descripting here</p>
           </v-tooltip></v-row
         ></v-col
       >
@@ -386,9 +352,7 @@
 
     <v-col cols="12"
       ><v-row>
-        <p class="title mt-4">
-          Email (Optional)
-        </p>
+        <p class="title mt-4">Email (Optional)</p>
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-icon color="primary" dark v-on="on"
