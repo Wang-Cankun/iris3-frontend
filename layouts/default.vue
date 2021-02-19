@@ -51,9 +51,7 @@
 
         <v-menu open-on-hover offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" elevation="0" v-on="on">
-              Development
-            </v-btn>
+            <v-btn v-bind="attrs" elevation="0" v-on="on"> Development </v-btn>
           </template>
           <v-list>
             <v-list-item
@@ -165,9 +163,7 @@
               <v-col md="8" offset-md="2">
                 <v-row class="mx-16">
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white;">
-                      EXPLORE
-                    </p>
+                    <p class="font-weight-bold" style="color: white">EXPLORE</p>
                     <p v-for="item in exploreMenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -182,7 +178,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white;">HELP</p>
+                    <p class="font-weight-bold" style="color: white">HELP</p>
                     <p v-for="item in helpmenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -198,7 +194,7 @@
                     <p><v-spacer></v-spacer></p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white;">NEW</p>
+                    <p class="font-weight-bold" style="color: white">NEW</p>
                     <p v-for="item in newsmenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -213,7 +209,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white;">
+                    <p class="font-weight-bold" style="color: white">
                       DEVELOPMENT
                     </p>
                     <p v-for="item in developmenu" :key="item.title">
@@ -230,7 +226,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white;">ABOUT</p>
+                    <p class="font-weight-bold" style="color: white">ABOUT</p>
                     <p v-for="item in aboutmenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -245,7 +241,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white;">SOCIAL</p>
+                    <p class="font-weight-bold" style="color: white">SOCIAL</p>
                     <v-btn
                       v-for="icon in icons"
                       :key="icon"

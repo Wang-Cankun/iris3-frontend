@@ -97,32 +97,16 @@
                 >Data last updated February 2021</v-card-title
               >
               <v-row class="text-center">
-                <v-col>
-                  Function
-                </v-col>
-                <v-col>
-                  Created Projects
-                </v-col>
-                <v-col>
-                  Submitted jobs
-                </v-col>
-                <v-col>
-                  Data source
-                </v-col>
+                <v-col> Function </v-col>
+                <v-col> Created Projects </v-col>
+                <v-col> Submitted jobs </v-col>
+                <v-col> Data source </v-col>
               </v-row>
               <v-row class="text-center">
-                <v-col>
-                  0
-                </v-col>
-                <v-col>
-                  0
-                </v-col>
-                <v-col>
-                  0
-                </v-col>
-                <v-col>
-                  0
-                </v-col>
+                <v-col> 0 </v-col>
+                <v-col> 0 </v-col>
+                <v-col> 0 </v-col>
+                <v-col> 0 </v-col>
               </v-row>
             </v-card>
           </v-row>
@@ -131,9 +115,7 @@
 
       <v-card flat height="100"></v-card>
       <v-row>
-        <v-col md="5" offset="5">
-          This is the search bar for ...
-        </v-col>
+        <v-col md="5" offset="5"> This is the search bar for ... </v-col>
       </v-row>
       <!-- Long search bar -->
       <v-row>
@@ -330,6 +312,7 @@
 export default {
   data() {
     return {
+      searchJobId: '',
       email: '',
       password: '',
       newsdate: '5/2/2020',
