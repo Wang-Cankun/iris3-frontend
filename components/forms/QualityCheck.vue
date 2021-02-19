@@ -240,7 +240,7 @@
                 :margin="[10, 10]"
                 :use-css-transforms="true"
               >
-                <resize-image
+                <boxplot
                   :key="layout[0].i"
                   :x="layout[0].x"
                   :y="layout[0].y"
@@ -249,9 +249,10 @@
                   :i="layout[0].i"
                   :src="qcViolin1"
                   :title="layout[0].title"
+                  :values="metadata.n_count_rna"
                 >
-                </resize-image>
-                <resize-image
+                </boxplot>
+                <boxplot
                   :key="layout[1].i"
                   :x="layout[1].x"
                   :y="layout[1].y"
@@ -260,9 +261,10 @@
                   :i="layout[1].i"
                   :src="qcViolin2"
                   :title="layout[1].title"
+                  :values="metadata.n_feature_rna"
                 >
-                </resize-image>
-                <resize-image
+                </boxplot>
+                <boxplot
                   :key="layout[2].i"
                   :x="layout[2].x"
                   :y="layout[2].y"
@@ -271,9 +273,10 @@
                   :i="layout[2].i"
                   :src="qcViolin3"
                   :title="layout[2].title"
+                  :values="metadata.pct_mito"
                 >
-                </resize-image>
-                <resize-image
+                </boxplot>
+                <boxplot
                   :key="layout[3].i"
                   :x="layout[3].x"
                   :y="layout[3].y"
@@ -282,8 +285,9 @@
                   :i="layout[3].i"
                   :src="qcViolin4"
                   :title="layout[3].title"
+                  :values="metadata.pct_ribo"
                 >
-                </resize-image>
+                </boxplot>
                 <resize-image
                   :key="layout[4].i"
                   :x="layout[4].x"
@@ -308,16 +312,39 @@
                   :title="layout[5].title"
                 >
                 </resize-table>
-                <resize-image
+                <pie-chart
                   :key="layout[6].i"
                   :x="layout[6].x"
                   :y="layout[6].y"
                   :w="layout[6].w"
                   :h="layout[6].h"
                   :i="layout[6].i"
-                  :src="pie1"
-                  :title="layout[6].title"
-                ></resize-image>
+                  :values="metadata.meta1_val"
+                  :name="metadata.meta1_name"
+                  :title="metadata.meta1_title"
+                ></pie-chart>
+                <pie-chart
+                  :key="layout[7].i"
+                  :x="layout[7].x"
+                  :y="layout[7].y"
+                  :w="layout[7].w"
+                  :h="layout[7].h"
+                  :i="layout[7].i"
+                  :values="metadata.meta2_val"
+                  :name="metadata.meta2_name"
+                  :title="metadata.meta2_title"
+                ></pie-chart>
+                <pie-chart
+                  :key="layout[8].i"
+                  :x="layout[8].x"
+                  :y="layout[8].y"
+                  :w="layout[8].w"
+                  :h="layout[8].h"
+                  :i="layout[8].i"
+                  :values="metadata.meta3_val"
+                  :name="metadata.meta3_name"
+                  :title="metadata.meta3_title"
+                ></pie-chart>
               </grid-layout>
             </v-col>
             <v-col cols="7"></v-col>
@@ -330,11 +357,15 @@
 <script>
 import ResizeImage from '~/components/utils/ResizeImage'
 import ResizeTable from '~/components/utils/ResizeTable'
+import PieChart from '~/components/utils/PieChart'
+import Boxplot from '~/components/utils/Boxplot'
 
 export default {
   components: {
     'resize-image': ResizeImage,
     'resize-table': ResizeTable,
+    'pie-chart': PieChart,
+    boxplot: Boxplot,
   },
   data() {
     return {
@@ -390,10 +421,26 @@ export default {
         {
           x: 2,
           y: 1,
-          w: 1,
+          w: 2,
           h: 1,
           i: '6',
-          title: 'Metadata',
+          title: 'Metadata: cell_type',
+        },
+        {
+          x: 4,
+          y: 1,
+          w: 2,
+          h: 1,
+          i: '7',
+          title: 'Metadata: Sex',
+        },
+        {
+          x: 0,
+          y: 2,
+          w: 2,
+          h: 1,
+          i: '8',
+          title: 'Metadata: Sample',
         },
       ],
       tab: null,
@@ -415,6 +462,7 @@ export default {
       pie1: '',
       varGenesScatter: '',
       varGenesList: [],
+      metadata: [],
     }
   },
   methods: {
@@ -603,6 +651,39 @@ export default {
           console.log({ error })
           this.$notifier.showMessage({
             content: 'Plot Variable genes error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/meta-data/')
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.metadata = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  this.$notifier.showMessage({
+                    content: 'Calculate QC metrics success!',
+                    color: 'success',
+                  })
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Download metadata error!',
             color: 'error',
           })
         })

@@ -94,7 +94,7 @@
                   :margin="[10, 10]"
                   :use-css-transforms="true"
                 >
-                  <resize-image
+                  <scatter
                     :key="layout[0].i"
                     :x="layout[0].x"
                     :y="layout[0].y"
@@ -104,9 +104,10 @@
                     :imagew="700"
                     :imageh="550"
                     :src="umapCluster"
+                    :values="clusterResult.umap_pts"
                     :title="layout[0].title"
                   >
-                  </resize-image>
+                  </scatter>
                   <v-card class="ma-0"
                     ><grid-item
                       :x="layout[1].x"
@@ -499,7 +500,12 @@
 </template>
 <script>
 import _ from 'lodash'
+import Scatter from '~/components/utils/Scatter'
+
 export default {
+  components: {
+    scatter: Scatter,
+  },
   data: () => ({
     layout: [
       {
