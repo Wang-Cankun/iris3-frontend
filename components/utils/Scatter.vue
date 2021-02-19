@@ -173,7 +173,7 @@ export default {
         series: {
           type: 'scatter',
           encode: { tooltip: [0, 1] },
-          symbolSize: 15,
+          symbolSize: 4,
           itemStyle: {
             borderColor: '#555',
           },

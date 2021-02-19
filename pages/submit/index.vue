@@ -12,16 +12,19 @@
         >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 3" step="3"
+          >Cell annotation</v-stepper-step
+        >
+        <v-stepper-step :complete="e1 > 3" step="4"
           >Regulon (v1)</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 4" step="4"
+        <v-stepper-step :complete="e1 > 4" step="5"
           >Regulon (lisa)</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 5" step="5">Todo</v-stepper-step>
+        <v-stepper-step :complete="e1 > 5" step="6">Todo</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 6" step="6">Report</v-stepper-step>
+        <v-stepper-step :complete="e1 > 6" step="7">Report</v-stepper-step>
         <v-divider></v-divider>
       </v-stepper-header>
       <v-stepper-items>

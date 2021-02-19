@@ -12,59 +12,29 @@
                 <p class="subtitle-1 font-weight-bold text-center">
                   Cell annotation
                 </p>
-                <div v-if="idents != ''">
+                <p class="subtitle-2 text--primary mx-4">Set Cell Identity:</p>
+                <v-autocomplete
+                  v-model="currentIdent"
+                  class="ml-4"
+                  :items="idents"
+                  label="Select identity"
+                ></v-autocomplete>
+
+                <div v-for="n in multipleDatasetsLength" :key="n">
                   <p class="subtitle-2 text--primary mx-4">
-                    Set Cell Identity for CTSR identification:
+                    Select/merge cluster:
                   </p>
                   <v-autocomplete
                     v-model="currentIdent"
                     class="ml-4"
                     :items="idents"
-                    label="Select identity"
+                    label="Select cluster"
                   ></v-autocomplete>
                 </div>
-                <p class="ml-4 title-h4">
-                  Number of dimensions
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-icon color="primary" dark v-on="on"
-                        >mdi-help-circle-outline</v-icon
-                      >
-                    </template>
-                    <p>
-                      Determine the ‘dimensionality’ of the dataset, the top
-                      principal components represent a robust compression of the
-                      dataset. Default: 20.
-                    </p>
-                  </v-tooltip>
-                </p>
-                <v-text-field
-                  v-model="nPCs"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
-                <p class="ml-4 title-h4">
-                  Resolution
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-icon color="primary" dark v-on="on"
-                        >mdi-help-circle-outline</v-icon
-                      >
-                    </template>
-                    <p>
-                      Resolution for clustering in Seurat (form 0-1). Larger
-                      number will generate more clusters and smaller number will
-                      generate less clusters. Default: 0.5.
-                    </p>
-                  </v-tooltip>
-                </p>
-                <v-text-field
-                  v-model="resolution"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
+
+                <v-btn @click="addMultipleDataset">Add a cluster</v-btn>
+                <v-btn @click="removeMultipleDataset">Remove a cluster</v-btn>
+                <v-row></v-row>
                 <v-row justify="center">
                   <v-btn
                     class="ma-2"
@@ -72,7 +42,7 @@
                     width="200"
                     rounded
                     @click="runCellCluster()"
-                    >Update</v-btn
+                    >Submit job</v-btn
                   >
                 </v-row>
                 <!--
@@ -358,13 +328,21 @@ export default {
     newCellType: [],
     gene: 'Gad1',
     genes: '',
-    currentIdent: 'seurat_clusters',
+    currentIdent: ['1', '2', '3', '4', '5', '6', '7'],
     currentAtlas: '',
     atlas: [
       'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
       'to-be-added',
     ],
-    idents: [],
+    idents: [
+      '1_oligodendrocytes',
+      '2_pyramidal_CA1',
+      '3_pyramidal_SS',
+      '4_microglia',
+      '5_interneurons',
+      '6_endothelial_mural',
+      '7_astrocytes_ependymal',
+    ],
     violinSplit: 'Sex',
     resHistory: [],
     ident1: 1,
@@ -377,6 +355,7 @@ export default {
     addMetadataDialog: false,
     // Add metadata
     displayAddMetadata: '',
+    multipleDatasetsLength: 1,
   }),
   computed: {
     identList() {
@@ -802,6 +781,13 @@ export default {
     },
     resetAddMetadata() {
       console.log(' ~ file: CellCluster.vue ~ line 944 ~ resetAddMetadata ~ ')
+    },
+    addMultipleDataset() {
+      this.multipleDatasetsLength++
+    },
+    removeMultipleDataset() {
+      if (this.multipleDatasetsLength === 1) return
+      this.multipleDatasetsLength--
     },
   },
 }
