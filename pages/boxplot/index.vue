@@ -19,11 +19,13 @@ export default {
             left: 'center',
           },
           {
-            text: 'upper: Q3 + 1.5 * IRQ \nlower: Q1 - 1.5 * IRQ',
+            text: 'upper: Q3 + 1.5 * IQR \nlower: Q1 - 1.5 * IQR',
             borderColor: '#999',
             borderWidth: 1,
             textStyle: {
+              fontWeight: 'normal',
               fontSize: 14,
+              lineHeight: 20,
             },
             left: '10%',
             top: '90%',
@@ -147,11 +149,7 @@ export default {
           {
             transform: {
               type: 'boxplot',
-              config: {
-                itemNameFormatter(params) {
-                  return 'expr ' + params.value
-                },
-              },
+              config: { itemNameFormatter: 'expr {value}' },
             },
           },
           {
@@ -170,7 +168,7 @@ export default {
           right: '10%',
           bottom: '15%',
         },
-        yAxis: {
+        xAxis: {
           type: 'category',
           boundaryGap: true,
           nameGap: 30,
@@ -181,7 +179,7 @@ export default {
             show: false,
           },
         },
-        xAxis: {
+        yAxis: {
           type: 'value',
           name: 'km/s minus 299,000',
           splitArea: {
@@ -197,7 +195,6 @@ export default {
           {
             name: 'outlier',
             type: 'scatter',
-            encode: { x: 1, y: 0 },
             datasetIndex: 2,
           },
         ],

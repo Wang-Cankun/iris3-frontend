@@ -10,61 +10,31 @@
             <v-col cols="2">
               <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
                 <p class="subtitle-1 font-weight-bold text-center">
-                  Cell clustering Prarmeters
+                  Cell annotation
                 </p>
-                <div v-if="idents != ''">
+                <p class="subtitle-2 text--primary mx-4">Set Cell Identity:</p>
+                <v-autocomplete
+                  v-model="currentIdent"
+                  class="ml-4"
+                  :items="idents"
+                  label="Select identity"
+                ></v-autocomplete>
+
+                <div v-for="n in multipleDatasetsLength" :key="n">
                   <p class="subtitle-2 text--primary mx-4">
-                    Set Cell Identity for CTSR identification:
+                    Select/merge cluster:
                   </p>
                   <v-autocomplete
                     v-model="currentIdent"
                     class="ml-4"
                     :items="idents"
-                    label="Select identity"
+                    label="Select cluster"
                   ></v-autocomplete>
                 </div>
-                <p class="ml-4 title-h4">
-                  Number of dimensions
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-icon color="primary" dark v-on="on"
-                        >mdi-help-circle-outline</v-icon
-                      >
-                    </template>
-                    <p>
-                      Determine the ‘dimensionality’ of the dataset, the top
-                      principal components represent a robust compression of the
-                      dataset. Default: 20.
-                    </p>
-                  </v-tooltip>
-                </p>
-                <v-text-field
-                  v-model="nPCs"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
-                <p class="ml-4 title-h4">
-                  Resolution
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-icon color="primary" dark v-on="on"
-                        >mdi-help-circle-outline</v-icon
-                      >
-                    </template>
-                    <p>
-                      Resolution for clustering in Seurat (form 0-1). Larger
-                      number will generate more clusters and smaller number will
-                      generate less clusters. Default: 0.5.
-                    </p>
-                  </v-tooltip>
-                </p>
-                <v-text-field
-                  v-model="resolution"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
+
+                <v-btn @click="addMultipleDataset">Add a cluster</v-btn>
+                <v-btn @click="removeMultipleDataset">Remove a cluster</v-btn>
+                <v-row></v-row>
                 <v-row justify="center">
                   <v-btn
                     class="ma-2"
@@ -72,7 +42,7 @@
                     width="200"
                     rounded
                     @click="runCellCluster()"
-                    >Update</v-btn
+                    >Submit job</v-btn
                   >
                 </v-row>
                 <!--
@@ -108,6 +78,7 @@
                     :title="layout[0].title"
                   >
                   </scatter>
+
                   <v-card class="ma-0"
                     ><grid-item
                       :x="layout[1].x"
@@ -119,7 +90,7 @@
                     >
                       <v-card-title
                         class="primary white--text caption px-2 py-1"
-                        >Differntial expression testing <v-spacer></v-spacer>
+                        >Cell type annotation<v-spacer></v-spacer>
                         <v-menu bottom left>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn dark icon v-bind="attrs" v-on="on">
@@ -139,70 +110,11 @@
                       <v-row
                         ><v-col cols="6">
                           <v-autocomplete
-                            v-model="ident1"
+                            v-model="currentIdent"
                             class="ml-4"
-                            :items="identList"
-                            label="Ident1"
+                            :items="idents"
+                            label="Select cluster identity"
                           ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="6">
-                          <v-autocomplete
-                            v-model="ident2"
-                            class="ml-4"
-                            :items="identList"
-                            label="Ident1"
-                          ></v-autocomplete> </v-col
-                      ></v-row>
-                      <v-row>
-                        <v-col cols="6">
-                          <p class="ml-4 mb-0 title-h4">
-                            Min cell percent
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>
-                                Only test genes that are detected in a minimum
-                                fraction of min.pct cells in either of the two
-                                populations. Meant to speed up the function by
-                                not testing genes that are very infrequently
-                                expressed. Default is 0.2
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minPct"
-                              class="px-0"
-                              outlined
-                              background-color="white"
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                        <v-col cols="6" class="ma-0">
-                          <p class="ml-4 mb-0 title-h4">
-                            LogFC threshold
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>
-                                Limit testing to genes which show, on average,
-                                at least X-fold difference (log-scale) between
-                                the two groups of cells. Default is 0.25
-                                Increasing logfc.threshold speeds up the
-                                function, but can miss weaker signals.
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minLfc"
-                              class="px-0"
-                              outlined
-                              background-color="white"
-                            ></v-text-field>
-                          </p>
                         </v-col>
                       </v-row>
                       <v-row justify="center" class="mx-2 mb-2 mt-0">
@@ -211,83 +123,35 @@
                           color="Primary"
                           width="200"
                           rounded
-                          @click="runDeg()"
-                          >Update</v-btn
+                          @click="showDotPlot()"
+                          >Show dot plot</v-btn
+                        ><v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          rounded
+                          @click="openMetadataDiaglog()"
+                          >Annotate manually</v-btn
+                        >
+                        <v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          rounded
+                          @click="openAddTransferMetadataDialog()"
+                          >Map from reference</v-btn
                         >
                       </v-row>
-                      <v-data-table
-                        dense
-                        :headers="headers"
-                        :items="deResult"
-                        item-key="name"
-                        :items-per-page="5"
-                        class="elevation-1"
-                      ></v-data-table></grid-item
-                  ></v-card>
-                  <v-card class="ma-0"
-                    ><grid-item
-                      :x="layout[2].x"
-                      :y="layout[2].y"
-                      :w="layout[2].w"
-                      :h="layout[2].h"
-                      :i="layout[2].i"
-                      class="grid-item-border"
-                    >
-                      <v-card-title
-                        class="primary white--text caption px-2 py-1"
-                        >Gene plots<v-spacer></v-spacer>
-                        <v-menu bottom left>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn dark icon v-bind="attrs" v-on="on">
-                              <v-icon>mdi-dots-vertical</v-icon>
-                            </v-btn>
-                          </template>
 
-                          <v-list>
-                            <v-list-item @click="downloadPDF">
-                              <v-list-item-title
-                                >Download Table</v-list-item-title
-                              >
-                            </v-list-item>
-                          </v-list>
-                        </v-menu></v-card-title
-                      >
-                      <v-row
-                        ><v-col cols="6">
-                          <v-autocomplete
-                            v-model="gene"
-                            class="ml-4"
-                            :items="genes"
-                            label="Gene"
-                          ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="6">
-                          <div v-if="idents != ''">
-                            <p class="subtitle-2 text--primary mx-4">
-                              Split the violin plots by:
-                            </p>
-                            <v-autocomplete
-                              v-model="violinSplit"
-                              class="ml-4"
-                              :items="violinSplitItems"
-                              label="Select identity"
-                            ></v-autocomplete>
-                          </div>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center" class="mx-2 mb-2 mt-0">
-                        <v-btn
-                          class="mx-2 mb-2 mt-0"
-                          color="Primary"
-                          width="200"
-                          rounded
-                          @click="runGenePlot()"
-                          >Plot</v-btn
-                        >
-                      </v-row>
-                      <v-row v-if="violinGene">
-                        <img :src="violinGene" :width="400" :height="350" />
-                        <img :src="featureGene" :width="400" :height="350" />
+                      <v-row v-if="dotPlot">
+                        <!--
+                        <v-row justify="center" class="mx-2 mb-2 mt-0">
+                          Number of annotated cell type :
+                          {{ annotateResult.n_annotate_cell_type }}
+                        </v-row>
+                        <v-row justify="center" class="mx-2 mb-2 mt-0">
+                          Annotated cell type :
+                          {{ annotateResult.annotate_cell_type }}
+                        </v-row> -->
+                        <img :src="dotPlot" :width="550" :height="400" />
                       </v-row> </grid-item
                   ></v-card>
                 </grid-layout>
@@ -368,53 +232,6 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-                <!--
-                <div v-if="deg">
-                  <v-data-table
-                    dense
-                    :search="keggSearch"
-                    :headers="enrichHeaders"
-                    :items="keggResult"
-                    :items-per-page="10"
-                    item-key="index"
-                    class="elevation-1"
-                    :expanded.sync="expandedKegg"
-                    show-expand
-                  >
-                    <template v-slot:top>
-                      <v-toolbar flat>
-                        <v-toolbar-title>
-                          <download-excel :data="keggResult" type="csv">
-                            <v-btn color="primary"> Download</v-btn
-                            ><v-tooltip top>
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                  color="primary"
-                                  dark
-                                  v-bind="attrs"
-                                  v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <span
-                                >KEGG Pathway enrichment analysis using the DE
-                                genes above. The results are calculated
-                                real-time using Enrichr.</span
-                              >
-                            </v-tooltip>
-                          </download-excel></v-toolbar-title
-                        >
-                        <v-spacer></v-spacer>
-                      </v-toolbar>
-                    </template>
-                    <template v-slot:expanded-item="{ item }">
-                      <td :colspan="headers.length">
-                        {{ item.genes.join(',') }}
-                      </td>
-                    </template>
-                  </v-data-table>
-                </div>
-                -->
               </div>
             </v-col>
           </v-row>
@@ -447,7 +264,7 @@ export default {
         w: 2,
         h: 2,
         i: '1',
-        title: 'Differential gene expression',
+        title: 'Cell type annotation',
       },
       {
         x: 0,
@@ -511,13 +328,21 @@ export default {
     newCellType: [],
     gene: 'Gad1',
     genes: '',
-    currentIdent: 'seurat_clusters',
+    currentIdent: ['1', '2', '3', '4', '5', '6', '7'],
     currentAtlas: '',
     atlas: [
       'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
       'to-be-added',
     ],
-    idents: [],
+    idents: [
+      '1_oligodendrocytes',
+      '2_pyramidal_CA1',
+      '3_pyramidal_SS',
+      '4_microglia',
+      '5_interneurons',
+      '6_endothelial_mural',
+      '7_astrocytes_ependymal',
+    ],
     violinSplit: 'Sex',
     resHistory: [],
     ident1: 1,
@@ -530,6 +355,7 @@ export default {
     addMetadataDialog: false,
     // Add metadata
     displayAddMetadata: '',
+    multipleDatasetsLength: 1,
   }),
   computed: {
     identList() {
@@ -955,6 +781,13 @@ export default {
     },
     resetAddMetadata() {
       console.log(' ~ file: CellCluster.vue ~ line 944 ~ resetAddMetadata ~ ')
+    },
+    addMultipleDataset() {
+      this.multipleDatasetsLength++
+    },
+    removeMultipleDataset() {
+      if (this.multipleDatasetsLength === 1) return
+      this.multipleDatasetsLength--
     },
   },
 }

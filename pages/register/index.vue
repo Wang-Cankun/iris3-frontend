@@ -99,7 +99,7 @@
             </v-flex>
             <v-flex class="text-xs-center" my-5>
               <v-btn color="primary" type="submit">Sign Up</v-btn>
-              <div class="has-text-centered" style="margin-top: 20px;">
+              <div class="has-text-centered" style="margin-top: 20px">
                 Already got an account?
                 <nuxt-link to="/login">Sign in</nuxt-link>
               </div>

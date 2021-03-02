@@ -9,30 +9,22 @@
           <v-row>
             <v-col cols="2">
               <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
-                <p class="subtitle-1 font-weight-bold text-center">
-                  Jobs
-                </p>
-                <p class="ml-4 title-h4">
-                  Bicluster overlap rate
-                </p>
+                <p class="subtitle-1 font-weight-bold text-center">Jobs</p>
+                <p class="ml-4 title-h4">Bicluster overlap rate</p>
                 <v-text-field
                   v-model="qubic_f"
                   class="px-6"
                   outlined
                   background-color="white"
                 ></v-text-field>
-                <p class="ml-4 title-h4">
-                  Maximum bicluster number
-                </p>
+                <p class="ml-4 title-h4">Maximum bicluster number</p>
                 <v-text-field
                   v-model="qubic_o"
                   class="px-6"
                   outlined
                   background-color="white"
                 ></v-text-field>
-                <p class="ml-4 title-h4">
-                  Minimum cell number
-                </p>
+                <p class="ml-4 title-h4">Minimum cell number</p>
                 <v-text-field
                   v-model="qubic_k"
                   class="px-6"
@@ -49,9 +41,7 @@
                   background-color="white"
                 ></v-text-field>
 
-                <p class="subtitle-1 font-weight-bold text-center">
-                  Jobs
-                </p>
+                <p class="subtitle-1 font-weight-bold text-center">Jobs</p>
                 <v-row justify="center">
                   <v-btn
                     class="ma-2"
