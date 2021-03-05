@@ -12,7 +12,16 @@
 
           <v-list>
             <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download data</v-list-item-title>
+              <v-list-item-title>Download PNG</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="downloadPNG">
+              <v-list-item-title>Download JPEG</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="downloadPDF">
+              <v-list-item-title>Download PDF</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="downloadPDF">
+              <v-list-item-title>Download file (CSV)</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu></v-card-title
