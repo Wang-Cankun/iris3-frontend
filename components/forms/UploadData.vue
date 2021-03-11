@@ -25,7 +25,7 @@
       <v-text-field
         v-model="title"
         :rules="rules"
-        counter="25"
+        counter="50"
         label="Title:"
         outlined
         required
@@ -475,9 +475,13 @@ export default {
       )
       this.speciesSelect = 'Mouse'
       this.title = 'Example data (Zeisel et al. 2015.)'
-      this.$notifier.showMessage({
-        content: 'Example dataset loaded: Zeisel et al. 2015.',
-        color: 'success',
+      // this.$notifier.showMessage({
+      //   content: 'Example dataset loaded: Zeisel et al. 2015.',
+      //   color: 'success',
+      // })
+      this.$notifier.showAlert({
+        content: 'Uploading example scRNA-seq dataset...',
+        color: 'green',
       })
     },
     loadMultiomeExample() {

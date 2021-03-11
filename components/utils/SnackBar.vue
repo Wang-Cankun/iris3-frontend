@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="show" :color="color" top>
+  <v-snackbar v-model="show" width="100%" :color="color" top>
     <div class="text-subtitle-1 font-weight-bold">{{ message }}</div>
     <v-spacer></v-spacer>
     <template v-slot:action="{ attrs }">

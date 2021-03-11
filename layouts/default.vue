@@ -144,6 +144,7 @@
     </v-app-bar>
 
     <v-main>
+      <alert></alert>
       <nuxt />
     </v-main>
 
@@ -285,10 +286,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Snackbar from '../components/utils/SnackBar'
+import Alert from '../components/utils/Alert'
 import LoginDialog from '../components/utils/LoginDialog'
 import RegisterDialog from '../components/utils/RegisterDialog'
 export default {
   components: {
+    alert: Alert,
     snackbar: Snackbar,
     'login-dialog': LoginDialog,
     'register-dialog': RegisterDialog,

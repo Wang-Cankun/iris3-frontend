@@ -23,9 +23,7 @@
                   <p class="text--secondary">
                     Cell number: {{ qcResult.raw_n_cells[0] }}
                   </p>
-                  <p class="text--secondary">
-                    Gene number: 36601
-                  </p>
+                  <p class="text--secondary">Gene number: 36601</p>
                 </v-card-text>
                 <v-row justify="center">
                   <div class="mb-2">
@@ -442,9 +440,7 @@
                         >mdi-help-circle-outline</v-icon
                       >
                     </template>
-                    <p>
-                      Data Normalization methods:
-                    </p>
+                    <p>Data Normalization methods:</p>
                     <p>
                       LogNormalize: Seurat's default method which Normalizes the
                       gene expression measurements for each cell by the total

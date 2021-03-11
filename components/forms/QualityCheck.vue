@@ -56,9 +56,7 @@
                   <div class="mb-2">
                     <v-menu close-on-click>
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn v-bind="attrs" v-on="on">
-                          Download Pre-processed data
-                        </v-btn>
+                        <v-btn v-bind="attrs" v-on="on"> Download </v-btn>
                       </template>
                       <v-list>
                         <v-list-item>
@@ -154,7 +152,7 @@
                   background-color="white"
                 ></v-text-field>
                 <v-row class="ml-4"
-                  ><p class="mt-4 title-h4">Variable features</p>
+                  ><p class="mt-4 title-h4">Top variable genes</p>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-icon color="primary" dark v-on="on"
@@ -208,7 +206,7 @@
                             >mdi-help-circle-outline</v-icon
                           >
                         </template>
-                        Remove all ribosome genes
+                        Remove ribosomal genes
                       </v-tooltip>
                     </div>
                   </template>
@@ -218,14 +216,14 @@
                     color="Primary"
                     width="200"
                     rounded
-                    class="mb-2"
+                    class="mb-4 pa-2"
                     @click="runPreProcess()"
                     >Update</v-btn
                   >
                 </v-row>
               </v-card>
             </v-col>
-            <v-col v-if="qcResult !== null" cols="10"
+            <v-col v-if="qcComplete !== false" cols="10"
               ><p v-if="timeElapsed != ''">
                 Execute time: {{ timeElapsed }} seconds
               </p>
@@ -247,7 +245,7 @@
                   :w="layout[0].w"
                   :h="layout[0].h"
                   :i="layout[0].i"
-                  :src="qcViolin1"
+                  :src="qcBox1"
                   :title="layout[0].title"
                   :values="metadata.n_count_rna"
                 >
@@ -259,7 +257,7 @@
                   :w="layout[1].w"
                   :h="layout[1].h"
                   :i="layout[1].i"
-                  :src="qcViolin2"
+                  :src="qcBox2"
                   :title="layout[1].title"
                   :values="metadata.n_feature_rna"
                 >
@@ -271,7 +269,7 @@
                   :w="layout[2].w"
                   :h="layout[2].h"
                   :i="layout[2].i"
-                  :src="qcViolin3"
+                  :src="qcBox3"
                   :title="layout[2].title"
                   :values="metadata.pct_mito"
                 >
@@ -283,7 +281,7 @@
                   :w="layout[3].w"
                   :h="layout[3].h"
                   :i="layout[3].i"
-                  :src="qcViolin4"
+                  :src="qcBox4"
                   :title="layout[3].title"
                   :values="metadata.pct_ribo"
                 >
@@ -345,6 +343,36 @@
                   :name="metadata.meta3_name"
                   :title="metadata.meta3_title"
                 ></pie-chart>
+                <barplot
+                  :key="layout[9].i"
+                  :x="layout[9].x"
+                  :y="layout[9].y"
+                  :w="layout[9].w"
+                  :h="layout[9].h"
+                  :i="layout[9].i"
+                  :src="qcHist1"
+                  :title="layout[9].title"
+                ></barplot>
+                <barplot
+                  :key="layout[10].i"
+                  :x="layout[10].x"
+                  :y="layout[10].y"
+                  :w="layout[10].w"
+                  :h="layout[10].h"
+                  :i="layout[10].i"
+                  :src="qcHist2"
+                  :title="layout[10].title"
+                ></barplot>
+                <barplot
+                  :key="layout[11].i"
+                  :x="layout[11].x"
+                  :y="layout[11].y"
+                  :w="layout[11].w"
+                  :h="layout[11].h"
+                  :i="layout[11].i"
+                  :src="qcHist3"
+                  :title="layout[11].title"
+                ></barplot>
               </grid-layout>
             </v-col>
             <v-col cols="7"></v-col>
@@ -359,6 +387,7 @@ import ResizeImage from '~/components/utils/ResizeImage'
 import ResizeTable from '~/components/utils/ResizeTable'
 import PieChart from '~/components/utils/PieChart'
 import Boxplot from '~/components/utils/Boxplot'
+import Barplot from '~/components/utils/Barplot'
 
 export default {
   components: {
@@ -366,6 +395,7 @@ export default {
     'resize-table': ResizeTable,
     'pie-chart': PieChart,
     boxplot: Boxplot,
+    barplot: Barplot,
   },
   data() {
     return {
@@ -376,7 +406,7 @@ export default {
           w: 1,
           h: 1,
           i: '0',
-          title: 'Number of genes per cell',
+          title: '# of genes per cell',
         },
         {
           x: 1,
@@ -384,7 +414,7 @@ export default {
           w: 1,
           h: 1,
           i: '1',
-          title: 'Total number of molecules per cell',
+          title: 'Total # of molecules per cell',
         },
         {
           x: 2,
@@ -403,8 +433,8 @@ export default {
           title: 'Ribosome genes percent',
         },
         {
-          x: 0,
-          y: 1,
+          x: 2,
+          y: 3,
           w: 2,
           h: 1,
           i: '4',
@@ -419,28 +449,52 @@ export default {
           title: 'Variable genes table',
         },
         {
-          x: 2,
-          y: 1,
+          x: 0,
+          y: 2,
           w: 2,
-          h: 1,
+          h: 2,
           i: '6',
           title: 'Metadata: cell_type',
         },
         {
-          x: 4,
-          y: 1,
+          x: 2,
+          y: 2,
           w: 2,
           h: 1,
           i: '7',
           title: 'Metadata: Sex',
         },
         {
-          x: 0,
+          x: 4,
           y: 2,
           w: 2,
           h: 1,
           i: '8',
           title: 'Metadata: Sample',
+        },
+        {
+          x: 0,
+          y: 1,
+          w: 2,
+          h: 1,
+          i: '9',
+          title: '# of expressed genes in each cell',
+        },
+        {
+          x: 2,
+          y: 1,
+          w: 2,
+          h: 1,
+          i: '10',
+          title: '# of read counts in each cell',
+        },
+        {
+          x: 4,
+          y: 1,
+          w: 2,
+          h: 1,
+          i: '11',
+          title: '# of cells for each gene',
         },
       ],
       tab: null,
@@ -455,10 +509,15 @@ export default {
       normalizeSelect: 'LogNormalize',
       normalizeMethods: ['LogNormalize'],
       qcResult: null,
-      qcViolin1: '',
-      qcViolin2: '',
-      qcViolin3: '',
-      qcViolin4: '',
+      qcComplete: false,
+      qcBox1: [],
+      qcBox2: [],
+      qcBox3: [],
+      qcBox4: [],
+      qcBox5: [],
+      qcHist1: [],
+      qcHist2: [],
+      qcHist3: [],
       pie1: '',
       varGenesScatter: '',
       varGenesList: [],
@@ -472,7 +531,7 @@ export default {
         color: 'accent',
       })
       this.varGenesList = []
-      this.pie1 = this.qcViolin1 = this.qcViolin2 = this.qcViolin3 = this.qcViolin4 = this.varGenesScatter =
+      this.pie1 = this.varGenesScatter =
         'https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp'
       await this.$axios
         .post('iris3/api/queue/load/', {
@@ -503,122 +562,6 @@ export default {
         .catch((error) => {
           this.$notifier.showMessage({
             content: 'Calculate QC metrics error: ' + error,
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('iris3/api/queue/qcplot1/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.qcViolin1 = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                }
-                if (++i === 15) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot QC violin error!',
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('iris3/api/queue/qcplot2/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.qcViolin2 = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                }
-                if (++i === 15) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot QC violin error!',
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('iris3/api/queue/qcplot3/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.qcViolin3 = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                }
-                if (++i === 15) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot QC violin error!',
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('iris3/api/queue/qcplot4/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.qcViolin4 = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                }
-                if (++i === 15) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot QC violin error!',
             color: 'error',
           })
         })
@@ -731,6 +674,26 @@ export default {
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.varGenesList = response.data.returnvalue
+                  this.qcBox1 = this.varGenesList[1].map(
+                    (item) => item.n_reads_per_cell
+                  )
+                  this.qcBox2 = this.varGenesList[1].map(
+                    (item) => item.n_genes_per_cell
+                  )
+                  this.qcBox3 = this.varGenesList[1].map(
+                    (item) => item.pct_ribo_per_gene
+                  )
+                  this.qcBox4 = this.varGenesList[1].map(
+                    (item) => item.pct_mito_per_gene
+                  )
+                  this.qcBox5 = this.varGenesList[0].map(
+                    (item) => item.n_cells_per_gene
+                  )
+                  this.qcHist1 = this.varGenesList[2]
+                  this.qcHist2 = this.varGenesList[3]
+                  this.qcHist3 = this.varGenesList[4]
+
+                  this.qcComplete = true
                   this.timeElapsed =
                     (response.data.finishedOn - response.data.processedOn) /
                     1000

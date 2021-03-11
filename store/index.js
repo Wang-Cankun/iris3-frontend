@@ -17,6 +17,9 @@ export const mutations = {
   SET_JOBID(state, jobid) {
     state.jobid = jobid
   },
+  SET_PLOT_EVENT(state, jobid) {
+    state.jobid = jobid
+  },
 }
 export const actions = {
   async fetchProfile({ commit }, email) {
