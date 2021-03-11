@@ -5,29 +5,26 @@
 <script>
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
+import graph from 'static/json/npmdepgraph.min10.json'
 
 export default {
   components: {
     ECharts: createComponent({ echarts }), // use as a component
   },
-  async fetch() {
-    this.json = await import(`static/json/npmdepgraph.min10.json`)
-  },
+
   data() {
-    return {
-      json: {},
-    }
+    return {}
   },
   computed: {
     option() {
-      this.json.nodes.forEach(function (node) {
+      graph.nodes.forEach(function (node) {
         node.label = {
           show: node.symbolSize > 30,
         }
       })
       return {
         title: {
-          text: 'NPM Dependencies',
+          text: 'Graph',
         },
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
@@ -36,7 +33,7 @@ export default {
             type: 'graph',
             layout: 'none',
             // progressiveThreshold: 700,
-            data: this.json.nodes.map(function (node) {
+            data: graph.nodes.map(function (node) {
               return {
                 x: node.x,
                 y: node.y,
@@ -48,7 +45,7 @@ export default {
                 },
               }
             }),
-            edges: this.json.edges.map(function (edge) {
+            edges: graph.edges.map(function (edge) {
               return {
                 source: edge.sourceID,
                 target: edge.targetID,
