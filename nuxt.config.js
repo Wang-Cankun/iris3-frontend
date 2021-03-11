@@ -72,16 +72,7 @@ export default {
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     '@nuxtjs/auth',
-    'nuxt-socket-io',
   ],
-  io: {
-    // module options
-    sockets: [
-      {
-        url: process.env.WS_URL,
-      },
-    ],
-  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
