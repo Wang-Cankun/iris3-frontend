@@ -3,7 +3,7 @@
     <v-app-bar app>
       <!-- logo image -->
       <v-toolbar-title>
-        <router-link to="/" tag="span" style="cursor: pointer">
+        <router-link to="/" tag="span" style="cursor: pointer;">
           <img
             width="150px"
             max-width="150px"
@@ -49,6 +49,21 @@
           </v-list>
         </v-menu>
 
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" elevation="0" v-on="on"> NEWS </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="item in newsmenu"
+              :key="item.title"
+              :to="item.path"
+              link
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <v-menu open-on-hover offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" elevation="0" v-on="on"> Development </v-btn>
@@ -164,7 +179,9 @@
               <v-col md="8" offset-md="2">
                 <v-row class="mx-16">
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white">EXPLORE</p>
+                    <p class="font-weight-bold" style="color: white;">
+                      EXPLORE
+                    </p>
                     <p v-for="item in exploreMenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -179,7 +196,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white">HELP</p>
+                    <p class="font-weight-bold" style="color: white;">HELP</p>
                     <p v-for="item in helpmenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -195,7 +212,7 @@
                     <p><v-spacer></v-spacer></p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white">NEW</p>
+                    <p class="font-weight-bold" style="color: white;">NEWS</p>
                     <p v-for="item in newsmenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -210,7 +227,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white">
+                    <p class="font-weight-bold" style="color: white;">
                       DEVELOPMENT
                     </p>
                     <p v-for="item in developmenu" :key="item.title">
@@ -227,7 +244,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white">ABOUT</p>
+                    <p class="font-weight-bold" style="color: white;">ABOUT</p>
                     <p v-for="item in aboutmenu" :key="item.title">
                       <nuxt-link
                         :to="item.path"
@@ -242,7 +259,7 @@
                     </p>
                   </v-col>
                   <v-col col="1">
-                    <p class="font-weight-bold" style="color: white">SOCIAL</p>
+                    <p class="font-weight-bold" style="color: white;">SOCIAL</p>
                     <v-btn
                       v-for="icon in icons"
                       :key="icon"
@@ -344,8 +361,12 @@ export default {
           path: '/usergroup',
         },
         {
-          title: 'Pi chart',
-          path: '/pichart',
+          title: 'graph1',
+          path: '/graph1',
+        },
+        {
+          title: 'graph2',
+          path: '/graph2',
         },
       ],
       newsmenu: [
