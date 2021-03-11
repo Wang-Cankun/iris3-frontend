@@ -5,7 +5,7 @@
     type="info"
     :color="color"
     dismissible
-    absolute
+    top
     transition="scale-transition"
   >
     <div class="text-subtitle-1 font-weight-bold">{{ message }}</div>

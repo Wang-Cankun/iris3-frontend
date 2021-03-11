@@ -104,9 +104,9 @@ export default {
   mounted() {
     this.$refs.chart.inst.on('click', (params) => {
       this.$notifier.showAlert({
-        content: `Current type: ${params.seriesType}; name: ${params.name};
-        value: ${params.value}`,
-        color: 'accent',
+        content: `Selected ${params.name} from ${params.seriesType} chart`,
+        value: `${params.value}`,
+        color: 'success',
       })
     })
   },

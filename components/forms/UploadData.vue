@@ -475,13 +475,9 @@ export default {
       )
       this.speciesSelect = 'Mouse'
       this.title = 'Example data (Zeisel et al. 2015.)'
-      // this.$notifier.showMessage({
-      //   content: 'Example dataset loaded: Zeisel et al. 2015.',
-      //   color: 'success',
-      // })
-      this.$notifier.showAlert({
-        content: 'Uploading example scRNA-seq dataset...',
-        color: 'green',
+      this.$notifier.showMessage({
+        content: 'Example dataset loaded: Zeisel et al. 2015.',
+        color: 'success',
       })
     },
     loadMultiomeExample() {

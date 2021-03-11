@@ -692,7 +692,10 @@ export default {
                   this.qcHist1 = this.varGenesList[2]
                   this.qcHist2 = this.varGenesList[3]
                   this.qcHist3 = this.varGenesList[4]
-
+                  this.$notifier.showAlert({
+                    content: `QC result`,
+                    color: 'accent',
+                  })
                   this.qcComplete = true
                   this.timeElapsed =
                     (response.data.finishedOn - response.data.processedOn) /
