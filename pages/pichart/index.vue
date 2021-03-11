@@ -11,9 +11,7 @@ export default {
     ECharts: createComponent({ echarts }), // use as a component
   },
   async fetch() {
-    this.graph = await fetch(
-      'https://echarts.apache.org/examples/data/asset/data/les-miserables.json'
-    ).then((res) => res.json())
+    this.graph = await import(`static/json/les-miserables.json`)
   },
   data() {
     return {
