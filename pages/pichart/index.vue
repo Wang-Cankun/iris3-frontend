@@ -16,10 +16,17 @@ export default {
     ).then((res) => res.json())
   },
   data() {
-    return {}
+    return {
+      graph: {},
+    }
   },
   computed: {
     option() {
+      this.graph.nodes.forEach(function (node) {
+        node.label = {
+          show: node.symbolSize > 30,
+        }
+      })
       return {
         title: {
           text: 'Les Miserables',
@@ -40,7 +47,7 @@ export default {
         series: [
           {
             name: 'Les Miserables',
-            type: 'this.graph',
+            type: 'graph',
             layout: 'circular',
             circular: {
               rotateLabel: true,
