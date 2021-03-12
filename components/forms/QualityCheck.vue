@@ -91,10 +91,10 @@
 
               <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
                 <p class="subtitle-1 font-weight-bold text-center">
-                  Preprocessing parameters
+                  Preprocessing
                 </p>
                 <v-row class="ml-4"
-                  ><p class="mt-4 title-h4">Cell filter</p>
+                  ><p class="my-1title-h4">Cell filter</p>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-icon color="primary" dark v-on="on"
@@ -103,17 +103,17 @@
                     </template>
                     <p>
                       Cells with zero values in more than # genes are removed
-                    </p>
-                  </v-tooltip></v-row
-                >
-                <v-text-field
-                  v-model="cellFilter"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
+                    </p> </v-tooltip
+                  ><v-text-field
+                    v-model="cellFilter"
+                    class="mr-2 pr-2"
+                    outlined
+                    background-color="white"
+                  ></v-text-field
+                ></v-row>
+
                 <v-row class="ml-4"
-                  ><p class="mt-4 title-h4">Gene filter</p>
+                  ><p class="my-1title-h4">Gene filter</p>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-icon color="primary" dark v-on="on"
@@ -122,17 +122,17 @@
                     </template>
                     <p>
                       Genes with zero values in more than # cells are removed
-                    </p>
-                  </v-tooltip></v-row
-                >
-                <v-text-field
-                  v-model="geneFilter"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
+                    </p> </v-tooltip
+                  ><v-text-field
+                    v-model="geneFilter"
+                    class="mr-2 pr-2"
+                    outlined
+                    background-color="white"
+                  ></v-text-field
+                ></v-row>
+
                 <v-row class="ml-4"
-                  ><p class="mt-4 title-h4">Mitochondrial percentage filter</p>
+                  ><p class="my-1title-h4">Mitochondrial filter</p>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-icon color="primary" dark v-on="on"
@@ -142,17 +142,17 @@
                     <p>
                       Cells with more than # percent mitochondrial counts are
                       removed
-                    </p>
-                  </v-tooltip></v-row
-                >
-                <v-text-field
-                  v-model="mitoFilter"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
+                    </p> </v-tooltip
+                  ><v-text-field
+                    v-model="mitoFilter"
+                    class="mr-2 pr-2"
+                    outlined
+                    background-color="white"
+                  ></v-text-field
+                ></v-row>
+
                 <v-row class="ml-4"
-                  ><p class="mt-4 title-h4">Top variable genes</p>
+                  ><p class="my-1 title-h4">Top variable genes</p>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-icon color="primary" dark v-on="on"
@@ -162,17 +162,17 @@
                     <p>
                       Select a subset of features that exhibit high cell-to-cell
                       variation in the dataset
-                    </p>
-                  </v-tooltip></v-row
-                >
-                <v-text-field
-                  v-model="nVariableFeatures"
-                  class="px-6"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
+                    </p> </v-tooltip
+                  ><v-text-field
+                    v-model="nVariableFeatures"
+                    class="mr-2 pr-2"
+                    outlined
+                    background-color="white"
+                  ></v-text-field
+                ></v-row>
+
                 <v-row class="ml-4 mb-0 py-0"
-                  ><p class="mt-4 title-h4">Normalization</p>
+                  ><p class="my-1 title-h4">Normalization</p>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-icon color="primary" dark v-on="on"
@@ -214,7 +214,7 @@
                 <v-row justify="center">
                   <v-btn
                     color="Primary"
-                    width="200"
+                    width="150"
                     rounded
                     class="mb-4 pa-2"
                     @click="runPreProcess()"

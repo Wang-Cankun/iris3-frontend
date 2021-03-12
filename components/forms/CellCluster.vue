@@ -10,21 +10,30 @@
             <v-col cols="2">
               <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
                 <p class="subtitle-1 font-weight-bold text-center">
-                  Cell clustering Prarmeters
+                  Clustering
                 </p>
-                <div v-if="idents != ''">
-                  <p class="subtitle-2 text--primary mx-4">
-                    Set Cell Identity for CTSR identification:
-                  </p>
-                  <v-autocomplete
-                    v-model="currentIdent"
-                    class="ml-4"
-                    :items="idents"
-                    label="Select identity"
-                  ></v-autocomplete>
-                </div>
+                <v-row class="ml-4 mb-0 py-0"
+                  ><p class="my-1">Dimension reduction</p>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                    </template>
+                    <p>Dimension reduction methods:</p>
+                    <p>
+                      Which dimension reduction technique to use? Default: PCA
+                    </p>
+                  </v-tooltip>
+                  <v-col class="py-0" cols="11"
+                    ><v-select
+                      v-model="reductionSelect"
+                      :items="reductionMethods"
+                      label=""
+                    ></v-select></v-col
+                ></v-row>
                 <p class="ml-4 title-h4">
-                  Number of dimensions
+                  Number of components
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-icon color="primary" dark v-on="on"
@@ -33,8 +42,8 @@
                     </template>
                     <p>
                       Determine the ‘dimensionality’ of the dataset, the top
-                      principal components represent a robust compression of the
-                      dataset. Default: 20.
+                      components represent a robust compression of the dataset.
+                      Default: 20.
                     </p>
                   </v-tooltip>
                 </p>
@@ -65,24 +74,90 @@
                   outlined
                   background-color="white"
                 ></v-text-field>
+                <p class="ml-4 title-h4">
+                  Number of neighbors
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                    </template>
+                    <p>
+                      Defines k for the k-nearest neighbor algorithm. Default:
+                      20.
+                    </p>
+                  </v-tooltip>
+                </p>
+                <v-text-field
+                  v-model="neighbor"
+                  class="px-6"
+                  outlined
+                  background-color="white"
+                ></v-text-field>
                 <v-row justify="center">
                   <v-btn
-                    class="ma-2"
+                    class="mx-2 my-4"
                     color="Primary"
-                    width="200"
+                    width="150"
                     rounded
                     @click="runCellCluster()"
-                    >Update</v-btn
+                    >Cluster</v-btn
                   >
                 </v-row>
-                <!--
-                
-                -->
+
+                <div v-if="idents !== []">
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Active cell identity
+                  </p>
+                  <v-autocomplete
+                    v-model="currentIdent"
+                    class="ml-4"
+                    :items="idents"
+                    label="Select identity"
+                  ></v-autocomplete>
+
+                  <v-row justify="center">
+                    <v-btn
+                      class="mx-2 my-4"
+                      color="Primary"
+                      width="150"
+                      rounded
+                      @click="setActiveIdents()"
+                      >SET</v-btn
+                    >
+                  </v-row>
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Merge identity
+                  </p>
+                  <v-autocomplete
+                    v-model="currentIdentMerge"
+                    class="ml-4"
+                    :items="currentIdentLevels"
+                    label="Select identity"
+                    multiple
+                  ></v-autocomplete>
+                  <!---<ul>
+                    <li v-for="(item, index) in currentIdentMerge" :key="index">
+                      {{ item }}
+                    </li>
+                  </ul>-->
+                  <v-row justify="center">
+                    <v-btn
+                      class="mx-2 my-4"
+                      color="Primary"
+                      width="150"
+                      rounded
+                      @click="mergeIdents()"
+                      >MERGE</v-btn
+                    >
+                  </v-row>
+                </div>
               </v-card></v-col
             >
             <v-col cols="9">
               <div v-if="clusterResult !== ''">
-                <p>Number of clusters: {{ clusterResult.n_seurat_clusters }}</p>
+                <p>Clusters: {{ currentIdent }}</p>
+                <p>Clusters: {{ currentIdentLevels }}</p>
                 <grid-layout
                   :layout.sync="layout"
                   :col-num="6"
@@ -297,9 +372,9 @@
                     <v-divider class="my-2 py-2"></v-divider>
                     <v-card-text>
                       <v-row
+                        v-for="item in cellClusterArray"
+                        :key="item"
                         class="my-0 py-0"
-                        v-for="(item, index) in cellClusterArray"
-                        :key="item.index"
                       >
                         <v-col class="my-0 py-0" cols="4"
                           >Cluster: {{ item.index }}
@@ -499,6 +574,7 @@ export default {
     title: '',
     nPCs: '20',
     resolution: '0.5',
+    neighbor: '20',
     timeElapsed: 0,
     qcResult: null,
     umapCluster: '',
@@ -512,12 +588,16 @@ export default {
     gene: 'Gad1',
     genes: '',
     currentIdent: 'seurat_clusters',
+    currentIdentMerge: [],
+    currentIdentLevels: [],
     currentAtlas: '',
+    reductionSelect: 'PCA',
+    reductionMethods: ['PCA'],
     atlas: [
       'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
       'to-be-added',
     ],
-    idents: [],
+    idents: '',
     violinSplit: 'Sex',
     resHistory: [],
     ident1: 1,
@@ -551,33 +631,7 @@ export default {
       else return [1, 2]
     },
     cellClusterArray() {
-      return [
-        { index: 0, value: '' },
-        { index: 1, value: '' },
-        { index: 2, value: '' },
-        { index: 3, value: '' },
-        { index: 4, value: '' },
-        { index: 5, value: '' },
-        { index: 6, value: '' },
-        { index: 7, value: '' },
-        { index: 8, value: '' },
-        { index: 9, value: '' },
-        { index: 10, value: '' },
-        { index: 11, value: '' },
-        { index: 12, value: '' },
-        { index: 13, value: '' },
-        { index: 14, value: '' },
-        { index: 15, value: '' },
-        { index: 16, value: '' },
-        { index: 17, value: '' },
-        { index: 18, value: '' },
-      ]
-      // return [
-      //   ...Array(this.clusterResult.n_seurat_clusters)
-      //     .fill(0)
-      //     .map((x) => ({ index: '', value: '' })),
-      // ]
-      // return [...Array(this.clusterResult.n_seurat_clusters).keys()]
+      return this.currentIdentLevels
     },
   },
   watch: {
@@ -588,51 +642,166 @@ export default {
     },
   },
   methods: {
+    async mergeIdents() {
+      await this.$axios
+        .post('iris3/api/queue/merge-idents/', {
+          newClusterIds: this.currentIdentMerge,
+        })
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  console.log(response.data.returnvalue)
+                  this.currentIdentLevels = response.data.returnvalue
+                  console.log(this.currentIdentLevels)
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Get idents error!',
+            color: 'error',
+          })
+        })
+      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+        this.idents = response.data
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
+    },
+    async setActiveIdents() {
+      this.currentIdentMerge = []
+      await this.$axios
+        .post('iris3/api/queue/set-idents/', {
+          name: this.currentIdent,
+        })
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.currentIdentLevels = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Get idents error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/umap-cluster/')
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.umapCluster = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot Cell UMAP error!',
+            color: 'error',
+          })
+        })
+
+      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+        this.idents = response.data
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
+    },
     async runCellCluster() {
       this.$notifier.showMessage({
         content: 'Running clustering...',
         color: 'accent',
       })
-      if (!this.resHistory.includes(this.resolution)) {
-        await this.$axios
-          .post('iris3/api/queue/cluster/', {
-            nPCs: this.nPCs,
-            resolution: this.resolution,
+
+      await this.$axios
+        .post('iris3/api/queue/cluster/', {
+          nPCs: this.nPCs,
+          resolution: this.resolution,
+          neighbor: this.neighbor,
+        })
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.resHistory.push(this.resolution)
+                  this.clusterResult = response.data.returnvalue
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Clustering error!',
+            color: 'error',
           })
-          .then((response) => {
-            const checkComplete = setInterval(async () => {
-              await this.$axios
-                .get('iris3/api/queue/' + response.data.id)
-                .then((response) => {
-                  if (response.data.returnvalue !== null) {
-                    this.resHistory.push(this.resolution)
-                    this.clusterResult = response.data.returnvalue
-                    clearInterval(checkComplete)
-                  }
-                })
-            }, 2000)
-          })
-          .catch((error) => {
-            console.log({ error })
-            this.$notifier.showMessage({
-              content: 'Clustering error!',
-              color: 'error',
-            })
-          })
-      }
+        })
 
       await this.$axios
         .post('iris3/api/queue/set-idents/', {
           name: this.currentIdent,
         })
         .then((response) => {
-          setTimeout(async () => {
+          const checkComplete = setInterval(async () => {
             await this.$axios
               .get('iris3/api/queue/' + response.data.id)
               .then((response) => {
-                // this.currentIdent = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
+                if (response.data.returnvalue !== null) {
+                  this.currentIdentLevels = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Set new idents',
+                    color: 'success',
+                  })
+                }
               })
           }, 1000)
         })
