@@ -5,12 +5,12 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-card outlined hover>
+        <v-card outlined>
           <v-row>
             <v-col cols="2">
-              <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
+              <v-card class="mt-6" outlined color="blue-grey lighten-5">
                 <p class="subtitle-1 font-weight-bold text-center">
-                  Clustering
+                  Cell clustering
                 </p>
                 <v-row class="ml-4 mb-0 py-0"
                   ><p class="my-1">Dimension reduction</p>
@@ -99,35 +99,33 @@
                     class="mx-2 my-4"
                     color="Primary"
                     width="150"
-                    rounded
                     @click="runCellCluster()"
                     >Cluster</v-btn
                   >
                 </v-row>
-
+                <v-divider></v-divider>
                 <div v-if="idents !== []">
                   <p class="subtitle-1 font-weight-bold text-center">
-                    Active cell identity
+                    Merge clusters
                   </p>
                   <v-autocomplete
-                    v-model="currentIdent"
+                    v-model="currentIdentMerge"
                     class="ml-4"
-                    :items="idents"
-                    label="Select identity"
+                    :items="currentIdentLevels"
+                    label="Select clusters"
+                    multiple
                   ></v-autocomplete>
-
                   <v-row justify="center">
                     <v-btn
                       class="mx-2 my-4"
                       color="Primary"
                       width="150"
-                      rounded
-                      @click="setActiveIdents()"
-                      >SET</v-btn
+                      @click="mergeIdents()"
+                      >MERGE</v-btn
                     >
                   </v-row>
                   <p class="subtitle-1 font-weight-bold text-center">
-                    Merge identity
+                    Re-cluster
                   </p>
                   <v-autocomplete
                     v-model="currentIdentMerge"
@@ -136,314 +134,572 @@
                     label="Select identity"
                     multiple
                   ></v-autocomplete>
-                  <!---<ul>
-                    <li v-for="(item, index) in currentIdentMerge" :key="index">
-                      {{ item }}
-                    </li>
-                  </ul>-->
                   <v-row justify="center">
                     <v-btn
                       class="mx-2 my-4"
                       color="Primary"
                       width="150"
-                      rounded
                       @click="mergeIdents()"
-                      >MERGE</v-btn
+                      >RE-cluster</v-btn
                     >
                   </v-row>
                 </div>
               </v-card></v-col
             >
-            <v-col cols="9">
-              <div v-if="clusterResult !== ''">
-                <p>Clusters: {{ currentIdent }}</p>
-                <p>Clusters: {{ currentIdentLevels }}</p>
-                <grid-layout
-                  :layout.sync="layout"
-                  :col-num="6"
-                  :row-height="300"
-                  :is-draggable="true"
-                  :is-resizable="true"
-                  :is-mirrored="false"
-                  :vertical-compact="true"
-                  :margin="[10, 10]"
-                  :use-css-transforms="true"
-                >
-                  <scatter
-                    :key="layout[0].i"
-                    :x="layout[0].x"
-                    :y="layout[0].y"
-                    :w="layout[0].w"
-                    :h="layout[0].h"
-                    :i="layout[0].i"
-                    :imagew="700"
-                    :imageh="550"
-                    :src="umapCluster"
-                    :values="clusterResult.umap_pts"
-                    :title="layout[0].title"
+            <v-col cols="2">
+              <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Cell labeling
+                </p>
+
+                <v-row class="mx-2 my-2 py-2">
+                  <p class="my-1 subtitle-2">Step 1: Create cell filters</p>
+                  <div class="d-flex flex">
+                    <v-text-field
+                      v-model="addGeneName"
+                      label="Gene"
+                      placeholder="Name"
+                      class="px-1"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-text-field
+                    ><v-select
+                      v-model="addGeneDirection"
+                      cols="3"
+                      :items="addGeneDirectionItems"
+                      label="Direction"
+                      class="px-1"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-text-field
+                      v-model="addGeneThres"
+                      label="Thres"
+                      placeholder="Number"
+                      class="px-1"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-text-field>
+                  </div>
+                  <v-btn color="Primary" @click="addGeneFilter()"
+                    >Add gene filter</v-btn
                   >
-                  </scatter>
-                  <v-card class="ma-0"
-                    ><grid-item
-                      :x="layout[1].x"
-                      :y="layout[1].y"
-                      :w="layout[1].w"
-                      :h="layout[1].h"
-                      :i="layout[1].i"
-                      class="grid-item-border"
-                    >
-                      <v-card-title
-                        class="primary white--text caption px-2 py-1"
-                        >Differntial expression testing <v-spacer></v-spacer>
-                        <v-menu bottom left>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn dark icon v-bind="attrs" v-on="on">
-                              <v-icon>mdi-dots-vertical</v-icon>
-                            </v-btn>
-                          </template>
+                  <div class="d-flex flex mt-2">
+                    <v-select
+                      v-model="filterCategoryName"
+                      cols="3"
+                      :items="idents"
+                      label="Category"
+                      class="px-1 col-2"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-select
+                      v-model="filterCategoryLevel"
+                      cols="3"
+                      :items="filterCategoryLevels"
+                      label="Cluster"
+                      class="px-1 col-2"
+                      outlined
+                      dense
+                      multiple
+                      background-color="white"
+                    ></v-select>
+                  </div>
+                  <v-btn color="Primary" @click="addClusterFilter()"
+                    >Add cluster filter</v-btn
+                  >
+                  <p class="my-1">Filters applied:</p>
+                  <v-col class="py-0" cols="12">
+                    <ul>
+                      <li v-for="(item, index) in filterPayload" :key="index">
+                        <div v-if="item.type === 'gene'">
+                          {{ item.name }} {{ item.direction }} {{ item.thres }}
+                        </div>
+                        <div v-if="item.type === 'cluster'">
+                          {{ item.direction }} {{ item.category[0] }}:
+                          {{ item.level }}
+                        </div>
+                      </li>
+                    </ul></v-col
+                  >
+                </v-row>
+                <v-divider></v-divider>
 
-                          <v-list>
-                            <v-list-item @click="downloadPDF">
-                              <v-list-item-title
-                                >Download Table</v-list-item-title
-                              >
-                            </v-list-item>
-                          </v-list>
-                        </v-menu></v-card-title
+                <v-row class="mx-2 my-2 py-2">
+                  <p class="my-1 subtitle-2">
+                    Step 2: Assign cells to new label
+                  </p>
+
+                  <v-col cols="8"
+                    ><v-text-field
+                      v-model="addCategoryName"
+                      label="Create new category"
+                      placeholder="Type categoty name"
+                      outlined
+                      hide-details="auto"
+                      background-color="white"
+                      dense
+                    ></v-text-field
+                  ></v-col>
+
+                  <v-col cols="4"
+                    ><v-btn @click="setCategory(addCategoryName)"
+                      >ADD</v-btn
+                    ></v-col
+                  >
+                  <v-col cols="12" class="my-0 py-0"
+                    ><p class="my-0">or</p></v-col
+                  >
+                  <v-col cols="8"
+                    ><v-select
+                      v-model="setExistingCategory"
+                      label="Select existing"
+                      :items="setExistingCategoryItems"
+                      outlined
+                      hide-details="auto"
+                      background-color="white"
+                      dense
+                    ></v-select
+                  ></v-col>
+                  <v-col cols="4"
+                    ><v-btn @click="setCategory(setExistingCategory)"
+                      >Set</v-btn
+                    ></v-col
+                  >
+                  <v-col cols="8"
+                    ><v-text-field
+                      v-model="addLabelName"
+                      label="Add new label"
+                      placeholder="Type label name"
+                      outlined
+                      hide-details="auto"
+                      background-color="white"
+                      dense
+                    ></v-text-field
+                  ></v-col>
+                  <v-btn class="mx-2 my-4" color="Accent" @click="assignCells()"
+                    >Assign cells</v-btn
+                  >
+                </v-row>
+                <v-divider></v-divider> </v-card
+            ></v-col>
+            <v-col cols="2">
+              <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Active cell category
+                </p>
+                <v-select
+                  v-model="currentIdent"
+                  class="ml-4"
+                  :items="idents"
+                  label="Select identity"
+                ></v-select>
+
+                <v-row justify="center">
+                  <v-btn
+                    class="mx-2 my-4"
+                    color="Primary"
+                    width="150"
+                    @click="setActiveIdents()"
+                    >SET</v-btn
+                  >
+                </v-row>
+                <v-divider></v-divider>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Cell selection
+                </p>
+
+                <v-row class="mx-2 my-2 py-2">
+                  <div class="d-flex flex">
+                    <v-text-field
+                      v-model="selectionGeneName"
+                      label="Gene"
+                      placeholder="Name"
+                      class="px-1"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-text-field
+                    ><v-select
+                      v-model="selectionGeneDirection"
+                      cols="3"
+                      :items="selectionGeneDirectionItems"
+                      label="Direction"
+                      class="px-1"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-text-field
+                      v-model="selectionGeneThres"
+                      label="Thres"
+                      placeholder="Number"
+                      class="px-1"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-text-field>
+                  </div>
+                  <v-btn color="Primary" @click="addGeneSelection()"
+                    >Add gene filter</v-btn
+                  >
+                  <div class="d-flex flex mt-2">
+                    <v-select
+                      v-model="selectionCategoryName"
+                      cols="3"
+                      :items="idents"
+                      label="Category"
+                      class="px-1 col-2"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-select
+                      v-model="selectionCategoryLevel"
+                      cols="3"
+                      :items="selectionCategoryLevels"
+                      label="Cluster"
+                      class="px-1 col-2"
+                      outlined
+                      dense
+                      multiple
+                      background-color="white"
+                    ></v-select>
+                  </div>
+                  <v-btn color="Primary" @click="addClusterSelection()"
+                    >Add cluster filter</v-btn
+                  >
+                  <p class="my-1">Selections applied:</p>
+                  <v-col class="py-0" cols="12">
+                    <ul>
+                      <li
+                        v-for="(item, index) in selectionPayload"
+                        :key="index"
                       >
-                      <v-row
-                        ><v-col cols="6">
-                          <v-autocomplete
-                            v-model="ident1"
-                            class="ml-4"
-                            :items="identList"
-                            label="Ident1"
-                          ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="6">
-                          <v-autocomplete
-                            v-model="ident2"
-                            class="ml-4"
-                            :items="identList"
-                            label="Ident1"
-                          ></v-autocomplete> </v-col
-                      ></v-row>
-                      <v-row>
-                        <v-col cols="6">
-                          <p class="ml-4 mb-0 title-h4">
-                            Min cell percent
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
+                        <div v-if="item.type === 'gene'">
+                          {{ item.name }} {{ item.direction }} {{ item.thres }}
+                        </div>
+                        <div v-if="item.type === 'cluster'">
+                          {{ item.direction }} {{ item.category[0] }}:
+                          {{ item.level }}
+                        </div>
+                      </li>
+                    </ul></v-col
+                  >
+                </v-row>
+
+                <v-row class="mx-2 my-2 py-2">
+                  <v-btn class="mx-2 my-4" color="Accent" @click="subsetCells()"
+                    >Subset cells</v-btn
+                  >
+                  <v-btn
+                    class="mx-2 my-4"
+                    color="Accent"
+                    @click="restoreCells()"
+                    >Restore cells</v-btn
+                  >
+                </v-row>
+              </v-card>
+            </v-col>
+            <v-col cols="5">
+              <p>Active ident: {{ currentIdent }}</p>
+              <p>Cluster levels: {{ currentIdentLevels }}</p>
+              <img :src="umapStatic" />
+              <div v-if="clusterResult !== ''">
+                <div>
+                  <grid-layout
+                    :layout.sync="layout"
+                    :col-num="6"
+                    :row-height="300"
+                    :is-draggable="true"
+                    :is-resizable="true"
+                    :is-mirrored="false"
+                    :vertical-compact="true"
+                    :margin="[10, 10]"
+                    :use-css-transforms="true"
+                  >
+                    <scatter
+                      :key="layout[0].i"
+                      :x="layout[0].x"
+                      :y="layout[0].y"
+                      :w="layout[0].w"
+                      :h="layout[0].h"
+                      :i="layout[0].i"
+                      :imagew="700"
+                      :imageh="550"
+                      :src="umapCluster"
+                      :values="clusterResult.umap_pts"
+                      :title="layout[0].title"
+                    >
+                    </scatter>
+
+                    <v-card class="ma-0"
+                      ><grid-item
+                        :x="layout[1].x"
+                        :y="layout[1].y"
+                        :w="layout[1].w"
+                        :h="layout[1].h"
+                        :i="layout[1].i"
+                        class="grid-item-border"
+                      >
+                        <v-card-title
+                          class="primary white--text caption px-2 py-1"
+                          >Differntial expression testing <v-spacer></v-spacer>
+                          <v-menu bottom left>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn dark icon v-bind="attrs" v-on="on">
+                                <v-icon>mdi-dots-vertical</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-list>
+                              <v-list-item @click="downloadPDF">
+                                <v-list-item-title
+                                  >Download Table</v-list-item-title
                                 >
-                              </template>
-                              <p>
-                                Only test genes that are detected in a minimum
-                                fraction of min.pct cells in either of the two
-                                populations. Meant to speed up the function by
-                                not testing genes that are very infrequently
-                                expressed. Default is 0.2
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minPct"
-                              class="px-0"
-                              outlined
-                              background-color="white"
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                        <v-col cols="6" class="ma-0">
-                          <p class="ml-4 mb-0 title-h4">
-                            LogFC threshold
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>
-                                Limit testing to genes which show, on average,
-                                at least X-fold difference (log-scale) between
-                                the two groups of cells. Default is 0.25
-                                Increasing logfc.threshold speeds up the
-                                function, but can miss weaker signals.
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minLfc"
-                              class="px-0"
-                              outlined
-                              background-color="white"
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center" class="mx-2 mb-2 mt-0">
-                        <v-btn
-                          class="mx-2 mb-2 mt-0"
-                          color="Primary"
-                          width="200"
-                          rounded
-                          @click="runDeg()"
-                          >Update</v-btn
+                              </v-list-item>
+                            </v-list>
+                          </v-menu></v-card-title
                         >
-                      </v-row>
-                      <v-data-table
-                        dense
-                        :headers="headers"
-                        :items="deResult"
-                        item-key="name"
-                        :items-per-page="5"
-                        class="elevation-1"
-                      ></v-data-table></grid-item
-                  ></v-card>
-                  <v-card class="ma-0"
-                    ><grid-item
-                      :x="layout[2].x"
-                      :y="layout[2].y"
-                      :w="layout[2].w"
-                      :h="layout[2].h"
-                      :i="layout[2].i"
-                      class="grid-item-border"
-                    >
-                      <v-card-title
-                        class="primary white--text caption px-2 py-1"
-                        >Gene plots<v-spacer></v-spacer>
-                        <v-menu bottom left>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn dark icon v-bind="attrs" v-on="on">
-                              <v-icon>mdi-dots-vertical</v-icon>
-                            </v-btn>
-                          </template>
-
-                          <v-list>
-                            <v-list-item @click="downloadPDF">
-                              <v-list-item-title
-                                >Download Table</v-list-item-title
-                              >
-                            </v-list-item>
-                          </v-list>
-                        </v-menu></v-card-title
-                      >
-                      <v-row
-                        ><v-col cols="6">
-                          <v-autocomplete
-                            v-model="gene"
-                            class="ml-4"
-                            :items="genes"
-                            label="Gene"
-                          ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="6">
-                          <div v-if="idents != ''">
-                            <p class="subtitle-2 text--primary mx-4">
-                              Split the violin plots by:
-                            </p>
+                        <v-row
+                          ><v-col cols="6">
                             <v-autocomplete
-                              v-model="violinSplit"
+                              v-model="ident1"
                               class="ml-4"
-                              :items="violinSplitItems"
-                              label="Select identity"
+                              :items="identList"
+                              label="Ident1"
                             ></v-autocomplete>
-                          </div>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center" class="mx-2 mb-2 mt-0">
-                        <v-btn
-                          class="mx-2 mb-2 mt-0"
-                          color="Primary"
-                          width="200"
-                          rounded
-                          @click="runGenePlot()"
-                          >Plot</v-btn
+                          </v-col>
+                          <v-col cols="6">
+                            <v-autocomplete
+                              v-model="ident2"
+                              class="ml-4"
+                              :items="identList"
+                              label="Ident1"
+                            ></v-autocomplete> </v-col
+                        ></v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <p class="ml-4 mb-0 title-h4">
+                              Min cell percent
+                              <v-tooltip top>
+                                <template v-slot:activator="{ on }">
+                                  <v-icon color="primary" dark v-on="on"
+                                    >mdi-help-circle-outline</v-icon
+                                  >
+                                </template>
+                                <p>
+                                  Only test genes that are detected in a minimum
+                                  fraction of min.pct cells in either of the two
+                                  populations. Meant to speed up the function by
+                                  not testing genes that are very infrequently
+                                  expressed. Default is 0.2
+                                </p>
+                              </v-tooltip>
+                              <v-text-field
+                                v-model="minPct"
+                                class="px-0"
+                                outlined
+                                background-color="white"
+                              ></v-text-field>
+                            </p>
+                          </v-col>
+                          <v-col cols="6" class="ma-0">
+                            <p class="ml-4 mb-0 title-h4">
+                              LogFC threshold
+                              <v-tooltip top>
+                                <template v-slot:activator="{ on }">
+                                  <v-icon color="primary" dark v-on="on"
+                                    >mdi-help-circle-outline</v-icon
+                                  >
+                                </template>
+                                <p>
+                                  Limit testing to genes which show, on average,
+                                  at least X-fold difference (log-scale) between
+                                  the two groups of cells. Default is 0.25
+                                  Increasing logfc.threshold speeds up the
+                                  function, but can miss weaker signals.
+                                </p>
+                              </v-tooltip>
+                              <v-text-field
+                                v-model="minLfc"
+                                class="px-0"
+                                outlined
+                                background-color="white"
+                              ></v-text-field>
+                            </p>
+                          </v-col>
+                        </v-row>
+                        <v-row justify="center" class="mx-2 mb-2 mt-0">
+                          <v-btn
+                            class="mx-2 mb-2 mt-0"
+                            color="Primary"
+                            width="200"
+                            @click="runDeg()"
+                            >Update</v-btn
+                          >
+                        </v-row>
+                        <v-data-table
+                          dense
+                          :headers="headers"
+                          :items="deResult"
+                          item-key="name"
+                          :items-per-page="5"
+                          class="elevation-1"
+                        ></v-data-table></grid-item
+                    ></v-card>
+                    <v-card class="ma-0"
+                      ><grid-item
+                        :x="layout[2].x"
+                        :y="layout[2].y"
+                        :w="layout[2].w"
+                        :h="layout[2].h"
+                        :i="layout[2].i"
+                        class="grid-item-border"
+                      >
+                        <v-card-title
+                          class="primary white--text caption px-2 py-1"
+                          >Gene plots<v-spacer></v-spacer>
+                          <v-menu bottom left>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn dark icon v-bind="attrs" v-on="on">
+                                <v-icon>mdi-dots-vertical</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-list>
+                              <v-list-item @click="downloadPDF">
+                                <v-list-item-title
+                                  >Download Table</v-list-item-title
+                                >
+                              </v-list-item>
+                            </v-list>
+                          </v-menu></v-card-title
                         >
-                      </v-row>
-                      <v-row v-if="violinGene">
-                        <img :src="violinGene" :width="400" :height="350" />
-                        <img :src="featureGene" :width="400" :height="350" />
-                      </v-row> </grid-item
-                  ></v-card>
-                </grid-layout>
-                <v-dialog v-model="addMetadataDialog" max-width="1200">
-                  <v-card>
-                    <v-card-title>Annotate cell type</v-card-title>
-                    <v-divider class="my-2 py-2"></v-divider>
-                    <v-card-text>
-                      <v-row
-                        v-for="item in cellClusterArray"
-                        :key="item"
-                        class="my-0 py-0"
+                        <v-row
+                          ><v-col cols="6">
+                            <v-autocomplete
+                              v-model="gene"
+                              class="ml-4"
+                              :items="genes"
+                              label="Gene"
+                            ></v-autocomplete>
+                          </v-col>
+                          <v-col cols="6">
+                            <div v-if="idents != ''">
+                              <p class="subtitle-2 text--primary mx-4">
+                                Split the violin plots by:
+                              </p>
+                              <v-autocomplete
+                                v-model="violinSplit"
+                                class="ml-4"
+                                :items="violinSplitItems"
+                                label="Select identity"
+                              ></v-autocomplete>
+                            </div>
+                          </v-col>
+                        </v-row>
+                        <v-row justify="center" class="mx-2 mb-2 mt-0">
+                          <v-btn
+                            class="mx-2 mb-2 mt-0"
+                            color="Primary"
+                            width="200"
+                            @click="runGenePlot()"
+                            >Plot</v-btn
+                          >
+                        </v-row>
+                        <v-row v-if="violinGene">
+                          <img :src="violinGene" :width="400" :height="350" />
+                          <img :src="featureGene" :width="400" :height="350" />
+                        </v-row> </grid-item
+                    ></v-card>
+                  </grid-layout>
+                  <v-dialog v-model="addMetadataDialog" max-width="1200">
+                    <v-card>
+                      <v-card-title>Annotate cell type</v-card-title>
+                      <v-divider class="my-2 py-2"></v-divider>
+                      <v-card-text>
+                        <v-row
+                          v-for="item in cellClusterArray"
+                          :key="item"
+                          class="my-0 py-0"
+                        >
+                          <v-col class="my-0 py-0" cols="4"
+                            >Cluster: {{ item.index }}
+                          </v-col>
+                          <v-col class="my-0 py-0" cols="6"
+                            >Cell type:
+                            <v-text-field
+                              v-model="newCellType[index]"
+                              outlined
+                              background-color="white"
+                            ></v-text-field
+                          ></v-col>
+                        </v-row>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-btn
+                          class="mx-2"
+                          color="primary"
+                          dark
+                          @click="addMetadata()"
+                        >
+                          Apply
+                        </v-btn>
+                        <v-btn
+                          color="grey darken-1"
+                          text
+                          @click="addMetadataDialog = false"
+                        >
+                          Cancel
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <v-dialog
+                    v-model="addTransferMetadataDialog"
+                    max-width="1200"
+                  >
+                    <v-card>
+                      <v-card-title
+                        >Reference based cell type annotation</v-card-title
                       >
-                        <v-col class="my-0 py-0" cols="4"
-                          >Cluster: {{ item.index }}
-                        </v-col>
-                        <v-col class="my-0 py-0" cols="6"
-                          >Cell type:
-                          <v-text-field
-                            v-model="newCellType[index]"
-                            outlined
-                            background-color="white"
-                          ></v-text-field
-                        ></v-col>
-                      </v-row>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn
-                        class="mx-2"
-                        color="primary"
-                        dark
-                        @click="addMetadata()"
-                      >
-                        Apply
-                      </v-btn>
-                      <v-btn
-                        color="grey darken-1"
-                        text
-                        @click="addMetadataDialog = false"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-spacer></v-spacer>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <v-dialog v-model="addTransferMetadataDialog" max-width="1200">
-                  <v-card>
-                    <v-card-title
-                      >Reference based cell type annotation</v-card-title
-                    >
-                    <v-divider class="my-2 py-2"></v-divider>
-                    <v-card-text>
-                      <v-autocomplete
-                        v-model="currentAtlas"
-                        class="ml-4"
-                        :items="atlas"
-                        label="Select atlas data"
-                      ></v-autocomplete>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn
-                        class="mx-2"
-                        color="primary"
-                        dark
-                        @click="addReference()"
-                      >
-                        Apply
-                      </v-btn>
-                      <v-btn
-                        color="grey darken-1"
-                        text
-                        @click="addTransferMetadataDialog = false"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-spacer></v-spacer>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <!--
+                      <v-divider class="my-2 py-2"></v-divider>
+                      <v-card-text>
+                        <v-autocomplete
+                          v-model="currentAtlas"
+                          class="ml-4"
+                          :items="atlas"
+                          label="Select atlas data"
+                        ></v-autocomplete>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-btn
+                          class="mx-2"
+                          color="primary"
+                          dark
+                          @click="addReference()"
+                        >
+                          Apply
+                        </v-btn>
+                        <v-btn
+                          color="grey darken-1"
+                          text
+                          @click="addTransferMetadataDialog = false"
+                        >
+                          Cancel
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <!--
                 <div v-if="deg">
                   <v-data-table
                     dense
@@ -489,7 +745,7 @@
                     </template>
                   </v-data-table>
                 </div>
-                -->
+                --></div>
               </div>
             </v-col>
           </v-row>
@@ -585,6 +841,15 @@ export default {
     clusterResult: '',
     annotateResult: '',
     newCellType: [],
+    addGeneName: '',
+    addGeneDirection: '>',
+    addGeneDirectionItems: ['>', '<', '='],
+    addGeneThres: '',
+    filterMetaDirection: 'in',
+    filterMetaDirectionItems: ['in', 'not in'],
+    addLabelName: '',
+    setExistingCategory: '',
+    setExistingCategoryItems: [],
     gene: 'Gad1',
     genes: '',
     currentIdent: 'seurat_clusters',
@@ -597,7 +862,7 @@ export default {
       'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
       'to-be-added',
     ],
-    idents: '',
+    idents: [],
     violinSplit: 'Sex',
     resHistory: [],
     ident1: 1,
@@ -610,6 +875,22 @@ export default {
     addMetadataDialog: false,
     // Add metadata
     displayAddMetadata: '',
+    addCategoryName: '',
+    activeCategory: '',
+    activeCategoryLevels: [],
+    filterCategoryName: '',
+    filterCategoryLevel: '',
+    filterPayload: [],
+    selectionGeneName: '',
+    selectionGeneDirection: '>',
+    selectionGeneDirectionItems: ['>', '<', '='],
+    selectionGeneThres: '',
+    selectionCategoryName: '',
+    selectionCategoryLevel: '',
+    selectionPayload: [],
+    allIdents: [],
+    selectedCells: [],
+    umapStatic: '',
   }),
   computed: {
     identList() {
@@ -633,6 +914,18 @@ export default {
     cellClusterArray() {
       return this.currentIdentLevels
     },
+    filterCategoryLevels() {
+      return this.allIdents
+        .filter((item) => item.ident === this.filterCategoryName)
+        .map((item) => item.levels)
+        .flat()
+    },
+    selectionCategoryLevels() {
+      return this.allIdents
+        .filter((item) => item.ident === this.selectionCategoryName)
+        .map((item) => item.levels)
+        .flat()
+    },
   },
   watch: {
     deg() {
@@ -653,9 +946,9 @@ export default {
               .get('iris3/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
-                  console.log(response.data.returnvalue)
-                  this.currentIdentLevels = response.data.returnvalue
-                  console.log(this.currentIdentLevels)
+                  this.currentIdent = response.data.returnvalue.new_ident[0]
+                  this.currentIdentLevels = response.data.returnvalue.new_levels
+                  this.currentIdentMerge = []
                   this.timeElapsed =
                     (response.data.finishedOn - response.data.processedOn) /
                     1000
@@ -669,14 +962,14 @@ export default {
           }, 1000)
         })
         .catch((error) => {
-          console.log({ error })
           this.$notifier.showMessage({
-            content: 'Get idents error!',
+            content: 'Get idents error!' + error,
             color: 'error',
           })
         })
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
-        this.idents = response.data
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
@@ -722,7 +1015,7 @@ export default {
               .get('iris3/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
-                  this.umapCluster = response.data.returnvalue
+                  this.umapStatic = response.data.returnvalue
                   this.timeElapsed =
                     (response.data.finishedOn - response.data.processedOn) /
                     1000
@@ -744,7 +1037,8 @@ export default {
         })
 
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
-        this.idents = response.data
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
@@ -869,15 +1163,395 @@ export default {
           })
         })
 */
+
+      await this.$axios
+        .post('iris3/api/queue/select-category/')
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.setExistingCategoryItems =
+                    response.data.returnvalue.available_category
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 500)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot Cell UMAP error!',
+            color: 'error',
+          })
+        })
+
       await this.$axios.post('iris3/api/queue/genes/').then((response) => {
         this.genes = response.data
       })
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
-        this.idents = response.data
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
     },
+
+    async setCategory(name) {
+      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
+      await this.$axios
+        .post('iris3/api/queue/select-category/', {
+          categoryName: name,
+        })
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.currentIdent = response.data.returnvalue.active_category
+                  this.setExistingCategory =
+                    response.data.returnvalue.active_category[0]
+                  this.activeCategory =
+                    response.data.returnvalue.active_category[0]
+                  this.activeCategoryLevels =
+                    response.data.returnvalue.active_category_levels
+                  this.setExistingCategoryItems =
+                    response.data.returnvalue.available_category
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 500)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot Cell UMAP error!',
+            color: 'error',
+          })
+        })
+    },
+
+    addGeneFilter() {
+      if (this.addGeneName && this.addGeneThres) {
+        this.filterPayload = [
+          {
+            type: 'gene',
+            name: this.addGeneName,
+            direction: this.addGeneDirection,
+            thres: this.addGeneThres,
+          },
+          ...this.filterPayload,
+        ]
+
+        this.$notifier.showMessage({
+          content: `Added filter: ${this.addGeneName} ${this.addGeneDirection} ${this.addGeneThres}`,
+          color: 'success',
+        })
+        this.addGeneName = this.addGeneThres = ''
+      } else {
+        this.$notifier.showMessage({
+          content: 'Please provide valid gene filter...',
+          color: 'error',
+        })
+      }
+
+      return 1
+    },
+    addClusterFilter() {
+      if (this.filterCategoryName && this.filterCategoryLevel) {
+        for (const categoryLevel of this.filterCategoryLevel) {
+          this.filterPayload = [
+            {
+              type: 'cluster',
+              direction: this.filterMetaDirection,
+              category: this.filterCategoryName,
+              level: categoryLevel,
+            },
+            ...this.filterPayload,
+          ]
+        }
+
+        this.$notifier.showMessage({
+          content: `Added filter: ${this.filterCategoryName} ${this.filterCategoryLevel}`,
+          color: 'success',
+        })
+        this.filterCategoryName = this.filterCategoryLevel = ''
+      } else {
+        this.$notifier.showMessage({
+          content: 'Please provide valid cluster filter...',
+          color: 'error',
+        })
+      }
+      return 1
+    },
+
+    async assignCells() {
+      const payload = {
+        newLevelName: this.addLabelName,
+        filterPayload: this.filterPayload,
+      }
+      console.log(payload)
+      await this.$axios
+        .post('iris3/api/queue/select-cells/', payload)
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.filterPayload = []
+                  this.selectedCells = response.data.returnvalue
+
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          this.$notifier.showMessage({
+            content: 'Calculate QC metrics error: ' + error,
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/umap-static/', {
+          categoryName: this.setExistingCategory,
+        })
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.umapStatic = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot Cell UMAP error!',
+            color: 'error',
+          })
+        })
+      return 1
+    },
+
+    addGeneSelection() {
+      if (this.selectionGeneName && this.selectionGeneThres) {
+        this.selectionPayload = [
+          {
+            type: 'gene',
+            name: this.selectionGeneName,
+            direction: this.selectionGeneDirection,
+            thres: this.selectionGeneThres,
+          },
+          ...this.selectionPayload,
+        ]
+
+        this.$notifier.showMessage({
+          content: `Added filter: ${this.selectionGeneName} ${this.selectionGeneDirection} ${this.selectionGeneThres}`,
+          color: 'success',
+        })
+        this.selectionGeneName = this.selectionGeneThres = ''
+      } else {
+        this.$notifier.showMessage({
+          content: 'Please provide valid gene filter...',
+          color: 'error',
+        })
+      }
+
+      return 1
+    },
+    addClusterSelection() {
+      if (this.selectionCategoryName && this.selectionCategoryLevel) {
+        for (const categoryLevel of this.selectionCategoryLevel) {
+          this.selectionPayload = [
+            {
+              type: 'cluster',
+              direction: this.selectionMetaDirection,
+              category: this.selectionCategoryName,
+              level: categoryLevel,
+            },
+            ...this.selectionPayload,
+          ]
+        }
+
+        this.$notifier.showMessage({
+          content: `Added filter: ${this.selectionCategoryName} ${this.selectionCategoryLevel}`,
+          color: 'success',
+        })
+        this.selectionCategoryName = this.selectionCategoryLevel = ''
+      } else {
+        this.$notifier.showMessage({
+          content: 'Please provide valid cluster filter...',
+          color: 'error',
+        })
+      }
+      return 1
+    },
+
+    async subsetCells() {
+      console.log({
+        selectionPayload: this.selectionPayload,
+      })
+      await this.$axios
+        .post('iris3/api/queue/subset-cells/', {
+          selectionPayload: this.selectionPayload,
+        })
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.selectionPayload = []
+                  this.subCells = response.data.returnvalue
+
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          this.$notifier.showMessage({
+            content: 'Subsets error: ' + error,
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/umap-static/', {
+          categoryName: this.currentIdent,
+        })
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.umapStatic = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot Cell UMAP error!',
+            color: 'error',
+          })
+        })
+      return 1
+    },
+
+    async restoreCells() {
+      await this.$axios
+        .post('iris3/api/queue/set-obj/', {
+          type: 'full',
+        })
+        .then((response) => {
+          let i = 0
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  clearInterval(checkComplete)
+                }
+                if (++i === 10) {
+                  clearInterval(checkComplete)
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          this.$notifier.showMessage({
+            content: 'Subsets error: ' + error,
+            color: 'error',
+          })
+        })
+
+      await this.$axios
+        .post('iris3/api/queue/umap-static/', {
+          categoryName: this.currentIdent,
+        })
+        .then((response) => {
+          const checkComplete = setInterval(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                if (response.data.returnvalue !== null) {
+                  this.umapStatic = response.data.returnvalue
+                  this.timeElapsed =
+                    (response.data.finishedOn - response.data.processedOn) /
+                    1000
+                  clearInterval(checkComplete)
+                  this.$notifier.showMessage({
+                    content: 'Cell Clustering success!',
+                    color: 'success',
+                  })
+                }
+              })
+          }, 1000)
+        })
+        .catch((error) => {
+          console.log({ error })
+          this.$notifier.showMessage({
+            content: 'Plot Cell UMAP error!',
+            color: 'error',
+          })
+        })
+      return 1
+    },
+
     async runDeg() {
       this.deResult = []
       await this.$axios
@@ -997,7 +1671,8 @@ export default {
           })
         })
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
-        this.idents = response.data
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
@@ -1083,7 +1758,8 @@ export default {
           })
         })
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
-        this.idents = response.data
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
@@ -1117,7 +1793,8 @@ export default {
           })
         })
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
-        this.idents = response.data
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
