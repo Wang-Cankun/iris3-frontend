@@ -1,7 +1,8 @@
 export default {
-  env: {
+  publicRuntimeConfig: {
     API_URL: process.env.API_URL || 'https://bmbls.bmi.osumc.edu',
-    WS_URL: process.env.WS_URL || 'http://localhost:9005',
+    GRAPHQL_URL:
+      process.env.GRAPHQL_URL || 'https://bmbls.bmi.osumc.edu/iris3/graphql',
   },
   /*
    ** Nuxt rendering mode
@@ -72,6 +73,7 @@ export default {
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     '@nuxtjs/auth',
+    '@nuxtjs/apollo',
   ],
   /*
    ** Axios module configuration
@@ -90,6 +92,13 @@ export default {
           user: { url: 'auth/profile', method: 'get', propertyName: 'info' },
           logout: false,
         },
+      },
+    },
+  },
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: process.env.GRAPHQL_URL,
       },
     },
   },

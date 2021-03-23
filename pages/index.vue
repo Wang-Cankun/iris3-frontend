@@ -14,8 +14,7 @@
             <v-col md="4">
               <v-card outlined hover light class="mr-1">
                 <v-card-title justify="center"
-                  >News
-                  2222222222222222222222222222222222222222222</v-card-title
+                  >News Example news content</v-card-title
                 >
               </v-card>
             </v-col>
