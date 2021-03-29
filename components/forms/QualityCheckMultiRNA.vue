@@ -18,6 +18,7 @@
                     <v-card
                       v-if="qcResult !== null"
                       outlined
+                      hover
                       color="blue-grey lighten-5"
                     >
                       <v-card-text>
@@ -94,7 +95,12 @@
                       </v-row>
                     </v-card>
 
-                    <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                    <v-card
+                      class="mt-6"
+                      outlined
+                      hover
+                      color="blue-grey lighten-5"
+                    >
                       <p class="subtitle-1 font-weight-bold text-center">
                         Preprocessing
                       </p>
@@ -644,8 +650,7 @@ export default {
       // Cell selection
       addTransferMetadataDialog: false,
       addMetadataDialog: false,
-      idents: [],
-      panel: [0],
+      // Add metadata
       displayAddMetadata: '',
       addCategoryName: '',
       activeCategory: '',
@@ -663,20 +668,6 @@ export default {
       allIdents: [],
       selectedCells: [],
     }
-  },
-  computed: {
-    filterCategoryLevels() {
-      return this.allIdents
-        .filter((item) => item.ident === this.filterCategoryName)
-        .map((item) => item.levels)
-        .flat()
-    },
-    selectionCategoryLevels() {
-      return this.allIdents
-        .filter((item) => item.ident === this.selectionCategoryName)
-        .map((item) => item.levels)
-        .flat()
-    },
   },
   methods: {
     async runPreProcess() {
