@@ -4,6 +4,7 @@ export default {
     GRAPHQL_URL:
       process.env.GRAPHQL_URL || 'https://bmbls.bmi.osumc.edu/iris3/graphql',
   },
+  components: true,
   /*
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
@@ -79,7 +80,7 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: { baseUrl: process.env.API_URL },
+  axios: {},
   auth: {
     strategies: {
       local: {

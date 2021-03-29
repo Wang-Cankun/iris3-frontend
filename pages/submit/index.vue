@@ -19,10 +19,10 @@
         >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 4" step="5"
-          >Regulon (lisa)</v-stepper-step
+          >Regulon (v2)</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 5" step="6">Todo</v-stepper-step>
+        <v-stepper-step :complete="e1 > 5" step="6">Report</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 6" step="7">Report</v-stepper-step>
         <v-divider></v-divider>
