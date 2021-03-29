@@ -30,31 +30,38 @@ export default {
     return apiClient.get('/dataset')
   },
 
-  postCommand(endpoint, command) {
-    this.$axios
+  wait(ms) {
+    return new Promise((resolve) => {
+      console.log(`waiting ${ms} ms...`)
+      setTimeout(resolve, ms)
+    })
+  },
+
+  async pollQueue(queueId, ms, maxAttempts = 50) {
+    let result = await apiClient.get('iris3/api/queue/' + queueId)
+    let attempts = 0
+    while ((result.data.returnvalue === null) & (attempts < maxAttempts)) {
+      await this.wait(ms)
+      attempts++
+      result = await apiClient.get('iris3/api/queue/' + queueId)
+    }
+
+    return result.data.returnvalue || 0
+  },
+
+  async postCommand(endpoint, command = {}) {
+    const queueId = await apiClient
       .post(endpoint, command)
-      .then((response) => {
-        let i = 0
-        const checkComplete = setInterval(async () => {
-          await this.$axios
-            .get('iris3/api/queue/' + response.data.id)
-            .then((response) => {
-              if (response.data.returnvalue !== null) {
-                clearInterval(checkComplete)
-                return response.data.returnvalue
-              }
-              if (++i === 10) {
-                clearInterval(checkComplete)
-                return 0
-              }
-            })
-        }, 1000)
-      })
+      .then((response) => response.data.id)
       .catch((error) => {
         this.$notifier.showMessage({
           content: 'Error: ' + error,
           color: 'error',
         })
       })
+
+    const result = await this.pollQueue(queueId, 1000)
+
+    return result
   },
 }

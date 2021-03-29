@@ -107,7 +107,7 @@
                             >
                           </template>
                           <p>
-                            Cells with zero values in more than # genes are
+                            Cells with zero values in less than # cells are
                             removed
                           </p> </v-tooltip
                         ><v-text-field
@@ -127,7 +127,7 @@
                             >
                           </template>
                           <p>
-                            Genes with zero values in more than # cells are
+                            Cells with zero values in less than # genes are
                             removed
                           </p> </v-tooltip
                         ><v-text-field
@@ -342,7 +342,7 @@
                 </v-expansion-panel>
               </v-expansion-panels>
             </v-col>
-            <v-col v-if="qcComplete !== false" cols="10"
+            <v-col v-if="qcComplete !== false" cols="9"
               ><p v-if="timeElapsed != ''">
                 Execute time: {{ timeElapsed }} seconds
               </p>
@@ -508,6 +508,8 @@ import PieChart from '~/components/utils/PieChart'
 import Boxplot from '~/components/utils/Boxplot'
 import Barplot from '~/components/utils/Barplot'
 
+import ApiService from '~/services/ApiService.js'
+
 export default {
   components: {
     'resize-image': ResizeImage,
@@ -619,9 +621,9 @@ export default {
       tab: null,
       removeRibosome: false,
       title: '',
-      cellFilter: '0',
-      geneFilter: '0',
-      mitoFilter: '0',
+      cellFilter: '3',
+      geneFilter: '200',
+      mitoFilter: '10',
       normalization: 'LogNormalize',
       nVariableFeatures: '2000',
       timeElapsed: '',
@@ -687,192 +689,29 @@ export default {
       this.varGenesList = []
       this.pie1 = this.varGenesScatter =
         'https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp'
-      await this.$axios
-        .post('iris3/api/queue/load/', {
-          filename: 'Zeisel_expression.fst',
-          type: 'CellGene',
-          min_cells: this.cellFilter,
-          min_genes: this.geneFilter,
-          nVariableFeatures: this.nVariableFeatures,
-          percentMt: this.mitoFilter,
-          removeRibosome: this.removeRibosome,
-        })
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.qcResult = response.data.returnvalue
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Calculate QC metrics error: ' + error,
-            color: 'error',
-          })
-        })
-      await this.$axios
-        .post('iris3/api/queue/var-genes-plot/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.varGenesScatter = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  this.$notifier.showMessage({
-                    content: 'Calculate QC metrics success!',
-                    color: 'success',
-                  })
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Variable genes error!',
-            color: 'error',
-          })
-        })
+      this.qcResult = await ApiService.postCommand('iris3/api/queue/load/', {
+        filename: 'Zeisel_expression.fst',
+        type: 'CellGene',
+        min_cells: this.cellFilter,
+        min_genes: this.geneFilter,
+        nVariableFeatures: this.nVariableFeatures,
+        percentMt: this.mitoFilter,
+        removeRibosome: this.removeRibosome,
+      })
 
-      await this.$axios
-        .post('iris3/api/queue/meta-data/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.metadata = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  this.$notifier.showMessage({
-                    content: 'Calculate QC metrics success!',
-                    color: 'success',
-                  })
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Download metadata error!',
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('iris3/api/queue/pie-meta/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.pie1 = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  this.$notifier.showMessage({
-                    content: 'Ploting metadata success!',
-                    color: 'success',
-                  })
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot metadata error!',
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('iris3/api/queue/var-genes-list/')
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.varGenesList = response.data.returnvalue
-                  this.qcBox1 = this.varGenesList[1].map(
-                    (item) => item.n_reads_per_cell
-                  )
-                  this.qcBox2 = this.varGenesList[1].map(
-                    (item) => item.n_genes_per_cell
-                  )
-                  this.qcBox3 = this.varGenesList[1].map(
-                    (item) => item.pct_ribo_per_gene
-                  )
-                  this.qcBox4 = this.varGenesList[1].map(
-                    (item) => item.pct_mito_per_gene
-                  )
-                  this.qcBox5 = this.varGenesList[0].map(
-                    (item) => item.n_cells_per_gene
-                  )
-                  this.qcHist1 = this.varGenesList[2]
-                  this.qcHist2 = this.varGenesList[3]
-                  this.qcHist3 = this.varGenesList[4]
-                  this.$notifier.showAlert({
-                    content: `QC result`,
-                    color: 'accent',
-                  })
-                  this.qcComplete = true
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  this.$notifier.showMessage({
-                    content: 'Calculate QC metrics success!',
-                    color: 'success',
-                  })
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Get Variable genes list error!',
-            color: 'error',
-          })
-        })
+      this.varGenesList = await ApiService.postCommand(
+        'iris3/api/queue/var-genes-list/'
+      )
+      console.log(this.varGenesList)
+      this.qcBox1 = this.varGenesList[1].map((item) => item.n_reads_per_cell)
+      this.qcBox2 = this.varGenesList[1].map((item) => item.n_genes_per_cell)
+      this.qcBox3 = this.varGenesList[1].map((item) => item.pct_ribo_per_gene)
+      this.qcBox4 = this.varGenesList[1].map((item) => item.pct_mito_per_gene)
+      this.qcBox5 = this.varGenesList[0].map((item) => item.n_cells_per_gene)
+      this.qcHist1 = this.varGenesList[2]
+      this.qcHist2 = this.varGenesList[3]
+      this.qcHist3 = this.varGenesList[4]
+      this.qcComplete = true
     },
   },
 }
