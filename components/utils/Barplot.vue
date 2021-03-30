@@ -21,7 +21,7 @@
           </v-list>
         </v-menu></v-card-title
       >
-      <ECharts ref="chart" :option="option" :events="events" /> </grid-item
+      <ECharts ref="chart" :option="option" /> </grid-item
   ></v-card>
 </template>
 

@@ -38,7 +38,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in src[0]" :key="index">
+            <tr v-for="(item, index) in src" :key="index">
               <td>{{ item.gene }}</td>
               <td>{{ item.mean }}</td>
               <td>{{ item.std }}</td>

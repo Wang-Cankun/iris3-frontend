@@ -34,7 +34,6 @@ export default {
   props: {
     src: { type: Array, required: true },
     title: { type: String, required: true },
-    values: { type: Array, required: true },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },

@@ -54,7 +54,6 @@ export default {
     base: '/iris3',
     linkActiveClass: 'active-link',
   },
-  components: true,
   /*
    ** Nuxt.js dev-modules
    */

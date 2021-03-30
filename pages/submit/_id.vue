@@ -56,7 +56,7 @@
   </div>
 </template>
 <script>
-import QualityCheck from '@/components/forms/QualityCheck.vue'
+import QualityCheck from '@/components/forms/QualityCheckRna.vue'
 import CellCluster from '@/components/forms/CellCluster.vue'
 import Regulon from '@/components/forms/Regulon.vue'
 import CombineRegulon from '@/components/forms/CombineRegulon.vue'

@@ -12,12 +12,20 @@
         >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 3" step="3"
-          >Regulon prediction</v-stepper-step
+          >Cell annotation</v-stepper-step
+        >
+        <v-stepper-step :complete="e1 > 3" step="4"
+          >Regulon (v1)</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 3" step="4"
-          >Network construction</v-stepper-step
+        <v-stepper-step :complete="e1 > 4" step="5"
+          >Regulon (v2)</v-stepper-step
         >
+        <v-divider></v-divider>
+        <v-stepper-step :complete="e1 > 5" step="6">Report</v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step :complete="e1 > 6" step="7">Report</v-stepper-step>
+        <v-divider></v-divider>
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
@@ -25,18 +33,23 @@
             <v-col class="mb-2" cols="12">
               <v-tabs v-model="qcTab" color="primary" slider-color="purple">
                 <v-tab title font-weight-bold text-center>Sample 1 </v-tab>
-                <v-tab v-show="false">Sample 2 </v-tab>
+                <v-tab title font-weight-bold text-center>Sample 2 </v-tab>
               </v-tabs>
               <v-tabs-items v-model="qcTab">
                 <v-tab-item
-                  ><qc-form :idx="0" type="single_rna"></qc-form> </v-tab-item
+                  ><qc-form :idx="1" type="multi_rna"></qc-form>
+                </v-tab-item>
+                <v-tab-item
+                  ><qc-form :idx="2" type="multi_rna"></qc-form> </v-tab-item
               ></v-tabs-items>
             </v-col>
           </v-row>
           <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-row><cell-cluster-form></cell-cluster-form></v-row>
+          <v-row
+            ><cell-cluster-form :type="`multi_rna`"></cell-cluster-form
+          ></v-row>
           <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
           <v-btn text @click="e1 = 1">Previous</v-btn>
         </v-stepper-content>
@@ -50,6 +63,20 @@
           <v-btn color="primary" @click="e1 = 5"> Continue </v-btn>
           <v-btn text @click="e1 = 2">Previous</v-btn>
         </v-stepper-content>
+        <v-stepper-content step="5">
+          <v-row><regulon-form></regulon-form></v-row>
+          <v-btn color="primary" @click="e1 = 6"> Continue </v-btn>
+          <v-btn text @click="e1 = 3">Previous</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="6">
+          <v-row></v-row>
+          <v-btn color="primary" @click="e1 = 7"> Continue </v-btn>
+          <v-btn text @click="e1 = 4">Previous</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="7">
+          <v-row><regulon-form></regulon-form></v-row>
+          <v-btn text @click="e1 = 5">Previous</v-btn>
+        </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
   </div>
@@ -58,6 +85,7 @@
 import QualityCheck from '@/components/forms/QualityCheckRna.vue'
 import CellCluster from '@/components/forms/CellCluster.vue'
 import CellAnnotation from '@/components/forms/CellAnnotation.vue'
+import Regulon from '@/components/forms/Regulon.vue'
 import CombineRegulon from '@/components/forms/CombineRegulon.vue'
 import ProjectInfo from '~/components/forms/ProjectInfo'
 
@@ -66,6 +94,7 @@ export default {
     'qc-form': QualityCheck,
     'cell-cluster-form': CellCluster,
     'cell-annotation-form': CellAnnotation,
+    'regulon-form': Regulon,
     'combine-regulon-form': CombineRegulon,
     'project-info': ProjectInfo,
   },

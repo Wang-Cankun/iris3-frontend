@@ -1,7 +1,7 @@
 <template>
   <v-col class="mb-2" cols="12">
     <v-tabs v-model="tab" color="primary" slider-color="purple">
-      <v-tab>Dataset </v-tab>
+      <v-tab>RNA+ATAC matched dataset </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
@@ -9,7 +9,7 @@
           <v-row>
             <v-col cols="4">
               <v-expansion-panels v-model="panel" multiple>
-                <v-expansion-panel v-if="type === 'multi_rna'">
+                <v-expansion-panel>
                   <v-expansion-panel-header>
                     Data integration
                   </v-expansion-panel-header>
@@ -27,9 +27,7 @@
                             >
                           </template>
                           <p>Integration method method:</p>
-                          <p>
-                            Which integration method to use? Default: Seurat
-                          </p>
+                          <p>Which integration method to use? Default: HGY</p>
                         </v-tooltip>
                         <v-col class="py-0" cols="11"
                           ><v-select
@@ -44,7 +42,7 @@
                           class="mx-2 my-4"
                           color="Primary"
                           width="150"
-                          @click="runCellCluster()"
+                          @click="runIntegration()"
                           >Run integration</v-btn
                         >
                       </v-row>
@@ -848,6 +846,7 @@
 <script>
 import _ from 'lodash'
 import ResizeImage from '~/components/utils/ResizeImage'
+import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
@@ -953,8 +952,8 @@ export default {
     currentAtlas: '',
     reductionSelect: 'PCA',
     reductionMethods: ['PCA'],
-    integrationSelect: 'Seurat',
-    integrationMethods: ['Seurat', 'Harmony'],
+    integrationSelect: 'HGT',
+    integrationMethods: ['HGT', 'Seurat'],
     atlas: [
       'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
       'to-be-added',
@@ -1028,6 +1027,15 @@ export default {
     },
   },
   methods: {
+    async runIntegration() {
+      this.umapStatic = await ApiService.postCommand(
+        'iris3/api/queue/umap-static/',
+        {
+          categoryName: 'seurat_clusters',
+        }
+      )
+      return 1
+    },
     async mergeIdents() {
       await this.$axios
         .post('iris3/api/queue/merge-idents/', {
