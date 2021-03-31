@@ -21,7 +21,8 @@
     "form-data": "^3.0.0",
     "nuxt": "^2.14.1",
     "nuxt-start": "^2.14.1",
-    "vue-grid-layout": "^2.3.11"
+    "vue-grid-layout": "^2.3.11",
+    "vue-json-excel": "^0.3.0"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",

@@ -14,7 +14,7 @@
                     Data integration
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                    <v-card class="py-3" outlined color="blue-grey lighten-5">
                       <p class="subtitle-1 font-weight-bold text-center">
                         Data integration
                       </p>
@@ -54,7 +54,7 @@
                     Cell clustering
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                    <v-card class="py-3" outlined color="blue-grey lighten-5">
                       <p class="subtitle-1 font-weight-bold text-center">
                         Cell clustering
                       </p>
@@ -100,6 +100,27 @@
                         outlined
                         background-color="white"
                       ></v-text-field>
+                      <v-row class="ml-4 mb-0 py-0"
+                        ><p class="my-1">Clustering method</p>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon color="primary" dark v-on="on"
+                              >mdi-help-circle-outline</v-icon
+                            >
+                          </template>
+                          <p>Dimension reduction methods:</p>
+                          <p>
+                            Which dimension reduction technique to use? Default:
+                            PCA
+                          </p>
+                        </v-tooltip>
+                        <v-col class="py-0" cols="11"
+                          ><v-select
+                            v-model="clusteringSelect"
+                            :items="clusteringMethods"
+                            label=""
+                          ></v-select></v-col
+                      ></v-row>
                       <p class="ml-4 title-h4">
                         Resolution
                         <v-tooltip top>
@@ -198,10 +219,77 @@
                 </v-expansion-panel>
                 <v-expansion-panel>
                   <v-expansion-panel-header>
+                    Set active visualization
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content
+                    ><v-card class="py-3" outlined color="blue-grey lighten-5">
+                      <p class="subtitle-1 font-weight-bold text-center">
+                        Active embedding
+                      </p>
+                      <div class="d-flex justify-between">
+                        <v-select
+                          v-model="currentEmbedding"
+                          class="ml-4"
+                          :items="allEmbeddings"
+                          label="Select identity"
+                        ></v-select
+                        ><v-btn
+                          class="mx-2 my-4"
+                          color="Primary"
+                          width="150"
+                          dense
+                          @click="setActiveIdents()"
+                          >SET</v-btn
+                        >
+                      </div>
+                      <p class="subtitle-1 font-weight-bold text-center">
+                        Active assay
+                      </p>
+                      <div class="d-flex justify-between">
+                        <v-select
+                          v-model="currentAssay"
+                          class="ml-4"
+                          :items="allAssays"
+                          label="Select identity"
+                        ></v-select
+                        ><v-btn
+                          class="mx-2 my-4"
+                          color="Primary"
+                          width="150"
+                          dense
+                          @click="setActiveIdents()"
+                          >SET</v-btn
+                        >
+                      </div>
+                      <p class="subtitle-1 font-weight-bold text-center">
+                        Active cell category
+                      </p>
+                      <div class="d-flex justify-between">
+                        <v-select
+                          v-model="currentIdent"
+                          class="ml-4"
+                          :items="idents"
+                          label="Select identity"
+                        ></v-select
+                        ><v-btn
+                          class="mx-2 my-4"
+                          color="Primary"
+                          width="150"
+                          dense
+                          @click="setActiveIdents()"
+                          >SET</v-btn
+                        >
+                      </div>
+                      <v-row justify="center"> </v-row>
+                    </v-card>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <v-expansion-panel>
+                  <v-expansion-panel-header>
                     Cell labeling
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                    <v-card class="py-3" outlined color="blue-grey lighten-5">
                       <p class="subtitle-1 font-weight-bold text-center">
                         Cell labeling
                       </p>
@@ -350,7 +438,6 @@
                           >Assign cells</v-btn
                         >
                       </v-row>
-                      <v-divider></v-divider>
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -359,27 +446,7 @@
                     Cell selection
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <v-card class="mt-6" outlined color="blue-grey lighten-5">
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Active cell category
-                      </p>
-                      <v-select
-                        v-model="currentIdent"
-                        class="ml-4"
-                        :items="idents"
-                        label="Select identity"
-                      ></v-select>
-
-                      <v-row justify="center">
-                        <v-btn
-                          class="mx-2 my-4"
-                          color="Primary"
-                          width="150"
-                          @click="setActiveIdents()"
-                          >SET</v-btn
-                        >
-                      </v-row>
-                      <v-divider></v-divider>
+                    <v-card class="py-3" outlined color="blue-grey lighten-5">
                       <p class="subtitle-1 font-weight-bold text-center">
                         Cell selection
                       </p>
@@ -788,53 +855,7 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
-                  <!--
-                <div v-if="deg">
-                  <v-data-table
-                    dense
-                    :search="keggSearch"
-                    :headers="enrichHeaders"
-                    :items="keggResult"
-                    :items-per-page="10"
-                    item-key="index"
-                    class="elevation-1"
-                    :expanded.sync="expandedKegg"
-                    show-expand
-                  >
-                    <template v-slot:top>
-                      <v-toolbar flat>
-                        <v-toolbar-title>
-                          <download-excel :data="keggResult" type="csv">
-                            <v-btn color="primary"> Download</v-btn
-                            ><v-tooltip top>
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                  color="primary"
-                                  dark
-                                  v-bind="attrs"
-                                  v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <span
-                                >KEGG Pathway enrichment analysis using the DE
-                                genes above. The results are calculated
-                                real-time using Enrichr.</span
-                              >
-                            </v-tooltip>
-                          </download-excel></v-toolbar-title
-                        >
-                        <v-spacer></v-spacer>
-                      </v-toolbar>
-                    </template>
-                    <template v-slot:expanded-item="{ item }">
-                      <td :colspan="headers.length">
-                        {{ item.genes.join(',') }}
-                      </td>
-                    </template>
-                  </v-data-table>
                 </div>
-                --></div>
               </div>
             </v-col>
           </v-row>
@@ -949,18 +970,23 @@ export default {
     currentIdent: 'seurat_clusters',
     currentIdentMerge: [],
     currentIdentLevels: [],
+    currentEmbedding: 'umap.rna',
+    allEmbeddings: ['umap.rna', 'umap.atac', 'wnn.umap', 'HGT'],
+    currentAssay: 'SCT',
+    allAssays: ['RNA', 'SCT', 'ATAC', 'MAESTRO'],
     currentAtlas: '',
     reductionSelect: 'PCA',
     reductionMethods: ['PCA'],
     integrationSelect: 'HGT',
     integrationMethods: ['HGT', 'Seurat'],
+    clusteringSelect: 'Louvain',
+    clusteringMethods: ['Louvain', 'K-means'],
     atlas: [
       'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
       'to-be-added',
     ],
     idents: [],
     violinSplit: 'Sex',
-    resHistory: [],
     ident1: 1,
     ident2: 2,
     minPct: 0.2,
@@ -1180,183 +1206,36 @@ export default {
         content: 'Running clustering...',
         color: 'accent',
       })
-
-      await this.$axios
-        .post('iris3/api/queue/cluster/', {
+      this.clusterResult = await ApiService.postCommand(
+        'iris3/api/queue/cluster-multiome/',
+        {
           nPCs: this.nPCs,
           resolution: this.resolution,
           neighbor: this.neighbor,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.resHistory.push(this.resolution)
-                  this.clusterResult = response.data.returnvalue
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Clustering error!',
-            color: 'error',
-          })
-        })
+        }
+      )
 
-      await this.$axios
-        .post('iris3/api/queue/set-idents/', {
+      this.currentIdentLevels = await ApiService.postCommand(
+        'iris3/api/queue/set-idents/',
+        {
           name: this.currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.currentIdentLevels = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Set new idents',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Get idents error!',
-            color: 'error',
-          })
-        })
+        }
+      )
 
-      await this.$axios
-        .post('iris3/api/queue/umap-cluster/')
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapCluster = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+      this.umapCluster = await ApiService.postCommand(
+        'iris3/api/queue/umap-cluster/'
+      )
 
-      await this.$axios
-        .post('iris3/api/queue/umap-static/', {
+      this.umapStatic = await ApiService.postCommand(
+        'iris3/api/queue/umap-static/',
+        {
           categoryName: 'seurat_clusters',
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  console.log(this.umapStatic)
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
-      /*
-      await this.$axios
-        .post('iris3/api/queue/umap-gene/', {
-          gene: this.gene,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapGene = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot UMAP error!',
-            color: 'error',
-          })
-        })
-*/
+        }
+      )
 
-      await this.$axios
-        .post('iris3/api/queue/select-category/')
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.setExistingCategoryItems =
-                    response.data.returnvalue.available_category
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 500)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+      this.setExistingCategoryItems = await ApiService.postCommand(
+        'iris3/api/queue/select-category/'
+      ).available_category
 
       await this.$axios.post('iris3/api/queue/genes/').then((response) => {
         this.genes = response.data

@@ -729,7 +729,7 @@ export default {
         color: 'accent',
       })
       this.metadata = []
-
+      this.$nuxt.$loading.start()
       if (this.idx === 0 && this.type === 'single_rna') {
         this.qcResult = await ApiService.postCommand('iris3/api/queue/load/', {
           idx: this.idx,
@@ -792,6 +792,7 @@ export default {
       this.varGenesScatter = await ApiService.postCommand(
         'iris3/api/queue/var-genes-plot/'
       )
+      this.$nuxt.$loading.stop()
       this.qcComplete = true
     },
   },

@@ -16,7 +16,12 @@
               <v-list-item-title>Download PNG</v-list-item-title>
             </v-list-item>
             <v-list-item @click="downloadPDF">
-              <v-list-item-title>Download PDF</v-list-item-title>
+              <v-list-item-title>Download JPG</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="downloadCSV">
+              <download-excel class="mr-4" :data="src" type="csv">
+                <v-list-item-title>Download file (CSV)</v-list-item-title>
+              </download-excel>
             </v-list-item>
           </v-list>
         </v-menu></v-card-title
@@ -28,6 +33,7 @@
 <script>
 import { createComponent } from 'echarts-for-vue'
 import * as echarts from 'echarts'
+import EchartsService from '~/services/EchartsService.js'
 export default {
   components: {
     ECharts: createComponent({ echarts }), // use as a component
@@ -84,13 +90,12 @@ export default {
   },
   methods: {
     downloadPNG() {
-      const link = document.createElement('a')
-      link.href = this.src
-      link.setAttribute('download', 'Image_png.png')
-      document.body.appendChild(link)
-      link.click()
+      EchartsService.downloadImg(this.$refs.chart.inst, 'png')
     },
     downloadPDF() {
+      EchartsService.downloadImg(this.$refs.chart.inst, 'jpg')
+    },
+    downloadCSV() {
       return 1
     },
     resizeEvent(i, newH, newW, newHPx, newWPx) {

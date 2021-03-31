@@ -15,7 +15,7 @@
               <v-list-item-title>Download PNG</v-list-item-title>
             </v-list-item>
             <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download JPEG</v-list-item-title>
+              <v-list-item-title>Download JPG</v-list-item-title>
             </v-list-item>
             <v-list-item @click="downloadPDF">
               <v-list-item-title>Download PDF</v-list-item-title>

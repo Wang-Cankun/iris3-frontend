@@ -36,7 +36,9 @@
           <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-row><cell-cluster-form></cell-cluster-form></v-row>
+          <v-row
+            ><cell-cluster-form type="single_rna"></cell-cluster-form
+          ></v-row>
           <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
           <v-btn text @click="e1 = 1">Previous</v-btn>
         </v-stepper-content>

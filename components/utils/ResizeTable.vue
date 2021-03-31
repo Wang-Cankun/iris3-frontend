@@ -11,17 +11,10 @@
           </template>
 
           <v-list>
-            <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download PNG</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download JPEG</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadPDF">
-              <v-list-item-title>Download PDF</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadPDF">
-              <v-list-item-title>Download file (CSV)</v-list-item-title>
+            <v-list-item @click="downloadCSV">
+              <download-excel class="mr-4" :data="src" type="csv">
+                <v-list-item-title>Download file (CSV)</v-list-item-title>
+              </download-excel>
             </v-list-item>
           </v-list>
         </v-menu></v-card-title
@@ -84,7 +77,7 @@ export default {
       document.body.appendChild(link)
       link.click()
     },
-    downloadPDF() {
+    downloadCSV() {
       return 1
     },
     resizeEvent(i, newH, newW, newHPx, newWPx) {
