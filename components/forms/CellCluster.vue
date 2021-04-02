@@ -7,7 +7,7 @@
       <v-tab-item>
         <v-card outlined>
           <v-row>
-            <v-col cols="4">
+            <v-col cols="3">
               <v-expansion-panels v-model="panel" multiple>
                 <v-expansion-panel v-if="type === 'multi_rna'">
                   <v-expansion-panel-header>
@@ -200,6 +200,57 @@
                 </v-expansion-panel>
                 <v-expansion-panel>
                   <v-expansion-panel-header>
+                    Active cell category
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content
+                    ><v-card class="py-3" outlined color="blue-grey lighten-5">
+                      <p class="subtitle-1 font-weight-bold text-center">
+                        Active cell category
+                      </p>
+                      <v-select
+                        v-model="currentIdent"
+                        class="ml-4"
+                        :items="idents"
+                        label="Select identity"
+                        @change="setActiveIdents(currentIdent)"
+                      ></v-select>
+                      <v-divider></v-divider>
+                      <p class="subtitle-1 font-weight-bold text-center">
+                        Rename clusters
+                      </p>
+                      <v-row class="mx-2 my-2 py-2">
+                        <v-col cols="12"
+                          ><v-select
+                            v-model="oldClusterName"
+                            class="px-1"
+                            label="Old cluster name"
+                            :items="currentIdentLevels"
+                            outlined
+                            hide-details="auto"
+                            background-color="white"
+                            dense
+                          ></v-select
+                        ></v-col>
+                        <v-col cols="8">
+                          <v-text-field
+                            v-model="newClusterName"
+                            label="New cluster name"
+                            placeholder="Number"
+                            class="px-1"
+                            outlined
+                            dense
+                            background-color="white"
+                          ></v-text-field
+                        ></v-col>
+                        <v-col cols="4"
+                          ><v-btn @click="renameCluster()">Rename</v-btn></v-col
+                        ></v-row
+                      >
+                    </v-card>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <v-expansion-panel>
+                  <v-expansion-panel-header>
                     Cell labeling
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
@@ -213,16 +264,16 @@
                           Step 1: Create cell filters
                         </p>
                         <div class="d-flex flex">
-                          <v-text-field
+                          <v-autocomplete
                             v-model="addGeneName"
-                            label="Gene"
-                            placeholder="Name"
                             class="px-1"
+                            :items="genes"
                             outlined
                             dense
+                            label="Gene"
                             background-color="white"
-                          ></v-text-field
-                          ><v-select
+                          ></v-autocomplete>
+                          <v-select
                             v-model="addGeneDirection"
                             cols="3"
                             :items="addGeneDirectionItems"
@@ -298,10 +349,10 @@
                           Step 2: Assign cells to new label
                         </p>
 
-                        <v-col cols="8"
+                        <v-col cols="12"
                           ><v-text-field
                             v-model="addCategoryName"
-                            label="Create new category"
+                            label="Set new category"
                             placeholder="Type categoty name"
                             outlined
                             hide-details="auto"
@@ -312,29 +363,11 @@
 
                         <v-col cols="4"
                           ><v-btn @click="setCategory(addCategoryName)"
-                            >ADD</v-btn
+                            >SET</v-btn
                           ></v-col
                         >
-                        <v-col cols="12" class="my-0 py-0"
-                          ><p class="my-0">or</p></v-col
-                        >
-                        <v-col cols="8"
-                          ><v-select
-                            v-model="setExistingCategory"
-                            label="Select existing"
-                            :items="setExistingCategoryItems"
-                            outlined
-                            hide-details="auto"
-                            background-color="white"
-                            dense
-                          ></v-select
-                        ></v-col>
-                        <v-col cols="4"
-                          ><v-btn @click="setCategory(setExistingCategory)"
-                            >Set</v-btn
-                          ></v-col
-                        >
-                        <v-col cols="8"
+
+                        <v-col cols="12"
                           ><v-text-field
                             v-model="addLabelName"
                             label="Add new label"
@@ -352,7 +385,6 @@
                           >Assign cells</v-btn
                         >
                       </v-row>
-                      <v-divider></v-divider>
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -363,40 +395,20 @@
                   <v-expansion-panel-content>
                     <v-card class="mt-6" outlined color="blue-grey lighten-5">
                       <p class="subtitle-1 font-weight-bold text-center">
-                        Active cell category
-                      </p>
-                      <v-select
-                        v-model="currentIdent"
-                        class="ml-4"
-                        :items="idents"
-                        label="Select identity"
-                      ></v-select>
-
-                      <v-row justify="center">
-                        <v-btn
-                          class="mx-2 my-4"
-                          color="Primary"
-                          width="150"
-                          @click="setActiveIdents()"
-                          >SET</v-btn
-                        >
-                      </v-row>
-                      <v-divider></v-divider>
-                      <p class="subtitle-1 font-weight-bold text-center">
                         Cell selection
                       </p>
 
                       <v-row class="mx-2 my-2 py-2">
                         <div class="d-flex flex">
-                          <v-text-field
+                          <v-autocomplete
                             v-model="selectionGeneName"
-                            label="Gene"
-                            placeholder="Name"
                             class="px-1"
+                            :items="genes"
                             outlined
                             dense
+                            label="Gene"
                             background-color="white"
-                          ></v-text-field
+                          ></v-autocomplete
                           ><v-select
                             v-model="selectionGeneDirection"
                             cols="3"
@@ -486,7 +498,7 @@
                 </v-expansion-panel>
               </v-expansion-panels>
             </v-col>
-            <v-col cols="8">
+            <v-col cols="9">
               <div v-if="clusterResult !== ''">
                 <div>
                   <grid-layout
@@ -563,7 +575,7 @@
                               v-model="ident1"
                               class="ml-4"
                               :items="currentIdentLevels"
-                              label="Ident1"
+                              label="Group 1"
                             ></v-autocomplete>
                           </v-col>
                           <v-col cols="6">
@@ -571,7 +583,7 @@
                               v-model="ident2"
                               class="ml-4"
                               :items="currentIdentLevels"
-                              label="Ident2"
+                              label="Group 2"
                             ></v-autocomplete> </v-col
                         ></v-row>
                         <v-row>
@@ -684,7 +696,7 @@
                           <v-col cols="6">
                             <div v-if="idents != ''">
                               <p class="subtitle-2 text--primary mx-4">
-                                Split the violin plots by:
+                                Split the violin plot by:
                               </p>
                               <v-autocomplete
                                 v-model="violinSplit"
@@ -848,6 +860,7 @@
 <script>
 import _ from 'lodash'
 import ResizeImage from '~/components/utils/ResizeImage'
+import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
@@ -952,7 +965,7 @@ export default {
     currentIdentLevels: [],
     currentAtlas: '',
     reductionSelect: 'PCA',
-    reductionMethods: ['PCA'],
+    reductionMethods: ['PCA', 'HGT'],
     integrationSelect: 'Seurat',
     integrationMethods: ['Seurat', 'Harmony'],
     atlas: [
@@ -988,6 +1001,9 @@ export default {
     allIdents: [],
     selectedCells: [],
     umapStatic: '',
+    // Renameing
+    oldClusterName: '',
+    newClusterName: '',
   }),
   computed: {
     identList() {
@@ -1039,7 +1055,8 @@ export default {
               .get('iris3/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
-                  this.currentIdent = response.data.returnvalue.new_ident[0]
+                  this.currentIdent = response.data.returnvalue.new_ident
+
                   this.currentIdentLevels = response.data.returnvalue.new_levels
                   this.currentIdentMerge = []
                   this.timeElapsed =
@@ -1047,7 +1064,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Merge clusters success!',
                     color: 'success',
                   })
                 }
@@ -1066,12 +1083,22 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+      await this.setActiveIdents(this.currentIdent)
+      setTimeout(async () => {
+        this.umapStatic = await ApiService.postCommand(
+          'iris3/api/queue/umap-static/',
+          {
+            categoryName: this.currentIdent,
+          }
+        )
+      }, 2000)
     },
-    async setActiveIdents() {
+
+    async setActiveIdents(currentIdent) {
       this.currentIdentMerge = []
       await this.$axios
         .post('iris3/api/queue/set-idents/', {
-          name: this.currentIdent,
+          name: currentIdent,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
@@ -1085,7 +1112,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: `Set cell category to ${currentIdent}`,
                     color: 'success',
                   })
                 }
@@ -1361,6 +1388,36 @@ export default {
       })
     },
 
+    async renameCluster() {
+      this.currentIdentLevels.new_levels = await ApiService.postCommand(
+        'iris3/api/queue/rename-idents/',
+        {
+          old_name: this.oldClusterName,
+          new_name: this.newClusterName,
+        }
+      )
+      this.umapStatic = await ApiService.postCommand(
+        'iris3/api/queue/umap-static/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
+      this.currentIdentLevels = await ApiService.postCommand(
+        'iris3/api/queue/set-idents/',
+        {
+          name: this.currentIdent,
+        }
+      )
+
+      this.oldClusterName = ''
+      this.newClusterName = ''
+      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
+    },
     async setCategory(name) {
       await this.$axios.post('iris3/api/queue/idents/').then((response) => {
         this.allIdents = response.data
@@ -1525,6 +1582,8 @@ export default {
             color: 'error',
           })
         })
+
+      await this.setActiveIdents(this.currentIdent)
       return 1
     },
 
@@ -1645,6 +1704,7 @@ export default {
             color: 'error',
           })
         })
+      await this.setActiveIdents(this.currentIdent)
       return 1
     },
 
@@ -1771,12 +1831,20 @@ export default {
               })
           }, 3000)
         })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot gene error!',
-            color: 'error',
-          })
+      await this.$axios
+        .post('iris3/api/queue/feature-gene/', {
+          gene: this.gene,
+        })
+        .then((response) => {
+          setTimeout(async () => {
+            await this.$axios
+              .get('iris3/api/queue/' + response.data.id)
+              .then((response) => {
+                this.featureGene = response.data.returnvalue
+                this.timeElapsed =
+                  (response.data.finishedOn - response.data.processedOn) / 1000
+              })
+          }, 3000)
         })
     },
     async showDotPlot() {

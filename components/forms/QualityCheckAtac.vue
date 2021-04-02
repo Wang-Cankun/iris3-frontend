@@ -682,7 +682,7 @@ export default {
 
     async runPreProcess() {
       this.$notifier.showMessage({
-        content: 'Running QC metrics...' + this.idx,
+        content: 'Running QC metrics...',
         color: 'accent',
       })
       this.metadata = []

@@ -223,114 +223,6 @@
                 </v-card></v-expansion-panel-content
               >
             </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header>
-                Cell selection
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="blue-grey lighten-5">
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Cell selection
-                  </p>
-
-                  <v-row class="mx-2 my-2 py-2">
-                    <div class="d-flex flex">
-                      <v-text-field
-                        v-model="selectionGeneName"
-                        label="Gene"
-                        placeholder="Name"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field
-                      ><v-select
-                        v-model="selectionGeneDirection"
-                        cols="3"
-                        :items="selectionGeneDirectionItems"
-                        label="Direction"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-text-field
-                        v-model="selectionGeneThres"
-                        label="Thres"
-                        placeholder="Number"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field>
-                    </div>
-                    <v-btn color="Primary" @click="addGeneSelection()"
-                      >Add gene filter</v-btn
-                    >
-                    <div class="d-flex flex mt-2">
-                      <v-select
-                        v-model="selectionCategoryName"
-                        cols="3"
-                        :items="idents"
-                        label="Category"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-select
-                        v-model="selectionCategoryLevel"
-                        cols="3"
-                        :items="selectionCategoryLevels"
-                        label="Cluster"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        multiple
-                        background-color="white"
-                      ></v-select>
-                    </div>
-                    <v-btn color="Primary" @click="addClusterSelection()"
-                      >Add cluster filter</v-btn
-                    >
-
-                    <v-col class="py-0" cols="12">
-                      <p class="my-1">Selections applied:</p>
-                      <ul>
-                        <li
-                          v-for="(item, index) in selectionPayload"
-                          :key="index"
-                        >
-                          <div v-if="item.type === 'gene'">
-                            {{ item.name }} {{ item.direction }}
-                            {{ item.thres }}
-                          </div>
-                          <div v-if="item.type === 'cluster'">
-                            {{ item.direction }} {{ item.category[0] }}:
-                            {{ item.level }}
-                          </div>
-                        </li>
-                      </ul></v-col
-                    >
-                  </v-row>
-
-                  <v-row class="mx-2 my-2 py-2">
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Accent"
-                      @click="subsetCells()"
-                      >Subset cells</v-btn
-                    >
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Accent"
-                      @click="restoreCells()"
-                      >Restore cells</v-btn
-                    >
-                  </v-row>
-                </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
           </v-expansion-panels>
         </v-col>
         <v-col v-if="qcComplete !== false" cols="9"
@@ -524,7 +416,7 @@ export default {
           w: 1,
           h: 1,
           i: '1',
-          title: 'Total # of molecules per cell',
+          title: 'Total # of counts per cell',
         },
         {
           x: 2,
@@ -725,7 +617,7 @@ export default {
 
     async runPreProcess() {
       this.$notifier.showMessage({
-        content: 'Running QC metrics...' + this.idx,
+        content: 'Running QC metrics...',
         color: 'accent',
       })
       this.metadata = []
