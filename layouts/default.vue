@@ -321,16 +321,16 @@ export default {
       searchJobId: '',
       exploreMenu: [
         {
-          title: 'scRNA-Seq',
-          path: '/upload',
+          title: 'Single scRNA-seq dataset',
+          path: '/upload?type=single-rna',
         },
         {
-          title: 'Multiple scRNA-Seq',
-          path: '/upload',
+          title: 'Multiple scRNA-seq datasets',
+          path: '/upload?type=multiple-rna',
         },
         {
-          title: 'scRNA-Seq and scATAC-Seq',
-          path: '/upload',
+          title: 'Matched scRNA-seq and scATAC-Seq',
+          path: '/upload?type=multiome',
         },
         {
           title: 'Public IRIS3 projects',

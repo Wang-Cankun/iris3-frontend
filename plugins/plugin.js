@@ -3,7 +3,9 @@ import VueGridLayout from 'vue-grid-layout'
 import * as echarts from 'echarts'
 import { plugin } from 'echarts-for-vue'
 import JsonExcel from 'vue-json-excel'
+import Vuelidate from 'vuelidate'
 
+Vue.use(Vuelidate)
 Vue.use(plugin, { echarts })
 Vue.component('downloadExcel', JsonExcel)
 Vue.component('grid-layout', VueGridLayout.GridLayout)

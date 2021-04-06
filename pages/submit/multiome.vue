@@ -1,6 +1,5 @@
 <template>
   <div>
-    <project-info></project-info>
     <v-stepper v-model="e1" alt-labels>
       <v-stepper-header>
         <v-stepper-step :complete="e1 > 1" step="1"
@@ -19,6 +18,7 @@
           >Network construction</v-stepper-step
         >
       </v-stepper-header>
+      <project-info></project-info>
       <v-stepper-items>
         <v-stepper-content step="1">
           <v-row>
@@ -74,7 +74,7 @@
   </div>
 </template>
 <script>
-import QualityCheck from '@/components/forms/QualityCheckRna.vue'
+import QualityCheckRna from '@/components/forms/QualityCheckRna.vue'
 import QualityCheckAtac from '@/components/forms/QualityCheckAtac.vue'
 import CellCluster from '@/components/forms/CellClusterMultiome.vue'
 import CellAnnotation from '@/components/forms/CellAnnotation.vue'
@@ -84,7 +84,7 @@ import ProjectInfo from '~/components/forms/ProjectInfo'
 
 export default {
   components: {
-    'qc-rna': QualityCheck,
+    'qc-rna': QualityCheckRna,
     'qc-atac': QualityCheckAtac,
     'cell-cluster-form': CellCluster,
     'cell-annotation-form': CellAnnotation,

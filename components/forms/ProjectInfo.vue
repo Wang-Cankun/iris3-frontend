@@ -50,12 +50,16 @@
                     <span class="text--primary">{{ jobId }}</span>
                   </p>
                   <p class="ma-2">
-                    <span class="text--secondary">Job create date: </span>
+                    <span class="text--secondary">Create date: </span>
                     <span class="text--primary">{{ jobCreateDate }}</span>
                   </p>
                   <p class="ma-2">
-                    <span class="text--secondary">Job creator: </span>
+                    <span class="text--secondary">Creator: </span>
                     <span class="text--primary">{{ jobCreator }}</span>
+                  </p>
+                  <p class="ma-2">
+                    <span class="text--secondary">Species: </span>
+                    <span class="text--primary">Human</span>
                   </p>
                 </v-card-text>
               </v-flex>
@@ -73,14 +77,19 @@ export default {
       panel: false,
       projectTitle: 'Example title1',
       projectDescription: 'Example description1',
-      projectCreateDate: '1/14/2021',
-      jobCreateDate: '1/14/2021',
       projectCreator: 'Admin',
       jobCreator: 'Admin',
       projectId: 'P000001',
       jobId: 'P000001-admin001',
     }
   },
-  computed: {},
+  computed: {
+    projectCreateDate() {
+      return new Date().toISOString().split('T')[0]
+    },
+    jobCreateDate() {
+      return new Date().toISOString().split('T')[0]
+    },
+  },
 }
 </script>

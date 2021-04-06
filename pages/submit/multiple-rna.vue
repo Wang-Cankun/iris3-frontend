@@ -1,6 +1,5 @@
 <template>
   <div>
-    <project-info></project-info>
     <v-stepper v-model="e1" alt-labels>
       <v-stepper-header>
         <v-stepper-step :complete="e1 > 1" step="1"
@@ -27,6 +26,7 @@
         <v-stepper-step :complete="e1 > 6" step="7">Report</v-stepper-step>
         <v-divider></v-divider>
       </v-stepper-header>
+      <project-info></project-info>
       <v-stepper-items>
         <v-stepper-content step="1">
           <v-row>

@@ -25,7 +25,7 @@
       <v-text-field
         v-model="title"
         :rules="rules"
-        counter="50"
+        counter="100"
         label="Title:"
         outlined
         required
@@ -65,21 +65,21 @@
           </v-tooltip></v-row
         >
       </v-col>
-      <v-tabs v-model="tab" background-color="white" grow>
-        <v-tab>scRNA-Seq data </v-tab>
-        <v-tab>Multiple scRNA-Seq data </v-tab>
-        <v-tab>scRNA-Seq & scATAC-seq data </v-tab>
+      <v-tabs v-model="tab" grow background-color="white">
+        <v-tab @click="switchTabs()">scRNA-Seq data </v-tab>
+        <v-tab @click="switchTabs()">Multiple scRNA-Seq data </v-tab>
+        <v-tab @click="switchTabs()">scRNA-Seq & scATAC-seq data </v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
           <v-file-input
-            v-model="expFile[0]"
+            v-model="expFile.singleRna[0]"
             color="primary"
             counter
             chips
             :rules="fileRules"
-            label="Click to upload (txt, tsv, csv)"
+            label="Click to upload (csv, txt, h5)"
             prepend-icon="mdi-paperclip"
             outlined
             required
@@ -91,7 +91,7 @@
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
               </template>
               <v-list>
-                <v-list-item @click="loadExample">
+                <v-list-item @click="loadSingleRnaExample()">
                   <v-list-item-title>{{
                     singleExample[0].item
                   }}</v-list-item-title>
@@ -121,7 +121,7 @@
           </v-col>
           <v-col cols="12"
             ><v-row>
-              <p class="title mt-4">Upload metadata (Optional)</p>
+              <p class="subtitle mt-4">Upload metadata (Optional)</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
@@ -140,48 +140,25 @@
             ></v-col
           >
           <v-file-input
-            v-model="labelFile"
+            v-model="labelFile.singleRna"
             color="primary"
             counter
             chips
-            label="Click to upload (txt, tsv, csv)"
-            prepend-icon="mdi-paperclip"
-            outlined
-          ></v-file-input>
-          <v-col cols="12"
-            ><v-row>
-              <p class="title mt-4">Upload BAM file (Optional)</p>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon color="primary" dark v-on="on"
-                    >mdi-help-circle-outline</v-icon
-                  >
-                </template>
-                <p>Provide BAM files for RNA velocity.</p>
-                <p>BAM files are used to calculate RNA velocity.</p>
-              </v-tooltip></v-row
-            ></v-col
-          >
-          <v-file-input
-            v-model="labelFile"
-            color="primary"
-            counter
-            chips
-            label="Click to upload (.bam)"
+            label="Click to upload (csv, txt)"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
         </v-tab-item>
         <v-tab-item>
-          <p class="title ma-0">Upload scRNA-seq data</p>
+          <p class="subtitle ma-0">Upload count matrix</p>
           <div v-for="(n, i) in multipleDatasetsLength" :key="n">
             <v-file-input
-              v-model="expFile[i]"
+              v-model="expFile.multiRna[i]"
               color="primary"
               counter
               chips
               :rules="fileRules"
-              :label="'Upload sample ' + n"
+              :label="'Upload dataset ' + n"
               prepend-icon="mdi-paperclip"
               outlined
               required
@@ -191,81 +168,99 @@
           <v-btn @click="addMultipleDataset">Add a row</v-btn>
           <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
 
-          <p class="title">Upload metadata (Optional)</p>
+          <p class="subtitle">Upload metadata (Optional)</p>
 
           <v-file-input
-            v-model="labelFile"
+            v-model="labelFile.multiRna"
             color="primary"
             counter
             chips
-            label="Click to upload (txt, tsv, csv)"
+            label="Click to upload (csv, txt, h5)"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
-          <v-col cols="12"
-            ><v-row>
-              <p class="title mt-4">Upload BAM file (Optional)</p>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon color="primary" dark v-on="on"
-                    >mdi-help-circle-outline</v-icon
+          <v-col cols="3" class="ma-0 pa-0"
+            ><v-menu close-on-click>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
+              </template>
+              <v-list>
+                <v-list-item @click="loadMultiRnaExample()">
+                  <v-list-item-title>{{
+                    multiRnaExample[0].item
+                  }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="multiRnaExample[1].link"
+                    >
+                      {{ multiRnaExample[1].item }}</a
+                    ></v-list-item-title
                   >
-                </template>
-                <p>Provide BAM files for RNA velocity.</p>
-                <p>BAM files are used to calculate RNA velocity.</p>
-              </v-tooltip></v-row
-            ></v-col
-          >
-          <v-file-input
-            v-model="labelFile"
-            color="primary"
-            counter
-            chips
-            label="Click to upload (.bam)"
-            prepend-icon="mdi-paperclip"
-            outlined
-          ></v-file-input>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
         </v-tab-item>
         <v-tab-item>
-          <p class="title ma-0">
-            Upload scRNA-seq and scATAC-seq data: 10x multiome
-          </p>
+          <p class="subtitle ma-0">Upload scRNA-seq data</p>
           <v-file-input
-            v-model="expFile[0]"
+            v-model="expFile.multiome[0]"
             color="primary"
             counter
             chips
             :rules="fileRules"
-            label="Upload count matrix (.h5)"
+            label="Upload count matrix (csv, txt, h5)"
             prepend-icon="mdi-paperclip"
             outlined
             required
           ></v-file-input>
+          <p class="subtitle ma-0">Upload scATAC-seq count matrix</p>
           <v-file-input
-            v-model="expFile[1]"
+            v-model="expFile.multiome[1]"
             color="primary"
             counter
             chips
             :rules="fileRules"
-            label="Upload ATAC fragment file (.tsv.gz)"
-            prepend-icon="mdi-paperclip"
-            outlined
-            required
-          ></v-file-input>
-          <v-file-input
-            v-model="expFile[2]"
-            color="primary"
-            counter
-            chips
-            :rules="fileRules"
-            label="Upload ATAC fragment file index (.tsv.gz.tbi)"
+            label="Upload ATAC fragment file (csv, txt, h5)"
             prepend-icon="mdi-paperclip"
             outlined
             required
           ></v-file-input>
           <v-col cols="12"
             ><v-row>
-              <p class="title mt-4">Upload BAM file (Optional)</p>
+              <p class="subtitle mt-4">Upload metadata (Optional)</p>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon color="primary" dark v-on="on"
+                    >mdi-help-circle-outline</v-icon
+                  >
+                </template>
+                <p>
+                  Provide cell labels for regulon identification (Cell label
+                  should be at least two factors).
+                </p>
+                <p>
+                  This file contains two columns: cell names and cell labels.
+                  Regulons will be predicted based on the provided cell labels.
+                </p>
+              </v-tooltip></v-row
+            ></v-col
+          >
+          <v-file-input
+            v-model="labelFile.multiome"
+            color="primary"
+            counter
+            chips
+            label="Click to upload (csv, txt)"
+            prepend-icon="mdi-paperclip"
+            outlined
+          ></v-file-input>
+          <v-col cols="12"
+            ><v-row>
+              <p class="subtitle mt-4">Upload scRNA-seq BAM file (Optional)</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
@@ -278,7 +273,7 @@
             ></v-col
           >
           <v-file-input
-            v-model="labelFile"
+            v-model="bamFile"
             color="primary"
             counter
             chips
@@ -292,7 +287,7 @@
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
               </template>
               <v-list>
-                <v-list-item @click="loadMultiomeExample">
+                <v-list-item @click="loadMultiomeExample()">
                   <v-list-item-title>{{
                     multiomeExample[0].item
                   }}</v-list-item-title>
@@ -335,7 +330,7 @@
 
       <v-col cols="12"
         ><v-row>
-          <p class="title mt-4">Project description (Optional)</p>
+          <p class="subtitle mt-4">Project description (Optional)</p>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-icon color="primary" dark v-on="on"
@@ -352,7 +347,7 @@
 
     <v-col cols="12"
       ><v-row>
-        <p class="title mt-4">Email (Optional)</p>
+        <p class="subtitle mt-4">Email (Optional)</p>
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-icon color="primary" dark v-on="on"
@@ -388,6 +383,9 @@
 
 <script>
 import FormData from 'form-data'
+import { validationMixin } from 'vuelidate'
+import { required, maxLength, email } from 'vuelidate/lib/validators'
+
 function dataURLtoFile(dataurl, filename) {
   const arr = dataurl.split(',')
   const mime = arr[0].match(/:(.*?);/)[1]
@@ -403,6 +401,19 @@ function dataURLtoFile(dataurl, filename) {
 }
 
 export default {
+  mixins: [validationMixin],
+
+  validations: {
+    name: { required, maxLength: maxLength(10) },
+    email: { required, email },
+    select: { required },
+    checkbox: {
+      checked(val) {
+        return val
+      },
+    },
+  },
+
   data: () => ({
     title: '',
     isPrivateProject: true,
@@ -410,8 +421,17 @@ export default {
     jobid: '',
     valid: true,
     form: {},
-    expFile: [],
-    labelFile: null,
+    expFile: {
+      singleRna: [],
+      multiRna: [],
+      multiome: [],
+    },
+    labelFile: {
+      singleRna: null,
+      multiRna: null,
+      multiome: null,
+    },
+    bamFile: null,
     species: ['Human', 'Mouse'],
     speciesSelect: '',
     singleExample: [
@@ -425,8 +445,19 @@ export default {
         link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_index_label.csv',
       },
     ],
+    multiRnaExample: [
+      {
+        item:
+          'Load example (Human IFNB-Stimulated and Control PBMCs, 2800 cells)',
+      },
+      {
+        item: 'Download gene expression matrix and cell label (ifnb_2800.rda)',
+        link:
+          'https://raw.githubusercontent.com/Wang-Cankun/iris3api/master/data/ifnb_2800.rda',
+      },
+    ],
     multiomeExample: [
-      { item: 'Load example (10X Human PBMC)' },
+      { item: 'Load example (10X Human PBMC 10k cells)' },
       {
         item: 'Download 10X Human PBMC count matrix ',
         link:
@@ -445,11 +476,11 @@ export default {
     ],
     email: '',
     description: '',
-    multipleDatasetsLength: 1,
+    multipleDatasetsLength: 2,
     rules: [
       (v) =>
-        (v && v.length <= 50) ||
-        'Project tiile is required (Max 50 characters)',
+        (v && v.length <= 100) ||
+        'Project tiile is required (Max 100 characters)',
     ],
     nameRules: [
       (v) => !!v || 'Field is required',
@@ -461,44 +492,116 @@ export default {
       (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
     ],
   }),
+  computed: {
+    checkboxErrors() {
+      const errors = []
+      if (!this.$v.checkbox.$dirty) return errors
+      !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+      return errors
+    },
+    selectErrors() {
+      const errors = []
+      if (!this.$v.select.$dirty) return errors
+      !this.$v.select.required && errors.push('Item is required')
+      return errors
+    },
+    nameErrors() {
+      const errors = []
+      if (!this.$v.name.$dirty) return errors
+      !this.$v.name.maxLength &&
+        errors.push('Name must be at most 10 characters long')
+      !this.$v.name.required && errors.push('Name is required.')
+      return errors
+    },
+    emailErrors() {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Must be valid e-mail')
+      !this.$v.email.required && errors.push('E-mail is required')
+      return errors
+    },
+  },
+  mounted() {
+    switch (this.$route.query.type) {
+      case 'single-rna':
+        this.tab = 0
+        break
+      case 'multiple-rna':
+        this.tab = 1
+        break
+      case 'multiome':
+        this.tab = 2
+        break
+      default:
+        this.tab = 0
+    }
+  },
   methods: {
-    loadExample() {
+    loadSingleRnaExample() {
       this.multipleDatasetsLength = 1
-      this.expFile = []
-      this.expFile[0] = dataURLtoFile(
-        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'Zeisel et al. 2015.'
-      )
-      this.labelFile = dataURLtoFile(
-        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'Zeisel et al. 2015.'
-      )
+      this.resetExpFile()
       this.speciesSelect = 'Mouse'
-      this.title = 'Example data (Zeisel et al. 2015.)'
+      this.title = 'Mouse brain scRNA-seq dataset (Zeisel et al. 2015)'
+      this.expFile.singleRna[0] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'Zeisel count matrix'
+      )
+      this.labelFile.singleRna = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'Zeisel cell label'
+      )
+
       this.$notifier.showMessage({
         content: 'Example dataset loaded: Zeisel et al. 2015.',
         color: 'success',
       })
     },
+    loadMultiRnaExample() {
+      this.multipleDatasetsLength = 2
+      this.resetExpFile()
+      this.speciesSelect = 'Human'
+      this.expFile.multiRna[0] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'IFNB PBMCs (Dataset 1)'
+      )
+      this.expFile.multiRna[1] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'IFNB PBMCs (Dataset 2)'
+      )
+      this.labelFile.multiRna = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'IFNB PBMCs cell label'
+      )
+      this.title = 'Human IFNB-Stimulated and Control PBMCs, 2800 cells'
+      this.$notifier.showMessage({
+        content:
+          'Example dataset loaded: Human IFNB-Stimulated and Control PBMCs, 2800 cells.',
+        color: 'success',
+      })
+    },
     loadMultiomeExample() {
       this.multipleDatasetsLength = 1
-      this.expFile = []
-      this.expFile[0] = dataURLtoFile(
-        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC count matrix'
-      )
-      this.expFile[1] = dataURLtoFile(
-        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'ATAC fragment'
-      )
-      this.expFile[2] = dataURLtoFile(
-        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'ATAC fragment index'
-      )
+      this.resetExpFile()
       this.speciesSelect = 'Human'
-      this.title = '10x Genomics for human PBMCs'
+      this.expFile.multiome[0] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'PBMC scRNA-seq data'
+      )
+      this.expFile.multiome[1] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'PBMC scATAC-seq data'
+      )
+      this.labelFile.multiome = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'PBMC cell label'
+      )
+      this.bamFile = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'PBMC scRNA-seq BAM file'
+      )
+      this.title = 'Human Multiome PBMCs 10k cells'
       this.$notifier.showMessage({
-        content: 'Example dataset loaded: 10x Genomics for human PBMCs',
+        content: 'Example dataset loaded: Human PBMCs 10k cells',
         color: 'success',
       })
     },
@@ -509,10 +612,18 @@ export default {
       this.$refs.form.reset()
     },
     resetValidation() {
+      console.log('reset validation')
       this.$refs.form.resetValidation()
     },
     async submit() {
-      if (!this.$refs.form.validate()) return
+      if (!this.$refs.form.validate()) {
+        this.$notifier.showMessage({
+          content: 'Form validation failed, please check your upload items.',
+          color: 'error',
+        })
+        this.$refs.form.resetValidation()
+        return
+      }
       this.dialog = true
       this.uploadStatus = 'Uploading ...'
       const formData = new FormData()
@@ -525,8 +636,8 @@ export default {
       formData.append('jobid', this.jobid)
       formData.append('species', this.speciesSelect)
       formData.append('description', this.description)
-      formData.append('expFile', this.expFile[0][0])
-      formData.append('labelFile', this.labelFile)
+      formData.append('expFile', 'exp')
+      formData.append('labelFile', 'label')
       formData.append('status', 'upload')
       this.$notifier.showMessage({
         content: 'Uploading data...',
@@ -549,12 +660,18 @@ export default {
             content: 'Jobid: ' + this.jobid + ' Upload success!',
             color: 'success',
           })
-          if (this.title === '10x Genomics for human PBMCs') {
+          if (this.title === 'Human Multiome PBMCs 10k cells') {
             this.$router.push({
               path: '/submit/multiome',
             })
+          } else if (
+            this.title === 'Human IFNB-Stimulated and Control PBMCs, 2800 cells'
+          ) {
+            this.$router.push({
+              path: '/submit/multiple-rna',
+            })
           } else {
-            this.$router.push(`submit/${this.jobid}`)
+            this.$router.push({ path: '/submit/single-rna' })
           }
         }, 3000)
       }
@@ -565,6 +682,22 @@ export default {
     removeMultipleDataset() {
       if (this.multipleDatasetsLength === 1) return
       this.multipleDatasetsLength--
+    },
+    switchTabs() {
+      this.resetValidation()
+    },
+    resetExpFile() {
+      this.resetValidation()
+      this.expFile = {
+        singleRna: [],
+        multiRna: [],
+        multiome: [],
+      }
+      this.labelFile = {
+        singleRna: null,
+        multiRna: null,
+        multiome: null,
+      }
     },
   },
 }

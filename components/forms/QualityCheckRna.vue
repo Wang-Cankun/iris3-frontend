@@ -93,8 +93,8 @@
                     Preprocessing
                   </p>
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">Cell filter</p>
-                    <v-tooltip top>
+                    ><p class="my-1 title-h4">Cell filter</p>
+                    <v-tooltip top class="my-0 py-0">
                       <template v-slot:activator="{ on }">
                         <v-icon color="primary" dark v-on="on"
                           >mdi-help-circle-outline</v-icon
@@ -107,12 +107,13 @@
                       v-model="cellFilter"
                       class="mr-2 pr-2"
                       outlined
+                      dense
                       background-color="white"
                     ></v-text-field
                   ></v-row>
 
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">Gene filter</p>
+                    ><p class="my-1 title-h4">Gene filter</p>
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
                         <v-icon color="primary" dark v-on="on"
@@ -126,14 +127,15 @@
                       v-model="geneFilter"
                       class="mr-2 pr-2"
                       outlined
+                      dense
                       background-color="white"
                     ></v-text-field
                   ></v-row>
 
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">Mitochondrial filter</p>
+                    ><p class="my-1 title-h4">Mitochondrial filter</p>
                     <v-tooltip top>
-                      <template v-slot:activator="{ on }">
+                      <template v-slot:activator="{ on }" class="ma-0 pa-0">
                         <v-icon color="primary" dark v-on="on"
                           >mdi-help-circle-outline</v-icon
                         >
@@ -146,10 +148,11 @@
                       v-model="mitoFilter"
                       class="mr-2 pr-2"
                       outlined
+                      dense
                       background-color="white"
                     ></v-text-field
                   ></v-row>
-
+                  <!--
                   <v-row class="ml-4"
                     ><p class="my-1 title-h4">Top variable genes</p>
                     <v-tooltip top>
@@ -166,9 +169,11 @@
                       v-model="nVariableFeatures"
                       class="mr-2 pr-2"
                       outlined
+                      dense
                       background-color="white"
                     ></v-text-field
                   ></v-row>
+                  -->
 
                   <v-row class="ml-4 mb-0 py-0"
                     ><p class="my-1 title-h4">Normalization</p>
@@ -195,17 +200,32 @@
                     ></v-select
                   ></v-col>
 
-                  <v-checkbox v-model="removeRibosome" class="ml-4">
+                  <v-checkbox v-model="removeRibosome" class="ml-4 my-0 py-0">
                     <template v-slot:label>
                       <div>
-                        Ribosome genes removal
+                        Remove ribosome genes
                         <v-tooltip top>
                           <template v-slot:activator="{ on }">
                             <v-icon color="primary" dark v-on="on"
                               >mdi-help-circle-outline</v-icon
                             >
                           </template>
-                          Remove ribosomal genes
+                          Remove ribosome genes#
+                        </v-tooltip>
+                      </div>
+                    </template>
+                  </v-checkbox>
+                  <v-checkbox v-model="removeSpikein" class="ml-4 my-0 py-0">
+                    <template v-slot:label>
+                      <div>
+                        Remove spike-in genes
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon color="primary" dark v-on="on"
+                              >mdi-help-circle-outline</v-icon
+                            >
+                          </template>
+                          Remove spike-in genes
                         </v-tooltip>
                       </div>
                     </template>
@@ -292,8 +312,8 @@
               :h="layout[4].h"
               :i="layout[4].i"
               :src="varGenesScatter"
-              :imagew="420"
-              :imageh="210"
+              :imagew="450"
+              :imageh="220"
               :title="layout[4].title"
             >
             </resize-image>
@@ -317,7 +337,7 @@
               :i="layout[6].i"
               :values="metadata.meta1_val"
               :name="metadata.meta1_name"
-              :title="metadata.meta1_title"
+              :title="'Metadata 1: ' + metadata.meta1_title[0]"
             ></pie-chart>
             <pie-chart
               :key="layout[7].i"
@@ -328,7 +348,7 @@
               :i="layout[7].i"
               :values="metadata.meta2_val"
               :name="metadata.meta2_name"
-              :title="metadata.meta2_title"
+              :title="'Metadata 2: ' + metadata.meta2_title[0]"
             ></pie-chart>
             <pie-chart
               :key="layout[8].i"
@@ -339,7 +359,7 @@
               :i="layout[8].i"
               :values="metadata.meta3_val"
               :name="metadata.meta3_name"
-              :title="metadata.meta3_title"
+              :title="'Metadata 3: ' + metadata.meta3_title[0]"
             ></pie-chart>
             <barplot
               :key="layout[9].i"
@@ -371,6 +391,62 @@
               :src="qcHist3"
               :title="layout[11].title"
             ></barplot>
+            <v-card class="ma-0"
+              ><grid-item
+                :x="layout[12].x"
+                :y="layout[12].y"
+                :w="layout[12].w"
+                :h="layout[12].h"
+                :i="layout[12].i"
+                class="grid-item-border"
+              >
+                <v-card-title class="primary white--text caption px-2 py-1"
+                  >Gene-gene correlation plot<v-spacer></v-spacer>
+                  <v-menu bottom left>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn dark icon v-bind="attrs" v-on="on">
+                        <v-icon>mdi-download-outline</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-title>Download</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu></v-card-title
+                >
+                <v-row
+                  ><v-col cols="6">
+                    <v-autocomplete
+                      v-model="geneCor1"
+                      class="ml-4"
+                      :items="genes"
+                      label="Gene 1"
+                    ></v-autocomplete>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-autocomplete
+                      v-model="geneCor2"
+                      class="ml-4"
+                      :items="genes"
+                      label="Gene 2"
+                    ></v-autocomplete>
+                  </v-col>
+                </v-row>
+                <v-row justify="center" class="mx-2 mb-2 mt-0">
+                  <v-btn
+                    class="mx-2 mb-2 mt-0"
+                    color="Primary"
+                    width="200"
+                    @click="runGeneCorPlot()"
+                    >Plot</v-btn
+                  >
+                </v-row>
+                <v-row v-if="geneCorPlot">
+                  <img :src="geneCorPlot" :width="450" :height="350" />
+                </v-row> </grid-item
+            ></v-card>
           </grid-layout>
         </v-col>
         <v-col cols="7"></v-col>
@@ -408,7 +484,7 @@ export default {
           w: 1,
           h: 1,
           i: '0',
-          title: '# of genes per cell',
+          title: 'Number of total read counts per cell',
         },
         {
           x: 1,
@@ -416,7 +492,7 @@ export default {
           w: 1,
           h: 1,
           i: '1',
-          title: 'Total # of counts per cell',
+          title: 'Number of expressed genes per cell',
         },
         {
           x: 2,
@@ -480,7 +556,7 @@ export default {
           w: 2,
           h: 1,
           i: '9',
-          title: '# of expressed genes in each cell',
+          title: 'Gene expression histogram',
         },
         {
           x: 2,
@@ -488,7 +564,7 @@ export default {
           w: 2,
           h: 1,
           i: '10',
-          title: '# of read counts in each cell',
+          title: 'Read counts histogram',
         },
         {
           x: 4,
@@ -496,11 +572,21 @@ export default {
           w: 2,
           h: 1,
           i: '11',
-          title: '# of cells for each gene',
+          title: 'Number of expressed genes among cells',
+        },
+
+        {
+          x: 2,
+          y: 3,
+          w: 2,
+          h: 2,
+          i: '12',
+          title: 'Gene-gene correlation',
         },
       ],
       tab: null,
       removeRibosome: false,
+      removeSpikein: false,
       title: '',
       cellFilter: '3',
       geneFilter: '200',
@@ -544,6 +630,10 @@ export default {
       selectionPayload: [],
       allIdents: [],
       selectedCells: [],
+      geneCor1: '',
+      geneCor2: '',
+      geneCorPlot: '',
+      genes: '',
     }
   },
   computed: {
@@ -684,8 +774,20 @@ export default {
       this.varGenesScatter = await ApiService.postCommand(
         'iris3/api/queue/var-genes-plot/'
       )
-      this.$nuxt.$loading.stop()
+      await this.$axios.post('iris3/api/queue/genes/').then((response) => {
+        this.genes = response.data
+      })
+      this.$nuxt.$loading.finish()
       this.qcComplete = true
+    },
+    async runGeneCorPlot() {
+      this.geneCorPlot = await ApiService.postCommand(
+        'iris3/api/queue/gene-correlation-plot/',
+        {
+          gene1: this.geneCor1,
+          gene2: this.geneCor2,
+        }
+      )
     },
   },
 }

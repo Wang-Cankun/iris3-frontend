@@ -1,29 +1,42 @@
 <template>
   <v-card class="ma-0"
     ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
-      <v-card-title class="primary white--text caption px-2 py-1"
+      <v-card-title
+        class="primary white--text caption px-2 py-1"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
         >{{ title }} <v-spacer></v-spacer>
-        <v-menu bottom left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
+        <div v-show="hover === true">
+          <v-tooltip top class="my-0 py-0">
+            <template v-slot:activator="{ on }">
+              <v-icon color="white" dark v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>Tooltip content</p>
+          </v-tooltip>
+          <v-menu bottom left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-download-outline</v-icon>
+              </v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download PNG</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadPDF">
-              <v-list-item-title>Download JPG</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadCSV">
-              <download-excel class="mr-4" :data="values" type="csv">
-                <v-list-item-title>Download file (CSV)</v-list-item-title>
-              </download-excel>
-            </v-list-item>
-          </v-list>
-        </v-menu></v-card-title
+            <v-list>
+              <v-list-item @click="downloadPNG">
+                <v-list-item-title>Download PNG</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="downloadPDF">
+                <v-list-item-title>Download JPG</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="downloadCSV">
+                <download-excel class="mr-4" :data="values" type="csv">
+                  <v-list-item-title>Download file (CSV)</v-list-item-title>
+                </download-excel>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div></v-card-title
       >
       <ECharts ref="chart" :option="option" /> </grid-item
   ></v-card>
@@ -40,7 +53,7 @@ export default {
   },
   props: {
     // src: { type: String, required: true },
-    title: { type: Array, required: true },
+    title: { type: String, required: true },
     name: { type: Array, required: true },
     values: { type: Array, required: true },
     w: { type: Number, required: true, default: 2 },
@@ -51,7 +64,7 @@ export default {
   },
   data() {
     return {
-      src: 1,
+      hover: false,
     }
   },
   computed: {

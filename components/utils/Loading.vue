@@ -24,6 +24,9 @@ export default {
     stop() {
       this.loading = false
     },
+    finish() {
+      this.loading = false
+    },
     fail(error) {
       this.error = error
     },

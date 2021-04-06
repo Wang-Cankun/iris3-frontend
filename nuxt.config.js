@@ -73,7 +73,6 @@ export default {
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     '@nuxtjs/auth',
-    '@nuxtjs/apollo',
   ],
   /*
    ** Axios module configuration
@@ -92,13 +91,6 @@ export default {
           user: { url: 'auth/profile', method: 'get', propertyName: 'info' },
           logout: false,
         },
-      },
-    },
-  },
-  apollo: {
-    clientConfigs: {
-      default: {
-        httpEndpoint: process.env.GRAPHQL_URL,
       },
     },
   },

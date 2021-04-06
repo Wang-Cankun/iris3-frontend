@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@nuxt/content": "^1.5.0",
-    "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.12.0",
     "echarts": "^5.0.2",
@@ -20,9 +19,11 @@
     "echarts-stat": "^1.2.0",
     "form-data": "^3.0.0",
     "nuxt": "^2.14.1",
+    "nuxt-dropzone": "^1.0.4",
     "nuxt-start": "^2.14.1",
     "vue-grid-layout": "^2.3.11",
-    "vue-json-excel": "^0.3.0"
+    "vue-json-excel": "^0.3.0",
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",

@@ -556,7 +556,7 @@
                           <v-menu bottom left>
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn dark icon v-bind="attrs" v-on="on">
-                                <v-icon>mdi-dots-vertical</v-icon>
+                                <v-icon>mdi-download-outline</v-icon>
                               </v-btn>
                             </template>
 
@@ -671,7 +671,7 @@
                           <v-menu bottom left>
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn dark icon v-bind="attrs" v-on="on">
-                                <v-icon>mdi-dots-vertical</v-icon>
+                                <v-icon>mdi-download-outline</v-icon>
                               </v-btn>
                             </template>
 
@@ -720,6 +720,70 @@
                           <img :src="violinGene" :width="400" :height="350" />
                           <img :src="featureGene" :width="400" :height="350" />
                         </v-row> </grid-item
+                    ></v-card>
+                    <v-card class="ma-0"
+                      ><grid-item
+                        :x="layout[3].x"
+                        :y="layout[3].y"
+                        :w="layout[3].w"
+                        :h="layout[3].h"
+                        :i="layout[3].i"
+                        class="grid-item-border"
+                      >
+                        <v-card-title
+                          class="primary white--text caption px-2 py-1"
+                          >Gene set enrichment <v-spacer></v-spacer>
+                          <v-menu bottom left>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn dark icon v-bind="attrs" v-on="on">
+                                <v-icon>mdi-download-outline</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-list>
+                              <v-list-item @click="downloadPDF">
+                                <v-list-item-title
+                                  >Download Table</v-list-item-title
+                                >
+                              </v-list-item>
+                            </v-list>
+                          </v-menu></v-card-title
+                        >
+                        <v-row
+                          ><v-col cols="6">
+                            <v-autocomplete
+                              v-model="ident1"
+                              class="ml-4"
+                              :items="currentIdentLevels"
+                              label="Group 1"
+                            ></v-autocomplete>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-autocomplete
+                              v-model="gseaDatabase"
+                              class="ml-4"
+                              :items="allGseaDatabases"
+                              label="Group 2"
+                            ></v-autocomplete> </v-col
+                        ></v-row>
+
+                        <v-row justify="center" class="mx-2 mb-2 mt-0">
+                          <v-btn
+                            class="mx-2 mb-2 mt-0"
+                            color="Primary"
+                            width="200"
+                            @click="runGSEA()"
+                            >Run</v-btn
+                          >
+                        </v-row>
+                        <v-data-table
+                          dense
+                          :headers="gseaHeaders"
+                          :items="gseaResult[0]"
+                          item-key="name"
+                          :items-per-page="5"
+                          class="elevation-1"
+                        ></v-data-table></grid-item
                     ></v-card>
                   </grid-layout>
                   <v-dialog v-model="addMetadataDialog" max-width="1200">
@@ -924,12 +988,11 @@ export default {
       { text: 'LogFC', value: 'avg_log2FC' },
       { text: 'Adj.p.value', value: 'p_val_adj' },
     ],
-    enrichHeaders: [
-      { text: 'Index', value: 'index' },
-      { text: 'Name', value: 'name' },
-      { text: 'Adjusted p-value', value: 'adjPvalue' },
-      { text: 'Odds ratio', value: 'odd' },
-      { text: 'Combined score', value: 'score' },
+    gseaHeaders: [
+      { text: 'pathway', value: 'pathway' },
+      { text: 'Adjusted p-value', value: 'padj' },
+      { text: 'NES', value: 'NES' },
+      { text: 'size', value: 'size' },
       { text: '', value: 'data-table-expand' },
     ],
     expandedKegg: [],
@@ -1004,6 +1067,13 @@ export default {
     // Renameing
     oldClusterName: '',
     newClusterName: '',
+    // GSEA
+    gseaDatabase: 'Hallmark',
+    allGseaDatabases: [
+      'Hallmark',
+      'C1: positional gene sets',
+      'C2: curated gene sets',
+    ],
   }),
   computed: {
     identList() {
@@ -1809,6 +1879,16 @@ export default {
         content: 'Running DE testing...',
         color: 'accent',
       })
+    },
+    async runGSEA() {
+      this.gseaResult = await ApiService.postCommand(
+        'iris3/api/queue/gsea-table/',
+        {
+          genes: this.currentIdent,
+          database: 'H',
+        }
+      )
+      console.log(this.gseaResult)
     },
     async runGenePlot() {
       this.$notifier.showMessage({

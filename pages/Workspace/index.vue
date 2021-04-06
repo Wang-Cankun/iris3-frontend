@@ -18,37 +18,37 @@
             <v-tabs-items v-model="tab">
               <!-- My projects tab -->
               <v-tab-item>
-                <v-card class="my-12" color="#BBDEFB" outlined rounded="lg">
+                <v-card class="my-12" color="#BBDEFB" outlined rounded>
                   <v-card-title class="justify-center"
                     >Project title</v-card-title
                   >
-                  <v-card outlined class="mx-6" height="100" rounded="lg">
+                  <v-card outlined class="mx-6" height="100" rounded>
                     <v-card-subtitle
                       >Here are project description</v-card-subtitle
                     >
                   </v-card>
                   <v-row class="ma-6" justify="space-around">
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >ID: P00001</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Owner: XXXX</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Created: 10/29/2020</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Species: Human</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >scRNA-Seq</v-card-title
                       ></v-card
@@ -70,37 +70,37 @@
 
               <!-- Saved projects tab -->
               <v-tab-item>
-                <v-card class="my-12" color="#BBDEFB" outlined rounded="lg">
+                <v-card class="my-12" color="#BBDEFB" outlined rounded>
                   <v-card-title class="justify-center"
                     >Project title</v-card-title
                   >
-                  <v-card outlined class="mx-6" height="100" rounded="lg">
+                  <v-card outlined class="mx-6" height="100" rounded>
                     <v-card-subtitle
                       >Here are project description</v-card-subtitle
                     >
                   </v-card>
                   <v-row class="ma-6" justify="space-around">
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >ID: P00001</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Owner: XXXX</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Created: 10/29/2020</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Species: Human</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >scRNA-Seq</v-card-title
                       ></v-card
@@ -119,37 +119,37 @@
                   </v-row>
                 </v-card>
 
-                <v-card class="my-12" color="#BBDEFB" outlined rounded="lg">
+                <v-card class="my-12" color="#BBDEFB" outlined rounded>
                   <v-card-title class="justify-center"
                     >Project title</v-card-title
                   >
-                  <v-card outlined class="mx-6" height="100" rounded="lg">
+                  <v-card outlined class="mx-6" height="100" rounded>
                     <v-card-subtitle
                       >Here are project description</v-card-subtitle
                     >
                   </v-card>
                   <v-row class="ma-6" justify="space-around">
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >ID: P00001</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Owner: XXXX</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Created: 10/29/2020</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >Species: Human</v-card-title
                       ></v-card
                     >
-                    <v-card outlined rounded="lg"
+                    <v-card outlined rounded
                       ><v-card-title class="justify-center"
                         >scRNA-Seq</v-card-title
                       ></v-card

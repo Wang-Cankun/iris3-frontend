@@ -1,199 +1,197 @@
 <template>
   <v-col class="mb-2" cols="12">
-    <v-tabs v-model="tab" color="primary" slider-color="purple">
-      <v-tab>RNA+ATAC matched dataset </v-tab>
-    </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item>
-        <v-card outlined>
-          <v-row>
-            <v-col cols="4">
-              <v-expansion-panels v-model="panel" multiple>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>
+    <v-card outlined>
+      <v-row>
+        <v-col cols="3">
+          <v-expansion-panels v-model="panel" multiple>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                Integrative clustering
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card class="py-3" outlined color="blue-grey lighten-5">
+                  <p class="subtitle-1 font-weight-bold text-center">
                     Data integration
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="py-3" outlined color="blue-grey lighten-5">
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Data integration
-                      </p>
-                      <v-row class="ml-4 mb-0 py-0"
-                        ><p class="my-1">Integration method</p>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>Integration method method:</p>
-                          <p>Which integration method to use? Default: HGY</p>
-                        </v-tooltip>
-                        <v-col class="py-0" cols="11"
-                          ><v-select
-                            v-model="integrationSelect"
-                            :items="integrationMethods"
-                            label=""
-                          ></v-select></v-col
-                      ></v-row>
 
-                      <v-row justify="center">
-                        <v-btn
-                          class="mx-2 my-4"
-                          color="Primary"
-                          width="150"
-                          @click="runIntegration()"
-                          >Run integration</v-btn
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-icon color="primary" dark v-on="on"
+                          >mdi-help-circle-outline</v-icon
                         >
-                      </v-row>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>
-                    Cell clustering
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="py-3" outlined color="blue-grey lighten-5">
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Cell clustering
-                      </p>
-                      <v-row class="ml-4 mb-0 py-0"
-                        ><p class="my-1">Dimension reduction</p>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>Dimension reduction methods:</p>
-                          <p>
-                            Which dimension reduction technique to use? Default:
-                            PCA
-                          </p>
-                        </v-tooltip>
-                        <v-col class="py-0" cols="11"
-                          ><v-select
-                            v-model="reductionSelect"
-                            :items="reductionMethods"
-                            label=""
-                          ></v-select></v-col
-                      ></v-row>
-                      <p class="ml-4 title-h4">
-                        Number of components
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>
-                            Determine the ‘dimensionality’ of the dataset, the
-                            top components represent a robust compression of the
-                            dataset. Default: 20.
-                          </p>
-                        </v-tooltip>
-                      </p>
-                      <v-text-field
-                        v-model="nPCs"
-                        class="px-6"
-                        outlined
-                        background-color="white"
-                      ></v-text-field>
-                      <v-row class="ml-4 mb-0 py-0"
-                        ><p class="my-1">Clustering method</p>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>Dimension reduction methods:</p>
-                          <p>
-                            Which dimension reduction technique to use? Default:
-                            PCA
-                          </p>
-                        </v-tooltip>
-                        <v-col class="py-0" cols="11"
-                          ><v-select
-                            v-model="clusteringSelect"
-                            :items="clusteringMethods"
-                            label=""
-                          ></v-select></v-col
-                      ></v-row>
-                      <p class="ml-4 title-h4">
-                        Resolution
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>
-                            Resolution for clustering in Seurat (form 0-1).
-                            Larger number will generate more clusters and
-                            smaller number will generate less clusters. Default:
-                            0.5.
-                          </p>
-                        </v-tooltip>
-                      </p>
-                      <v-text-field
-                        v-model="resolution"
-                        class="px-6"
-                        outlined
-                        background-color="white"
-                      ></v-text-field>
-                      <p class="ml-4 title-h4">
-                        Number of neighbors
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>
-                            Defines k for the k-nearest neighbor algorithm.
-                            Default: 20.
-                          </p>
-                        </v-tooltip>
-                      </p>
-                      <v-text-field
-                        v-model="neighbor"
-                        class="px-6"
-                        outlined
-                        background-color="white"
-                      ></v-text-field>
-                      <v-row justify="center">
-                        <v-btn
-                          class="mx-2 my-4"
-                          color="Primary"
-                          width="150"
-                          @click="runCellCluster()"
-                          >Cluster</v-btn
-                        >
-                      </v-row>
-                      <v-divider></v-divider>
-                      <div v-if="idents !== []">
-                        <p class="subtitle-1 font-weight-bold text-center">
-                          Merge clusters
-                        </p>
-                        <v-autocomplete
-                          v-model="currentIdentMerge"
-                          class="ml-4"
-                          :items="currentIdentLevels"
-                          label="Select clusters"
-                          multiple
-                        ></v-autocomplete>
-                        <v-row justify="center">
-                          <v-btn
-                            class="mx-2 my-4"
-                            color="Primary"
-                            width="150"
-                            @click="mergeIdents()"
-                            >MERGE</v-btn
+                      </template>
+                      <p>Data integration:</p>
+                      <p>Default: Velocity weighted method</p>
+                    </v-tooltip>
+                  </p>
+                  <v-row class="ml-4 mb-0 py-0">
+                    <v-col class="py-0" cols="11"
+                      ><v-select
+                        v-model="integrationSelect"
+                        :items="integrationMethods"
+                        label=""
+                      ></v-select></v-col
+                  ></v-row>
+                  <v-divider></v-divider>
+                  <v-card class="py-3" outlined color="blue-grey lighten-5">
+                    <p class="subtitle-1 font-weight-bold text-center">
+                      Cell clustering
+                    </p>
+                    <v-row class="ml-4 mb-0 py-0"
+                      ><p class="my-1">Dimension reduction</p>
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
                           >
-                        </v-row>
-                        <!--
+                        </template>
+                        <p>Dimension reduction methods:</p>
+                        <p>
+                          Which dimension reduction technique to use? Default:
+                          PCA
+                        </p>
+                      </v-tooltip>
+                      <v-col class="py-0" cols="11"
+                        ><v-select
+                          v-model="reductionSelect"
+                          :items="reductionMethods"
+                          label=""
+                        ></v-select></v-col
+                    ></v-row>
+                    <p class="ml-4 title-h4">
+                      Number of components
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>
+                          Determine the ‘dimensionality’ of the dataset, the top
+                          components represent a robust compression of the
+                          dataset. Default: 20.
+                        </p>
+                      </v-tooltip>
+                    </p>
+                    <v-text-field
+                      v-model="nPCs"
+                      class="px-6"
+                      outlined
+                      dense
+                      background-color="white"
+                    ></v-text-field>
+                    <v-row class="ml-4 mb-0 py-0"
+                      ><p class="my-1">Clustering method</p>
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>Dimension reduction methods:</p>
+                        <p>
+                          Which dimension reduction technique to use? Default:
+                          PCA
+                        </p>
+                      </v-tooltip>
+                      <v-col class="py-0" cols="11"
+                        ><v-select
+                          v-model="clusteringSelect"
+                          :items="clusteringMethods"
+                          label=""
+                        ></v-select></v-col
+                    ></v-row>
+                    <p class="ml-4 title-h4">
+                      Resolution
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>
+                          Resolution for clustering in Seurat (form 0-1). Larger
+                          number will generate more clusters and smaller number
+                          will generate less clusters. Default: 0.5.
+                        </p>
+                      </v-tooltip>
+                    </p>
+                    <v-text-field
+                      v-model="resolution"
+                      class="px-6"
+                      outlined
+                      background-color="white"
+                      dense
+                    ></v-text-field>
+                    <p class="ml-4 title-h4">
+                      Number of neighbors
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>
+                          Defines k for the k-nearest neighbor algorithm.
+                          Default: 20.
+                        </p>
+                      </v-tooltip>
+                    </p>
+                    <v-text-field
+                      v-model="neighbor"
+                      class="px-6"
+                      outlined
+                      background-color="white"
+                      dense
+                    ></v-text-field>
+                    <v-row justify="center">
+                      <v-btn
+                        class="mx-2 my-4"
+                        color="Primary"
+                        width="150"
+                        @click="runCellCluster()"
+                        >Cluster</v-btn
+                      >
+                    </v-row>
+                    <v-divider></v-divider>
+                  </v-card>
+                  <v-row justify="center">
+                    <v-btn
+                      class="mx-2 my-4"
+                      color="Primary"
+                      width="150"
+                      @click="runIntegration()"
+                      >Run</v-btn
+                    >
+                  </v-row>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                Cell clustering
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <div v-if="idents !== []">
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Merge clusters
+                  </p>
+                  <v-autocomplete
+                    v-model="currentIdentMerge"
+                    class="ml-4"
+                    :items="currentIdentLevels"
+                    label="Select clusters"
+                    multiple
+                  ></v-autocomplete>
+                  <v-row justify="center">
+                    <v-btn
+                      class="mx-2 my-4"
+                      color="Primary"
+                      width="150"
+                      @click="mergeIdents()"
+                      >MERGE</v-btn
+                    >
+                  </v-row>
+                  <!--
                         <p class="subtitle-1 font-weight-bold text-center">
                           Re-cluster
                         </p>
@@ -213,372 +211,366 @@
                             >RE-cluster</v-btn
                           >
                         </v-row>-->
-                      </div>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>
-                    Set active visualization
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content
-                    ><v-card class="py-3" outlined color="blue-grey lighten-5">
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Active embedding
-                      </p>
-                      <div class="d-flex justify-between">
-                        <v-select
-                          v-model="currentEmbedding"
-                          class="ml-4"
-                          :items="allEmbeddings"
-                          label="Select identity"
-                        ></v-select
-                        ><v-btn
-                          class="mx-2 my-4"
-                          color="Primary"
-                          width="150"
-                          dense
-                          @click="setActiveIdents()"
-                          >SET</v-btn
-                        >
-                      </div>
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Active assay
-                      </p>
-                      <div class="d-flex justify-between">
-                        <v-select
-                          v-model="currentAssay"
-                          class="ml-4"
-                          :items="allAssays"
-                          label="Select identity"
-                        ></v-select
-                        ><v-btn
-                          class="mx-2 my-4"
-                          color="Primary"
-                          width="150"
-                          dense
-                          @click="setActiveIdents()"
-                          >SET</v-btn
-                        >
-                      </div>
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Active cell category
-                      </p>
-                      <div class="d-flex justify-between">
-                        <v-select
-                          v-model="currentIdent"
-                          class="ml-4"
-                          :items="idents"
-                          label="Select identity"
-                        ></v-select
-                        ><v-btn
-                          class="mx-2 my-4"
-                          color="Primary"
-                          width="150"
-                          dense
-                          @click="setActiveIdents()"
-                          >SET</v-btn
-                        >
-                      </div>
-                      <v-row justify="center"> </v-row>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>
-                    Cell labeling
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="py-3" outlined color="blue-grey lighten-5">
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Cell labeling
-                      </p>
-
-                      <v-row class="mx-2 my-2 py-2">
-                        <p class="my-1 subtitle-2">
-                          Step 1: Create cell filters
-                        </p>
-                        <div class="d-flex flex">
-                          <v-text-field
-                            v-model="addGeneName"
-                            label="Gene"
-                            placeholder="Name"
-                            class="px-1"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-text-field
-                          ><v-select
-                            v-model="addGeneDirection"
-                            cols="3"
-                            :items="addGeneDirectionItems"
-                            label="Direction"
-                            class="px-1"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-select>
-                          <v-text-field
-                            v-model="addGeneThres"
-                            label="Thres"
-                            placeholder="Number"
-                            class="px-1"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-text-field>
-                        </div>
-                        <v-btn color="Primary" @click="addGeneFilter()"
-                          >Add gene filter</v-btn
-                        >
-                        <div class="d-flex flex mt-2">
-                          <v-select
-                            v-model="filterCategoryName"
-                            cols="3"
-                            :items="idents"
-                            label="Category"
-                            class="px-1 col-2"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-select>
-                          <v-select
-                            v-model="filterCategoryLevel"
-                            cols="3"
-                            :items="filterCategoryLevels"
-                            label="Cluster"
-                            class="px-1 col-2"
-                            outlined
-                            dense
-                            multiple
-                            background-color="white"
-                          ></v-select>
-                        </div>
-                        <v-btn color="Primary" @click="addClusterFilter()"
-                          >Add cluster filter</v-btn
-                        >
-
-                        <v-col class="py-0" cols="12">
-                          <p class="my-1">Filters applied:</p>
-                          <ul>
-                            <li
-                              v-for="(item, index) in filterPayload"
-                              :key="index"
-                            >
-                              <div v-if="item.type === 'gene'">
-                                {{ item.name }} {{ item.direction }}
-                                {{ item.thres }}
-                              </div>
-                              <div v-if="item.type === 'cluster'">
-                                {{ item.direction }} {{ item.category[0] }}:
-                                {{ item.level }}
-                              </div>
-                            </li>
-                          </ul></v-col
-                        >
-                      </v-row>
-                      <v-divider></v-divider>
-
-                      <v-row class="mx-2 my-2 py-2">
-                        <p class="my-1 subtitle-2">
-                          Step 2: Assign cells to new label
-                        </p>
-
-                        <v-col cols="8"
-                          ><v-text-field
-                            v-model="addCategoryName"
-                            label="Create new category"
-                            placeholder="Type categoty name"
-                            outlined
-                            hide-details="auto"
-                            background-color="white"
-                            dense
-                          ></v-text-field
-                        ></v-col>
-
-                        <v-col cols="4"
-                          ><v-btn @click="setCategory(addCategoryName)"
-                            >ADD</v-btn
-                          ></v-col
-                        >
-                        <v-col cols="12" class="my-0 py-0"
-                          ><p class="my-0">or</p></v-col
-                        >
-                        <v-col cols="8"
-                          ><v-select
-                            v-model="setExistingCategory"
-                            label="Select existing"
-                            :items="setExistingCategoryItems"
-                            outlined
-                            hide-details="auto"
-                            background-color="white"
-                            dense
-                          ></v-select
-                        ></v-col>
-                        <v-col cols="4"
-                          ><v-btn @click="setCategory(setExistingCategory)"
-                            >Set</v-btn
-                          ></v-col
-                        >
-                        <v-col cols="8"
-                          ><v-text-field
-                            v-model="addLabelName"
-                            label="Add new label"
-                            placeholder="Type label name"
-                            outlined
-                            hide-details="auto"
-                            background-color="white"
-                            dense
-                          ></v-text-field
-                        ></v-col>
-                        <v-btn
-                          class="mx-2 my-4"
-                          color="Accent"
-                          @click="assignCells()"
-                          >Assign cells</v-btn
-                        >
-                      </v-row>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>
-                    Cell selection
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="py-3" outlined color="blue-grey lighten-5">
-                      <p class="subtitle-1 font-weight-bold text-center">
-                        Cell selection
-                      </p>
-
-                      <v-row class="mx-2 my-2 py-2">
-                        <div class="d-flex flex">
-                          <v-text-field
-                            v-model="selectionGeneName"
-                            label="Gene"
-                            placeholder="Name"
-                            class="px-1"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-text-field
-                          ><v-select
-                            v-model="selectionGeneDirection"
-                            cols="3"
-                            :items="selectionGeneDirectionItems"
-                            label="Direction"
-                            class="px-1"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-select>
-                          <v-text-field
-                            v-model="selectionGeneThres"
-                            label="Thres"
-                            placeholder="Number"
-                            class="px-1"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-text-field>
-                        </div>
-                        <v-btn color="Primary" @click="addGeneSelection()"
-                          >Add gene filter</v-btn
-                        >
-                        <div class="d-flex flex mt-2">
-                          <v-select
-                            v-model="selectionCategoryName"
-                            cols="3"
-                            :items="idents"
-                            label="Category"
-                            class="px-1 col-2"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-select>
-                          <v-select
-                            v-model="selectionCategoryLevel"
-                            cols="3"
-                            :items="selectionCategoryLevels"
-                            label="Cluster"
-                            class="px-1 col-2"
-                            outlined
-                            dense
-                            multiple
-                            background-color="white"
-                          ></v-select>
-                        </div>
-                        <v-btn color="Primary" @click="addClusterSelection()"
-                          >Add cluster filter</v-btn
-                        >
-
-                        <v-col class="py-0" cols="12">
-                          <p class="my-1">Selections applied:</p>
-                          <ul>
-                            <li
-                              v-for="(item, index) in selectionPayload"
-                              :key="index"
-                            >
-                              <div v-if="item.type === 'gene'">
-                                {{ item.name }} {{ item.direction }}
-                                {{ item.thres }}
-                              </div>
-                              <div v-if="item.type === 'cluster'">
-                                {{ item.direction }} {{ item.category[0] }}:
-                                {{ item.level }}
-                              </div>
-                            </li>
-                          </ul></v-col
-                        >
-                      </v-row>
-
-                      <v-row class="mx-2 my-2 py-2">
-                        <v-btn
-                          class="mx-2 my-4"
-                          color="Accent"
-                          @click="subsetCells()"
-                          >Subset cells</v-btn
-                        >
-                        <v-btn
-                          class="mx-2 my-4"
-                          color="Accent"
-                          @click="restoreCells()"
-                          >Restore cells</v-btn
-                        >
-                      </v-row>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-            </v-col>
-            <v-col cols="8">
-              <div v-if="clusterResult !== ''">
-                <div>
-                  <grid-layout
-                    :layout.sync="layout"
-                    :col-num="6"
-                    :row-height="300"
-                    :is-draggable="true"
-                    :is-resizable="true"
-                    :is-mirrored="false"
-                    :vertical-compact="true"
-                    :margin="[10, 10]"
-                    :use-css-transforms="true"
-                  >
-                    <scatter
-                      :key="layout[0].i"
-                      :x="layout[0].x"
-                      :y="layout[0].y"
-                      :w="layout[0].w"
-                      :h="layout[0].h"
-                      :i="layout[0].i"
-                      :imagew="600"
-                      :imageh="550"
-                      :src="umapStatic"
-                      :title="layout[0].title"
+                </div>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                Set active visualization
+              </v-expansion-panel-header>
+              <v-expansion-panel-content
+                ><v-card class="py-3" outlined color="blue-grey lighten-5">
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Active embedding
+                  </p>
+                  <div class="d-flex justify-between">
+                    <v-select
+                      v-model="currentEmbedding"
+                      class="ml-4"
+                      :items="allEmbeddings"
+                      label="Select identity"
+                    ></v-select
+                    ><v-btn
+                      class="mx-2 my-4"
+                      color="Primary"
+                      width="150"
+                      dense
+                      @click="setActiveIdents()"
+                      >SET</v-btn
                     >
-                    </scatter>
-                    <!--
+                  </div>
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Active assay
+                  </p>
+                  <div class="d-flex justify-between">
+                    <v-select
+                      v-model="currentAssay"
+                      class="ml-4"
+                      :items="allAssays"
+                      label="Select identity"
+                    ></v-select
+                    ><v-btn
+                      class="mx-2 my-4"
+                      color="Primary"
+                      width="150"
+                      dense
+                      @click="setActiveIdents()"
+                      >SET</v-btn
+                    >
+                  </div>
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Active cell category
+                  </p>
+                  <div class="d-flex justify-between">
+                    <v-select
+                      v-model="currentIdent"
+                      class="ml-4"
+                      :items="idents"
+                      label="Select identity"
+                    ></v-select
+                    ><v-btn
+                      class="mx-2 my-4"
+                      color="Primary"
+                      width="150"
+                      dense
+                      @click="setActiveIdents()"
+                      >SET</v-btn
+                    >
+                  </div>
+                  <v-row justify="center"> </v-row>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                Cell labeling
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card class="py-3" outlined color="blue-grey lighten-5">
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Cell labeling
+                  </p>
+
+                  <v-row class="mx-2 my-2 py-2">
+                    <p class="my-1 subtitle-2">Step 1: Create cell filters</p>
+                    <div class="d-flex flex">
+                      <v-text-field
+                        v-model="addGeneName"
+                        label="Gene"
+                        placeholder="Name"
+                        class="px-1"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-text-field
+                      ><v-select
+                        v-model="addGeneDirection"
+                        cols="3"
+                        :items="addGeneDirectionItems"
+                        label="Direction"
+                        class="px-1"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-select>
+                      <v-text-field
+                        v-model="addGeneThres"
+                        label="Thres"
+                        placeholder="Number"
+                        class="px-1"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-text-field>
+                    </div>
+                    <v-btn color="Primary" @click="addGeneFilter()"
+                      >Add gene filter</v-btn
+                    >
+                    <div class="d-flex flex mt-2">
+                      <v-select
+                        v-model="filterCategoryName"
+                        cols="3"
+                        :items="idents"
+                        label="Category"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-select>
+                      <v-select
+                        v-model="filterCategoryLevel"
+                        cols="3"
+                        :items="filterCategoryLevels"
+                        label="Cluster"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        multiple
+                        background-color="white"
+                      ></v-select>
+                    </div>
+                    <v-btn color="Primary" @click="addClusterFilter()"
+                      >Add cluster filter</v-btn
+                    >
+
+                    <v-col class="py-0" cols="12">
+                      <p class="my-1">Filters applied:</p>
+                      <ul>
+                        <li v-for="(item, index) in filterPayload" :key="index">
+                          <div v-if="item.type === 'gene'">
+                            {{ item.name }} {{ item.direction }}
+                            {{ item.thres }}
+                          </div>
+                          <div v-if="item.type === 'cluster'">
+                            {{ item.direction }} {{ item.category[0] }}:
+                            {{ item.level }}
+                          </div>
+                        </li>
+                      </ul></v-col
+                    >
+                  </v-row>
+                  <v-divider></v-divider>
+
+                  <v-row class="mx-2 my-2 py-2">
+                    <p class="my-1 subtitle-2">
+                      Step 2: Assign cells to new label
+                    </p>
+
+                    <v-col cols="8"
+                      ><v-text-field
+                        v-model="addCategoryName"
+                        label="Create new category"
+                        placeholder="Type categoty name"
+                        outlined
+                        hide-details="auto"
+                        background-color="white"
+                        dense
+                      ></v-text-field
+                    ></v-col>
+
+                    <v-col cols="4"
+                      ><v-btn @click="setCategory(addCategoryName)"
+                        >ADD</v-btn
+                      ></v-col
+                    >
+                    <v-col cols="12" class="my-0 py-0"
+                      ><p class="my-0">or</p></v-col
+                    >
+                    <v-col cols="8"
+                      ><v-select
+                        v-model="setExistingCategory"
+                        label="Select existing"
+                        :items="setExistingCategoryItems"
+                        outlined
+                        hide-details="auto"
+                        background-color="white"
+                        dense
+                      ></v-select
+                    ></v-col>
+                    <v-col cols="4"
+                      ><v-btn @click="setCategory(setExistingCategory)"
+                        >Set</v-btn
+                      ></v-col
+                    >
+                    <v-col cols="8"
+                      ><v-text-field
+                        v-model="addLabelName"
+                        label="Add new label"
+                        placeholder="Type label name"
+                        outlined
+                        hide-details="auto"
+                        background-color="white"
+                        dense
+                      ></v-text-field
+                    ></v-col>
+                    <v-btn
+                      class="mx-2 my-4"
+                      color="Accent"
+                      @click="assignCells()"
+                      >Assign cells</v-btn
+                    >
+                  </v-row>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                Cell selection
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card class="py-3" outlined color="blue-grey lighten-5">
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Cell selection
+                  </p>
+
+                  <v-row class="mx-2 my-2 py-2">
+                    <div class="d-flex flex">
+                      <v-text-field
+                        v-model="selectionGeneName"
+                        label="Gene"
+                        placeholder="Name"
+                        class="px-1"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-text-field
+                      ><v-select
+                        v-model="selectionGeneDirection"
+                        cols="3"
+                        :items="selectionGeneDirectionItems"
+                        label="Direction"
+                        class="px-1"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-select>
+                      <v-text-field
+                        v-model="selectionGeneThres"
+                        label="Thres"
+                        placeholder="Number"
+                        class="px-1"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-text-field>
+                    </div>
+                    <v-btn color="Primary" @click="addGeneSelection()"
+                      >Add gene filter</v-btn
+                    >
+                    <div class="d-flex flex mt-2">
+                      <v-select
+                        v-model="selectionCategoryName"
+                        cols="3"
+                        :items="idents"
+                        label="Category"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-select>
+                      <v-select
+                        v-model="selectionCategoryLevel"
+                        cols="3"
+                        :items="selectionCategoryLevels"
+                        label="Cluster"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        multiple
+                        background-color="white"
+                      ></v-select>
+                    </div>
+                    <v-btn color="Primary" @click="addClusterSelection()"
+                      >Add cluster filter</v-btn
+                    >
+
+                    <v-col class="py-0" cols="12">
+                      <p class="my-1">Selections applied:</p>
+                      <ul>
+                        <li
+                          v-for="(item, index) in selectionPayload"
+                          :key="index"
+                        >
+                          <div v-if="item.type === 'gene'">
+                            {{ item.name }} {{ item.direction }}
+                            {{ item.thres }}
+                          </div>
+                          <div v-if="item.type === 'cluster'">
+                            {{ item.direction }} {{ item.category[0] }}:
+                            {{ item.level }}
+                          </div>
+                        </li>
+                      </ul></v-col
+                    >
+                  </v-row>
+
+                  <v-row class="mx-2 my-2 py-2">
+                    <v-btn
+                      class="mx-2 my-4"
+                      color="Accent"
+                      @click="subsetCells()"
+                      >Subset cells</v-btn
+                    >
+                    <v-btn
+                      class="mx-2 my-4"
+                      color="Accent"
+                      @click="restoreCells()"
+                      >Restore cells</v-btn
+                    >
+                  </v-row>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
+        <v-col cols="9">
+          <div v-if="clusterResult !== ''">
+            <div>
+              <grid-layout
+                :layout.sync="layout"
+                :col-num="6"
+                :row-height="300"
+                :is-draggable="true"
+                :is-resizable="true"
+                :is-mirrored="false"
+                :vertical-compact="true"
+                :margin="[10, 10]"
+                :use-css-transforms="true"
+              >
+                <scatter
+                  :key="layout[0].i"
+                  :x="layout[0].x"
+                  :y="layout[0].y"
+                  :w="layout[0].w"
+                  :h="layout[0].h"
+                  :i="layout[0].i"
+                  :imagew="600"
+                  :imageh="550"
+                  :src="umapStatic"
+                  :title="layout[0].title"
+                >
+                </scatter>
+                <!--
                     <scatter
                       :key="layout[0].i"
                       :x="layout[0].x"
@@ -594,274 +586,270 @@
                     >
                     </scatter>
 -->
-                    <v-card class="ma-0"
-                      ><grid-item
-                        :x="layout[1].x"
-                        :y="layout[1].y"
-                        :w="layout[1].w"
-                        :h="layout[1].h"
-                        :i="layout[1].i"
-                        class="grid-item-border"
-                      >
-                        <v-card-title
-                          class="primary white--text caption px-2 py-1"
-                          >Differntial expression testing <v-spacer></v-spacer>
-                          <v-menu bottom left>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn dark icon v-bind="attrs" v-on="on">
-                                <v-icon>mdi-dots-vertical</v-icon>
-                              </v-btn>
-                            </template>
-
-                            <v-list>
-                              <v-list-item @click="downloadPDF">
-                                <v-list-item-title
-                                  >Download Table</v-list-item-title
-                                >
-                              </v-list-item>
-                            </v-list>
-                          </v-menu></v-card-title
-                        >
-                        <v-row
-                          ><v-col cols="6">
-                            <v-autocomplete
-                              v-model="ident1"
-                              class="ml-4"
-                              :items="currentIdentLevels"
-                              label="Ident1"
-                            ></v-autocomplete>
-                          </v-col>
-                          <v-col cols="6">
-                            <v-autocomplete
-                              v-model="ident2"
-                              class="ml-4"
-                              :items="currentIdentLevels"
-                              label="Ident2"
-                            ></v-autocomplete> </v-col
-                        ></v-row>
-                        <v-row>
-                          <v-col cols="6">
-                            <p class="ml-4 mb-0 title-h4">
-                              Min cell percent
-                              <v-tooltip top>
-                                <template v-slot:activator="{ on }">
-                                  <v-icon color="primary" dark v-on="on"
-                                    >mdi-help-circle-outline</v-icon
-                                  >
-                                </template>
-                                <p>
-                                  Only test genes that are detected in a minimum
-                                  fraction of min.pct cells in either of the two
-                                  populations. Meant to speed up the function by
-                                  not testing genes that are very infrequently
-                                  expressed. Default is 0.2
-                                </p>
-                              </v-tooltip>
-                              <v-text-field
-                                v-model="minPct"
-                                class="px-0"
-                                outlined
-                                background-color="white"
-                              ></v-text-field>
-                            </p>
-                          </v-col>
-                          <v-col cols="6" class="ma-0">
-                            <p class="ml-4 mb-0 title-h4">
-                              LogFC threshold
-                              <v-tooltip top>
-                                <template v-slot:activator="{ on }">
-                                  <v-icon color="primary" dark v-on="on"
-                                    >mdi-help-circle-outline</v-icon
-                                  >
-                                </template>
-                                <p>
-                                  Limit testing to genes which show, on average,
-                                  at least X-fold difference (log-scale) between
-                                  the two groups of cells. Default is 0.25
-                                  Increasing logfc.threshold speeds up the
-                                  function, but can miss weaker signals.
-                                </p>
-                              </v-tooltip>
-                              <v-text-field
-                                v-model="minLfc"
-                                class="px-0"
-                                outlined
-                                background-color="white"
-                              ></v-text-field>
-                            </p>
-                          </v-col>
-                        </v-row>
-                        <v-row justify="center" class="mx-2 mb-2 mt-0">
-                          <v-btn
-                            class="mx-2 mb-2 mt-0"
-                            color="Primary"
-                            width="200"
-                            @click="runDeg()"
-                            >Update</v-btn
-                          >
-                        </v-row>
-                        <v-data-table
-                          dense
-                          :headers="headers"
-                          :items="deResult"
-                          item-key="name"
-                          :items-per-page="5"
-                          class="elevation-1"
-                        ></v-data-table></grid-item
-                    ></v-card>
-                    <v-card class="ma-0"
-                      ><grid-item
-                        :x="layout[2].x"
-                        :y="layout[2].y"
-                        :w="layout[2].w"
-                        :h="layout[2].h"
-                        :i="layout[2].i"
-                        class="grid-item-border"
-                      >
-                        <v-card-title
-                          class="primary white--text caption px-2 py-1"
-                          >Gene plots<v-spacer></v-spacer>
-                          <v-menu bottom left>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn dark icon v-bind="attrs" v-on="on">
-                                <v-icon>mdi-dots-vertical</v-icon>
-                              </v-btn>
-                            </template>
-
-                            <v-list>
-                              <v-list-item @click="downloadPDF">
-                                <v-list-item-title
-                                  >Download Table</v-list-item-title
-                                >
-                              </v-list-item>
-                            </v-list>
-                          </v-menu></v-card-title
-                        >
-                        <v-row
-                          ><v-col cols="6">
-                            <v-autocomplete
-                              v-model="gene"
-                              class="ml-4"
-                              :items="genes"
-                              label="Gene"
-                            ></v-autocomplete>
-                          </v-col>
-                          <v-col cols="6">
-                            <div v-if="idents != ''">
-                              <p class="subtitle-2 text--primary mx-4">
-                                Split the violin plots by:
-                              </p>
-                              <v-autocomplete
-                                v-model="violinSplit"
-                                class="ml-4"
-                                :items="idents"
-                                label="Select identity"
-                              ></v-autocomplete>
-                            </div>
-                          </v-col>
-                        </v-row>
-                        <v-row justify="center" class="mx-2 mb-2 mt-0">
-                          <v-btn
-                            class="mx-2 mb-2 mt-0"
-                            color="Primary"
-                            width="200"
-                            @click="runGenePlot()"
-                            >Plot</v-btn
-                          >
-                        </v-row>
-                        <v-row v-if="violinGene">
-                          <img :src="violinGene" :width="400" :height="350" />
-                          <img :src="featureGene" :width="400" :height="350" />
-                        </v-row> </grid-item
-                    ></v-card>
-                  </grid-layout>
-                  <v-dialog v-model="addMetadataDialog" max-width="1200">
-                    <v-card>
-                      <v-card-title>Annotate cell type</v-card-title>
-                      <v-divider class="my-2 py-2"></v-divider>
-                      <v-card-text>
-                        <v-row
-                          v-for="item in cellClusterArray"
-                          :key="item"
-                          class="my-0 py-0"
-                        >
-                          <v-col class="my-0 py-0" cols="4"
-                            >Cluster: {{ item.index }}
-                          </v-col>
-                          <v-col class="my-0 py-0" cols="6"
-                            >Cell type:
-                            <v-text-field
-                              v-model="newCellType[index]"
-                              outlined
-                              background-color="white"
-                            ></v-text-field
-                          ></v-col>
-                        </v-row>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-btn
-                          class="mx-2"
-                          color="primary"
-                          dark
-                          @click="addMetadata()"
-                        >
-                          Apply
-                        </v-btn>
-                        <v-btn
-                          color="grey darken-1"
-                          text
-                          @click="addMetadataDialog = false"
-                        >
-                          Cancel
-                        </v-btn>
-                        <v-spacer></v-spacer>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                  <v-dialog
-                    v-model="addTransferMetadataDialog"
-                    max-width="1200"
+                <v-card class="ma-0"
+                  ><grid-item
+                    :x="layout[1].x"
+                    :y="layout[1].y"
+                    :w="layout[1].w"
+                    :h="layout[1].h"
+                    :i="layout[1].i"
+                    class="grid-item-border"
                   >
-                    <v-card>
-                      <v-card-title
-                        >Reference based cell type annotation</v-card-title
-                      >
-                      <v-divider class="my-2 py-2"></v-divider>
-                      <v-card-text>
+                    <v-card-title class="primary white--text caption px-2 py-1"
+                      >Differntial expression testing <v-spacer></v-spacer>
+                      <v-menu bottom left>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn dark icon v-bind="attrs" v-on="on">
+                            <v-icon>mdi-download-outline</v-icon>
+                          </v-btn>
+                        </template>
+
+                        <v-list>
+                          <v-list-item @click="downloadPDF">
+                            <v-list-item-title
+                              >Download Table</v-list-item-title
+                            >
+                          </v-list-item>
+                        </v-list>
+                      </v-menu></v-card-title
+                    >
+                    <v-row
+                      ><v-col cols="6">
                         <v-autocomplete
-                          v-model="currentAtlas"
+                          v-model="ident1"
                           class="ml-4"
-                          :items="atlas"
-                          label="Select atlas data"
+                          :items="currentIdentLevels"
+                          label="Ident1"
                         ></v-autocomplete>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-btn
-                          class="mx-2"
-                          color="primary"
-                          dark
-                          @click="addReference()"
-                        >
-                          Apply
-                        </v-btn>
-                        <v-btn
-                          color="grey darken-1"
-                          text
-                          @click="addTransferMetadataDialog = false"
-                        >
-                          Cancel
-                        </v-btn>
-                        <v-spacer></v-spacer>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-autocomplete
+                          v-model="ident2"
+                          class="ml-4"
+                          :items="currentIdentLevels"
+                          label="Ident2"
+                        ></v-autocomplete> </v-col
+                    ></v-row>
+                    <v-row>
+                      <v-col cols="6">
+                        <p class="ml-4 mb-0 title-h4">
+                          Min cell percent
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="primary" dark v-on="on"
+                                >mdi-help-circle-outline</v-icon
+                              >
+                            </template>
+                            <p>
+                              Only test genes that are detected in a minimum
+                              fraction of min.pct cells in either of the two
+                              populations. Meant to speed up the function by not
+                              testing genes that are very infrequently
+                              expressed. Default is 0.2
+                            </p>
+                          </v-tooltip>
+                          <v-text-field
+                            v-model="minPct"
+                            class="px-0"
+                            outlined
+                            background-color="white"
+                            dense
+                          ></v-text-field>
+                        </p>
+                      </v-col>
+                      <v-col cols="6" class="ma-0">
+                        <p class="ml-4 mb-0 title-h4">
+                          LogFC threshold
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="primary" dark v-on="on"
+                                >mdi-help-circle-outline</v-icon
+                              >
+                            </template>
+                            <p>
+                              Limit testing to genes which show, on average, at
+                              least X-fold difference (log-scale) between the
+                              two groups of cells. Default is 0.25 Increasing
+                              logfc.threshold speeds up the function, but can
+                              miss weaker signals.
+                            </p>
+                          </v-tooltip>
+                          <v-text-field
+                            v-model="minLfc"
+                            class="px-0"
+                            outlined
+                            background-color="white"
+                            dense
+                          ></v-text-field>
+                        </p>
+                      </v-col>
+                    </v-row>
+                    <v-row justify="center" class="mx-2 mb-2 mt-0">
+                      <v-btn
+                        class="mx-2 mb-2 mt-0"
+                        color="Primary"
+                        width="200"
+                        @click="runDeg()"
+                        >Update</v-btn
+                      >
+                    </v-row>
+                    <v-data-table
+                      dense
+                      :headers="headers"
+                      :items="deResult"
+                      item-key="name"
+                      :items-per-page="5"
+                      class="elevation-1"
+                    ></v-data-table></grid-item
+                ></v-card>
+                <v-card class="ma-0"
+                  ><grid-item
+                    :x="layout[2].x"
+                    :y="layout[2].y"
+                    :w="layout[2].w"
+                    :h="layout[2].h"
+                    :i="layout[2].i"
+                    class="grid-item-border"
+                  >
+                    <v-card-title class="primary white--text caption px-2 py-1"
+                      >Gene plots<v-spacer></v-spacer>
+                      <v-menu bottom left>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn dark icon v-bind="attrs" v-on="on">
+                            <v-icon>mdi-download-outline</v-icon>
+                          </v-btn>
+                        </template>
+
+                        <v-list>
+                          <v-list-item @click="downloadPDF">
+                            <v-list-item-title
+                              >Download Table</v-list-item-title
+                            >
+                          </v-list-item>
+                        </v-list>
+                      </v-menu></v-card-title
+                    >
+                    <v-row
+                      ><v-col cols="6">
+                        <v-autocomplete
+                          v-model="gene"
+                          class="ml-4"
+                          :items="genes"
+                          label="Gene"
+                        ></v-autocomplete>
+                      </v-col>
+                      <v-col cols="6">
+                        <div v-if="idents != ''">
+                          <p class="subtitle-2 text--primary mx-4">
+                            Split the violin plots by:
+                          </p>
+                          <v-autocomplete
+                            v-model="violinSplit"
+                            class="ml-4"
+                            :items="idents"
+                            label="Select identity"
+                          ></v-autocomplete>
+                        </div>
+                      </v-col>
+                    </v-row>
+                    <v-row justify="center" class="mx-2 mb-2 mt-0">
+                      <v-btn
+                        class="mx-2 mb-2 mt-0"
+                        color="Primary"
+                        width="200"
+                        @click="runGenePlot()"
+                        >Plot</v-btn
+                      >
+                    </v-row>
+                    <v-row v-if="violinGene">
+                      <img :src="violinGene" :width="400" :height="350" />
+                      <img :src="featureGene" :width="400" :height="350" />
+                    </v-row> </grid-item
+                ></v-card>
+              </grid-layout>
+              <v-dialog v-model="addMetadataDialog" max-width="1200">
+                <v-card>
+                  <v-card-title>Annotate cell type</v-card-title>
+                  <v-divider class="my-2 py-2"></v-divider>
+                  <v-card-text>
+                    <v-row
+                      v-for="item in cellClusterArray"
+                      :key="item"
+                      class="my-0 py-0"
+                    >
+                      <v-col class="my-0 py-0" cols="4"
+                        >Cluster: {{ item.index }}
+                      </v-col>
+                      <v-col class="my-0 py-0" cols="6"
+                        >Cell type:
+                        <v-text-field
+                          v-model="newCellType[index]"
+                          outlined
+                          background-color="white"
+                          dense
+                        ></v-text-field
+                      ></v-col>
+                    </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      class="mx-2"
+                      color="primary"
+                      dark
+                      @click="addMetadata()"
+                    >
+                      Apply
+                    </v-btn>
+                    <v-btn
+                      color="grey darken-1"
+                      text
+                      @click="addMetadataDialog = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <v-dialog v-model="addTransferMetadataDialog" max-width="1200">
+                <v-card>
+                  <v-card-title
+                    >Reference based cell type annotation</v-card-title
+                  >
+                  <v-divider class="my-2 py-2"></v-divider>
+                  <v-card-text>
+                    <v-autocomplete
+                      v-model="currentAtlas"
+                      class="ml-4"
+                      :items="atlas"
+                      label="Select atlas data"
+                    ></v-autocomplete>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      class="mx-2"
+                      color="primary"
+                      dark
+                      @click="addReference()"
+                    >
+                      Apply
+                    </v-btn>
+                    <v-btn
+                      color="grey darken-1"
+                      text
+                      @click="addTransferMetadataDialog = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-col>
 </template>
 <script>
@@ -940,7 +928,6 @@ export default {
       { text: '', value: 'data-table-expand' },
     ],
     expandedKegg: [],
-    tab: null,
     title: '',
     panel: [0],
     nPCs: '20',
@@ -977,8 +964,8 @@ export default {
     currentAtlas: '',
     reductionSelect: 'PCA',
     reductionMethods: ['PCA'],
-    integrationSelect: 'HGT',
-    integrationMethods: ['HGT', 'Seurat'],
+    integrationSelect: 'Velocity weighted method',
+    integrationMethods: ['Velocity weighted method', 'Seurat-WNN'],
     clusteringSelect: 'Louvain',
     clusteringMethods: ['Louvain', 'K-means'],
     atlas: [
