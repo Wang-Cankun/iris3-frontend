@@ -56,6 +56,21 @@ export default {
   },
   computed: {
     option() {
+      this.graph.nodes.forEach((node) => {
+        if (node.category !== 'Gene') {
+          node.label = {
+            show: true,
+          }
+        } else {
+          node.label = {
+            show: false,
+          }
+          node.itemStyle = {
+            color: '#BDBDBD',
+          }
+        }
+      })
+
       return {
         title: {
           text: '',
@@ -85,6 +100,7 @@ export default {
             label: {
               position: 'right',
               formatter: '{b}',
+              show: true,
             },
             lineStyle: {
               color: 'source',

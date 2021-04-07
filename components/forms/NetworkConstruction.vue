@@ -21,7 +21,8 @@
                         <p>Select regulon to display</p>
                       </v-tooltip>
                     </p>
-                    Parent: {{ selectedTf }}
+                    Selected:
+                    {{ selectedTf }}
                     <selection
                       :all="tfList"
                       :selected.sync="selectedTf"
