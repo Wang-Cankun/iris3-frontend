@@ -5,7 +5,7 @@
 <script>
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
-import graph from 'static/json/les-miserables.json'
+import graph from 'static/json/test_network.json'
 
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
       })
       return {
         title: {
-          text: 'Les Miserables',
+          text: 'Example Regulon TF-Gene network',
           subtext: 'Circular layout',
           top: 'bottom',
           left: 'right',
@@ -62,17 +62,6 @@ export default {
             lineStyle: {
               color: 'source',
               curveness: 0.3,
-            },
-            emphasis: {
-              blurScope: 'global',
-              focus: 'adjacency',
-              label: {
-                position: 'right',
-                show: true,
-              },
-              lineStyle: {
-                width: 10,
-              },
             },
           },
         ],

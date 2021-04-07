@@ -11,10 +11,6 @@
         >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 3" step="3"
-          >Regulon prediction</v-stepper-step
-        >
-        <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 3" step="4"
           >Network construction</v-stepper-step
         >
       </v-stepper-header>
@@ -42,13 +38,7 @@
           <v-btn text @click="e1 = 1">Previous</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
-          <v-row><cell-annotation-form></cell-annotation-form></v-row>
-          <v-btn color="primary" @click="e1 = 4"> Continue </v-btn>
-          <v-btn text @click="e1 = 1">Previous</v-btn>
-        </v-stepper-content>
-        <v-stepper-content step="4">
-          <v-row><combine-regulon-form></combine-regulon-form></v-row>
-          <v-btn color="primary" @click="e1 = 5"> Continue </v-btn>
+          <v-row><network-form></network-form></v-row>
           <v-btn text @click="e1 = 2">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
@@ -58,16 +48,14 @@
 <script>
 import QualityCheck from '@/components/forms/QualityCheckRna.vue'
 import CellCluster from '@/components/forms/CellCluster.vue'
-import CellAnnotation from '@/components/forms/CellAnnotation.vue'
-import CombineRegulon from '@/components/forms/CombineRegulon.vue'
+import NetworkConstruction from '@/components/forms/NetworkConstruction.vue'
 import ProjectInfo from '~/components/forms/ProjectInfo'
 
 export default {
   components: {
     'qc-form': QualityCheck,
     'cell-cluster-form': CellCluster,
-    'cell-annotation-form': CellAnnotation,
-    'combine-regulon-form': CombineRegulon,
+    'network-form': NetworkConstruction,
     'project-info': ProjectInfo,
   },
   data() {

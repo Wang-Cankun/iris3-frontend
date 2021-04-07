@@ -486,7 +486,7 @@ export default {
       (v) => !!v || 'Field is required',
       (v) => (v && v.length <= 20) || 'Name must be less than 20 characters',
     ],
-    fileRules: [(v) => !!v || 'Field is required'],
+    fileRules: [true],
     selectRules: [(v) => !!v || 'Control data is required'],
     emailRules: [
       (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
