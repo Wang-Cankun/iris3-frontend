@@ -143,16 +143,28 @@
         <v-row>
           <v-col>
             <v-card class="ml-2" hover>
-              <v-card-title class="justify-center">scRNA-Seq</v-card-title>
+              <v-card-title class="justify-center"
+                >Single sample scRNA-Seq</v-card-title
+              >
               <v-col>
                 <v-row justify="center" class="mb-1">
-                  <v-btn color="primary" width="150" rounded>Example</v-btn>
+                  <v-btn
+                    color="primary"
+                    width="150"
+                    rounded
+                    to="/submit/single-rna"
+                    >Example</v-btn
+                  >
                 </v-row>
                 <v-row justify="center" class="mb-1"
                   ><v-btn color="primary" width="150" rounded>Learn more</v-btn>
                 </v-row>
                 <v-row justify="center" class="mb-1"
-                  ><v-btn color="primary" width="150" rounded
+                  ><v-btn
+                    color="primary"
+                    width="150"
+                    rounded
+                    to="/upload?type=single-rna"
                     >Get started</v-btn
                   >
                 </v-row>
@@ -167,13 +179,23 @@
 
               <v-col>
                 <v-row justify="center" class="mb-1">
-                  <v-btn color="primary" width="150" rounded>Example</v-btn>
+                  <v-btn
+                    color="primary"
+                    width="150"
+                    rounded
+                    to="/submit/multiple-rna"
+                    >Example</v-btn
+                  >
                 </v-row>
                 <v-row justify="center" class="mb-1"
                   ><v-btn color="primary" width="150" rounded>Learn more</v-btn>
                 </v-row>
                 <v-row justify="center" class="mb-1"
-                  ><v-btn color="primary" width="150" rounded
+                  ><v-btn
+                    color="primary"
+                    width="150"
+                    rounded
+                    to="/upload?type=multiple-rna"
                     >Get started</v-btn
                   >
                 </v-row>
@@ -187,13 +209,23 @@
               >
               <v-col>
                 <v-row justify="center" class="mb-1">
-                  <v-btn color="primary" width="150" rounded>Example</v-btn>
+                  <v-btn
+                    color="primary"
+                    width="150"
+                    rounded
+                    to="/submit/multiome"
+                    >Example</v-btn
+                  >
                 </v-row>
                 <v-row justify="center" class="mb-1"
                   ><v-btn color="primary" width="150" rounded>Learn more</v-btn>
                 </v-row>
                 <v-row justify="center" class="mb-1"
-                  ><v-btn color="primary" width="150" rounded
+                  ><v-btn
+                    color="primary"
+                    width="150"
+                    rounded
+                    to="/upload?type=multiome"
                     >Get started</v-btn
                   >
                 </v-row>
