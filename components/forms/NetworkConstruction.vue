@@ -180,7 +180,11 @@ export default {
           categories: tmpCategories,
         }
       } else {
-        return ExampleGraph
+        return {
+          nodes: [],
+          links: [],
+          categories: [],
+        }
       }
     },
 

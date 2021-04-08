@@ -1056,7 +1056,7 @@ export default {
     gseaResult: [],
     gseaDatabase: '',
     allGseaDatabases: [
-      { name: 'Hallmark gene sets', value: 'H' },
+      { name: 'Hallmark gene sets (H)', value: 'H' },
       { name: 'Positional gene sets (C1)', value: 'C1' },
       { name: 'Curated gene sets (C2)', value: 'C2' },
       { name: 'Regulatory target gene sets (C3)', value: 'C3' },
