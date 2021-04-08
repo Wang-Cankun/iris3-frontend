@@ -10,14 +10,13 @@
           >
             <v-card-title class="justify-center">
               <h1 class="text-h1">
-                <strong>IRIS3</strong>
+                <strong>DeepMAPS</strong>
               </h1>
             </v-card-title>
 
             <v-card-title class="justify-center">
               <div class="typewriter">
-                Integrated Cell-type-specific Regulon Inference Server from
-                Single-cell sequencing data
+                Deep learning based Multi-omics Analysis Portal for Single cells
               </div>
             </v-card-title>
 
