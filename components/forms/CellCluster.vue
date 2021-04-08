@@ -939,7 +939,7 @@ export default {
       {
         x: 0,
         y: 2,
-        w: 3,
+        w: 4,
         h: 2,
         i: '2',
         title: 'Plotting genes',
@@ -947,7 +947,7 @@ export default {
       {
         x: 3,
         y: 2,
-        w: 3,
+        w: 2,
         h: 2,
         i: '3',
         title: 'Cell type annotation',

@@ -911,7 +911,7 @@ export default {
       {
         x: 0,
         y: 2,
-        w: 3,
+        w: 4,
         h: 2,
         i: '2',
         title: 'Plotting genes',
@@ -919,10 +919,10 @@ export default {
       {
         x: 3,
         y: 2,
-        w: 3,
+        w: 2,
         h: 2,
         i: '3',
-        title: 'Cell type annotation',
+        title: 'GSEA',
       },
     ],
     degList: [
@@ -1708,12 +1708,20 @@ export default {
               })
           }, 3000)
         })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot gene error!',
-            color: 'error',
-          })
+      await this.$axios
+        .post('deepmaps/api/queue/feature-gene/', {
+          gene: this.gene,
+        })
+        .then((response) => {
+          setTimeout(async () => {
+            await this.$axios
+              .get('deepmaps/api/queue/' + response.data.id)
+              .then((response) => {
+                this.featureGene = response.data.returnvalue
+                this.timeElapsed =
+                  (response.data.finishedOn - response.data.processedOn) / 1000
+              })
+          }, 3000)
         })
     },
     async showDotPlot() {
