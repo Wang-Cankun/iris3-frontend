@@ -73,68 +73,70 @@
                         label=""
                       ></v-select></v-col
                   ></v-row>
-                  <p class="ml-4 title-h4">
-                    Number of components
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-icon color="primary" dark v-on="on"
-                          >mdi-help-circle-outline</v-icon
-                        >
-                      </template>
-                      <p>
-                        Determine the ‘dimensionality’ of the dataset, the top
-                        components represent a robust compression of the
-                        dataset. Default: 20.
-                      </p>
-                    </v-tooltip>
-                  </p>
-                  <v-text-field
-                    v-model="nPCs"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Resolution
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-icon color="primary" dark v-on="on"
-                          >mdi-help-circle-outline</v-icon
-                        >
-                      </template>
-                      <p>
-                        Resolution for clustering in Seurat (form 0-1). Larger
-                        number will generate more clusters and smaller number
-                        will generate less clusters. Default: 0.5.
-                      </p>
-                    </v-tooltip>
-                  </p>
-                  <v-text-field
-                    v-model="resolution"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
-                  <p class="ml-4 title-h4">
-                    Number of neighbors
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-icon color="primary" dark v-on="on"
-                          >mdi-help-circle-outline</v-icon
-                        >
-                      </template>
-                      <p>
-                        Defines k for the k-nearest neighbor algorithm. Default:
-                        20.
-                      </p>
-                    </v-tooltip>
-                  </p>
-                  <v-text-field
-                    v-model="neighbor"
-                    class="px-6"
-                    outlined
-                    background-color="white"
-                  ></v-text-field>
+                  <div v-if="reductionSelect === 'PCA'">
+                    <p class="ml-4 title-h4">
+                      Number of components
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>
+                          Determine the ‘dimensionality’ of the dataset, the top
+                          components represent a robust compression of the
+                          dataset. Default: 20.
+                        </p>
+                      </v-tooltip>
+                    </p>
+                    <v-text-field
+                      v-model="nPCs"
+                      class="px-6"
+                      outlined
+                      background-color="white"
+                    ></v-text-field>
+                    <p class="ml-4 title-h4">
+                      Resolution
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>
+                          Resolution for clustering in Seurat (form 0-1). Larger
+                          number will generate more clusters and smaller number
+                          will generate less clusters. Default: 0.5.
+                        </p>
+                      </v-tooltip>
+                    </p>
+                    <v-text-field
+                      v-model="resolution"
+                      class="px-6"
+                      outlined
+                      background-color="white"
+                    ></v-text-field>
+                    <p class="ml-4 title-h4">
+                      Number of neighbors
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>
+                          Defines k for the k-nearest neighbor algorithm.
+                          Default: 20.
+                        </p>
+                      </v-tooltip>
+                    </p>
+                    <v-text-field
+                      v-model="neighbor"
+                      class="px-6"
+                      outlined
+                      background-color="white"
+                    ></v-text-field>
+                  </div>
                   <v-row justify="center">
                     <v-btn
                       class="mx-2 my-4"
@@ -144,6 +146,7 @@
                       >Cluster</v-btn
                     >
                   </v-row>
+                  <!--
                   <v-divider></v-divider>
                   <div v-if="idents !== []">
                     <p class="subtitle-1 font-weight-bold text-center">
@@ -165,7 +168,7 @@
                         >MERGE</v-btn
                       >
                     </v-row>
-                    <!--
+                   
                         <p class="subtitle-1 font-weight-bold text-center">
                           Re-cluster
                         </p>
@@ -184,8 +187,8 @@
                             @click="mergeIdents()"
                             >RE-cluster</v-btn
                           >
-                        </v-row>-->
-                  </div>
+                        </v-row>
+                  </div>-->
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -253,6 +256,33 @@
                   <v-row class="mx-2 my-2 py-2">
                     <p class="my-1 subtitle-2">Step 1: Create cell filters</p>
                     <div class="d-flex flex">
+                      <v-select
+                        v-model="filterCategoryName"
+                        cols="3"
+                        :items="idents"
+                        label="Category"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-select>
+                      <v-select
+                        v-model="filterCategoryLevel"
+                        cols="3"
+                        :items="filterCategoryLevels"
+                        label="Cluster"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        multiple
+                        background-color="white"
+                      ></v-select>
+                    </div>
+                    <v-btn color="Primary" @click="addClusterFilter()"
+                      >Add cluster filter</v-btn
+                    >
+
+                    <div class="d-flex flex mt-4">
                       <v-autocomplete
                         v-model="addGeneName"
                         class="px-1"
@@ -284,32 +314,6 @@
                     </div>
                     <v-btn color="Primary" @click="addGeneFilter()"
                       >Add gene filter</v-btn
-                    >
-                    <div class="d-flex flex mt-2">
-                      <v-select
-                        v-model="filterCategoryName"
-                        cols="3"
-                        :items="idents"
-                        label="Category"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-select
-                        v-model="filterCategoryLevel"
-                        cols="3"
-                        :items="filterCategoryLevels"
-                        label="Cluster"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        multiple
-                        background-color="white"
-                      ></v-select>
-                    </div>
-                    <v-btn color="Primary" @click="addClusterFilter()"
-                      >Add cluster filter</v-btn
                     >
 
                     <v-col class="py-0" cols="12">
@@ -386,6 +390,33 @@
 
                   <v-row class="mx-2 my-2 py-2">
                     <div class="d-flex flex">
+                      <v-select
+                        v-model="selectionCategoryName"
+                        cols="3"
+                        :items="idents"
+                        label="Category"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        background-color="white"
+                      ></v-select>
+                      <v-select
+                        v-model="selectionCategoryLevel"
+                        cols="3"
+                        :items="selectionCategoryLevels"
+                        label="Cluster"
+                        class="px-1 col-2"
+                        outlined
+                        dense
+                        multiple
+                        background-color="white"
+                      ></v-select>
+                    </div>
+                    <v-btn color="Primary" @click="addClusterSelection()"
+                      >Add cluster filter</v-btn
+                    >
+
+                    <div class="d-flex flex mt-4">
                       <v-autocomplete
                         v-model="selectionGeneName"
                         class="px-1"
@@ -417,32 +448,6 @@
                     </div>
                     <v-btn color="Primary" @click="addGeneSelection()"
                       >Add gene filter</v-btn
-                    >
-                    <div class="d-flex flex mt-2">
-                      <v-select
-                        v-model="selectionCategoryName"
-                        cols="3"
-                        :items="idents"
-                        label="Category"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-select
-                        v-model="selectionCategoryLevel"
-                        cols="3"
-                        :items="selectionCategoryLevels"
-                        label="Cluster"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        multiple
-                        background-color="white"
-                      ></v-select>
-                    </div>
-                    <v-btn color="Primary" @click="addClusterSelection()"
-                      >Add cluster filter</v-btn
                     >
 
                     <v-col class="py-0" cols="12">
@@ -732,22 +737,21 @@
                         </v-list>
                       </v-menu></v-card-title
                     >
-                    <v-row
-                      ><v-col cols="6">
-                        <v-autocomplete
-                          v-model="ident1"
-                          class="ml-4"
-                          :items="currentIdentLevels"
-                          label="Group 1"
-                        ></v-autocomplete>
+                    <v-row>
+                      <v-col cols="12"
+                        >Perform GSEA using the above DEGs
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="12">
                         <v-autocomplete
                           v-model="gseaDatabase"
                           class="ml-4"
                           :items="allGseaDatabases"
-                          label="Group 2"
-                        ></v-autocomplete> </v-col
+                          label="MSigDB database"
+                          return-object
+                          item-text="name"
+                          item-value="value"
+                        >
+                        </v-autocomplete> </v-col
                     ></v-row>
 
                     <v-row justify="center" class="mx-2 mb-2 mt-0">
@@ -759,14 +763,16 @@
                         >Run</v-btn
                       >
                     </v-row>
-                    <v-data-table
-                      dense
-                      :headers="gseaHeaders"
-                      :items="gseaResult[0]"
-                      item-key="name"
-                      :items-per-page="5"
-                      class="elevation-1"
-                    ></v-data-table></grid-item
+                    <div v-if="gseaResult.length">
+                      <v-data-table
+                        dense
+                        :headers="gseaHeaders"
+                        :items="gseaResult[0]"
+                        item-key="name"
+                        :items-per-page="5"
+                        class="elevation-1"
+                      ></v-data-table>
+                    </div> </grid-item
                 ></v-card>
               </grid-layout>
               <v-dialog v-model="addMetadataDialog" max-width="1200">
@@ -1047,11 +1053,17 @@ export default {
     oldClusterName: '',
     newClusterName: '',
     // GSEA
-    gseaDatabase: 'Hallmark',
+    gseaResult: [],
+    gseaDatabase: '',
     allGseaDatabases: [
-      'Hallmark',
-      'C1: positional gene sets',
-      'C2: curated gene sets',
+      { name: 'Hallmark gene sets', value: 'H' },
+      { name: 'Positional gene sets (C1)', value: 'C1' },
+      { name: 'Curated gene sets (C2)', value: 'C2' },
+      { name: 'Regulatory target gene sets (C3)', value: 'C3' },
+      { name: 'Computational gene sets (C4)', value: 'C4' },
+      { name: 'Ontology gene sets (C5)', value: 'C5' },
+      { name: 'Oncogenic signature gene sets (C6)', value: 'C6' },
+      { name: 'Immunologic signature gene sets (C7)', value: 'C7' },
     ],
   }),
   computed: {
@@ -1086,22 +1098,18 @@ export default {
     },
   },
   watch: {
-    deg() {
-      if (this.deg) {
-        this.sendKegg(this.deg)
-      }
-    },
+    deg() {},
   },
   methods: {
     async mergeIdents() {
       await this.$axios
-        .post('iris3/api/queue/merge-idents/', {
+        .post('deepmaps/api/queue/merge-idents/', {
           newClusterIds: this.currentIdentMerge,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.currentIdent = response.data.returnvalue.new_ident
@@ -1126,7 +1134,7 @@ export default {
             color: 'error',
           })
         })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
@@ -1135,7 +1143,7 @@ export default {
       await this.setActiveIdents(this.currentIdent)
       setTimeout(async () => {
         this.umapStatic = await ApiService.postCommand(
-          'iris3/api/queue/umap-static/',
+          'deepmaps/api/queue/umap-static/',
           {
             categoryName: this.currentIdent,
           }
@@ -1146,13 +1154,13 @@ export default {
     async setActiveIdents(currentIdent) {
       this.currentIdentMerge = []
       await this.$axios
-        .post('iris3/api/queue/set-idents/', {
+        .post('deepmaps/api/queue/set-idents/', {
           name: currentIdent,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.currentIdentLevels = response.data.returnvalue
@@ -1177,11 +1185,11 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/umap-cluster/')
+        .post('deepmaps/api/queue/umap-cluster/')
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapStatic = response.data.returnvalue
@@ -1205,7 +1213,7 @@ export default {
           })
         })
 
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
@@ -1213,13 +1221,13 @@ export default {
       })
 
       await this.$axios
-        .post('iris3/api/queue/umap-static/', {
+        .post('deepmaps/api/queue/umap-static/', {
           categoryName: this.currentIdent,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapStatic = response.data.returnvalue
@@ -1250,7 +1258,7 @@ export default {
       })
 
       await this.$axios
-        .post('iris3/api/queue/cluster/', {
+        .post('deepmaps/api/queue/cluster/', {
           nPCs: this.nPCs,
           resolution: this.resolution,
           neighbor: this.neighbor,
@@ -1258,7 +1266,7 @@ export default {
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.resHistory.push(this.resolution)
@@ -1277,13 +1285,13 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/set-idents/', {
+        .post('deepmaps/api/queue/set-idents/', {
           name: this.currentIdent,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.currentIdentLevels = response.data.returnvalue
@@ -1308,11 +1316,11 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/umap-cluster/')
+        .post('deepmaps/api/queue/umap-cluster/')
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapCluster = response.data.returnvalue
@@ -1337,13 +1345,13 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/umap-static/', {
+        .post('deepmaps/api/queue/umap-static/', {
           categoryName: 'seurat_clusters',
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapStatic = response.data.returnvalue
@@ -1369,13 +1377,13 @@ export default {
         })
       /*
       await this.$axios
-        .post('iris3/api/queue/umap-gene/', {
+        .post('deepmaps/api/queue/umap-gene/', {
           gene: this.gene,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapGene = response.data.returnvalue
@@ -1397,11 +1405,11 @@ export default {
 */
 
       await this.$axios
-        .post('iris3/api/queue/select-category/')
+        .post('deepmaps/api/queue/select-category/')
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.setExistingCategoryItems =
@@ -1426,10 +1434,10 @@ export default {
           })
         })
 
-      await this.$axios.post('iris3/api/queue/genes/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/genes/').then((response) => {
         this.genes = response.data
       })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
@@ -1439,20 +1447,20 @@ export default {
 
     async renameCluster() {
       this.currentIdentLevels.new_levels = await ApiService.postCommand(
-        'iris3/api/queue/rename-idents/',
+        'deepmaps/api/queue/rename-idents/',
         {
           old_name: this.oldClusterName,
           new_name: this.newClusterName,
         }
       )
       this.umapStatic = await ApiService.postCommand(
-        'iris3/api/queue/umap-static/',
+        'deepmaps/api/queue/umap-static/',
         {
           categoryName: this.currentIdent,
         }
       )
       this.currentIdentLevels = await ApiService.postCommand(
-        'iris3/api/queue/set-idents/',
+        'deepmaps/api/queue/set-idents/',
         {
           name: this.currentIdent,
         }
@@ -1460,7 +1468,7 @@ export default {
 
       this.oldClusterName = ''
       this.newClusterName = ''
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
@@ -1468,20 +1476,20 @@ export default {
       })
     },
     async setCategory(name) {
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
       await this.$axios
-        .post('iris3/api/queue/select-category/', {
+        .post('deepmaps/api/queue/select-category/', {
           categoryName: name,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.currentIdent = response.data.returnvalue.active_category
@@ -1575,12 +1583,12 @@ export default {
       }
       console.log(payload)
       await this.$axios
-        .post('iris3/api/queue/select-cells/', payload)
+        .post('deepmaps/api/queue/select-cells/', payload)
         .then((response) => {
           let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.filterPayload = []
@@ -1602,13 +1610,13 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/umap-static/', {
+        .post('deepmaps/api/queue/umap-static/', {
           categoryName: this.setExistingCategory,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapStatic = response.data.returnvalue
@@ -1695,14 +1703,14 @@ export default {
         selectionPayload: this.selectionPayload,
       })
       await this.$axios
-        .post('iris3/api/queue/subset-cells/', {
+        .post('deepmaps/api/queue/subset-cells/', {
           selectionPayload: this.selectionPayload,
         })
         .then((response) => {
           let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.selectionPayload = []
@@ -1724,13 +1732,13 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/umap-static/', {
+        .post('deepmaps/api/queue/umap-static/', {
           categoryName: this.currentIdent,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapStatic = response.data.returnvalue
@@ -1759,14 +1767,14 @@ export default {
 
     async restoreCells() {
       await this.$axios
-        .post('iris3/api/queue/set-obj/', {
+        .post('deepmaps/api/queue/set-obj/', {
           type: 'full',
         })
         .then((response) => {
           let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   clearInterval(checkComplete)
@@ -1785,13 +1793,13 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/umap-static/', {
+        .post('deepmaps/api/queue/umap-static/', {
           categoryName: this.currentIdent,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapStatic = response.data.returnvalue
@@ -1820,7 +1828,7 @@ export default {
     async runDeg() {
       this.deResult = []
       await this.$axios
-        .post('iris3/api/queue/deg/', {
+        .post('deepmaps/api/queue/deg/', {
           ident1: this.ident1,
           ident2: this.ident2,
           min_pct: this.minPct,
@@ -1830,7 +1838,7 @@ export default {
           let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.deResult = response.data.returnvalue[0]
@@ -1860,14 +1868,24 @@ export default {
       })
     },
     async runGSEA() {
-      this.gseaResult = await ApiService.postCommand(
-        'iris3/api/queue/gsea-table/',
-        {
-          genes: this.currentIdent,
-          database: 'H',
-        }
-      )
-      console.log(this.gseaResult)
+      if (!this.deResult.length) {
+        this.$notifier.showMessage({
+          content: 'Please run DE testing first!',
+          color: 'error',
+        })
+      } else {
+        this.$notifier.showMessage({
+          content: 'Running GSEA...',
+          color: 'accent',
+        })
+        this.gseaResult = await ApiService.postCommand(
+          'deepmaps/api/queue/gsea-table/',
+          {
+            database: this.gseaDatabase.value,
+          }
+        )
+        console.log(this.gseaResult)
+      }
     },
     async runGenePlot() {
       this.$notifier.showMessage({
@@ -1875,14 +1893,14 @@ export default {
         color: 'accent',
       })
       await this.$axios
-        .post('iris3/api/queue/violin-gene/', {
+        .post('deepmaps/api/queue/violin-gene/', {
           gene: this.gene,
           split: this.violinSplit,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.violinGene = response.data.returnvalue
                 this.timeElapsed =
@@ -1891,13 +1909,13 @@ export default {
           }, 3000)
         })
       await this.$axios
-        .post('iris3/api/queue/feature-gene/', {
+        .post('deepmaps/api/queue/feature-gene/', {
           gene: this.gene,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.featureGene = response.data.returnvalue
                 this.timeElapsed =
@@ -1908,13 +1926,13 @@ export default {
     },
     async showDotPlot() {
       await this.$axios
-        .post('iris3/api/queue/dot-plot/', {
+        .post('deepmaps/api/queue/dot-plot/', {
           top: 3,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.dotPlot = response.data.returnvalue
                 this.timeElapsed =
@@ -1932,13 +1950,13 @@ export default {
     },
     async annotateCellType() {
       await this.$axios
-        .post('iris3/api/queue/dot-plot/', {
+        .post('deepmaps/api/queue/dot-plot/', {
           top: 3,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.dotPlot = response.data.returnvalue
                 this.timeElapsed =
@@ -1953,49 +1971,12 @@ export default {
             color: 'error',
           })
         })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
-    },
-    async sendKegg(genes) {
-      const geneSetLibrary = 'KEGG_2019_Mouse'
-      const formData = new FormData()
-      formData.append('method', 'post')
-      formData.append('name', 'list')
-      formData.append('enctype', 'multipart/form-data')
-      formData.append('list', genes.join('\n'))
-      formData.append('description', 'test test')
-      const geneListEnrichrId = await this.$axios
-        .post('https://amp.pharm.mssm.edu/Enrichr/addList', formData)
-        .then(function (response) {
-          return response.data.userListId
-        })
-      const enrichrResult = await this.$axios
-        .get(
-          'https://amp.pharm.mssm.edu/Enrichr/enrich?userListId=' +
-            geneListEnrichrId +
-            '&backgroundType=' +
-            geneSetLibrary
-        )
-        .then(function (response) {
-          return response.data
-        })
-
-      this.keggResult = enrichrResult.KEGG_2019_Mouse.map((value) => ({
-        index: value[0],
-        name: value[1],
-        pvalue: value[2],
-        odd: value[3].toFixed(2),
-        score: value[4].toFixed(2),
-        genes: value[5],
-        adjPvalue: value[6].toExponential(4),
-        key8: value[7],
-      }))
-
-      return enrichrResult
     },
     runQubic() {
       this.$notifier.showMessage({
@@ -2019,13 +2000,13 @@ export default {
       })
       this.addMetadataDialog = false
       await this.$axios
-        .post('iris3/api/queue/annotate-cell-type/', {
+        .post('deepmaps/api/queue/annotate-cell-type/', {
           gene: this.gene,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.annotateResult = response.data.returnvalue
                 this.timeElapsed =
@@ -2040,7 +2021,7 @@ export default {
             color: 'error',
           })
         })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data
@@ -2054,13 +2035,13 @@ export default {
       })
       this.addTransferMetadataDialog = false
       await this.$axios
-        .post('iris3/api/queue/transfer-cell-type/', {
+        .post('deepmaps/api/queue/transfer-cell-type/', {
           gene: this.gene,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.annotateResult = response.data.returnvalue
                 this.timeElapsed =
@@ -2075,7 +2056,7 @@ export default {
             color: 'error',
           })
         })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
         this.violinSplitItems = response.data

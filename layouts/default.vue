@@ -4,14 +4,7 @@
       <!-- logo image -->
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">
-          <img
-            width="150px"
-            max-width="150px"
-            height="40px"
-            max-height="40px"
-            class="mt-2"
-            src="img/iris3_logo_v2.png"
-          />
+          <span class="title">DeepMAPS</span>
         </router-link>
       </v-toolbar-title>
 
@@ -275,7 +268,7 @@
                 <!-- Version and Data information -->
                 <v-divider></v-divider>
                 <v-col class="lighten-2 py-4 text-center" cols="12">
-                  IRIS3 (v1.2.2) is developed by
+                  deepmaps v(0.0.1) is developed by
                   <a class="BMBL" href="https://u.osu.edu/bmbl/">BMBL</a>, it is
                   free and open to all users. |
                   {{ new Date().getFullYear() }}
@@ -333,7 +326,7 @@ export default {
           path: '/upload?type=multiome',
         },
         {
-          title: 'Public IRIS3 projects',
+          title: 'Public deepmaps projects',
           path: '/public',
         },
         {
@@ -434,7 +427,7 @@ export default {
         },
       ],
       icons: ['mdi-github', 'mdi-youtube', 'mdi-twitter'],
-      title: 'IRIS3',
+      title: 'DeepMAPS',
     }
   },
   computed: {

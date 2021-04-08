@@ -1,4 +1,4 @@
-# iris3-frontend
+# deepmaps-frontend
 
 ## Build Setup
 

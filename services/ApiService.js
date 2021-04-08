@@ -26,9 +26,6 @@ export default {
       },
     })
   },
-  getDatasets() {
-    return apiClient.get('/dataset')
-  },
 
   wait(ms) {
     return new Promise((resolve) => {
@@ -38,12 +35,12 @@ export default {
   },
 
   async pollQueue(queueId, ms, maxAttempts = 50) {
-    let result = await apiClient.get('iris3/api/queue/' + queueId)
+    let result = await apiClient.get('deepmaps/api/queue/' + queueId)
     let attempts = 0
     while ((result.data.returnvalue === null) & (attempts < maxAttempts)) {
       await this.wait(ms)
       attempts++
-      result = await apiClient.get('iris3/api/queue/' + queueId)
+      result = await apiClient.get('deepmaps/api/queue/' + queueId)
     }
 
     return result.data.returnvalue || 0
@@ -60,7 +57,7 @@ export default {
         })
       })
 
-    const result = await this.pollQueue(queueId, 1000)
+    const result = await this.pollQueue(queueId, 2000)
 
     return result
   },

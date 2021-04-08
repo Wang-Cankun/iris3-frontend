@@ -8,7 +8,7 @@
             <!-- Title -->
             <v-col md="8">
               <h1 class="text-h1">
-                <strong>IRIS3</strong>
+                <strong>DeepMAPS</strong>
               </h1>
             </v-col>
             <v-col md="4">
@@ -23,8 +23,8 @@
             <v-col md="9">
               <div class="typewriter">
                 <h2 class="text-h6">
-                  Integrated Cell-type-specific Regulon Inference Server from
-                  Single-cell sequencing data
+                  Deep learning based Multi-omics Analysis Portal for Single
+                  cells
                 </h2>
               </div>
             </v-col>
@@ -46,9 +46,9 @@
             <v-card flat height="30"></v-card>
             <v-card hover width="620" class="mb-1 text-h5">
               <v-card-subtitle>
-                IRIS3 now supports user accounts! Sign in for access to private
-                workspace, project sharing and archive, and long-term data
-                storage.
+                DeepMAPS now supports user accounts! Sign in for access to
+                private workspace, project sharing and archive, and long-term
+                data storage.
               </v-card-subtitle>
             </v-card>
           </v-row>
@@ -328,7 +328,7 @@ export default {
   },
   head() {
     return {
-      title: 'IRIS3',
+      title: 'DeepMAPS',
       meta: [
         {
           hid: 'description',

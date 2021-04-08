@@ -1,8 +1,6 @@
 export default {
   publicRuntimeConfig: {
     API_URL: process.env.API_URL || 'https://bmbls.bmi.osumc.edu',
-    GRAPHQL_URL:
-      process.env.GRAPHQL_URL || 'https://bmbls.bmi.osumc.edu/iris3/graphql',
   },
   components: true,
   /*
@@ -21,7 +19,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-head
    */
   head: {
-    titleTemplate: '%s - IRIS3',
+    titleTemplate: '%s - DeepMAPS',
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -51,7 +49,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-components
    */
   router: {
-    base: '/iris3',
+    base: '/deepmaps',
     linkActiveClass: 'active-link',
   },
   /*

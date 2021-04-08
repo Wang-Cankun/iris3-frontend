@@ -69,7 +69,7 @@
                             <v-list-item-title>
                               <a
                                 class="text-decoration-none"
-                                href="https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_expression.csv"
+                                href="https://bmbl.bmi.osumc.edu/deepmaps/storage/Zeisel_expression.csv"
                               >
                                 Save as CSV format</a
                               ></v-list-item-title
@@ -713,19 +713,22 @@ export default {
       this.metadata = []
       this.$nuxt.$loading.start()
       if (this.idx === 0 && this.type === 'single_rna') {
-        this.qcResult = await ApiService.postCommand('iris3/api/queue/load/', {
-          idx: this.idx,
-          filename: 'zeisel_2015',
-          type: 'CellGene',
-          min_cells: this.cellFilter,
-          min_genes: this.geneFilter,
-          nVariableFeatures: this.nVariableFeatures,
-          percentMt: this.mitoFilter,
-          removeRibosome: this.removeRibosome,
-        })
+        this.qcResult = await ApiService.postCommand(
+          'deepmaps/api/queue/load/',
+          {
+            idx: this.idx,
+            filename: 'zeisel_2015',
+            type: 'CellGene',
+            min_cells: this.cellFilter,
+            min_genes: this.geneFilter,
+            nVariableFeatures: this.nVariableFeatures,
+            percentMt: this.mitoFilter,
+            removeRibosome: this.removeRibosome,
+          }
+        )
       } else if (this.type === 'multi_rna') {
         this.qcResult = await ApiService.postCommand(
-          'iris3/api/queue/load-multi-rna/',
+          'deepmaps/api/queue/load-multi-rna/',
           {
             idx: this.idx,
             filename: 'ifnb_2800',
@@ -739,7 +742,7 @@ export default {
         )
       } else if (this.type === 'multiome') {
         this.qcResult = await ApiService.postCommand(
-          'iris3/api/queue/load-multiome/',
+          'deepmaps/api/queue/load-multiome/',
           {
             idx: this.idx,
             filename: 'ifnb_2800',
@@ -754,7 +757,7 @@ export default {
       }
 
       this.metadata = await ApiService.postCommand(
-        'iris3/api/queue/var-genes-list/'
+        'deepmaps/api/queue/var-genes-list/'
       )
       this.varGenesList = this.metadata.gene_result
       this.qcBox5 = this.metadata.cell_result.map((e) => e.n_cells_per_gene)
@@ -766,15 +769,15 @@ export default {
       this.qcHist2 = this.metadata.hist_reads_per_cell
       this.qcHist3 = this.metadata.hist_cells_per_gene
 
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
       })
 
       this.varGenesScatter = await ApiService.postCommand(
-        'iris3/api/queue/var-genes-plot/'
+        'deepmaps/api/queue/var-genes-plot/'
       )
-      await this.$axios.post('iris3/api/queue/genes/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/genes/').then((response) => {
         this.genes = response.data
       })
       this.$nuxt.$loading.finish()
@@ -782,7 +785,7 @@ export default {
     },
     async runGeneCorPlot() {
       this.geneCorPlot = await ApiService.postCommand(
-        'iris3/api/queue/gene-correlation-plot/',
+        'deepmaps/api/queue/gene-correlation-plot/',
         {
           gene1: this.geneCor1,
           gene2: this.geneCor2,

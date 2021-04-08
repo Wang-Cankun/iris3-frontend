@@ -421,14 +421,14 @@ export default {
       })
       if (!this.resHistory.includes(this.resolution)) {
         await this.$axios
-          .post('iris3/api/queue/cluster/', {
+          .post('deepmaps/api/queue/cluster/', {
             nPCs: this.nPCs,
             resolution: this.resolution,
           })
           .then((response) => {
             const checkComplete = setInterval(async () => {
               await this.$axios
-                .get('iris3/api/queue/' + response.data.id)
+                .get('deepmaps/api/queue/' + response.data.id)
                 .then((response) => {
                   if (response.data.returnvalue !== null) {
                     this.resHistory.push(this.resolution)
@@ -448,13 +448,13 @@ export default {
       }
 
       await this.$axios
-        .post('iris3/api/queue/set-idents/', {
+        .post('deepmaps/api/queue/set-idents/', {
           name: this.currentIdent,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 // this.currentIdent = response.data.returnvalue
                 this.timeElapsed =
@@ -471,11 +471,11 @@ export default {
         })
 
       await this.$axios
-        .post('iris3/api/queue/umap-cluster/')
+        .post('deepmaps/api/queue/umap-cluster/')
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapCluster = response.data.returnvalue
@@ -500,13 +500,13 @@ export default {
         })
       /*
       await this.$axios
-        .post('iris3/api/queue/umap-gene/', {
+        .post('deepmaps/api/queue/umap-gene/', {
           gene: this.gene,
         })
         .then((response) => {
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.umapGene = response.data.returnvalue
@@ -526,10 +526,10 @@ export default {
           })
         })
 */
-      await this.$axios.post('iris3/api/queue/genes/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/genes/').then((response) => {
         this.genes = response.data
       })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.idents = response.data
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
@@ -538,7 +538,7 @@ export default {
     async runDeg() {
       this.deResult = []
       await this.$axios
-        .post('iris3/api/queue/deg/', {
+        .post('deepmaps/api/queue/deg/', {
           ident1: this.ident1,
           ident2: this.ident2,
           min_pct: this.minPct,
@@ -548,7 +548,7 @@ export default {
           let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.deResult = response.data.returnvalue[0]
@@ -583,14 +583,14 @@ export default {
         color: 'accent',
       })
       await this.$axios
-        .post('iris3/api/queue/violin-gene/', {
+        .post('deepmaps/api/queue/violin-gene/', {
           gene: this.gene,
           split: this.violinSplit,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.violinGene = response.data.returnvalue
                 this.timeElapsed =
@@ -608,13 +608,13 @@ export default {
     },
     async showDotPlot() {
       await this.$axios
-        .post('iris3/api/queue/dot-plot/', {
+        .post('deepmaps/api/queue/dot-plot/', {
           top: 3,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.dotPlot = response.data.returnvalue
                 this.timeElapsed =
@@ -632,13 +632,13 @@ export default {
     },
     async annotateCellType() {
       await this.$axios
-        .post('iris3/api/queue/dot-plot/', {
+        .post('deepmaps/api/queue/dot-plot/', {
           top: 3,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.dotPlot = response.data.returnvalue
                 this.timeElapsed =
@@ -653,7 +653,7 @@ export default {
             color: 'error',
           })
         })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.idents = response.data
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
@@ -718,13 +718,13 @@ export default {
       })
       this.addMetadataDialog = false
       await this.$axios
-        .post('iris3/api/queue/annotate-cell-type/', {
+        .post('deepmaps/api/queue/annotate-cell-type/', {
           gene: this.gene,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.annotateResult = response.data.returnvalue
                 this.timeElapsed =
@@ -739,7 +739,7 @@ export default {
             color: 'error',
           })
         })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.idents = response.data
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
@@ -752,13 +752,13 @@ export default {
       })
       this.addTransferMetadataDialog = false
       await this.$axios
-        .post('iris3/api/queue/transfer-cell-type/', {
+        .post('deepmaps/api/queue/transfer-cell-type/', {
           gene: this.gene,
         })
         .then((response) => {
           setTimeout(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 this.annotateResult = response.data.returnvalue
                 this.timeElapsed =
@@ -773,7 +773,7 @@ export default {
             color: 'error',
           })
         })
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.idents = response.data
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')

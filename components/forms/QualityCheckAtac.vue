@@ -69,7 +69,7 @@
                             <v-list-item-title>
                               <a
                                 class="text-decoration-none"
-                                href="https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_expression.csv"
+                                href="https://bmbl.bmi.osumc.edu/deepmaps/storage/Zeisel_expression.csv"
                               >
                                 Save as CSV format</a
                               ></v-list-item-title
@@ -688,7 +688,7 @@ export default {
       this.metadata = []
 
       this.qcResult = await ApiService.postCommand(
-        'iris3/api/queue/load-multiome/',
+        'deepmaps/api/queue/load-multiome/',
         {
           idx: this.idx,
           filename: 'pbmc_match_3k',
@@ -702,7 +702,7 @@ export default {
       )
 
       this.metadata = await ApiService.postCommand(
-        'iris3/api/queue/atac-qc-list/'
+        'deepmaps/api/queue/atac-qc-list/'
       )
       this.qcBox1 = this.metadata.cell_result.map((e) => e.n_reads_per_cell)
       this.qcBox2 = this.metadata.cell_result.map((e) => e.n_features_per_cell)
@@ -716,13 +716,13 @@ export default {
       this.qcHist3 = this.metadata.hist_atac_peak_region_fragments
       this.qcHist4 = this.metadata.hist_tss_enrichment
 
-      await this.$axios.post('iris3/api/queue/idents/').then((response) => {
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
       })
 
       this.varGenesScatter = await ApiService.postCommand(
-        'iris3/api/queue/var-genes-plot/'
+        'deepmaps/api/queue/var-genes-plot/'
       )
       this.qcComplete = true
     },

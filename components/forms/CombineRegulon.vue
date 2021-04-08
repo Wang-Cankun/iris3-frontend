@@ -49,7 +49,7 @@
                     width="200"
                     rounded
                     @click="runV1(jobId, qubic_k, qubic_f, qubic_o)"
-                    >Start IRIS3 v1</v-btn
+                    >Start deepmaps v1</v-btn
                   >
                   <v-btn
                     class="ma-2"
@@ -136,14 +136,14 @@ export default {
       this.regulon = []
       console.log(jobId)
       await this.$axios
-        .post('iris3/api/queue/combine-regulon/', {
+        .post('deepmaps/api/queue/combine-regulon/', {
           jobid: jobId,
         })
         .then((response) => {
           let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.regulon = response.data.returnvalue[0]
@@ -173,7 +173,7 @@ export default {
     },
     async runV1(jobId, k, f, o) {
       await this.$axios
-        .post('iris3/api/queue/run-v1/', {
+        .post('deepmaps/api/queue/run-v1/', {
           jobid: jobId,
           k_arg: k,
           f_arg: f,
@@ -183,7 +183,7 @@ export default {
           let i = 0
           const checkComplete = setInterval(async () => {
             await this.$axios
-              .get('iris3/api/queue/' + response.data.id)
+              .get('deepmaps/api/queue/' + response.data.id)
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.v1Result = response.data.returnvalue[0]
@@ -221,7 +221,7 @@ export default {
     async checkJobIdExist(jobId) {
       console.log(jobId)
       await this.$axios
-        .get('https://bmbl.bmi.osumc.edu/iris3/data/202004168452')
+        .get('https://bmbl.bmi.osumc.edu/deepmaps/data/202004168452')
         .then((response) => {
           if (response.data.returnvalue !== null) {
             this.checkResult = response.data.returnvalue[0]

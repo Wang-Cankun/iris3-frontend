@@ -134,7 +134,7 @@ export default {
       this.uploadStatus = 'Uploading ...'
       this.umap_url = 'https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp'
       await this.$axios
-        .post('iris3/api/command/preprocess/', {
+        .post('deepmaps/api/command/preprocess/', {
           nPCs: this.nPCs,
           nResolution: this.nResolution,
         })

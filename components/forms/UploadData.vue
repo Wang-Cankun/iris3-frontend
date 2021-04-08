@@ -438,11 +438,13 @@ export default {
       { item: 'Load example (Zeisel et al, 2015)' },
       {
         item: 'Download gene expression matrix (Zeisel et al, 2015) ',
-        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_expression.csv',
+        link:
+          'https://bmbl.bmi.osumc.edu/deepmaps/storage/Zeisel_expression.csv',
       },
       {
         item: 'Download cell label file (Zeisel et al, 2015)',
-        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_index_label.csv',
+        link:
+          'https://bmbl.bmi.osumc.edu/deepmaps/storage/Zeisel_index_label.csv',
       },
     ],
     multiRnaExample: [
@@ -453,7 +455,7 @@ export default {
       {
         item: 'Download gene expression matrix and cell label (ifnb_2800.rda)',
         link:
-          'https://raw.githubusercontent.com/Wang-Cankun/iris3api/master/data/ifnb_2800.rda',
+          'https://raw.githubusercontent.com/Wang-Cankun/deepmapsapi/master/data/ifnb_2800.rda',
       },
     ],
     multiomeExample: [
@@ -645,7 +647,7 @@ export default {
       })
 
       const uploadRes = await this.$axios.post(
-        'iris3/api/queue/upload/',
+        'deepmaps/api/queue/upload/',
         formData,
         {
           headers: {
