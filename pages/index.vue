@@ -85,7 +85,13 @@
                 <v-card-title class="justify-center">scRNA-Seq</v-card-title>
                 <v-col>
                   <v-row justify="center" class="mb-1">
-                    <v-btn color="primary" width="150" rounded>Example</v-btn>
+                    <v-btn
+                      color="primary"
+                      width="150"
+                      rounded
+                      to="/submit/single-rna"
+                      >Example</v-btn
+                    >
                   </v-row>
                   <v-row justify="center" class="mb-1"
                     ><v-btn color="primary" width="150" rounded
@@ -111,7 +117,13 @@
                 >
                 <v-col>
                   <v-row justify="center" class="mb-1">
-                    <v-btn color="primary" width="150" rounded>Example</v-btn>
+                    <v-btn
+                      color="primary"
+                      width="150"
+                      rounded
+                      to="/submit/multiple-rna"
+                      >Example</v-btn
+                    >
                   </v-row>
                   <v-row justify="center" class="mb-1"
                     ><v-btn color="primary" width="150" rounded
@@ -137,7 +149,13 @@
                 >
                 <v-col>
                   <v-row justify="center" class="mb-1">
-                    <v-btn color="primary" width="150" rounded>Example</v-btn>
+                    <v-btn
+                      color="primary"
+                      width="150"
+                      rounded
+                      to="/submit/multiome"
+                      >Example</v-btn
+                    >
                   </v-row>
                   <v-row justify="center" class="mb-1"
                     ><v-btn color="primary" width="150" rounded
