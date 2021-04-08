@@ -1,69 +1,187 @@
 <template>
   <v-row>
-    <v-col md="8" offset="2">
-      <!-- Main Page content start here -->
-      <v-container>
-        <v-img dark src="img/Molecular_RNA1.jpg">
-          <v-row>
-            <!-- Title -->
-            <v-col md="8">
+    <v-container>
+      <v-col lg="12">
+        <v-card class="mx-auto">
+          <v-img
+            class="white--text align-center"
+            src="img/main-header.jpg"
+            gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+          >
+            <v-card-title class="justify-center">
               <h1 class="text-h1">
                 <strong>DeepMAPS</strong>
               </h1>
-            </v-col>
-            <v-col md="4">
-              <v-card outlined hover light class="mr-1">
-                <v-card-title justify="center"
-                  >News Example news content</v-card-title
+            </v-card-title>
+
+            <v-card-title class="justify-center">
+              <div class="typewriter">
+                Deep learning based Multi-omics Analysis Portal for Single cells
+              </div>
+            </v-card-title>
+
+            <!-- Data monitor section -->
+            <v-row class="mt-10">
+              <v-col md="8" offset="2">
+                <v-card-title class="justify-center"
+                  >Data last updated April 2021</v-card-title
                 >
+                <v-row class="text-center">
+                  <v-col> Function </v-col>
+                  <v-col> Created Projects </v-col>
+                  <v-col> Submitted jobs </v-col>
+                  <v-col> Data source </v-col>
+                </v-row>
+                <v-row class="text-center">
+                  <v-col> 3 </v-col>
+                  <v-col> 5 </v-col>
+                  <v-col> 15 </v-col>
+                  <v-col> 7 </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+
+            <!-- Public projects -->
+            <v-row class="mt-10">
+              <v-col md="8" offset="5">
+                <v-btn to="/public" rounded large color="primary"
+                  >Explore Our Projects
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <!-- Long search bar -->
+            <v-row class="mt-5">
+              <v-col md="8" offset="2">
+                <v-text-field
+                  v-model="searchJobId"
+                  solo-inverted
+                  flat
+                  clearable
+                  hide-details
+                  label="Search Job"
+                  type="search"
+                  prepend-inner-icon="mdi-magnify"
+                  class="shrink"
+                  dark
+                />
+              </v-col>
+            </v-row>
+          </v-img>
+        </v-card>
+      </v-col>
+    </v-container>
+
+    <!-- Create your own project section -->
+    <v-container>
+      <v-col lg="12">
+        <v-card flat>
+          <v-card-title class="justify-center text-h5"
+            >Create your own project</v-card-title
+          >
+          <v-row>
+            <v-col>
+              <v-card hover>
+                <v-card-title class="justify-center">scRNA-Seq</v-card-title>
+                <v-col>
+                  <v-row justify="center" class="mb-1">
+                    <v-btn color="primary" width="150" rounded>Example</v-btn>
+                  </v-row>
+                  <v-row justify="center" class="mb-1"
+                    ><v-btn color="primary" width="150" rounded
+                      >Learn more</v-btn
+                    >
+                  </v-row>
+                  <v-row justify="center" class="mb-1"
+                    ><v-btn
+                      to="/upload?type=single-rna"
+                      color="primary"
+                      width="150"
+                      rounded
+                      >Get started</v-btn
+                    >
+                  </v-row>
+                </v-col>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card hover>
+                <v-card-title class="justify-center"
+                  >Multiple scRNA-Seq</v-card-title
+                >
+                <v-col>
+                  <v-row justify="center" class="mb-1">
+                    <v-btn color="primary" width="150" rounded>Example</v-btn>
+                  </v-row>
+                  <v-row justify="center" class="mb-1"
+                    ><v-btn color="primary" width="150" rounded
+                      >Learn more</v-btn
+                    >
+                  </v-row>
+                  <v-row justify="center" class="mb-1"
+                    ><v-btn
+                      to="/upload?type=multiple-rna"
+                      color="primary"
+                      width="150"
+                      rounded
+                      >Get started</v-btn
+                    >
+                  </v-row>
+                </v-col>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card hover>
+                <v-card-title class="justify-center"
+                  >scRNA-Seq & scATAc-Seq</v-card-title
+                >
+                <v-col>
+                  <v-row justify="center" class="mb-1">
+                    <v-btn color="primary" width="150" rounded>Example</v-btn>
+                  </v-row>
+                  <v-row justify="center" class="mb-1"
+                    ><v-btn color="primary" width="150" rounded
+                      >Learn more</v-btn
+                    >
+                  </v-row>
+                  <v-row justify="center" class="mb-1"
+                    ><v-btn
+                      to="/upload?type=multiome"
+                      color="primary"
+                      width="150"
+                      rounded
+                      >Get started</v-btn
+                    >
+                  </v-row>
+                </v-col>
               </v-card>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col md="9">
-              <div class="typewriter">
-                <h2 class="text-h6">
-                  Deep learning based Multi-omics Analysis Portal for Single
-                  cells
-                </h2>
-              </div>
-            </v-col>
-          </v-row>
-        </v-img>
-      </v-container>
+        </v-card>
+      </v-col>
+    </v-container>
 
-      <!-- divider -->
-      <v-row>
-        <v-col>
+    <!-- image display window and sign in -->
+    <v-container>
+      <v-row class="my-5">
+        <v-col cols="6">
           <v-carousel cycle height="580">
             <v-carousel-item class="center">
-              <v-img max-width="500" src="img/abstract_workflow.jpg"></v-img>
+              <v-img src="img/abstract_workflow.jpg"></v-img>
             </v-carousel-item>
           </v-carousel>
         </v-col>
-        <v-col>
+        <v-col cols="6">
           <v-row>
-            <v-card flat height="30"></v-card>
-            <v-card hover width="620" class="mb-1 text-h5">
+            <v-card hover color="primary" height="360" dark>
               <v-card-subtitle>
                 DeepMAPS now supports user accounts! Sign in for access to
                 private workspace, project sharing and archive, and long-term
                 data storage.
               </v-card-subtitle>
-            </v-card>
-          </v-row>
-
-          <v-row>
-            <!-- Sign in part -->
-            <v-card
-              class="my-10"
-              color="#BBDEFB"
-              height="260"
-              width="620"
-              outlined
-              justify="center"
-            >
-              <v-card-title class="justify-center">Sign In</v-card-title>
+              <v-card-title class="justify-center headline"
+                >Sign In</v-card-title
+              >
               <!-- Type in field -->
               <v-text-field
                 v-model="email"
@@ -82,260 +200,44 @@
               <v-row justify="center" class="mx-2">
                 <v-btn color="primary" rounded to="/Workspace">Sign in</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn rounded>Forgot password</v-btn>
+                <v-btn color="primary" rounded>Forgot password</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn rounded>Create an account</v-btn>
+                <v-btn color="primary" rounded>Create an account</v-btn>
               </v-row>
             </v-card>
           </v-row>
 
-          <!-- Data monitor section -->
-          <v-row>
-            <v-card width="620">
-              <v-card-title class="justify-center"
-                >Data last updated February 2021</v-card-title
+          <!-- Cite us -->
+          <v-row class="mt-6">
+            <v-card hover color="primary" height="220" dark>
+              <v-card-title class="justify-center headline"
+                >Cite us</v-card-title
               >
-              <v-row class="text-center">
-                <v-col> Function </v-col>
-                <v-col> Created Projects </v-col>
-                <v-col> Submitted jobs </v-col>
-                <v-col> Data source </v-col>
-              </v-row>
-              <v-row class="text-center">
-                <v-col> 0 </v-col>
-                <v-col> 0 </v-col>
-                <v-col> 0 </v-col>
-                <v-col> 0 </v-col>
-              </v-row>
+              <v-card-text class="justify-center test-h4">{{
+                citeus
+              }}</v-card-text>
             </v-card>
           </v-row>
         </v-col>
       </v-row>
+    </v-container>
 
-      <v-card flat height="100"></v-card>
-      <v-row>
-        <v-col md="5" offset="5"> This is the search bar for ... </v-col>
-      </v-row>
-      <!-- Long search bar -->
-      <v-row>
-        <v-col md="8" offset="2">
-          <v-text-field
-            v-model="searchJobId"
-            solo-inverted
-            flat
-            clearable
-            hide-details
-            label="Search Job ID"
-            type="search"
-            prepend-inner-icon="mdi-magnify"
-            class="shrink"
-          />
-        </v-col>
-      </v-row>
-
-      <v-card flat height="100"></v-card>
-
-      <!-- Create your own project section -->
-      <v-card flat class="my-20">
-        <v-card-title class="justify-center text-h5"
-          >Create your own project</v-card-title
-        >
-        <v-row>
-          <v-col>
-            <v-card class="ml-2" hover>
-              <v-card-title class="justify-center"
-                >Single sample scRNA-Seq</v-card-title
-              >
-              <v-col>
-                <v-row justify="center" class="mb-1">
-                  <v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/submit/single-rna"
-                    >Example</v-btn
-                  >
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn color="primary" width="150" rounded>Learn more</v-btn>
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/upload?type=single-rna"
-                    >Get started</v-btn
-                  >
-                </v-row>
-              </v-col>
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card hover>
-              <v-card-title class="justify-center"
-                >Multiple scRNA-Seq</v-card-title
-              >
-
-              <v-col>
-                <v-row justify="center" class="mb-1">
-                  <v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/submit/multiple-rna"
-                    >Example</v-btn
-                  >
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn color="primary" width="150" rounded>Learn more</v-btn>
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/upload?type=multiple-rna"
-                    >Get started</v-btn
-                  >
-                </v-row>
-              </v-col>
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card hover>
-              <v-card-title class="justify-center"
-                >scRNA-Seq & scATAc-Seq</v-card-title
-              >
-              <v-col>
-                <v-row justify="center" class="mb-1">
-                  <v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/submit/multiome"
-                    >Example</v-btn
-                  >
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn color="primary" width="150" rounded>Learn more</v-btn>
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/upload?type=multiome"
-                    >Get started</v-btn
-                  >
-                </v-row>
-              </v-col>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-card>
-      <!-- divider -->
-      <v-card flat height="50"></v-card>
-      <v-divider></v-divider>
-      <v-card flat height="50"></v-card>
-      <!-- Publich data exploration section-->
-      <v-card flat class="my-20">
-        <v-card-title class="justify-center text-h5"
-          >Publich data exploration</v-card-title
-        >
-        <v-row>
-          <v-col>
-            <v-card class="mr-1" hover>
-              <v-card-title class="justify-center">Project1</v-card-title>
-              <v-card-subtitle class="justify-center"
-                >Create time</v-card-subtitle
-              >
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card class="mr-1" hover>
-              <v-card-title class="justify-center">Project2</v-card-title>
-              <v-card-subtitle class="justify-center"
-                >Create time</v-card-subtitle
-              >
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card class="mr-1" hover>
-              <v-card-title class="justify-center">Project3</v-card-title>
-              <v-card-subtitle class="justify-center"
-                >Create time</v-card-subtitle
-              >
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card class="mr-1" hover>
-              <v-card-title class="justify-center">Project4</v-card-title>
-              <v-card-subtitle class="justify-center"
-                >Create time</v-card-subtitle
-              >
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col md="2" offset="10">
-            <v-card class="mr-1">
-              <v-card-title class="justify-center">More+</v-card-title>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-card>
-      <!-- divider -->
-      <v-card flat height="50"></v-card>
-      <v-divider></v-divider>
-      <v-card flat height="50"></v-card>
-
-      <v-row>
-        <v-col md="6">
-          <!-- Citation card -->
-          <v-container>
-            <v-card
-              outlined
-              rounded="lg"
-              hover
-              height="100"
-              width="600"
-              class="my-20"
-            >
-              <v-card-title class="justify-center">Cite us</v-card-title>
-              <v-card-subtitle>
-                <p class="text-h7">
-                  <strong>{{ citeus }}</strong>
-                </p>
-              </v-card-subtitle>
-            </v-card>
-          </v-container>
-        </v-col>
-        <v-col>
-          <!-- Visiting monitor -->
-          <div>
-            <v-container>
-              <v-row>
-                <v-col lg="5" md="5" class="ml-md-auto"> </v-col>
-              </v-row>
-              <v-row>
-                <v-layout justify-end>
-                  <client-only>
-                    <div class="viewer_options">
-                      <script
-                        id="clustrmaps"
-                        type="text/javascript"
-                        src="//cdn.clustrmaps.com/map_v2.js?d=y6edmNGXh1CPbChW0tW9Ahz11iiWoeE4HDc-yFfav5Y&cl=ffffff&w=a"
-                      ></script>
-                    </div>
-                  </client-only>
-                </v-layout>
-              </v-row>
-            </v-container>
-          </div>
-        </v-col>
-      </v-row>
-    </v-col>
+    <!-- Visiting monitor -->
+    <v-container>
+      <v-col lg="12">
+        <v-layout justify-center>
+          <client-only>
+            <div class="viewer_options">
+              <script
+                id="clustrmaps"
+                type="text/javascript"
+                src="//cdn.clustrmaps.com/map_v2.js?d=y6edmNGXh1CPbChW0tW9Ahz11iiWoeE4HDc-yFfav5Y&cl=ffffff&w=a"
+              ></script>
+            </div>
+          </client-only>
+        </v-layout>
+      </v-col>
+    </v-container>
   </v-row>
 </template>
 
