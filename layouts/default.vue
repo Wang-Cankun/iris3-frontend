@@ -19,7 +19,7 @@
       <v-toolbar-items class="hidden-xs-only mx-1">
         <v-menu open-on-hover offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" elevation="0" v-on="on"> Explore </v-btn>
+            <v-btn v-bind="attrs" elevation="0" v-on="on">Explore</v-btn>
           </template>
           <v-list>
             <v-list-item
@@ -177,7 +177,7 @@
           <v-container>
             <v-row>
               <v-col md="8" offset-md="2">
-                <v-row class="mx-16">
+                <v-row>
                   <v-col col="1">
                     <p class="font-weight-bold" style="color: white">EXPLORE</p>
                     <p v-for="item in exploreMenu" :key="item.title">
