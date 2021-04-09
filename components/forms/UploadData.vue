@@ -296,7 +296,7 @@
                   <v-list-item-title>
                     <a
                       class="text-decoration-none"
-                      :href="singleExample[1].link"
+                      :href="multiomeExample[1].link"
                     >
                       {{ multiomeExample[1].item }}</a
                     ></v-list-item-title
