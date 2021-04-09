@@ -165,7 +165,7 @@
                 </v-card></v-expansion-panel-content
               >
             </v-expansion-panel>
-            <v-expansion-panel>
+            <!--<v-expansion-panel>
               <v-expansion-panel-header>
                 Cell selection
               </v-expansion-panel-header>
@@ -272,7 +272,7 @@
                   </v-row>
                 </v-card>
               </v-expansion-panel-content>
-            </v-expansion-panel>
+            </v-expansion-panel>-->
           </v-expansion-panels>
         </v-col>
         <v-col v-if="qcComplete !== false" cols="9"
