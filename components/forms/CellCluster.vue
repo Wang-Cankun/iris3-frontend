@@ -945,7 +945,7 @@ export default {
         title: 'Plotting genes',
       },
       {
-        x: 3,
+        x: 4,
         y: 2,
         w: 2,
         h: 2,
