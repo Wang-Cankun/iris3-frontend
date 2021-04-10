@@ -710,195 +710,15 @@
                       <img :src="featureGene" :width="400" :height="350" />
                     </v-row> </grid-item
                 ></v-card>
-                <v-card class="ma-0"
-                  ><grid-item
-                    :x="layout[3].x"
-                    :y="layout[3].y"
-                    :w="layout[3].w"
-                    :h="layout[3].h"
-                    :i="layout[3].i"
-                    class="grid-item-border"
-                  >
-                    <v-card-title class="primary white--text caption px-2 py-1"
-                      >Gene set enrichment <v-spacer></v-spacer>
-                      <v-menu bottom left>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn dark icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-download-outline</v-icon>
-                          </v-btn>
-                        </template>
-
-                        <v-list>
-                          <v-list-item @click="downloadPDF">
-                            <v-list-item-title
-                              >Download Table</v-list-item-title
-                            >
-                          </v-list-item>
-                        </v-list>
-                      </v-menu></v-card-title
-                    >
-                    <v-row>
-                      <v-col cols="12"
-                        >Perform GSEA using the above DEGs
-                      </v-col>
-                      <v-col cols="12">
-                        <v-autocomplete
-                          v-model="gseaDatabase"
-                          class="ml-4"
-                          :items="allGseaDatabases"
-                          label="MSigDB database"
-                          return-object
-                          item-text="name"
-                          item-value="value"
-                        >
-                        </v-autocomplete> </v-col
-                    ></v-row>
-
-                    <v-row justify="center" class="mx-2 mb-2 mt-0">
-                      <v-btn
-                        class="mx-2 mb-2 mt-0"
-                        color="Primary"
-                        width="200"
-                        @click="runGSEA()"
-                        >Run</v-btn
-                      >
-                    </v-row>
-                    <div v-if="gseaResult.length">
-                      <v-data-table
-                        dense
-                        :headers="gseaHeaders"
-                        :items="gseaResult[0]"
-                        item-key="name"
-                        :items-per-page="5"
-                        class="elevation-1"
-                      ></v-data-table>
-                    </div> </grid-item
-                ></v-card>
+                <enrichment-table
+                  :deg="deResult"
+                  :x="layout[3].x"
+                  :y="layout[3].y"
+                  :w="layout[3].w"
+                  :h="layout[3].h"
+                  :i="layout[3].i"
+                ></enrichment-table>
               </grid-layout>
-              <v-dialog v-model="addMetadataDialog" max-width="1200">
-                <v-card>
-                  <v-card-title>Annotate cell type</v-card-title>
-                  <v-divider class="my-2 py-2"></v-divider>
-                  <v-card-text>
-                    <v-row
-                      v-for="item in cellClusterArray"
-                      :key="item"
-                      class="my-0 py-0"
-                    >
-                      <v-col class="my-0 py-0" cols="4"
-                        >Cluster: {{ item.index }}
-                      </v-col>
-                      <v-col class="my-0 py-0" cols="6"
-                        >Cell type:
-                        <v-text-field
-                          v-model="newCellType[index]"
-                          outlined
-                          background-color="white"
-                        ></v-text-field
-                      ></v-col>
-                    </v-row>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn
-                      class="mx-2"
-                      color="primary"
-                      dark
-                      @click="addMetadata()"
-                    >
-                      Apply
-                    </v-btn>
-                    <v-btn
-                      color="grey darken-1"
-                      text
-                      @click="addMetadataDialog = false"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-dialog v-model="addTransferMetadataDialog" max-width="1200">
-                <v-card>
-                  <v-card-title
-                    >Reference based cell type annotation</v-card-title
-                  >
-                  <v-divider class="my-2 py-2"></v-divider>
-                  <v-card-text>
-                    <v-autocomplete
-                      v-model="currentAtlas"
-                      class="ml-4"
-                      :items="atlas"
-                      label="Select atlas data"
-                    ></v-autocomplete>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn
-                      class="mx-2"
-                      color="primary"
-                      dark
-                      @click="addReference()"
-                    >
-                      Apply
-                    </v-btn>
-                    <v-btn
-                      color="grey darken-1"
-                      text
-                      @click="addTransferMetadataDialog = false"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <!--
-                <div v-if="deg">
-                  <v-data-table
-                    dense
-                    :search="keggSearch"
-                    :headers="enrichHeaders"
-                    :items="keggResult"
-                    :items-per-page="10"
-                    item-key="index"
-                    class="elevation-1"
-                    :expanded.sync="expandedKegg"
-                    show-expand
-                  >
-                    <template v-slot:top>
-                      <v-toolbar flat>
-                        <v-toolbar-title>
-                          <download-excel :data="keggResult" type="csv">
-                            <v-btn color="primary"> Download</v-btn
-                            ><v-tooltip top>
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                  color="primary"
-                                  dark
-                                  v-bind="attrs"
-                                  v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <span
-                                >KEGG Pathway enrichment analysis using the DE
-                                genes above. The results are calculated
-                                real-time using Enrichr.</span
-                              >
-                            </v-tooltip>
-                          </download-excel></v-toolbar-title
-                        >
-                        <v-spacer></v-spacer>
-                      </v-toolbar>
-                    </template>
-                    <template v-slot:expanded-item="{ item }">
-                      <td :colspan="headers.length">
-                        {{ item.genes.join(',') }}
-                      </td>
-                    </template>
-                  </v-data-table>
-                </div>
-                -->
             </div>
           </div>
         </v-col>
@@ -909,11 +729,14 @@
 <script>
 import _ from 'lodash'
 import ResizeImage from '~/components/utils/ResizeImage'
+import EnrichmentTable from '~/components/utils/EnrichmentTable'
+
 import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
     scatter: ResizeImage,
+    'enrichment-table': EnrichmentTable,
   },
   props: {
     type: { type: String, required: true, default: 'single_rna' },
@@ -1867,26 +1690,7 @@ export default {
         color: 'accent',
       })
     },
-    async runGSEA() {
-      if (!this.deResult.length) {
-        this.$notifier.showMessage({
-          content: 'Please run DE testing first!',
-          color: 'error',
-        })
-      } else {
-        this.$notifier.showMessage({
-          content: 'Running GSEA...',
-          color: 'accent',
-        })
-        this.gseaResult = await ApiService.postCommand(
-          'deepmaps/api/queue/gsea-table/',
-          {
-            database: this.gseaDatabase.value,
-          }
-        )
-        console.log(this.gseaResult)
-      }
-    },
+
     async runGenePlot() {
       this.$notifier.showMessage({
         content: `Plotting ${this.gene} gene...`,
