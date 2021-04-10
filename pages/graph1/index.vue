@@ -1,88 +1,129 @@
 <template>
-  <ECharts ref="chart" :option="option" />
+  <div id="holder">
+    <v-autocomplete
+      v-model="currentLayouts"
+      class="ml-4"
+      :items="allLayouts"
+      label="Select layout"
+      @change="changeLayout(currentLayouts)"
+    ></v-autocomplete>
+    <cytoscape
+      ref="cy"
+      :config="config"
+      :pre-config="preConfig"
+      :afte-created="afterCreated"
+      @mousedown="addNode"
+      @cxttapstart="updateNode"
+    >
+      <cy-element
+        v-for="def in elements"
+        :key="`${def.data.id}`"
+        :definition="def"
+        @mousedown="deleteNode($event, def.data.id)"
+      />
+    </cytoscape>
+  </div>
 </template>
 
 <script>
-import * as echarts from 'echarts'
-import { createComponent } from 'echarts-for-vue'
-import graph from 'static/json/les-miserables.json'
+// eslint-disable-next-line no-unused-vars
+import cola from 'cytoscape-cola'
+import avsdf from 'cytoscape-avsdf'
+import cise from 'cytoscape-cise'
+import coseBilkent from 'cytoscape-cose-bilkent'
+import fcose from 'cytoscape-fcose'
+import euler from 'cytoscape-euler'
+import spread from 'cytoscape-spread'
+import dagre from 'cytoscape-dagre'
+import klay from 'cytoscape-klay'
+
+import nodes from 'static/json/example_cyto_nodes.json'
+import edges from 'static/json/example_cyto_edges.json'
+import exampleConfig from '~/static/json/test_cyto'
 
 export default {
-  components: {
-    ECharts: createComponent({ echarts }), // use as a component
-  },
-
   data() {
-    return {}
+    return {
+      config: exampleConfig.config,
+      i: 1,
+      currentLayouts: '',
+      allLayouts: [
+        'circle',
+        'grid',
+        'random',
+        'breadthfirst',
+        'concentric',
+        'cose',
+        'cola',
+        'avsdf',
+        'cose-bilkent',
+        'fcose',
+        'euler',
+        'spread',
+        'dagre',
+        'klay',
+      ],
+    }
   },
   computed: {
-    option() {
-      graph.nodes.forEach(function (node) {
-        node.label = {
-          show: node.symbolSize > 30,
-        }
+    cy() {
+      return this.$refs.cy.instance
+    },
+    elements() {
+      const graph = [...nodes, ...edges].map((item) => {
+        return { data: item }
       })
-
-      const node2 = graph.nodes.map((node) => {
-        return { id: node.id, name: node.name, category: node.category }
-      })
-      return {
-        title: {
-          text: 'Les Miserables',
-          subtext: 'Circular layout',
-          top: 'bottom',
-          left: 'right',
-        },
-        tooltip: {},
-        legend: [
-          {
-            data: graph.categories.map(function (a) {
-              return a.name
-            }),
-          },
-        ],
-        animationDurationUpdate: 1500,
-        animationEasingUpdate: 'quinticInOut',
-        series: [
-          {
-            name: 'Example Regulon TF-Gene network',
-            type: 'graph',
-            layout: 'circular',
-            circular: {
-              rotateLabel: true,
-            },
-            data: node2,
-            links: graph.links,
-            categories: graph.categories,
-            roam: true,
-            label: {
-              position: 'right',
-              formatter: '{b}',
-            },
-            lineStyle: {
-              color: 'source',
-              curveness: 0.3,
-            },
-            emphasis: {
-              blurScope: 'global',
-              focus: 'adjacency',
-              label: {
-                position: 'right',
-                show: true,
-              },
-              lineStyle: {
-                width: 10,
-              },
-            },
-          },
-        ],
-      }
+      return graph
     },
   },
+  mounted: () => {},
   methods: {
-    doSomething() {
-      this.$refs.chart.inst.getWidth() // call the method of ECharts instance
+    preConfig(cytoscape) {
+      console.log('calling pre-config')
+      // cytoscape: this is the cytoscape constructor
+      cytoscape.use(cola)
+      cytoscape.use(cise)
+      cytoscape.use(avsdf)
+      cytoscape.use(coseBilkent)
+      cytoscape.use(fcose)
+      cytoscape.use(euler)
+      cytoscape.use(spread)
+      cytoscape.use(dagre)
+      cytoscape.use(klay)
+    },
+    afterCreated(cy) {
+      // cy: this is the cytoscape instance
+      this.$refs.cy.instance.cy
+        .layout({
+          name: 'cose',
+        })
+        .run()
+      console.log('after config')
+    },
+    addNode(event) {
+      console.log(event.target, this.cy)
+      if (event.target === this.cy) console.log('adding node', event.target)
+    },
+    deleteNode(id) {
+      console.log('node clicked', id)
+    },
+    updateNode(event) {
+      console.log('right click node', event)
+    },
+    changeLayout(lay) {
+      const layout = this.cy.layout({
+        name: lay,
+      })
+
+      layout.run()
     },
   },
 }
 </script>
+
+<style>
+#holder {
+  width: 100%;
+  height: 400px;
+}
+</style>
