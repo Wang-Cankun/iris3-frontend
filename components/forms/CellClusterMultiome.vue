@@ -12,7 +12,6 @@
                 <v-card class="py-3" outlined color="blue-grey lighten-5">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Integrative clustering
-
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
                         <v-icon color="primary" dark v-on="on"
@@ -210,10 +209,37 @@
             </v-expansion-panel>-->
             <v-expansion-panel>
               <v-expansion-panel-header>
-                Active cell category
+                Active metadata
               </v-expansion-panel-header>
               <v-expansion-panel-content
                 ><v-card class="py-3" outlined color="blue-grey lighten-5">
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Active assay
+                  </p>
+                  <div class="d-flex justify-between">
+                    <v-select
+                      v-model="currentAssay"
+                      class="ml-4"
+                      :items="allAssays"
+                      label="Select assay"
+                      @change="setActiveAssay(currentAssay)"
+                    ></v-select>
+                  </div>
+                  <v-divider />
+
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Active embedding
+                  </p>
+                  <div class="d-flex justify-between">
+                    <v-select
+                      v-model="currentEmbedding"
+                      class="ml-4"
+                      :items="allEmbeddings"
+                      label="Select embedding"
+                      @change="setActiveEmbedding(currentEmbedding)"
+                    ></v-select>
+                  </div>
+                  <v-divider />
                   <p class="subtitle-1 font-weight-bold text-center">
                     Active cell category
                   </p>
@@ -224,7 +250,7 @@
                     label="Select identity"
                     @change="setActiveIdents(currentIdent)"
                   ></v-select>
-                  <v-divider></v-divider>
+                  <v-divider />
                   <p class="subtitle-1 font-weight-bold text-center">
                     Rename clusters
                   </p>
@@ -869,7 +895,7 @@ export default {
     currentIdentMerge: [],
     currentIdentLevels: [],
     currentEmbedding: 'umap.rna',
-    allEmbeddings: ['umap.rna', 'umap.atac', 'wnn.umap', 'HGT'],
+    allEmbeddings: ['pca', 'umap.rna', 'umap.atac', 'wnn.umap', 'HGT'],
     currentAssay: 'SCT',
     allAssays: ['RNA', 'SCT', 'ATAC', 'MAESTRO'],
     currentAtlas: '',
@@ -916,20 +942,6 @@ export default {
     newClusterName: '',
   }),
   computed: {
-    identList() {
-      if (this.currentIdent === 'cell_type') {
-        return [
-          '1_oligodendrocytes',
-          '2_pyramidal_CA1',
-          '3_pyramidal_SS',
-          '4_microglia',
-          '5_interneurons',
-          '6_endothelial_mural',
-          '7_astrocytes_ependymal',
-        ]
-      } else if (this.clusterResult !== '') return this.currentIdentList
-      else return [1, 2]
-    },
     cellClusterArray() {
       return this.currentIdentLevels
     },
@@ -998,65 +1010,15 @@ export default {
     },
     async setActiveIdents() {
       this.currentIdentMerge = []
-      await this.$axios
-        .post('deepmaps/api/queue/set-idents/', {
-          name: this.currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.currentIdentLevels = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Get idents error!',
-            color: 'error',
-          })
-        })
 
-      await this.$axios
-        .post('deepmaps/api/queue/umap-cluster/')
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+      this.currentIdentLevels = await ApiService.postCommand(
+        'deepmaps/api/queue/set-idents/',
+        { name: this.currentIdent }
+      )
+
+      this.umapCluster = await ApiService.postCommand(
+        'deepmaps/api/queue/umap-cluster/'
+      )
 
       await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
@@ -1065,36 +1027,47 @@ export default {
         this.violinSplitItems.push('NULL')
       })
 
-      await this.$axios
-        .post('deepmaps/api/queue/umap-static/', {
+      this.umapStatic = await ApiService.postCommand(
+        'deepmaps/api/queue/umap-static/',
+        {
           categoryName: this.currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+        }
+      )
+    },
+
+    async setActiveEmbedding(currentEmbedding) {
+      const result = await ApiService.postCommand(
+        'deepmaps/api/queue/set-embedding/',
+        {
+          name: currentEmbedding,
+        }
+      )
+      this.allEmbeddings = result.all_embeddings
+      this.currentEmbedding = result.all_embeddings[result.embedding_idx[0]]
+
+      this.umapStatic = await ApiService.postCommand(
+        'deepmaps/api/queue/umap-static/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
+    },
+    async setActiveAssay(currentAssay) {
+      const result = await ApiService.postCommand(
+        'deepmaps/api/queue/set-assay/',
+        {
+          name: currentAssay,
+        }
+      )
+      this.allAssays = result.all_assays
+      this.currentAssay = result.all_assays[result.assay_idx[0]]
+
+      this.umapStatic = await ApiService.postCommand(
+        'deepmaps/api/queue/umap-static/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
     },
     async runCellCluster() {
       this.$notifier.showMessage({
@@ -1141,6 +1114,15 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+      let tmp = await ApiService.postCommand('deepmaps/api/queue/assays/')
+      console.log(tmp)
+      this.allAssays = tmp.all_assays
+      this.currentAssay = tmp.all_assays[tmp.assay_idx[0]]
+
+      tmp = await ApiService.postCommand('deepmaps/api/queue/embeddings/')
+      this.allEmbeddings = tmp.all_embeddings
+      this.currentEmbedding = tmp.all_embeddings[tmp.embedding_idx[0]]
+      console.log(tmp)
     },
 
     async setCategory(name) {
@@ -1150,6 +1132,7 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+
       await this.$axios
         .post('deepmaps/api/queue/select-category/', {
           categoryName: name,
@@ -1179,14 +1162,7 @@ export default {
                   })
                 }
               })
-          }, 500)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
+          }, 1000)
         })
     },
 
