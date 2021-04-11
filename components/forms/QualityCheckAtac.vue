@@ -466,7 +466,7 @@ export default {
           w: 1,
           h: 1,
           i: '0',
-          title: '# of reads per cell',
+          title: 'Number of total read counts per cell',
         },
         {
           x: 1,
@@ -474,7 +474,7 @@ export default {
           w: 1,
           h: 1,
           i: '1',
-          title: '# of features per cell',
+          title: 'Number of expressed peaks per cell',
         },
         {
           x: 2,
@@ -482,7 +482,7 @@ export default {
           w: 1,
           h: 1,
           i: '2',
-          title: 'ATAC peak region fragments',
+          title: 'Number of ATAC peak fragments per cell',
         },
         {
           x: 3,
@@ -490,7 +490,7 @@ export default {
           w: 1,
           h: 1,
           i: '3',
-          title: 'blacklist ratio',
+          title: 'Blacklist ratio',
         },
         {
           x: 4,
@@ -498,7 +498,7 @@ export default {
           w: 1,
           h: 1,
           i: '4',
-          title: '% of reads in peaks',
+          title: 'Percent of reads in peaks',
         },
         {
           x: 0,
@@ -538,7 +538,7 @@ export default {
           w: 2,
           h: 1,
           i: '9',
-          title: '# of features in each cell',
+          title: 'Number of peaks in each cell',
         },
         {
           x: 2,
@@ -546,7 +546,7 @@ export default {
           w: 2,
           h: 1,
           i: '10',
-          title: '# of reads in each cell',
+          title: 'Number of total reads in each cell',
         },
         {
           x: 4,
@@ -554,7 +554,7 @@ export default {
           w: 2,
           h: 1,
           i: '11',
-          title: '# of atac peak fragments',
+          title: 'Number of ATAC fragments',
         },
         {
           x: 2,
@@ -562,7 +562,7 @@ export default {
           w: 2,
           h: 1,
           i: '12',
-          title: '# of atac peak fragments',
+          title: 'Number of ATAC fragments',
         },
       ],
       tab: null,
