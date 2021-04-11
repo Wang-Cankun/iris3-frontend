@@ -891,12 +891,12 @@ export default {
     setExistingCategoryItems: [],
     gene: 'Gad1',
     genes: '',
-    currentIdent: 'seurat_clusters',
+    currentIdent: '',
     currentIdentMerge: [],
     currentIdentLevels: [],
-    currentEmbedding: 'umap.rna',
+    currentEmbedding: '',
     allEmbeddings: ['pca', 'umap.rna', 'umap.atac', 'wnn.umap', 'HGT'],
-    currentAssay: 'SCT',
+    currentAssay: '',
     allAssays: ['RNA', 'SCT', 'ATAC', 'MAESTRO'],
     currentAtlas: '',
     reductionSelect: 'PCA',
@@ -964,7 +964,7 @@ export default {
       this.umapStatic = await ApiService.postCommand(
         'deepmaps/api/queue/umap-static/',
         {
-          categoryName: 'seurat_clusters',
+          categoryName: 'hgt_cluster',
         }
       )
       return 1
@@ -1010,7 +1010,10 @@ export default {
     },
     async setActiveIdents() {
       this.currentIdentMerge = []
-
+      this.$notifier.showMessage({
+        content: `Set cell identity to ${this.currentIdent}`,
+        color: 'accent',
+      })
       this.currentIdentLevels = await ApiService.postCommand(
         'deepmaps/api/queue/set-idents/',
         { name: this.currentIdent }
@@ -1036,6 +1039,10 @@ export default {
     },
 
     async setActiveEmbedding(currentEmbedding) {
+      this.$notifier.showMessage({
+        content: `Set cell embedding to ${currentEmbedding}`,
+        color: 'accent',
+      })
       const result = await ApiService.postCommand(
         'deepmaps/api/queue/set-embedding/',
         {
@@ -1053,6 +1060,10 @@ export default {
       )
     },
     async setActiveAssay(currentAssay) {
+      this.$notifier.showMessage({
+        content: `Set data assay to ${currentAssay}`,
+        color: 'accent',
+      })
       const result = await ApiService.postCommand(
         'deepmaps/api/queue/set-assay/',
         {
@@ -1083,6 +1094,8 @@ export default {
         }
       )
 
+      this.currentIdent = ['hgt_cluster']
+
       this.currentIdentLevels = await ApiService.postCommand(
         'deepmaps/api/queue/set-idents/',
         {
@@ -1097,7 +1110,7 @@ export default {
       this.umapStatic = await ApiService.postCommand(
         'deepmaps/api/queue/umap-static/',
         {
-          categoryName: 'seurat_clusters',
+          categoryName: 'hgt_cluster',
         }
       )
 
