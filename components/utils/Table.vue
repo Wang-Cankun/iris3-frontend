@@ -50,17 +50,7 @@ EnrichmentTable.vue
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title class="d-flex align-start">
-                <download-excel :data="items" type="csv">
-                  <v-btn color="primary"> Download</v-btn
-                  ><v-tooltip top>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon color="primary" dark v-bind="attrs" v-on="on"
-                        >mdi-help-circle-outline</v-icon
-                      >
-                    </template>
-                    <span>Hint.</span>
-                  </v-tooltip> </download-excel
-                ><v-btn color="primary" @click="copyGenes(genes)"
+                <v-btn color="primary" @click="copyGenes(genes)"
                   >Copy</v-btn
                 ></v-toolbar-title
               >
@@ -90,7 +80,7 @@ export default {
     i: { type: String, required: true, default: '0' },
   },
   data() {
-    return { expanded: [] }
+    return { search: '', expanded: [] }
   },
 
   methods: {
