@@ -14,7 +14,7 @@
           <span>{{ item }}</span>
         </v-chip>
         <span v-if="index === 1" class="grey--text caption">
-          (+{{ all.length - 1 }} others)
+          (+{{ selected.length - 1 }} others)
         </span>
       </template>
       <template v-slot:prepend-item>
@@ -30,6 +30,14 @@
         </v-list-item>
         <v-divider class="mt-2"></v-divider> </template
     ></v-select>
+    <v-slider
+      v-model="topNumber"
+      hint="Select top N"
+      :max="all.length"
+      min="0"
+      thumb-label="always"
+      @change="updateSelectedByIndex"
+    ></v-slider>
   </div>
 </template>
 
@@ -42,6 +50,16 @@ export default {
     return {
       selected: [],
     }
+  },
+  computed: {
+    topNumber: {
+      get() {
+        return this.selected.length
+      },
+      set(val) {
+        this.selected = this.all.slice(0, val)
+      },
+    },
   },
   watch: {
     selected() {
@@ -65,12 +83,15 @@ export default {
     },
     toggleSelect() {
       this.$nextTick(() => {
-        if (this.selected.length) {
+        if (this.selected.length > 0) {
           this.selected = []
         } else {
           this.selected = this.all
         }
       })
+    },
+    updateSelectedByIndex() {
+      this.selected = this.all.slice(0, this.topNumber)
     },
   },
 }

@@ -20,7 +20,7 @@
         </v-menu></v-card-title
       >
       <v-row>
-        <v-col cols="12">Perform GSEA using the above DEGs </v-col>
+        <v-col cols="12">Perform GSEA </v-col>
         <v-col cols="12">
           <v-autocomplete
             v-model="gseaDatabase"

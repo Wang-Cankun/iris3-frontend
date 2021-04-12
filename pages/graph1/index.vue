@@ -1,5 +1,6 @@
 <template>
   <div id="holder">
+    {{ elements }}
     <v-autocomplete
       v-model="currentLayouts"
       class="ml-4"
@@ -93,11 +94,6 @@ export default {
     },
     afterCreated(cy) {
       // cy: this is the cytoscape instance
-      this.$refs.cy.instance.cy
-        .layout({
-          name: 'cose',
-        })
-        .run()
       console.log('after config')
     },
     addNode(event) {

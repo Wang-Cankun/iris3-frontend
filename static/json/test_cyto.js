@@ -11,16 +11,13 @@ const config = {
   style: [
     {
       selector: 'node',
-      style: {
-        width: 'data([[degree]])',
-        height: 'data([[degree]])',
-      },
+      style: {},
     },
     {
       selector: 'node[type="tf"]',
       style: {
         shape: 'triangle',
-        label: 'data(id)',
+        label: 'data(name)',
       },
     },
     {
@@ -37,7 +34,7 @@ const config = {
       selector: 'node[type="gene"]',
       style: {
         'background-color': 'grey',
-        label: 'data(id)',
+        label: 'data(name)',
       },
     },
     {

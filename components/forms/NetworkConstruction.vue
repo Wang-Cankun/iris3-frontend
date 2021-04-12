@@ -11,18 +11,34 @@
                   <p class="subtitle-1 font-weight-bold text-center">Network</p>
                   <v-col>
                     <p class="title-h4">
-                      Select regulon
+                      Select cell type
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <v-icon color="primary" dark v-on="on"
                             >mdi-help-circle-outline</v-icon
                           >
                         </template>
-                        <p>Select regulon to display</p>
+                        <p>Select cell type to display</p>
                       </v-tooltip>
                     </p>
                     Selected:
-                    {{ selectedTf }}
+                    <v-select
+                      v-model="selectedCt"
+                      :items="ctList"
+                      dense
+                    ></v-select>
+                    <p class="title-h4">
+                      Select regulons
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon color="primary" dark v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>Select regulons to display</p>
+                      </v-tooltip>
+                    </p>
+                    Selected:
                     <selection
                       :all="tfList"
                       :selected.sync="selectedTf"
@@ -65,21 +81,21 @@
                 :i="layout[0].i"
                 :imagew="600"
                 :imageh="550"
-                :graph="graph"
+                :nodes="graphNodes"
+                :edges="graphEdges"
                 :title="layout[0].title"
               >
               </network>
-              <v-card class="ma-0"
-                ><grid-item
-                  :x="layout[1].x"
-                  :y="layout[1].y"
-                  :w="layout[1].w"
-                  :h="layout[1].h"
-                  :i="layout[1].i"
-                  class="grid-item-border"
-                >
-                </grid-item
-              ></v-card>
+              ><resize-table
+                :x="layout[1].x"
+                :y="layout[1].y"
+                :w="layout[1].w"
+                :h="layout[1].h"
+                :i="layout[1].i"
+                :headers="headers"
+                :items="regulonTable"
+              >
+              </resize-table>
             </grid-layout>
           </div>
         </v-col>
@@ -88,14 +104,18 @@
   </v-col>
 </template>
 <script>
-import ExampleGraph from 'static/json/test_network.json'
+import RegulonList from 'static/json/example_regulon.json'
+import ExampleNodes from 'static/json/example_nodes.json'
+import ExampleEdges from 'static/json/example_edges.json'
 import RegulonNetwork from '~/components/utils/RegulonNetwork'
 import selection from '~/components/utils/Selection'
+import ResizeTable from '~/components/utils/Table'
 
 export default {
   components: {
     network: RegulonNetwork,
     selection,
+    'resize-table': ResizeTable,
   },
   props: {},
   data: () => ({
@@ -115,7 +135,7 @@ export default {
         w: 2,
         h: 2,
         i: '1',
-        title: 'Differential gene expression',
+        title: 'Regulons',
       },
       {
         x: 0,
@@ -123,7 +143,7 @@ export default {
         w: 3,
         h: 2,
         i: '2',
-        title: 'Plotting genes',
+        title: 'Plot genes',
       },
       {
         x: 3,
@@ -145,57 +165,50 @@ export default {
       },
     ],
     headers: [
+      { text: 'Cell type', value: 'ct' },
       {
-        text: 'Gene',
+        text: 'Tf',
         align: 'start',
         sortable: false,
-        value: 'gene',
+        value: 'tf',
       },
-      { text: 'LogFC', value: 'avg_log2FC' },
-      { text: 'Adj.p.value', value: 'p_val_adj' },
+      { text: 'Number of genes', value: 'n' },
+      { text: 'RSS', value: 'rss' },
+      { text: '', value: 'data-table-expand' },
     ],
     // TF selection
     selectedTf: [],
+    selectedCt: 1,
+    sliderTf: 1,
   }),
   computed: {
-    graph() {
-      const activeNodes = ExampleGraph.links
-        .filter((item) => this.selectedTf.includes(item.source))
-        .reduce((acc, cur) => acc.add(cur.target), new Set(this.selectedTf))
-      if (activeNodes.size) {
-        const tmpNodes = ExampleGraph.nodes.filter((item) =>
-          activeNodes.has(item.name)
-        )
-        const tmpLinks = ExampleGraph.links.filter(
-          (item) => activeNodes.has(item.source) || activeNodes.has(item.target)
-        )
-        const tmpCategories = ExampleGraph.categories.filter(
-          (item) =>
-            this.selectedTf.includes(item.geneSymbol) ||
-            item.geneSymbol === 'Gene'
-        )
-        return {
-          nodes: tmpNodes,
-          links: tmpLinks,
-          categories: tmpCategories,
-        }
-      } else {
-        return {
-          nodes: [],
-          links: [],
-          categories: [],
-        }
-      }
+    selectedNodes() {
+      return ExampleEdges.filter((i) =>
+        this.selectedTf.includes(i.source)
+      ).reduce((acc, cur) => acc.add(cur.target), new Set(this.selectedTf))
+    },
+    graphNodes() {
+      return ExampleNodes.filter((i) => this.selectedNodes.has(i.id))
+    },
+    graphEdges() {
+      return ExampleEdges.filter((i) => this.selectedNodes.has(i.source))
+    },
+    regulonTable() {
+      return RegulonList.filter((i) => i.ct === this.selectedCt)
     },
 
+    ctList() {
+      return RegulonList.map((item) => item.ct)
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .sort()
+    },
     tfList() {
-      const result = ExampleGraph.nodes
-        .filter((item) => item.category.includes('Regulon'))
-        .map((item) => item.category)
-        .map((item) => item.replace('Regulon-', ''))
-      return result
+      return RegulonList.filter((i) => i.ct === this.selectedCt).map(
+        (i) => i.tf
+      )
     },
   },
+  created() {},
   methods: {
     runNetwork() {
       console.log(this)

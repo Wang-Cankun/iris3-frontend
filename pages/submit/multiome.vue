@@ -53,7 +53,7 @@
 import QualityCheckRna from '@/components/forms/QualityCheckRna.vue'
 import QualityCheckAtac from '@/components/forms/QualityCheckAtac.vue'
 import CellCluster from '@/components/forms/CellClusterMultiome.vue'
-import NetworkConstruction from '@/components/forms/NetworkConstruction.vue'
+import NetworkConstruction from '~/components/forms/NetworkConstruction.vue'
 import ProjectInfo from '~/components/forms/ProjectInfo'
 
 export default {

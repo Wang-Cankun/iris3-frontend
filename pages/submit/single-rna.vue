@@ -48,7 +48,7 @@
 <script>
 import QualityCheck from '@/components/forms/QualityCheckRna.vue'
 import CellCluster from '@/components/forms/CellCluster.vue'
-import NetworkConstruction from '@/components/forms/NetworkConstruction.vue'
+import NetworkConstruction from '~/components/forms/NetworkConstruction.vue'
 import ProjectInfo from '~/components/forms/ProjectInfo'
 
 export default {

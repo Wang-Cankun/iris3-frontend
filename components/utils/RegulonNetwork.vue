@@ -1,6 +1,14 @@
 <template>
   <v-card class="ma-0"
-    ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
+    ><grid-item
+      :w="w"
+      :h="h"
+      :x="x"
+      :y="y"
+      :i="i"
+      class="grid-item-border"
+      drag-ignore-from=".no-drag"
+    >
       <v-card-title
         class="primary white--text caption px-2 py-1"
         @mouseover="hover = true"
@@ -26,23 +34,54 @@
           </v-menu>
         </div></v-card-title
       >
-      <ECharts ref="chart" :option="option" /> </grid-item
+      <div id="holder" class="no-drag">
+        <v-autocomplete
+          v-model="currentLayouts"
+          class="ml-4"
+          :items="allLayouts"
+          label="Select layout"
+          @change="changeLayout(currentLayouts)"
+        ></v-autocomplete>
+        <cytoscape
+          ref="cy"
+          :config="config"
+          :pre-config="preConfig"
+          :afte-created="afterCreated"
+          @mousedown="addNode"
+          @cxttapstart="updateNode"
+        >
+          <cy-element
+            v-for="def in elements"
+            :key="`${def.data.id}`"
+            :definition="def"
+            @mousedown="deleteNode($event, def.data.id)"
+          />
+        </cytoscape>
+      </div> </grid-item
   ></v-card>
 </template>
 
 <script>
-import * as echarts from 'echarts'
-import { createComponent } from 'echarts-for-vue'
+import cola from 'cytoscape-cola'
+import avsdf from 'cytoscape-avsdf'
+import cise from 'cytoscape-cise'
+import coseBilkent from 'cytoscape-cose-bilkent'
+import fcose from 'cytoscape-fcose'
+import euler from 'cytoscape-euler'
+import spread from 'cytoscape-spread'
+import dagre from 'cytoscape-dagre'
+import klay from 'cytoscape-klay'
 
-import EchartsService from '~/services/EchartsService.js'
+import exampleConfig from '~/static/json/test_cyto'
 
 export default {
   components: {
-    ECharts: createComponent({ echarts }), // use as a component
+    // use as a component
   },
   props: {
     title: { type: String, required: true },
-    graph: { type: Object, required: true },
+    nodes: { type: Array, required: true },
+    edges: { type: Array, required: true },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },
@@ -52,77 +91,72 @@ export default {
   data() {
     return {
       hover: false,
+      config: exampleConfig.config,
+      currentLayouts: '',
+      allLayouts: [
+        'circle',
+        'grid',
+        'random',
+        'breadthfirst',
+        'concentric',
+        'cose',
+        'cola',
+        'avsdf',
+        'cose-bilkent',
+        'fcose',
+        'euler',
+        'spread',
+        'dagre',
+        'klay',
+      ],
     }
   },
   computed: {
-    option() {
-      this.graph.nodes.forEach((node) => {
-        if (node.category !== 'Gene') {
-          node.label = {
-            show: true,
-          }
-        } else {
-          node.label = {
-            show: false,
-          }
-          node.itemStyle = {
-            color: '#BDBDBD',
-          }
-        }
+    cy() {
+      return this.$refs.cy.instance
+    },
+    elements() {
+      const graph = [...this.nodes, ...this.edges].map((item) => {
+        return { data: item }
       })
-
-      return {
-        title: {
-          text: '',
-          subtext: '',
-          top: 'top',
-          left: 'left',
-        },
-        tooltip: {},
-        legend: [
-          {
-            data: this.graph.categories.map((cate) => cate.name),
-          },
-        ],
-        animationDurationUpdate: 1500,
-        animationEasingUpdate: 'quinticInOut',
-        series: [
-          {
-            name: '',
-            type: 'graph',
-            layout: 'none',
-            draggable: true,
-            selectMode: 'multiple',
-            data: this.graph.nodes,
-            links: this.graph.links,
-            categories: this.graph.categories,
-            roam: true,
-            label: {
-              position: 'right',
-              formatter: '{b}',
-              show: true,
-            },
-            lineStyle: {
-              color: 'source',
-              curveness: 0.3,
-            },
-            emphasis: {
-              blurScope: 'global',
-              focus: 'adjacency',
-              label: {
-                position: 'right',
-                show: true,
-              },
-              lineStyle: {
-                width: 10,
-              },
-            },
-          },
-        ],
-      }
+      return graph
     },
   },
   methods: {
+    preConfig(cytoscape) {
+      console.log('calling pre-config')
+      // cytoscape: this is the cytoscape constructor
+      cytoscape.use(cola)
+      cytoscape.use(cise)
+      cytoscape.use(avsdf)
+      cytoscape.use(coseBilkent)
+      cytoscape.use(fcose)
+      cytoscape.use(euler)
+      cytoscape.use(spread)
+      cytoscape.use(dagre)
+      cytoscape.use(klay)
+    },
+    afterCreated(cy) {
+      // cy: this is the cytoscape instance
+      console.log('after config')
+    },
+    addNode(event) {
+      console.log(event.target, this.cy)
+      if (event.target === this.cy) console.log('adding node', event.target)
+    },
+    deleteNode(id) {
+      console.log('node clicked', id)
+    },
+    updateNode(event) {
+      console.log('right click node', event)
+    },
+    changeLayout(type) {
+      const layout = this.cy.layout({
+        name: type,
+      })
+
+      layout.run()
+    },
     resizeEvent(i, newH, newW, newHPx, newWPx) {
       console.log(
         'RESIZE i=' +
@@ -137,12 +171,8 @@ export default {
           newWPx
       )
     },
-    downloadPNG() {
-      EchartsService.downloadImg(this.$refs.chart.inst, 'png')
-    },
-    downloadJPG() {
-      EchartsService.downloadImg(this.$refs.chart.inst, 'jpg')
-    },
+    downloadPNG() {},
+    downloadJPG() {},
   },
 }
 </script>
@@ -156,5 +186,11 @@ export default {
   height: 100%;
   border-radius: 4px;
   background: white;
+}
+</style>
+<style>
+#holder {
+  width: 100%;
+  height: 30%;
 }
 </style>
