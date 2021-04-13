@@ -43,7 +43,7 @@
         </v-stepper-content>
         <v-stepper-content step="3"
           ><v-row><network-form></network-form></v-row>
-          <v-btn text @click="e1 = 1">Previous</v-btn>
+          <v-btn text @click="e1 = 2">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
