@@ -559,8 +559,8 @@
                         </v-list>
                       </v-menu></v-card-title
                     >
-                    <v-row
-                      ><v-col cols="6">
+                    <v-row>
+                      <v-col cols="6">
                         <v-autocomplete
                           v-model="ident1"
                           class="ml-4"
@@ -574,10 +574,54 @@
                           class="ml-4"
                           :items="currentIdentLevels"
                           label="Group 2"
-                        ></v-autocomplete> </v-col
-                    ></v-row>
+                        ></v-autocomplete>
+                      </v-col>
+                      <!--<v-col cols="6" class="ma-0">
+                        <p class="ml-4 mb-0 title-h4">
+                          Assay
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="primary" dark v-on="on"
+                                >mdi-help-circle-outline</v-icon
+                              >
+                            </template>
+                            <p>Assay</p>
+                          </v-tooltip>
+                          <v-select
+                            v-model="degAssay"
+                            class="px-0"
+                            :items="allAssays"
+                            outlined
+                            dense
+                          ></v-select>
+                        </p>
+                      </v-col>
+                      -->
+                    </v-row>
                     <v-row>
-                      <v-col cols="6">
+                      <v-col cols="4" class="ma-0">
+                        <p class="ml-4 mb-0 title-h4">
+                          P-value cutoff
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="primary" dark v-on="on"
+                                >mdi-help-circle-outline</v-icon
+                              >
+                            </template>
+                            <p>pvalue</p>
+                          </v-tooltip>
+                          <v-text-field
+                            v-model="degPvalue"
+                            class="px-0"
+                            outlined
+                            type="number"
+                            step="0.01"
+                            background-color="white"
+                            dense
+                          ></v-text-field>
+                        </p>
+                      </v-col>
+                      <v-col cols="4">
                         <p class="ml-4 mb-0 title-h4">
                           Min cell percent
                           <v-tooltip top>
@@ -598,11 +642,12 @@
                             v-model="minPct"
                             class="px-0"
                             outlined
+                            dense
                             background-color="white"
                           ></v-text-field>
                         </p>
                       </v-col>
-                      <v-col cols="6" class="ma-0">
+                      <v-col cols="4" class="ma-0">
                         <p class="ml-4 mb-0 title-h4">
                           LogFC threshold
                           <v-tooltip top>
@@ -623,6 +668,7 @@
                             v-model="minLfc"
                             class="px-0"
                             outlined
+                            dense
                             background-color="white"
                           ></v-text-field>
                         </p>
@@ -846,12 +892,15 @@ export default {
     idents: [],
     violinSplit: 'Sex',
     resHistory: [],
+    // DEG
     ident1: 1,
     ident2: 2,
     minPct: 0.2,
     minLfc: 0.8,
     deResult: [],
     deg: [],
+    degAssay: 'RNA',
+    degPvalue: 0.05,
     addTransferMetadataDialog: false,
     addMetadataDialog: false,
     // Add metadata
@@ -1656,6 +1705,8 @@ export default {
           ident2: this.ident2,
           min_pct: this.minPct,
           min_lfc: this.minLfc,
+          assay: 'RNA',
+          pvalue: this.degPvalue,
         })
         .then((response) => {
           let i = 0

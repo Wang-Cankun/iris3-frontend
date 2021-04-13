@@ -60,7 +60,7 @@
           </v-expansion-panels>
         </v-col>
         <v-col cols="9">
-          <div>
+          <div v-if="showNetwork">
             <grid-layout
               :layout.sync="layout"
               :col-num="6"
@@ -86,7 +86,7 @@
                 :title="layout[0].title"
               >
               </network>
-              ><resize-table
+              <resize-table
                 :x="layout[1].x"
                 :y="layout[1].y"
                 :w="layout[1].w"
@@ -180,6 +180,7 @@ export default {
     selectedTf: [],
     selectedCt: 1,
     sliderTf: 1,
+    showNetwork: false,
   }),
   computed: {
     selectedNodes() {
@@ -211,6 +212,7 @@ export default {
   created() {},
   methods: {
     runNetwork() {
+      this.showNetwork = true
       console.log(this)
     },
   },

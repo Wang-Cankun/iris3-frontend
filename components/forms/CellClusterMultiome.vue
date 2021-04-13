@@ -213,7 +213,7 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content
                 ><v-card class="py-3" outlined color="blue-grey lighten-5">
-                  <p class="subtitle-1 font-weight-bold text-center">
+                  <!--<p class="subtitle-1 font-weight-bold text-center">
                     Active assay
                   </p>
                   <div class="d-flex justify-between">
@@ -225,7 +225,7 @@
                       @change="setActiveAssay(currentAssay)"
                     ></v-select>
                   </div>
-                  <v-divider />
+                  <v-divider />-->
 
                   <p class="subtitle-1 font-weight-bold text-center">
                     Active embedding
@@ -325,7 +325,7 @@
                     >
 
                     <div class="d-flex flex mt-4">
-                      <v-text-field
+                      <v-autocomplete
                         v-model="addGeneName"
                         label="Gene"
                         placeholder="Name"
@@ -333,7 +333,7 @@
                         outlined
                         dense
                         background-color="white"
-                      ></v-text-field
+                      ></v-autocomplete
                       ><v-select
                         v-model="addGeneDirection"
                         cols="3"
@@ -459,7 +459,7 @@
                     >
 
                     <div class="d-flex flex mt-4">
-                      <v-text-field
+                      <v-autocomplete
                         v-model="selectionGeneName"
                         label="Gene"
                         placeholder="Name"
@@ -467,7 +467,7 @@
                         outlined
                         dense
                         background-color="white"
-                      ></v-text-field
+                      ></v-autocomplete
                       ><v-select
                         v-model="selectionGeneDirection"
                         cols="3"
@@ -619,7 +619,49 @@
                         ></v-autocomplete> </v-col
                     ></v-row>
                     <v-row>
-                      <v-col cols="6">
+                      <v-col cols="6" class="ma-0">
+                        <p class="ml-4 mb-0 title-h4">
+                          Assay
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="primary" dark v-on="on"
+                                >mdi-help-circle-outline</v-icon
+                              >
+                            </template>
+                            <p>Assay</p>
+                          </v-tooltip>
+                          <v-select
+                            v-model="degAssay"
+                            class="px-0"
+                            :items="allAssays"
+                            outlined
+                            dense
+                          ></v-select>
+                        </p>
+                      </v-col>
+                      <v-col cols="6" class="ma-0">
+                        <p class="ml-4 mb-0 title-h4">
+                          P-value threshold
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="primary" dark v-on="on"
+                                >mdi-help-circle-outline</v-icon
+                              >
+                            </template>
+                            <p>pvalue</p>
+                          </v-tooltip>
+                          <v-text-field
+                            v-model="degPvalue"
+                            class="px-0"
+                            outlined
+                            type="number"
+                            step="0.01"
+                            background-color="white"
+                            dense
+                          ></v-text-field>
+                        </p>
+                      </v-col>
+                      <v-col cols="6" class="ma-0">
                         <p class="ml-4 mb-0 title-h4">
                           Min cell percent
                           <v-tooltip top>
@@ -640,6 +682,8 @@
                             v-model="minPct"
                             class="px-0"
                             outlined
+                            type="number"
+                            step="0.1"
                             background-color="white"
                             dense
                           ></v-text-field>
@@ -666,6 +710,8 @@
                             v-model="minLfc"
                             class="px-0"
                             outlined
+                            type="number"
+                            step="0.1"
                             background-color="white"
                             dense
                           ></v-text-field>
@@ -717,16 +763,23 @@
                         </v-list>
                       </v-menu></v-card-title
                     >
-                    <v-row
-                      ><v-col cols="6">
+                    <v-row>
+                      <v-col cols="4">
+                        <v-select
+                          v-model="plotGeneAssay"
+                          class="ml-4"
+                          :items="allAssays"
+                          label="Assay"
+                        ></v-select> </v-col
+                      ><v-col cols="4">
                         <v-autocomplete
-                          v-model="gene"
+                          v-model="plotGeneSymbol"
                           class="ml-4"
                           :items="genes"
                           label="Gene"
                         ></v-autocomplete>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="4">
                         <div v-if="idents != ''">
                           <p class="subtitle-2 text--primary mx-4">
                             Split the violin plots by:
@@ -910,13 +963,6 @@ export default {
       'to-be-added',
     ],
     idents: [],
-    violinSplit: 'Sex',
-    ident1: 1,
-    ident2: 2,
-    minPct: 0.2,
-    minLfc: 0.8,
-    deResult: [],
-    deg: [],
     addTransferMetadataDialog: false,
     addMetadataDialog: false,
     // Add metadata
@@ -940,6 +986,19 @@ export default {
     // Renameing
     oldClusterName: '',
     newClusterName: '',
+    // DEG
+    ident1: 1,
+    ident2: 2,
+    minPct: 0.2,
+    minLfc: 0.4,
+    deResult: [],
+    deg: [],
+    degAssay: 'RNA',
+    degPvalue: 0.05,
+    // Gene plots
+    plotGeneSymbol: '',
+    plotGeneAssay: '',
+    violinSplit: 'Sex',
   }),
   computed: {
     cellClusterArray() {
@@ -1487,6 +1546,8 @@ export default {
           ident2: this.ident2,
           min_pct: this.minPct,
           min_lfc: this.minLfc,
+          assay: this.degAssay,
+          pvalue: this.degPvalue,
         })
         .then((response) => {
           let i = 0
@@ -1529,8 +1590,9 @@ export default {
       })
       await this.$axios
         .post('deepmaps/api/queue/violin-gene/', {
-          gene: this.gene,
+          gene: this.plotGeneSymbol,
           split: this.violinSplit,
+          assay: this.plotGeneAssay,
         })
         .then((response) => {
           setTimeout(async () => {
@@ -1545,7 +1607,8 @@ export default {
         })
       await this.$axios
         .post('deepmaps/api/queue/feature-gene/', {
-          gene: this.gene,
+          gene: this.plotGeneSymbol,
+          assay: this.plotGeneAssay,
         })
         .then((response) => {
           setTimeout(async () => {

@@ -63,14 +63,8 @@
 
 <script>
 import cola from 'cytoscape-cola'
-import avsdf from 'cytoscape-avsdf'
-import cise from 'cytoscape-cise'
-import coseBilkent from 'cytoscape-cose-bilkent'
-import fcose from 'cytoscape-fcose'
 import euler from 'cytoscape-euler'
 import spread from 'cytoscape-spread'
-import dagre from 'cytoscape-dagre'
-import klay from 'cytoscape-klay'
 
 import exampleConfig from '~/static/json/test_cyto'
 
@@ -96,18 +90,11 @@ export default {
       allLayouts: [
         'circle',
         'grid',
-        'random',
         'breadthfirst',
         'concentric',
-        'cose',
         'cola',
-        'avsdf',
-        'cose-bilkent',
-        'fcose',
         'euler',
         'spread',
-        'dagre',
-        'klay',
       ],
     }
   },
@@ -127,14 +114,8 @@ export default {
       console.log('calling pre-config')
       // cytoscape: this is the cytoscape constructor
       cytoscape.use(cola)
-      cytoscape.use(cise)
-      cytoscape.use(avsdf)
-      cytoscape.use(coseBilkent)
-      cytoscape.use(fcose)
       cytoscape.use(euler)
       cytoscape.use(spread)
-      cytoscape.use(dagre)
-      cytoscape.use(klay)
     },
     afterCreated(cy) {
       // cy: this is the cytoscape instance
@@ -191,6 +172,9 @@ export default {
 <style>
 #holder {
   width: 100%;
-  height: 30%;
+}
+#cytoscape-div {
+  min-height: 470px !important;
+  display: block;
 }
 </style>
