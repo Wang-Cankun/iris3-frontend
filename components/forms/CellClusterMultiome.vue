@@ -650,15 +650,14 @@
                             </template>
                             <p>pvalue</p>
                           </v-tooltip>
-                          <v-text-field
+                          <v-select
                             v-model="degPvalue"
                             class="px-0"
+                            :items="degPvalueList"
                             outlined
-                            type="number"
-                            step="0.01"
                             background-color="white"
                             dense
-                          ></v-text-field>
+                          ></v-select>
                         </p>
                       </v-col>
                       <v-col cols="6" class="ma-0">
@@ -995,6 +994,7 @@ export default {
     deg: [],
     degAssay: 'RNA',
     degPvalue: 0.05,
+    degPvalueList: [0.01, 0.05, 0.1],
     // Gene plots
     plotGeneSymbol: '',
     plotGeneAssay: '',

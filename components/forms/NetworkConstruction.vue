@@ -10,6 +10,91 @@
                 <v-card class="mt-6" outlined color="blue-grey lighten-5">
                   <p class="subtitle-1 font-weight-bold text-center">Network</p>
                   <v-col>
+                    <p class="subtitle-1 font-weight-bold text-center">
+                      Edge style
+                    </p>
+                    <v-slider
+                      v-model="edgeWidth"
+                      label="Edge width"
+                      :max="20"
+                      :min="1"
+                      thumb-label="always"
+                    ></v-slider>
+                    <v-select
+                      v-model="edgeType"
+                      :items="edgeTypeList"
+                      label="Edge type"
+                      dense
+                    ></v-select>
+                    <v-divider />
+                    <p class="subtitle-1 font-weight-bold text-center">
+                      Node style
+                    </p>
+                    <v-switch
+                      v-model="geneSymbolSwitch"
+                      :label="`Show gene label: ${geneSymbolSwitch.toString()}`"
+                    ></v-switch>
+                    <v-slider
+                      v-model="geneNodeSize"
+                      label="Gene node size"
+                      :max="200"
+                      min="1"
+                      thumb-label="always"
+                    ></v-slider>
+                    <v-slider
+                      v-model="geneNodeTextSize"
+                      label="Gene text size"
+                      :max="200"
+                      min="1"
+                      thumb-label="always"
+                    ></v-slider>
+                    <v-select
+                      v-model="geneNodeShape"
+                      :items="nodeShapeList"
+                      label="Gene node shape"
+                      dense
+                    ></v-select>
+                    <v-color-picker
+                      v-model="geneNodeColor"
+                      class="ma-2"
+                      :swatches="swatches"
+                      label="Gene node color"
+                      show-swatches
+                    ></v-color-picker>
+                    <v-switch
+                      v-model="tfSymbolSwitch"
+                      :label="`Show TF label: ${tfSymbolSwitch.toString()}`"
+                    ></v-switch>
+                    <v-slider
+                      v-model="tfNodeSize"
+                      label="TF node size"
+                      :max="200"
+                      min="1"
+                      thumb-label="always"
+                    ></v-slider>
+                    <v-slider
+                      v-model="tfNodeTextSize"
+                      label="TF text size"
+                      :max="200"
+                      min="1"
+                      thumb-label="always"
+                    ></v-slider>
+                    <v-select
+                      v-model="tfNodeShape"
+                      :items="nodeShapeList"
+                      label="TF node shape"
+                      dense
+                    ></v-select>
+                    <v-color-picker
+                      v-model="tfNodeColor"
+                      class="ma-2"
+                      :swatches="swatches"
+                      type="hex"
+                      label="TF node color"
+                      show-swatches
+                    ></v-color-picker>
+                  </v-col>
+                  <v-col>
                     <p class="title-h4">
                       Select cell type
                       <v-tooltip top>
@@ -83,10 +168,12 @@
                 :imageh="550"
                 :nodes="graphNodes"
                 :edges="graphEdges"
+                :css="graphStyle"
                 :title="layout[0].title"
               >
               </network>
               <resize-table
+                :key="layout[1].i"
                 :x="layout[1].x"
                 :y="layout[1].y"
                 :w="layout[1].w"
@@ -167,7 +254,7 @@ export default {
     headers: [
       { text: 'Cell type', value: 'ct' },
       {
-        text: 'Tf',
+        text: 'TF',
         align: 'start',
         sortable: false,
         value: 'tf',
@@ -176,6 +263,60 @@ export default {
       { text: 'RSS', value: 'rss' },
       { text: '', value: 'data-table-expand' },
     ],
+    // Network graph style
+    geneSymbolSwitch: false,
+    tfSymbolSwitch: true,
+    geneNodeSize: 20,
+    tfNodeSize: 50,
+    geneNodeTextSize: 20,
+    tfNodeTextSize: 30,
+    edgeWidth: 3,
+    edgeType: 'straight',
+    edgeTypeList: [
+      'straight',
+      'bezier',
+      'segments',
+      'unbundled-bezier',
+      'haystack',
+      'taxi',
+    ],
+    swatches: [
+      ['#FF0000', '#AA0000', '#550000'],
+      ['#FFFF00', '#AAAA00', '#555500'],
+      ['#00FF00', '#00AA00', '#005500'],
+      ['#00FFFF', '#00AAAA', '#005555'],
+      ['#0000FF', '#0000AA', '#000055'],
+    ],
+    geneNodeShape: 'ellipse',
+    tfNodeShape: 'triangle',
+    nodeShapeList: [
+      'ellipse',
+      'triangle',
+      'round-triangle',
+      'rectangle',
+      'round-rectangle',
+      'bottom-round-rectangle',
+      'cut-rectangle',
+      'barrel',
+      'rhomboid',
+      'diamond',
+      'round-diamond',
+      'pentagon',
+      'round-pentagon',
+      'hexagon',
+      'round-hexagon',
+      'concave-hexagon',
+      'heptagon',
+      'round-heptagon',
+      'octagon',
+      'round-octagon',
+      'star',
+      'tag',
+      'round-tag',
+      'vee',
+    ],
+    tfNodeColor: '',
+    geneNodeColor: '',
     // TF selection
     selectedTf: [],
     selectedCt: 1,
@@ -193,6 +334,61 @@ export default {
     },
     graphEdges() {
       return ExampleEdges.filter((i) => this.selectedNodes.has(i.source))
+    },
+    graphStyle() {
+      const tfLabel = this.tfSymbolSwitch ? 'data(name)' : ''
+      const geneLabel = this.geneSymbolSwitch ? 'data(name)' : ''
+      const tfNodeSize = this.tfNodeSize
+      const geneNodeSize = this.geneNodeSize
+
+      const style = [
+        {
+          selector: 'node',
+          style: {},
+        },
+        {
+          selector: 'node[type="gene"]',
+          style: {
+            shape: this.geneNodeShape,
+            'background-color': this.geneNodeColor,
+            label: geneLabel,
+            'font-size': this.geneNodeTextSize + 'px',
+            width: geneNodeSize,
+            height: geneNodeSize,
+          },
+        },
+        {
+          selector: 'node[type="tf"]',
+          style: {
+            shape: this.tfNodeShape,
+            'background-color': this.tfNodeColor,
+            label: tfLabel,
+            width: tfNodeSize,
+            height: tfNodeSize,
+            'font-size': this.tfNodeTextSize + 'px',
+          },
+        },
+        {
+          selector: 'edge',
+          style: {
+            width: this.edgeWidth,
+            'line-color': '#ccc',
+            // 'target-arrow-color': '#ccc',
+            // 'target-arrow-shape': 'triangle',
+            'curve-style': this.edgeType,
+          },
+        },
+
+        {
+          selector: '*[background_color]',
+          style: {
+            'background-color': 'data(background_color)',
+            'text-outline-color': 'data(background_color)',
+            'line-color': 'data(background_color)',
+          },
+        },
+      ]
+      return style
     },
     regulonTable() {
       return RegulonList.filter((i) => i.ct === this.selectedCt)
@@ -213,7 +409,6 @@ export default {
   methods: {
     runNetwork() {
       this.showNetwork = true
-      console.log(this)
     },
   },
 }

@@ -32,7 +32,7 @@
     ></v-select>
     <v-slider
       v-model="topNumber"
-      hint="Select top N"
+      label="Select top N regulons"
       :max="all.length"
       min="0"
       thumb-label="always"

@@ -1,4 +1,3 @@
-EnrichmentTable.vue
 <template>
   <v-card class="ma-0"
     ><grid-item
@@ -47,25 +46,56 @@ EnrichmentTable.vue
           :expanded.sync="expanded"
           show-expand
         >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title class="d-flex align-start">
-                <v-btn color="primary" @click="copyGenes(genes)"
-                  >Copy</v-btn
-                ></v-toolbar-title
-              >
-              <v-spacer></v-spacer>
-            </v-toolbar>
-          </template>
           <template v-slot:expanded-item="{ item }">
             <td :colspan="headers.length">
-              {{ item.genes }}
+              <v-virtual-scroll
+                height="125"
+                item-height="40"
+                :items="item.genes.split(',')"
+              >
+                <span> Target genes:</span>
+                <template v-slot:default="{ item }">
+                  <v-list-item :key="item">
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ item }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                      <v-btn
+                        depressed
+                        small
+                        :href="'https://www.uniprot.org/uniprot/?query=' + item"
+                        target="_blank"
+                      >
+                        UniProt
+                        <v-icon color="primary" right> mdi-open-in-new </v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                    <v-list-item-action>
+                      <v-btn
+                        depressed
+                        small
+                        :href="
+                          'https://www.genecards.org/cgi-bin/carddisp.pl?gene=' +
+                          item
+                        "
+                        target="_blank"
+                      >
+                        GeneCards
+                        <v-icon color="primary" right> mdi-open-in-new </v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                  <v-divider />
+                </template>
+              </v-virtual-scroll>
             </td>
           </template>
         </v-data-table>
-      </div>
-    </grid-item></v-card
-  >
+      </div> </grid-item
+  ></v-card>
 </template>
 
 <script>
@@ -104,6 +134,13 @@ export default {
           ', W(px)=' +
           newWPx
       )
+    },
+    async copyGenes(genes) {
+      try {
+        await this.$copyText(genes.join('\n'))
+      } catch (e) {
+        console.error(e)
+      }
     },
   },
 }

@@ -44,7 +44,7 @@
         ></v-autocomplete>
         <cytoscape
           ref="cy"
-          :config="config"
+          :config="networkConfig"
           :pre-config="preConfig"
           :afte-created="afterCreated"
           @mousedown="addNode"
@@ -66,8 +66,6 @@ import cola from 'cytoscape-cola'
 import euler from 'cytoscape-euler'
 import spread from 'cytoscape-spread'
 
-import exampleConfig from '~/static/json/test_cyto'
-
 export default {
   components: {
     // use as a component
@@ -76,6 +74,7 @@ export default {
     title: { type: String, required: true },
     nodes: { type: Array, required: true },
     edges: { type: Array, required: true },
+    css: { type: Array, required: true },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },
@@ -85,7 +84,6 @@ export default {
   data() {
     return {
       hover: false,
-      config: exampleConfig.config,
       currentLayouts: '',
       allLayouts: [
         'circle',
@@ -107,6 +105,27 @@ export default {
         return { data: item }
       })
       return graph
+    },
+
+    networkConfig() {
+      const config = {
+        autounselectify: true,
+        boxSelectionEnabled: false,
+
+        layout: {
+          name: 'cola',
+          options: {
+            spacingFactor: 2,
+          },
+        },
+        style: this.css,
+      }
+      return config
+    },
+  },
+  watch: {
+    css() {
+      this.cy.style(this.css)
     },
   },
   methods: {
