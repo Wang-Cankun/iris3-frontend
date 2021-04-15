@@ -297,66 +297,70 @@
 
                   <v-row class="mx-2 my-2 py-2">
                     <p class="my-1 subtitle-2">Step 1: Create cell filters</p>
-                    <div class="d-flex flex">
-                      <v-select
-                        v-model="filterCategoryName"
-                        cols="3"
-                        :items="idents"
-                        label="Category"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-select
-                        v-model="filterCategoryLevel"
-                        cols="3"
-                        :items="filterCategoryLevels"
-                        label="Cluster"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        multiple
-                        background-color="white"
-                      ></v-select>
-                    </div>
-                    <v-btn color="Primary" @click="addClusterFilter()"
-                      >Add cluster filter</v-btn
-                    >
+                    <v-col cols="12">
+                      <div class="d-flex flex">
+                        <v-select
+                          v-model="filterCategoryName"
+                          cols="3"
+                          :items="idents"
+                          label="Category"
+                          class="px-1 col-2"
+                          outlined
+                          dense
+                          background-color="white"
+                        ></v-select>
+                        <v-select
+                          v-model="filterCategoryLevel"
+                          cols="3"
+                          :items="filterCategoryLevels"
+                          label="Cluster"
+                          class="px-1 col-2"
+                          outlined
+                          dense
+                          multiple
+                          background-color="white"
+                        ></v-select>
+                      </div>
 
-                    <div class="d-flex flex mt-4">
-                      <v-autocomplete
-                        v-model="addGeneName"
-                        label="Gene"
-                        :items="genes"
-                        placeholder="Name"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-autocomplete
-                      ><v-select
-                        v-model="addGeneDirection"
-                        cols="3"
-                        :items="addGeneDirectionItems"
-                        label="Direction"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-text-field
-                        v-model="addGeneThres"
-                        label="Thres"
-                        placeholder="Number"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field>
-                    </div>
-                    <v-btn color="Primary" @click="addGeneFilter()"
-                      >Add gene filter</v-btn
+                      <v-btn color="Primary" @click="addClusterFilter()"
+                        >Add cluster filter</v-btn
+                      >
+                    </v-col>
+                    <v-col cols="12">
+                      <div class="d-flex flex mt-4">
+                        <v-autocomplete
+                          v-model="addGeneName"
+                          label="Gene"
+                          :items="genes"
+                          placeholder="Name"
+                          class="px-1"
+                          outlined
+                          dense
+                          background-color="white"
+                        ></v-autocomplete
+                        ><v-select
+                          v-model="addGeneDirection"
+                          cols="3"
+                          :items="addGeneDirectionItems"
+                          label="Direction"
+                          class="px-1"
+                          outlined
+                          dense
+                          background-color="white"
+                        ></v-select>
+                        <v-text-field
+                          v-model="addGeneThres"
+                          label="Thres"
+                          placeholder="Number"
+                          class="px-1"
+                          outlined
+                          dense
+                          background-color="white"
+                        ></v-text-field>
+                      </div>
+                      <v-btn color="Primary" @click="addGeneFilter()"
+                        >Add gene filter</v-btn
+                      ></v-col
                     >
 
                     <v-col class="py-0" cols="12">
