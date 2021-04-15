@@ -542,7 +542,7 @@
                     class="grid-item-border"
                   >
                     <v-card-title class="primary white--text caption px-2 py-1"
-                      >Differntial expression testing <v-spacer></v-spacer>
+                      >Differential expression testing <v-spacer></v-spacer>
                       <v-menu bottom left>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn dark icon v-bind="attrs" v-on="on">
@@ -700,6 +700,7 @@
                     :h="layout[2].h"
                     :i="layout[2].i"
                     class="grid-item-border"
+                    @resized="changeSize"
                   >
                     <v-card-title class="primary white--text caption px-2 py-1"
                       >Gene plots<v-spacer></v-spacer>
@@ -730,9 +731,7 @@
                       </v-col>
                       <v-col cols="6">
                         <div v-if="idents != ''">
-                          <p class="subtitle-2 text--primary mx-4">
-                            Split the violin plot by:
-                          </p>
+                          <p class="subtitle-2 text--primary mx-4">Split by:</p>
                           <v-autocomplete
                             v-model="violinSplit"
                             class="ml-4"
@@ -751,9 +750,25 @@
                         >Plot</v-btn
                       >
                     </v-row>
-                    <v-row v-if="violinGene">
-                      <img :src="violinGene" :width="400" :height="350" />
-                      <img :src="featureGene" :width="400" :height="350" />
+                    <v-row v-show="violinGene">
+                      <v-col cols="6"
+                        ><v-img
+                          contain
+                          :height="windowSize.y - 130"
+                          :max-width="windowSize.x / 2 + 'px'"
+                          :max-height="windowSize.y / 2 + 'px'"
+                          :src="violinGene"
+                        ></v-img
+                      ></v-col>
+                      <v-col cols="6"
+                        ><v-img
+                          contain
+                          :height="windowSize.y - 130"
+                          :max-width="windowSize.x / 2 + 'px'"
+                          :max-height="windowSize.y / 2 + 'px'"
+                          :src="featureGene"
+                        ></v-img
+                      ></v-col>
                     </v-row> </grid-item
                 ></v-card>
                 <enrichment-table
@@ -881,7 +896,7 @@ export default {
     currentIdentMerge: [],
     currentIdentLevels: [],
     currentAtlas: '',
-    reductionSelect: 'PCA',
+    reductionSelect: 'HGT',
     reductionMethods: ['PCA', 'HGT'],
     integrationSelect: 'Seurat',
     integrationMethods: ['Seurat', 'Harmony'],
@@ -937,6 +952,10 @@ export default {
       { name: 'Oncogenic signature gene sets (C6)', value: 'C6' },
       { name: 'Immunologic signature gene sets (C7)', value: 'C7' },
     ],
+    windowSize: {
+      x: 600,
+      y: 600,
+    },
   }),
   computed: {
     identList() {
@@ -973,6 +992,10 @@ export default {
     deg() {},
   },
   methods: {
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.windowSize.x = newWPx
+      this.windowSize.y = newHPx
+    },
     async mergeIdents() {
       await this.$axios
         .post('deepmaps/api/queue/merge-idents/', {

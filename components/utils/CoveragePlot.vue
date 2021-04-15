@@ -1,6 +1,14 @@
 <template>
   <v-card class="ma-0"
-    ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
+    ><grid-item
+      :w="w"
+      :h="h"
+      :x="x"
+      :y="y"
+      :i="i"
+      class="grid-item-border"
+      @resized="changeSize"
+    >
       <v-card-title class="primary white--text caption px-2 py-1"
         >Coverage plot{{ type }} <v-spacer></v-spacer>
         <v-menu bottom left>
@@ -106,7 +114,13 @@
         >
       </v-row>
       <div v-if="src">
-        <img :src="src" :width="imagew" :height="imageh" />
+        <v-img
+          contain
+          :height="windowSize.y - 350"
+          :max-width="windowSize.x + 'px'"
+          :max-height="windowSize.y - 350"
+          :src="src"
+        ></v-img>
       </div> </grid-item
   ></v-card>
 </template>
@@ -159,6 +173,10 @@ export default {
         'chrX',
         'chrY',
       ],
+      windowSize: {
+        x: 400,
+        y: 400,
+      },
       type: 'gene',
       gene: NaN,
       chr: '',
@@ -181,6 +199,10 @@ export default {
   },
   computed: {},
   methods: {
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.windowSize.x = newWPx
+      this.windowSize.y = newHPx
+    },
     clearForm() {
       this.$refs.form.reset()
     },

@@ -103,7 +103,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          name: 'x-axis title',
+          name: '',
           boundaryGap: true,
           nameGap: 30,
           splitArea: {
@@ -115,7 +115,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: 'y-axis title',
+          name: '',
           splitArea: {
             show: true,
           },

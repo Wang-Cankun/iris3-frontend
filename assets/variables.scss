@@ -8,3 +8,12 @@
 // $font-size-root: 18px;
 // $messages-font-size: 14px;
 // @import '~vuetify/src/styles/styles.sass';
+.grid-item-border {
+  border: 1px solid #d3d3d3;
+  flex-direction: column;
+  position: relative;
+  display: flex;
+  height: 100%;
+  border-radius: 4px;
+  background: white;
+}

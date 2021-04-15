@@ -317,7 +317,7 @@
               :title="layout[4].title"
             >
             </resize-image>
-            <resize-table
+            <var-genes-table
               :key="layout[5].i"
               :x="layout[5].x"
               :y="layout[5].y"
@@ -327,7 +327,7 @@
               :src="varGenesList"
               :title="layout[5].title"
             >
-            </resize-table>
+            </var-genes-table>
             <pie-chart
               :key="layout[6].i"
               :x="layout[6].x"
@@ -391,62 +391,15 @@
               :src="qcHist3"
               :title="layout[11].title"
             ></barplot>
-            <v-card class="ma-0"
-              ><grid-item
-                :x="layout[12].x"
-                :y="layout[12].y"
-                :w="layout[12].w"
-                :h="layout[12].h"
-                :i="layout[12].i"
-                class="grid-item-border"
-              >
-                <v-card-title class="primary white--text caption px-2 py-1"
-                  >Gene-gene correlation plot<v-spacer></v-spacer>
-                  <v-menu bottom left>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn dark icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-download-outline</v-icon>
-                      </v-btn>
-                    </template>
-
-                    <v-list>
-                      <v-list-item>
-                        <v-list-item-title>Download</v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu></v-card-title
-                >
-                <v-row
-                  ><v-col cols="6">
-                    <v-autocomplete
-                      v-model="geneCor1"
-                      class="ml-4"
-                      :items="genes"
-                      label="Gene 1"
-                    ></v-autocomplete>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-autocomplete
-                      v-model="geneCor2"
-                      class="ml-4"
-                      :items="genes"
-                      label="Gene 2"
-                    ></v-autocomplete>
-                  </v-col>
-                </v-row>
-                <v-row justify="center" class="mx-2 mb-2 mt-0">
-                  <v-btn
-                    class="mx-2 mb-2 mt-0"
-                    color="Primary"
-                    width="200"
-                    @click="runGeneCorPlot()"
-                    >Plot</v-btn
-                  >
-                </v-row>
-                <v-row v-if="geneCorPlot">
-                  <img :src="geneCorPlot" :width="450" :height="350" />
-                </v-row> </grid-item
-            ></v-card>
+            <gene-correlation-scatter
+              :key="layout[12].i"
+              :x="layout[12].x"
+              :y="layout[12].y"
+              :w="layout[12].w"
+              :h="layout[12].h"
+              :i="layout[12].i"
+              :genes="genes"
+            ></gene-correlation-scatter>
           </grid-layout>
         </v-col>
         <v-col cols="7"></v-col>
@@ -456,20 +409,22 @@
 </template>
 <script>
 import ResizeImage from '~/components/utils/ResizeImage'
-import ResizeTable from '~/components/utils/ResizeTable'
+import VarGenesTable from '~/components/utils/VarGenesTable'
 import PieChart from '~/components/utils/PieChart'
 import Boxplot from '~/components/utils/Boxplot'
 import Barplot from '~/components/utils/Barplot'
+import GeneCorrelationScatter from '~/components/utils/GeneCorrelationScatter'
 
 import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
     'resize-image': ResizeImage,
-    'resize-table': ResizeTable,
+    'var-genes-table': VarGenesTable,
     'pie-chart': PieChart,
     boxplot: Boxplot,
     barplot: Barplot,
+    'gene-correlation-scatter': GeneCorrelationScatter,
   },
   props: {
     idx: { type: Number, required: true, default: 0 },
@@ -514,7 +469,7 @@ export default {
           x: 2,
           y: 3,
           w: 2,
-          h: 1,
+          h: 2,
           i: '4',
           title: 'Highly variable genes',
         },
@@ -530,7 +485,7 @@ export default {
           x: 0,
           y: 2,
           w: 2,
-          h: 2,
+          h: 3,
           i: '6',
           title: 'Metadata: cell_type',
         },
@@ -630,9 +585,6 @@ export default {
       selectionPayload: [],
       allIdents: [],
       selectedCells: [],
-      geneCor1: '',
-      geneCor2: '',
-      geneCorPlot: '',
       genes: '',
     }
   },
@@ -706,10 +658,6 @@ export default {
     },
 
     async runPreProcess() {
-      this.$notifier.showMessage({
-        content: 'Running QC metrics...',
-        color: 'accent',
-      })
       this.metadata = []
       this.$nuxt.$loading.start()
       if (this.idx === 0 && this.type === 'single_rna') {
@@ -782,15 +730,6 @@ export default {
       })
       this.$nuxt.$loading.finish()
       this.qcComplete = true
-    },
-    async runGeneCorPlot() {
-      this.geneCorPlot = await ApiService.postCommand(
-        'deepmaps/api/queue/gene-correlation-plot/',
-        {
-          gene1: this.geneCor1,
-          gene2: this.geneCor2,
-        }
-      )
     },
   },
 }

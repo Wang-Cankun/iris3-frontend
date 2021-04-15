@@ -328,6 +328,7 @@
                       <v-autocomplete
                         v-model="addGeneName"
                         label="Gene"
+                        :items="genes"
                         placeholder="Name"
                         class="px-1"
                         outlined
@@ -462,6 +463,7 @@
                       <v-autocomplete
                         v-model="selectionGeneName"
                         label="Gene"
+                        :items="genes"
                         placeholder="Name"
                         class="px-1"
                         outlined
@@ -584,7 +586,7 @@
                     class="grid-item-border"
                   >
                     <v-card-title class="primary white--text caption px-2 py-1"
-                      >Differntial expression testing <v-spacer></v-spacer>
+                      >Differential expression testing <v-spacer></v-spacer>
                       <v-menu bottom left>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn dark icon v-bind="attrs" v-on="on">
@@ -743,6 +745,7 @@
                     :h="layout[2].h"
                     :i="layout[2].i"
                     class="grid-item-border"
+                    @resized="changeSize"
                   >
                     <v-card-title class="primary white--text caption px-2 py-1"
                       >Gene plots<v-spacer></v-spacer>
@@ -763,14 +766,14 @@
                       </v-menu></v-card-title
                     >
                     <v-row>
-                      <v-col cols="4">
+                      <v-col cols="3">
                         <v-select
                           v-model="plotGeneAssay"
                           class="ml-4"
                           :items="allAssays"
                           label="Assay"
                         ></v-select> </v-col
-                      ><v-col cols="4">
+                      ><v-col cols="3">
                         <v-autocomplete
                           v-model="plotGeneSymbol"
                           class="ml-4"
@@ -778,16 +781,25 @@
                           label="Gene"
                         ></v-autocomplete>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="3">
                         <div v-if="idents != ''">
-                          <p class="subtitle-2 text--primary mx-4">
-                            Split the violin plots by:
-                          </p>
+                          <p class="subtitle-2 text--primary mx-4">Split by:</p>
                           <v-autocomplete
                             v-model="violinSplit"
                             class="ml-4"
                             :items="idents"
-                            label="Select identity"
+                            label="Select cell category"
+                          ></v-autocomplete>
+                        </div>
+                      </v-col>
+                      <v-col cols="3">
+                        <div v-if="idents != ''">
+                          <p class="subtitle-2 text--primary mx-4">Group by:</p>
+                          <v-autocomplete
+                            v-model="violinGroup"
+                            class="ml-4"
+                            :items="idents"
+                            label="Select cell category"
                           ></v-autocomplete>
                         </div>
                       </v-col>
@@ -801,9 +813,25 @@
                         >Plot</v-btn
                       >
                     </v-row>
-                    <v-row v-if="violinGene">
-                      <img :src="violinGene" :width="400" :height="350" />
-                      <img :src="featureGene" :width="400" :height="350" />
+                    <v-row v-show="violinGene">
+                      <v-col cols="6"
+                        ><v-img
+                          contain
+                          :height="windowSize.y - 130"
+                          :max-width="windowSize.x / 2 + 'px'"
+                          :max-height="windowSize.y / 2 + 'px'"
+                          :src="violinGene"
+                        ></v-img
+                      ></v-col>
+                      <v-col cols="6"
+                        ><v-img
+                          contain
+                          :height="windowSize.y - 130"
+                          :max-width="windowSize.x / 2 + 'px'"
+                          :max-height="windowSize.y / 2 + 'px'"
+                          :src="featureGene"
+                        ></v-img
+                      ></v-col>
                     </v-row> </grid-item
                 ></v-card>
                 <enrichment-table
@@ -999,6 +1027,10 @@ export default {
     plotGeneSymbol: '',
     plotGeneAssay: '',
     violinSplit: 'Sex',
+    windowSize: {
+      x: 700,
+      y: 700,
+    },
   }),
   computed: {
     cellClusterArray() {
@@ -1019,6 +1051,10 @@ export default {
   },
   watch: {},
   methods: {
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.windowSize.x = newWPx
+      this.windowSize.y = newHPx
+    },
     async runIntegration() {
       this.umapStatic = await ApiService.postCommand(
         'deepmaps/api/queue/umap-static/',

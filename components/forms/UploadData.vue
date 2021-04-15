@@ -85,7 +85,7 @@
             required
             class="mt-5"
           ></v-file-input>
-          <v-col cols="3" class="ma-0 pa-0"
+          <v-col cols="3" class="ma-1 pa-1"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
@@ -179,7 +179,7 @@
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
-          <v-col cols="3" class="ma-0 pa-0"
+          <v-col cols="3" class="ma-1 pa-1"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
@@ -281,7 +281,7 @@
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
-          <v-col cols="3" class="ma-0 pa-0"
+          <v-col cols="3" class="ma-1 pa-1"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
@@ -486,7 +486,7 @@ export default {
       (v) => !!v || 'Field is required',
       (v) => (v && v.length <= 20) || 'Name must be less than 20 characters',
     ],
-    fileRules: [true],
+    fileRules: [(v) => !!v || 'Field is required'],
     selectRules: [(v) => !!v || 'Control data is required'],
     emailRules: [
       (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
@@ -621,7 +621,7 @@ export default {
           content: 'Form validation failed, please check your upload items.',
           color: 'error',
         })
-        this.$refs.form.resetValidation()
+        // this.$refs.form.resetValidation()
         return
       }
       this.dialog = true

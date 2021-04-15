@@ -75,12 +75,12 @@ export default {
         },
         xAxis: {
           type: 'category',
-          name: 'x-axis title',
+          name: '',
           data: this.src.map((item) => item.breaks),
         },
         yAxis: {
           type: 'value',
-          name: 'y-axis title',
+          name: '',
         },
 
         series: [

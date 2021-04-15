@@ -22,30 +22,26 @@
           </v-list>
         </v-menu></v-card-title
       >
-      <v-simple-table class="elevation-1" height="246">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Gene</th>
-              <th class="text-left">Mean</th>
-              <th class="text-left">SD</th>
-              <th class="text-left">Min</th>
-              <th class="text-left">Max</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in src" :key="index">
-              <td>{{ item.gene }}</td>
-              <td>{{ item.mean }}</td>
-              <td>{{ item.std }}</td>
-              <td>{{ item.min }}</td>
-              <td>{{ item.max }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </grid-item></v-card
-  >
+      <div class="no-drag">
+        <v-text-field
+          v-model="search"
+          dense
+          prepend-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+        <v-data-table
+          dense
+          :search="search"
+          :headers="headers"
+          :items="src"
+          :items-per-page="3"
+          item-key="index"
+        >
+        </v-data-table>
+      </div> </grid-item
+  ></v-card>
 </template>
 
 <script>
@@ -61,12 +57,21 @@ export default {
   },
   data() {
     return {
+      search: '',
       headers: [
         {
-          text: 'Genes',
+          text: 'Gene',
+          value: 'gene',
           align: 'start',
-          sortable: true,
-          value: 'data',
+        },
+        { text: 'Min', value: 'min', align: 'start' },
+        { text: 'Max', value: 'max', align: 'start' },
+        { text: 'Mean', value: 'mean', align: 'start' },
+        { text: 'Standard deviation', value: 'std', align: 'start' },
+        {
+          text: 'Residual variance',
+          value: 'residual_variance',
+          align: 'start',
         },
       ],
     }
