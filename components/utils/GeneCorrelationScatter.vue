@@ -83,7 +83,7 @@ export default {
       geneCor2: '',
       geneCorPlot: '',
       windowSize: {
-        x: 600,
+        x: 420,
         y: 600,
       },
     }

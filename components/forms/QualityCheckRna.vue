@@ -52,7 +52,7 @@
                     </p>
                   </v-card-text>
                   <v-row justify="center">
-                    <div class="mb-2">
+                    <div class="mb-6">
                       <v-menu close-on-click>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn v-bind="attrs" v-on="on"> Download </v-btn>
