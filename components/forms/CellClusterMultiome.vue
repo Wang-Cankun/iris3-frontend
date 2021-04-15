@@ -1027,6 +1027,7 @@ export default {
     plotGeneSymbol: '',
     plotGeneAssay: '',
     violinSplit: 'Sex',
+    violinGroup: 'seurat_clusters',
     windowSize: {
       x: 700,
       y: 700,
@@ -1628,6 +1629,7 @@ export default {
         .post('deepmaps/api/queue/violin-gene/', {
           gene: this.plotGeneSymbol,
           split: this.violinSplit,
+          group: this.violinGroup,
           assay: this.plotGeneAssay,
         })
         .then((response) => {

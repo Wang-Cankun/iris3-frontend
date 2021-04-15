@@ -721,7 +721,7 @@
                       </v-menu></v-card-title
                     >
                     <v-row
-                      ><v-col cols="6">
+                      ><v-col cols="4">
                         <v-autocomplete
                           v-model="gene"
                           class="ml-4"
@@ -729,7 +729,7 @@
                           label="Gene"
                         ></v-autocomplete>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="4">
                         <div v-if="idents != ''">
                           <p class="subtitle-2 text--primary mx-4">Split by:</p>
                           <v-autocomplete
@@ -737,6 +737,17 @@
                             class="ml-4"
                             :items="idents"
                             label="Select identity"
+                          ></v-autocomplete>
+                        </div>
+                      </v-col>
+                      <v-col cols="4">
+                        <div v-if="idents != ''">
+                          <p class="subtitle-2 text--primary mx-4">Group by:</p>
+                          <v-autocomplete
+                            v-model="violinGroup"
+                            class="ml-4"
+                            :items="idents"
+                            label="Select cell category"
                           ></v-autocomplete>
                         </div>
                       </v-col>
@@ -956,6 +967,7 @@ export default {
       x: 600,
       y: 600,
     },
+    violinGroup: 'seurat_clusters',
   }),
   computed: {
     identList() {
@@ -1774,6 +1786,7 @@ export default {
         .post('deepmaps/api/queue/violin-gene/', {
           gene: this.gene,
           split: this.violinSplit,
+          group: this.violinGroup,
         })
         .then((response) => {
           setTimeout(async () => {
