@@ -258,7 +258,6 @@
                     <div class="d-flex flex">
                       <v-select
                         v-model="filterCategoryName"
-                        cols="3"
                         :items="idents"
                         label="Category"
                         class="px-1 col-2"
@@ -268,7 +267,6 @@
                       ></v-select>
                       <v-select
                         v-model="filterCategoryLevel"
-                        cols="3"
                         :items="filterCategoryLevels"
                         label="Cluster"
                         class="px-1 col-2"
@@ -294,7 +292,6 @@
                       ></v-autocomplete>
                       <v-select
                         v-model="addGeneDirection"
-                        cols="3"
                         :items="addGeneDirectionItems"
                         label="Direction"
                         class="px-1"
