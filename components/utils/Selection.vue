@@ -10,10 +10,10 @@
       multiple
       dense
       ><template v-slot:selection="{ item, index }">
-        <v-chip v-if="index === 0">
+        <v-chip v-show="index === 0">
           <span>{{ item }}</span>
         </v-chip>
-        <span v-if="index === 1" class="grey--text caption">
+        <span v-show="index === 1" class="grey--text caption">
           (+{{ selected.length - 1 }} others)
         </span>
       </template>
@@ -67,7 +67,7 @@ export default {
     },
   },
   mounted() {
-    this.selected = this.all
+    this.selected = this.all.length > 10 ? this.all.slice(0, 5) : this.all
   },
   methods: {
     iconSelect() {

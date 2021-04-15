@@ -1,1 +1,56 @@
-[{"name":"CEBPA","size":0,"index":1,"id":"CEBPA","category":"Regulon-CEBPA","geneSymbol":"CEBPA","type":"tf"},{"name":"POU2F1","size":1,"index":2,"id":"POU2F1","category":"Regulon-POU2F1","geneSymbol":"POU2F1","type":"tf"},{"name":"RFX5","size":0.6594,"index":3,"id":"RFX5","category":"Regulon-RFX5","geneSymbol":"RFX5","type":"tf"},{"name":"ABCB1","size":0,"index":4,"id":"ABCB1","category":"Gene","geneSymbol":"Gene","type":"gene"},{"name":"BDKRB1","size":1,"index":5,"id":"BDKRB1","category":"Gene","geneSymbol":"Gene","type":"gene"},{"name":"CD74","size":0.6594,"index":6,"id":"CD74","category":"Gene","geneSymbol":"Gene","type":"gene"}]
+[
+  {
+    "name": "CEBPA",
+    "size": 0,
+    "index": 1,
+    "id": "CEBPA",
+    "category": "Regulon-CEBPA",
+    "geneSymbol": "CEBPA",
+    "type": "tf"
+  },
+  {
+    "name": "POU2F1",
+    "size": 1,
+    "index": 2,
+    "id": "POU2F1",
+    "category": "Regulon-POU2F1",
+    "geneSymbol": "POU2F1",
+    "type": "tf"
+  },
+  {
+    "name": "RFX5",
+    "size": 0.6594,
+    "index": 3,
+    "id": "RFX5",
+    "category": "Regulon-RFX5",
+    "geneSymbol": "RFX5",
+    "type": "tf"
+  },
+  {
+    "name": "ABCB1",
+    "size": 0,
+    "index": 4,
+    "id": "ABCB1",
+    "category": "Gene",
+    "geneSymbol": "Gene",
+    "type": "gene"
+  },
+  {
+    "name": "BDKRB1",
+    "size": 1,
+    "index": 5,
+    "id": "BDKRB1",
+    "category": "Gene",
+    "geneSymbol": "Gene",
+    "type": "gene"
+  },
+  {
+    "name": "CD74",
+    "size": 0.6594,
+    "index": 6,
+    "id": "CD74",
+    "category": "Gene",
+    "geneSymbol": "Gene",
+    "type": "gene"
+  }
+]
