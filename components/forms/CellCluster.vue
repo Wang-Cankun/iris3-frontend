@@ -245,12 +245,12 @@
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header>
-                Cell labeling
+                Custom cell labeling
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-card class="mt-6" outlined color="blue-grey lighten-5">
                   <p class="subtitle-1 font-weight-bold text-center">
-                    Cell labeling
+                    Custom cell labeling
                   </p>
 
                   <v-row class="mx-2 my-2 py-2">
@@ -478,7 +478,7 @@
                       class="mx-2 my-4"
                       color="Accent"
                       @click="restoreCells()"
-                      >Restore cells</v-btn
+                      >Reset</v-btn
                     >
                   </v-row>
                 </v-card>
@@ -780,7 +780,7 @@
                     </v-row> </grid-item
                 ></v-card>
                 <enrichment-table
-                  :deg="deResult"
+                  :genes="deResult"
                   :x="layout[3].x"
                   :y="layout[3].y"
                   :w="layout[3].w"
@@ -798,7 +798,7 @@
 <script>
 import _ from 'lodash'
 import ResizeImage from '~/components/utils/ResizeImage'
-import EnrichmentTable from '~/components/utils/EnrichmentTable'
+import EnrichmentTable from '~/components/tables/EnrichmentTable'
 
 import ApiService from '~/services/ApiService.js'
 

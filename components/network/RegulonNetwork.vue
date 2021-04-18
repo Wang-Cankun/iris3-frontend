@@ -187,7 +187,6 @@ export default {
         'breadthfirst',
         'concentric',
         'cola',
-        'euler',
         'spread',
       ],
       geneSymbolSwitch: false,
@@ -401,7 +400,7 @@ export default {
   width: 100%;
 }
 #cytoscape-div {
-  min-height: 800px !important;
+  min-height: 450px !important;
   display: block;
 }
 </style>

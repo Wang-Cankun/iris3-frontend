@@ -86,7 +86,7 @@
                 :title="layout[0].title"
               >
               </network>
-              <resize-table
+              <regulon-table
                 :key="layout[1].i"
                 :x="layout[1].x"
                 :y="layout[1].y"
@@ -95,8 +95,74 @@
                 :i="layout[1].i"
                 :headers="headers"
                 :items="regulonTable"
+                :selected.sync="selectedRegulon"
               >
-              </resize-table>
+              </regulon-table>
+              <v-card class="ma-0"
+                ><grid-item
+                  :x="layout[2].x"
+                  :y="layout[2].y"
+                  :w="layout[2].w"
+                  :h="layout[2].h"
+                  :i="layout[2].i"
+                  class="grid-item-border"
+                  @resized="changeSize"
+                >
+                  <v-card-title class="primary white--text caption px-2 py-1"
+                    >Gene plots<v-spacer></v-spacer>
+                    <v-menu bottom left>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn dark icon v-bind="attrs" v-on="on">
+                          <v-icon>mdi-download-outline</v-icon>
+                        </v-btn>
+                      </template>
+
+                      <v-list>
+                        <v-list-item>
+                          <v-list-item-title>TODO</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu></v-card-title
+                  >
+
+                  <v-row v-show="regulonUmapStatic">
+                    <v-col cols="6"
+                      ><v-img
+                        contain
+                        :height="windowSize.y - 130"
+                        :max-width="windowSize.x / 2 + 'px'"
+                        :max-height="windowSize.y / 2 + 'px'"
+                        :src="clusterUmapStatic"
+                      ></v-img
+                    ></v-col>
+                    <v-col cols="6"
+                      ><v-img
+                        contain
+                        :height="windowSize.y - 130"
+                        :max-width="windowSize.x / 2 + 'px'"
+                        :max-height="windowSize.y / 2 + 'px'"
+                        :src="regulonUmapStatic"
+                      ></v-img
+                    ></v-col>
+                  </v-row> </grid-item
+              ></v-card>
+              <enrichment-table
+                :genes="selectedRegulonGenes"
+                :x="layout[3].x"
+                :y="layout[3].y"
+                :w="layout[3].w"
+                :h="layout[3].h"
+                :i="layout[3].i"
+              ></enrichment-table>
+              <regulon-heatmap
+                :key="layout[4].i"
+                :x="layout[4].x"
+                :y="layout[4].y"
+                :w="layout[4].w"
+                :h="layout[4].h"
+                :i="layout[4].i"
+                :genes="selectedRegulonGenes"
+              ></regulon-heatmap>
             </grid-layout>
           </div>
         </v-col>
@@ -110,13 +176,17 @@ import ExampleNodes from 'static/json/example_nodes.json'
 import ExampleEdges from 'static/json/example_edges.json'
 import RegulonNetwork from '~/components/network/RegulonNetwork'
 import selection from '~/components/utils/Selection'
-import ResizeTable from '~/components/utils/Table'
+import RegulonTable from '~/components/tables/RegulonTable'
+import EnrichmentTable from '~/components/tables/EnrichmentTable'
+import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
 
 export default {
   components: {
     network: RegulonNetwork,
     selection,
-    'resize-table': ResizeTable,
+    'regulon-table': RegulonTable,
+    'enrichment-table': EnrichmentTable,
+    'regulon-heatmap': RegulonHeatmap,
   },
   props: {},
   data: () => ({
@@ -125,34 +195,42 @@ export default {
       {
         x: 0,
         y: 0,
-        w: 6,
-        h: 3,
+        w: 4,
+        h: 2,
         i: '0',
         title: 'Regulon network',
+      },
+      {
+        x: 4,
+        y: 0,
+        w: 2,
+        h: 2,
+        i: '1',
+        title: 'Regulon table',
       },
       {
         x: 0,
         y: 2,
         w: 2,
         h: 2,
-        i: '1',
-        title: 'Regulons',
-      },
-      {
-        x: 0,
-        y: 2,
-        w: 3,
-        h: 2,
         i: '2',
-        title: 'Plot genes',
+        title: 'Regulon scatter',
       },
       {
-        x: 3,
+        x: 2,
         y: 2,
-        w: 3,
+        w: 2,
         h: 2,
         i: '3',
-        title: 'Cell type annotation',
+        title: 'GSEA',
+      },
+      {
+        x: 4,
+        y: 2,
+        w: 2,
+        h: 2,
+        i: '4',
+        title: 'Regulon heatmap',
       },
     ],
     degList: [
@@ -170,12 +248,12 @@ export default {
       {
         text: 'TF',
         align: 'start',
-        sortable: false,
         value: 'tf',
       },
       { text: 'Number of genes', value: 'n' },
-      { text: 'RSS', value: 'rss' },
-      { text: '', value: 'data-table-expand' },
+      { text: 'Score', value: 'rss' },
+      { text: 'Visualize', value: 'actions', sortable: false },
+      { text: 'Expand', value: 'data-table-expand' },
     ],
 
     // TF selection
@@ -183,6 +261,17 @@ export default {
     selectedCt: 1,
     sliderTf: 1,
     showNetwork: false,
+
+    // Regulon visualize
+    windowSize: {
+      x: 700,
+      y: 700,
+    },
+    selectedRegulon: {},
+    selectedRegulonGenes: [],
+    regulonUmapStatic: '',
+    clusterUmapStatic: '',
+    regulonHeatmapStatic: '',
   }),
   computed: {
     selectedNodes() {
@@ -212,11 +301,26 @@ export default {
       )
     },
   },
-  created() {},
+  watch: {
+    selectedRegulon() {
+      console.log(this.selectedRegulon)
+      this.selectedRegulonGenes = this.selectedRegulon.genes.split(',')
+    },
+  },
+  mounted() {
+    this.showNetwork = false
+  },
   methods: {
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.windowSize.x = newWPx
+      this.windowSize.y = newHPx
+    },
     runNetwork() {
       this.showNetwork = true
     },
+    runRegulonUmap() {},
+    runRegulonHeatmap() {},
+    runRegulonGsea() {},
   },
 }
 </script>

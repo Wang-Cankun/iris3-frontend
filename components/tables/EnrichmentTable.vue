@@ -2,7 +2,7 @@
   <v-card class="ma-0"
     ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
       <v-card-title class="primary white--text caption px-2 py-1"
-        >Gene set enrichment <v-spacer></v-spacer>
+        >Gene set enrichment analysis<v-spacer></v-spacer>
         <v-menu bottom left>
           <template v-slot:activator="{ on, attrs }">
             <v-btn dark icon v-bind="attrs" v-on="on">
@@ -12,7 +12,7 @@
 
           <v-list>
             <v-list-item @click="downloadTable">
-              <download-excel class="mr-4" :data="src" type="csv">
+              <download-excel class="mr-4" :data="gseaResult" type="csv">
                 <v-list-item-title>Download file (CSV)</v-list-item-title>
               </download-excel>
             </v-list-item>
@@ -20,7 +20,6 @@
         </v-menu></v-card-title
       >
       <v-row>
-        <v-col cols="12">Perform GSEA </v-col>
         <v-col cols="12">
           <v-autocomplete
             v-model="gseaDatabase"
@@ -61,7 +60,7 @@ import ApiService from '~/services/ApiService.js'
 
 export default {
   props: {
-    deg: { type: Array, required: true },
+    genes: { type: Array, required: true },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },
@@ -100,9 +99,9 @@ export default {
       })
     },
     async runGSEA() {
-      if (!this.deg.length) {
+      if (!this.genes.length) {
         this.$notifier.showMessage({
-          content: 'Please run DE testing first!',
+          content: 'No genes selected!',
           color: 'error',
         })
       } else {
@@ -113,6 +112,7 @@ export default {
         this.gseaResult = await ApiService.postCommand(
           'deepmaps/api/queue/gsea-table/',
           {
+            genes: this.genes,
             database: this.gseaDatabase.value,
           }
         )

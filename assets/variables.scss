@@ -17,3 +17,11 @@
   border-radius: 4px;
   background: white;
 }
+
+.container {
+  touch-action: none;
+}
+
+.draggable {
+  touch-action: none;
+}

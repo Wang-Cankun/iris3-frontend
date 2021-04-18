@@ -46,6 +46,11 @@
           :expanded.sync="expanded"
           show-expand
         >
+          <template v-slot:item.actions="{ item }">
+            <v-icon small class="mr-2" @click="visualizeRegulon(item)">
+              mdi-chart-scatter-plot
+            </v-icon>
+          </template>
           <template v-slot:expanded-item="{ item }">
             <td :colspan="headers.length">
               <v-virtual-scroll
@@ -54,6 +59,7 @@
                 :items="item.genes.split(',')"
               >
                 <span> Target genes:</span>
+
                 <template v-slot:default="{ item }">
                   <v-list-item :key="item">
                     <v-list-item-content>
@@ -141,6 +147,9 @@ export default {
       } catch (e) {
         console.error(e)
       }
+    },
+    visualizeRegulon(item) {
+      this.$emit('update:selected', item)
     },
   },
 }
