@@ -82,11 +82,15 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: 'auth/login',
+            url: process.env.API_URL + 'deepmaps/api/auth/login',
             method: 'post',
             propertyName: 'access_token',
           },
-          user: { url: 'auth/profile', method: 'get', propertyName: 'info' },
+          user: {
+            url: process.env.API_URL + 'deepmaps/api/auth/profile',
+            method: 'get',
+            propertyName: 'email',
+          },
           logout: false,
         },
       },

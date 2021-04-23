@@ -621,7 +621,6 @@ export default {
           content: 'Form validation failed, please check your upload items.',
           color: 'error',
         })
-        // this.$refs.form.resetValidation()
         return
       }
       this.dialog = true
@@ -636,8 +635,8 @@ export default {
       formData.append('jobid', this.jobid)
       formData.append('species', this.speciesSelect)
       formData.append('description', this.description)
-      formData.append('expFile', 'exp')
-      formData.append('labelFile', 'label')
+      formData.append('expFile', this.expFile.singleRna[0])
+      formData.append('labelFile', this.labelFile)
       formData.append('status', 'upload')
       this.$notifier.showMessage({
         content: 'Uploading data...',
@@ -654,7 +653,9 @@ export default {
           },
         }
       )
-      if (uploadRes) {
+      console.log(uploadRes)
+      // eslint-disable-next-line no-constant-condition
+      if (false) {
         setTimeout(() => {
           this.$notifier.showMessage({
             content: 'Jobid: ' + this.jobid + ' Upload success!',

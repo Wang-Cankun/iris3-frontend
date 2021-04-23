@@ -198,7 +198,7 @@ export default {
         w: 4,
         h: 2,
         i: '0',
-        title: 'Regulon network',
+        title: 'Gene regulatory network',
       },
       {
         x: 4,
