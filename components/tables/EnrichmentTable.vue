@@ -112,7 +112,7 @@ export default {
         this.gseaResult = await ApiService.postCommand(
           'deepmaps/api/queue/gsea-table/',
           {
-            genes: this.genes,
+            genes: '1',
             database: this.gseaDatabase.value,
           }
         )
