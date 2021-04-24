@@ -152,6 +152,7 @@
         <v-tab-item>
           <p class="subtitle ma-0">Upload count matrix</p>
           <div v-for="(n, i) in multipleDatasetsLength" :key="n">
+            {{ i }}
             <v-file-input
               v-model="expFile.multiRna[i]"
               color="primary"
@@ -162,7 +163,6 @@
               prepend-icon="mdi-paperclip"
               outlined
               required
-              multiple
             ></v-file-input>
           </div>
           <v-btn @click="addMultipleDataset">Add a row</v-btn>
@@ -486,7 +486,7 @@ export default {
       (v) => !!v || 'Field is required',
       (v) => (v && v.length <= 20) || 'Name must be less than 20 characters',
     ],
-    fileRules: [(v) => !!v || 'Field is required'],
+    fileRules: [true || 'Field is required'],
     selectRules: [(v) => !!v || 'Control data is required'],
     emailRules: [
       (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
@@ -633,10 +633,25 @@ export default {
       formData.append('title', this.title)
       formData.append('email', this.email)
       formData.append('jobid', this.jobid)
+      formData.append('status', 'created')
       formData.append('species', this.speciesSelect)
       formData.append('description', this.description)
-      formData.append('expFile', this.expFile.singleRna[0])
-      formData.append('labelFile', this.labelFile)
+      this.expFile.singleRna.forEach((file, index) => {
+        formData.append('singleRna', file)
+        formData.append('index', index)
+      })
+      this.expFile.multiRna.forEach((file, index) => {
+        formData.append('multiRna[]', file)
+        formData.append('index', index)
+      })
+      this.expFile.multiome.forEach((file, index) => {
+        formData.append('multiome[]', file)
+        formData.append('index', index)
+      })
+      formData.append('labelFile-singleRna', this.labelFile.singleRna)
+      formData.append('labelFile-multiRna', this.labelFile.multiRna)
+      formData.append('labelFile-multiome', this.labelFile.multiome)
+
       formData.append('status', 'upload')
       this.$notifier.showMessage({
         content: 'Uploading data...',
@@ -644,7 +659,7 @@ export default {
       })
 
       const uploadRes = await this.$axios.post(
-        'deepmaps/api/queue/upload/',
+        'deepmaps/api/file/upload/',
         formData,
         {
           headers: {
@@ -653,9 +668,8 @@ export default {
           },
         }
       )
-      console.log(uploadRes)
       // eslint-disable-next-line no-constant-condition
-      if (false) {
+      if (uploadRes) {
         setTimeout(() => {
           this.$notifier.showMessage({
             content: 'Jobid: ' + this.jobid + ' Upload success!',
@@ -663,16 +677,16 @@ export default {
           })
           if (this.title === 'Human Multiome PBMCs 10k cells') {
             this.$router.push({
-              path: '/submit/multiome',
+              path: '/submit/multiome/' + this.jobid,
             })
           } else if (
             this.title === 'Human IFNB-Stimulated and Control PBMCs, 2800 cells'
           ) {
             this.$router.push({
-              path: '/submit/multiple-rna',
+              path: '/submit/multiple-rna/' + this.jobid,
             })
           } else {
-            this.$router.push({ path: '/submit/single-rna' })
+            this.$router.push({ path: '/submit/single-rna/' + this.jobid })
           }
         }, 3000)
       }
@@ -681,7 +695,7 @@ export default {
       this.multipleDatasetsLength++
     },
     removeMultipleDataset() {
-      if (this.multipleDatasetsLength === 1) return
+      if (this.multipleDatasetsLength <= 2) return
       this.multipleDatasetsLength--
     },
     switchTabs() {

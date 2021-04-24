@@ -836,7 +836,7 @@
                     </v-row> </grid-item
                 ></v-card>
                 <enrichment-table
-                  :deg="deResult"
+                  :genes="deResult"
                   :x="layout[3].x"
                   :y="layout[3].y"
                   :w="layout[3].w"

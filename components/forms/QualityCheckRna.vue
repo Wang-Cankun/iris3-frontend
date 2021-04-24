@@ -328,6 +328,47 @@
               :title="layout[5].title"
             >
             </var-genes-table>
+
+            <gene-correlation-scatter
+              :key="layout[12].i"
+              :x="layout[12].x"
+              :y="layout[12].y"
+              :w="layout[12].w"
+              :h="layout[12].h"
+              :i="layout[12].i"
+              :genes="genes"
+            ></gene-correlation-scatter>
+
+            <barplot
+              :key="layout[9].i"
+              :x="layout[9].x"
+              :y="layout[9].y"
+              :w="layout[9].w"
+              :h="layout[9].h"
+              :i="layout[9].i"
+              :src="qcHist1"
+              :title="layout[9].title"
+            ></barplot>
+            <barplot
+              :key="layout[10].i"
+              :x="layout[10].x"
+              :y="layout[10].y"
+              :w="layout[10].w"
+              :h="layout[10].h"
+              :i="layout[10].i"
+              :src="qcHist2"
+              :title="layout[10].title"
+            ></barplot>
+            <barplot
+              :key="layout[11].i"
+              :x="layout[11].x"
+              :y="layout[11].y"
+              :w="layout[11].w"
+              :h="layout[11].h"
+              :i="layout[11].i"
+              :src="qcHist3"
+              :title="layout[11].title"
+            ></barplot>
             <pie-chart
               :key="layout[6].i"
               :x="layout[6].x"
@@ -361,45 +402,6 @@
               :name="metadata.meta3_name"
               :title="'Metadata 3: ' + metadata.meta3_title[0]"
             ></pie-chart>
-            <barplot
-              :key="layout[9].i"
-              :x="layout[9].x"
-              :y="layout[9].y"
-              :w="layout[9].w"
-              :h="layout[9].h"
-              :i="layout[9].i"
-              :src="qcHist1"
-              :title="layout[9].title"
-            ></barplot>
-            <barplot
-              :key="layout[10].i"
-              :x="layout[10].x"
-              :y="layout[10].y"
-              :w="layout[10].w"
-              :h="layout[10].h"
-              :i="layout[10].i"
-              :src="qcHist2"
-              :title="layout[10].title"
-            ></barplot>
-            <barplot
-              :key="layout[11].i"
-              :x="layout[11].x"
-              :y="layout[11].y"
-              :w="layout[11].w"
-              :h="layout[11].h"
-              :i="layout[11].i"
-              :src="qcHist3"
-              :title="layout[11].title"
-            ></barplot>
-            <gene-correlation-scatter
-              :key="layout[12].i"
-              :x="layout[12].x"
-              :y="layout[12].y"
-              :w="layout[12].w"
-              :h="layout[12].h"
-              :i="layout[12].i"
-              :genes="genes"
-            ></gene-correlation-scatter>
           </grid-layout>
         </v-col>
         <v-col cols="7"></v-col>
@@ -428,6 +430,7 @@ export default {
   },
   props: {
     idx: { type: Number, required: true, default: 0 },
+    jobid: { type: String, required: true, default: '1' },
     type: { type: String, required: true, default: 'single_rna' },
   },
   data() {
@@ -466,8 +469,8 @@ export default {
           title: 'Ribosome genes percent',
         },
         {
-          x: 2,
-          y: 3,
+          x: 0,
+          y: 2,
           w: 2,
           h: 2,
           i: '4',
@@ -482,36 +485,36 @@ export default {
           title: 'Variable genes table',
         },
         {
-          x: 0,
-          y: 2,
-          w: 2,
-          h: 3,
-          i: '6',
-          title: 'Metadata: cell_type',
-        },
-        {
-          x: 2,
-          y: 2,
-          w: 2,
-          h: 1,
-          i: '7',
-          title: 'Metadata: Sex',
-        },
-        {
           x: 4,
           y: 2,
           w: 2,
-          h: 1,
-          i: '8',
-          title: 'Metadata: Sample',
+          h: 2,
+          i: '6',
+          title: 'Metadata: 1',
         },
         {
           x: 0,
-          y: 1,
+          y: 4,
+          w: 2,
+          h: 2,
+          i: '7',
+          title: 'Metadata: 2',
+        },
+        {
+          x: 2,
+          y: 4,
+          w: 2,
+          h: 2,
+          i: '8',
+          title: 'Metadata: 3',
+        },
+        {
+          x: 0,
+          y: 2,
           w: 2,
           h: 1,
           i: '9',
-          title: 'Gene expression histogram',
+          title: 'Correlation',
         },
         {
           x: 2,
@@ -531,7 +534,7 @@ export default {
         },
 
         {
-          x: 4,
+          x: 2,
           y: 2,
           w: 2,
           h: 2,
@@ -665,8 +668,8 @@ export default {
           'deepmaps/api/queue/load/',
           {
             idx: this.idx,
-            filename: 'zeisel_2015',
-            type: 'CellGene',
+            jobid: this.jobid,
+            type: 'singleRna',
             min_cells: this.cellFilter,
             min_genes: this.geneFilter,
             nVariableFeatures: this.nVariableFeatures,
@@ -679,8 +682,9 @@ export default {
           'deepmaps/api/queue/load-multi-rna/',
           {
             idx: this.idx,
+            jobid: this.jobid,
             filename: 'ifnb_2800',
-            type: 'CellGene',
+            type: 'multiRna',
             min_cells: this.cellFilter,
             min_genes: this.geneFilter,
             nVariableFeatures: this.nVariableFeatures,
@@ -693,8 +697,9 @@ export default {
           'deepmaps/api/queue/load-multiome/',
           {
             idx: this.idx,
+            jobid: this.jobid,
             filename: 'ifnb_2800',
-            type: 'CellGene',
+            type: 'multiome',
             min_cells: this.cellFilter,
             min_genes: this.geneFilter,
             nVariableFeatures: this.nVariableFeatures,
@@ -716,7 +721,7 @@ export default {
       this.qcHist1 = this.metadata.hist_features_per_cell
       this.qcHist2 = this.metadata.hist_reads_per_cell
       this.qcHist3 = this.metadata.hist_cells_per_gene
-
+      console.log(this.metadata)
       await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)

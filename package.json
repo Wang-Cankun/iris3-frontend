@@ -14,7 +14,8 @@
   "dependencies": {
     "@nuxt/content": "^1.5.0",
     "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.12.0",
+    "@nuxtjs/auth-next": "5.0.0-1618898588.9655d0e",
+    "@nuxtjs/axios": "^5.13.1",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-cise": "^1.0.0",
     "cytoscape-cola": "^2.4.0",
