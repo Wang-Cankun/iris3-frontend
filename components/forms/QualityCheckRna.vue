@@ -304,107 +304,85 @@
               :title="layout[3].title"
             >
             </boxplot>
-            <resize-image
+
+            <var-genes-table
               :key="layout[4].i"
               :x="layout[4].x"
               :y="layout[4].y"
               :w="layout[4].w"
               :h="layout[4].h"
               :i="layout[4].i"
-              :src="varGenesScatter"
-              :imagew="450"
-              :imageh="220"
+              :src="varGenesList"
               :title="layout[4].title"
             >
-            </resize-image>
-            <var-genes-table
+            </var-genes-table>
+            <barplot
               :key="layout[5].i"
               :x="layout[5].x"
               :y="layout[5].y"
               :w="layout[5].w"
               :h="layout[5].h"
               :i="layout[5].i"
-              :src="varGenesList"
-              :title="layout[5].title"
-            >
-            </var-genes-table>
-
-            <gene-correlation-scatter
-              :key="layout[12].i"
-              :x="layout[12].x"
-              :y="layout[12].y"
-              :w="layout[12].w"
-              :h="layout[12].h"
-              :i="layout[12].i"
-              :genes="genes"
-            ></gene-correlation-scatter>
-
-            <barplot
-              :key="layout[9].i"
-              :x="layout[9].x"
-              :y="layout[9].y"
-              :w="layout[9].w"
-              :h="layout[9].h"
-              :i="layout[9].i"
               :src="qcHist1"
-              :title="layout[9].title"
+              :title="layout[5].title"
             ></barplot>
             <barplot
-              :key="layout[10].i"
-              :x="layout[10].x"
-              :y="layout[10].y"
-              :w="layout[10].w"
-              :h="layout[10].h"
-              :i="layout[10].i"
-              :src="qcHist2"
-              :title="layout[10].title"
-            ></barplot>
-            <barplot
-              :key="layout[11].i"
-              :x="layout[11].x"
-              :y="layout[11].y"
-              :w="layout[11].w"
-              :h="layout[11].h"
-              :i="layout[11].i"
-              :src="qcHist3"
-              :title="layout[11].title"
-            ></barplot>
-            <pie-chart
               :key="layout[6].i"
               :x="layout[6].x"
               :y="layout[6].y"
               :w="layout[6].w"
               :h="layout[6].h"
               :i="layout[6].i"
-              :values="metadata.meta1_val"
-              :name="metadata.meta1_name"
-              :title="'Metadata 1: ' + metadata.meta1_title[0]"
-            ></pie-chart>
-            <pie-chart
+              :src="qcHist2"
+              :title="layout[6].title"
+            ></barplot>
+            <barplot
               :key="layout[7].i"
               :x="layout[7].x"
               :y="layout[7].y"
               :w="layout[7].w"
               :h="layout[7].h"
               :i="layout[7].i"
-              :values="metadata.meta2_val"
-              :name="metadata.meta2_name"
-              :title="'Metadata 2: ' + metadata.meta2_title[0]"
-            ></pie-chart>
-            <pie-chart
+              :src="qcHist3"
+              :title="layout[7].title"
+            ></barplot>
+            <resize-image
               :key="layout[8].i"
               :x="layout[8].x"
               :y="layout[8].y"
               :w="layout[8].w"
               :h="layout[8].h"
               :i="layout[8].i"
-              :values="metadata.meta3_val"
-              :name="metadata.meta3_name"
-              :title="'Metadata 3: ' + metadata.meta3_title[0]"
-            ></pie-chart>
+              :src="varGenesScatter"
+              :imagew="450"
+              :imageh="220"
+              :title="layout[8].title"
+            >
+            </resize-image>
+            <gene-correlation-scatter
+              :key="layout[9].i"
+              :x="layout[9].x"
+              :y="layout[9].y"
+              :w="layout[9].w"
+              :h="layout[9].h"
+              :i="layout[9].i"
+              :genes="genes"
+            ></gene-correlation-scatter>
+            <div v-for="(item, i) in metaList" :key="i">
+              <pie-chart
+                :key="layout[i + 10].i"
+                :x="layout[i + 10].x"
+                :y="layout[i + 10].y"
+                :w="layout[i + 10].w"
+                :h="layout[i + 10].h"
+                :i="layout[i + 10].i"
+                :values="item.val"
+                :name="item.name"
+                :title="'Metadata: ' + item.title[0]"
+              ></pie-chart>
+            </div>
           </grid-layout>
         </v-col>
-        <v-col cols="7"></v-col>
       </v-row>
     </v-card>
   </v-col>
@@ -469,59 +447,27 @@ export default {
           title: 'Ribosome genes percent',
         },
         {
-          x: 0,
-          y: 2,
-          w: 2,
-          h: 2,
-          i: '4',
-          title: 'Highly variable genes',
-        },
-        {
           x: 4,
           y: 0,
           w: 2,
           h: 1,
-          i: '5',
+          i: '4',
           title: 'Variable genes table',
         },
         {
-          x: 4,
-          y: 2,
-          w: 2,
-          h: 2,
-          i: '6',
-          title: 'Metadata: 1',
-        },
-        {
           x: 0,
-          y: 4,
-          w: 2,
-          h: 2,
-          i: '7',
-          title: 'Metadata: 2',
-        },
-        {
-          x: 2,
-          y: 4,
-          w: 2,
-          h: 2,
-          i: '8',
-          title: 'Metadata: 3',
-        },
-        {
-          x: 0,
-          y: 2,
+          y: 1,
           w: 2,
           h: 1,
-          i: '9',
-          title: 'Correlation',
+          i: '5',
+          title: 'Gene expression histogram',
         },
         {
           x: 2,
           y: 1,
           w: 2,
           h: 1,
-          i: '10',
+          i: '6',
           title: 'Read counts histogram',
         },
         {
@@ -529,8 +475,17 @@ export default {
           y: 1,
           w: 2,
           h: 1,
-          i: '11',
+          i: '7',
           title: 'Number of expressed genes among cells',
+        },
+
+        {
+          x: 0,
+          y: 2,
+          w: 2,
+          h: 2,
+          i: '8',
+          title: 'Highly variable genes',
         },
 
         {
@@ -538,10 +493,35 @@ export default {
           y: 2,
           w: 2,
           h: 2,
-          i: '12',
+          i: '9',
           title: 'Gene-gene correlation',
         },
+        {
+          x: 4,
+          y: 2,
+          w: 2,
+          h: 2,
+          i: '10',
+          title: 'Metadata: 1',
+        },
+        {
+          x: 0,
+          y: 4,
+          w: 2,
+          h: 2,
+          i: '11',
+          title: 'Metadata: 2',
+        },
+        {
+          x: 2,
+          y: 4,
+          w: 2,
+          h: 2,
+          i: '12',
+          title: 'Metadata: 3',
+        },
       ],
+      nPie: 1,
       tab: null,
       removeRibosome: false,
       removeSpikein: false,
@@ -567,6 +547,7 @@ export default {
       varGenesScatter: '',
       varGenesList: [],
       metadata: [],
+      metaList: [],
       // Cell selection
       addTransferMetadataDialog: false,
       addMetadataDialog: false,
@@ -606,6 +587,19 @@ export default {
     },
   },
   methods: {
+    addItem() {
+      // Add a new item. It must have a unique key!
+      this.layout.push({
+        x: (this.layout.length * 2) % (this.colNum || 6),
+        y: this.layout.length + (this.colNum || 6), // puts it at the bottom
+        w: 2,
+        h: 2,
+        i: this.index,
+      })
+      // Increment the counter to ensure key is always unique.
+      this.index++
+    },
+
     addGeneSelection() {
       if (this.selectionGeneName && this.selectionGeneThres) {
         this.selectionPayload = [
@@ -721,7 +715,7 @@ export default {
       this.qcHist1 = this.metadata.hist_features_per_cell
       this.qcHist2 = this.metadata.hist_reads_per_cell
       this.qcHist3 = this.metadata.hist_cells_per_gene
-      console.log(this.metadata)
+      this.metaList = this.metadata.meta_list
       await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
