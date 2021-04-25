@@ -116,6 +116,26 @@
                     ></v-list-item-title
                   >
                 </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="singleExample[3].link"
+                    >
+                      {{ singleExample[3].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="singleExample[4].link"
+                    >
+                      {{ singleExample[4].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
               </v-list>
             </v-menu>
           </v-col>
