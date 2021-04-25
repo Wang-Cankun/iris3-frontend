@@ -70,5 +70,8 @@ export default {
       qcTab: null,
     }
   },
+  jobid() {
+    return this.$route.params.id
+  },
 }
 </script>
