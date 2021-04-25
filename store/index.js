@@ -3,6 +3,8 @@ export const state = () => ({
   snack: '',
   token: '',
   jobid: '',
+  species: '',
+  files: {},
 })
 export const mutations = {
   SET_PROFILE(state, profile) {
@@ -19,6 +21,12 @@ export const mutations = {
   },
   SET_PLOT_EVENT(state, jobid) {
     state.jobid = jobid
+  },
+  SET_SPECIES(state, species) {
+    state.species = species
+  },
+  SET_UPLOAD_FILES(state, files) {
+    state.files = files
   },
 }
 export const actions = {

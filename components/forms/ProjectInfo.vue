@@ -47,7 +47,7 @@
                 <v-card-text>
                   <p class="ma-2">
                     <span class="text--secondary">Job ID: </span>
-                    <span class="text--primary">{{ jobId }}</span>
+                    <span class="text--primary">{{ jobid }}</span>
                   </p>
                   <p class="ma-2">
                     <span class="text--secondary">Create date: </span>
@@ -59,7 +59,11 @@
                   </p>
                   <p class="ma-2">
                     <span class="text--secondary">Species: </span>
-                    <span class="text--primary">Human</span>
+                    <span class="text--primary">{{ species }}</span>
+                  </p>
+                  <p class="ma-2">
+                    <span class="text--secondary">Uploaded files: </span>
+                    <span class="text--primary">{{ uploadFiles }}</span>
                   </p>
                 </v-card-text>
               </v-flex>
@@ -72,6 +76,17 @@
 </template>
 <script>
 export default {
+  props: {
+    jobid: { type: String, required: true, default: 'example' },
+  },
+
+  async fetch() {
+    const files = await this.$axios
+      .get('deepmaps/api/file/upload/' + this.jobid)
+      .then((res) => res.data)
+    this.uploadFiles = files.map((file) => file.originalname)
+    this.species = files.map((file) => file.species)
+  },
   data() {
     return {
       panel: false,
@@ -80,15 +95,28 @@ export default {
       projectCreator: 'Admin',
       jobCreator: 'Admin',
       projectId: 'P000001',
-      jobId: 'P000001-admin001',
+      uploadFiles: '',
+      species: '',
     }
   },
+
   computed: {
     projectCreateDate() {
       return new Date().toISOString().split('T')[0]
     },
     jobCreateDate() {
       return new Date().toISOString().split('T')[0]
+    },
+  },
+
+  methods: {
+    async getUploadFiles() {
+      return await this.$axios
+        .get('deepmaps/api/file/upload/' + this.jobid)
+        .then((res) => {
+          console.log(res.data.map((file) => file.originalname))
+          return res.data.map((file) => file.originalname)
+        })
     },
   },
 }

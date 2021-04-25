@@ -93,7 +93,7 @@
                     Preprocessing
                   </p>
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">atac_peak_region_fragments</p>
+                    ><p class="my-1title-h4">Min cell per peaks</p>
                     <v-text-field
                       v-model="cellFilter"
                       class="mr-2 pr-2"
@@ -103,7 +103,7 @@
                   ></v-row>
 
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">nCount_ATAC</p>
+                    ><p class="my-1title-h4">Min peaks per cell</p>
                     <v-text-field
                       v-model="geneFilter"
                       class="mr-2 pr-2"
@@ -123,7 +123,7 @@
                   ></v-row>
 
                   <v-row class="ml-4"
-                    ><p class="my-1 title-h4">blacklist_ratio</p>
+                    ><p class="my-1 title-h4">Max black region ratio</p>
                     <v-text-field
                       v-model="nVariableFeatures"
                       class="mr-2 pr-2"
@@ -355,39 +355,6 @@
               :src="qcHist4"
               :title="layout[5].title"
             ></barplot>
-            <pie-chart
-              :key="layout[6].i"
-              :x="layout[6].x"
-              :y="layout[6].y"
-              :w="layout[6].w"
-              :h="layout[6].h"
-              :i="layout[6].i"
-              :values="metadata.meta1_val"
-              :name="metadata.meta1_name"
-              :title="metadata.meta1_title"
-            ></pie-chart>
-            <pie-chart
-              :key="layout[7].i"
-              :x="layout[7].x"
-              :y="layout[7].y"
-              :w="layout[7].w"
-              :h="layout[7].h"
-              :i="layout[7].i"
-              :values="metadata.meta2_val"
-              :name="metadata.meta2_name"
-              :title="metadata.meta2_title"
-            ></pie-chart>
-            <pie-chart
-              :key="layout[8].i"
-              :x="layout[8].x"
-              :y="layout[8].y"
-              :w="layout[8].w"
-              :h="layout[8].h"
-              :i="layout[8].i"
-              :values="metadata.meta3_val"
-              :name="metadata.meta3_name"
-              :title="metadata.meta3_title"
-            ></pie-chart>
             <barplot
               :key="layout[9].i"
               :x="layout[9].x"
@@ -440,7 +407,6 @@
 </template>
 <script>
 import ResizeImage from '~/components/utils/ResizeImage'
-import PieChart from '~/components/utils/PieChart'
 import Boxplot from '~/components/utils/Boxplot'
 import Barplot from '~/components/utils/Barplot'
 
@@ -449,12 +415,12 @@ import ApiService from '~/services/ApiService.js'
 export default {
   components: {
     'resize-image': ResizeImage,
-    'pie-chart': PieChart,
     boxplot: Boxplot,
     barplot: Barplot,
   },
   props: {
     idx: { type: Number, required: true, default: 0 },
+    jobid: { type: String, required: true, default: '1' },
     type: { type: String, required: true, default: 'multiome' },
   },
   data() {
@@ -682,13 +648,17 @@ export default {
 
     async runPreProcess() {
       this.metadata = []
-
+      this.$notifier.showMessage({
+        content: `Running ATAC data preprocessing. Estimate: 2 mins`,
+        color: 'accent',
+      })
       this.qcResult = await ApiService.postCommand(
         'deepmaps/api/queue/load-multiome/',
         {
           idx: this.idx,
-          filename: 'pbmc_match_3k',
-          type: 'CellGene',
+          jobid: this.jobid,
+          filename: 'ifnb_2800',
+          type: 'multiome',
           min_cells: this.cellFilter,
           min_genes: this.geneFilter,
           nVariableFeatures: this.nVariableFeatures,

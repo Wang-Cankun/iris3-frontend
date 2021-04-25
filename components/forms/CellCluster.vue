@@ -1279,34 +1279,6 @@ export default {
             color: 'error',
           })
         })
-      /*
-      await this.$axios
-        .post('deepmaps/api/queue/umap-gene/', {
-          gene: this.gene,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapGene = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 2000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot UMAP error!',
-            color: 'error',
-          })
-        })
-*/
 
       await this.$axios
         .post('deepmaps/api/queue/select-category/')

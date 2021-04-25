@@ -533,7 +533,7 @@ export default {
       nVariableFeatures: '2000',
       timeElapsed: '',
       normalizeSelect: 'LogNormalize',
-      normalizeMethods: ['LogNormalize'],
+      normalizeMethods: ['LogNormalize', 'sctransform'],
       qcResult: null,
       qcComplete: false,
       qcBox1: [],
@@ -687,6 +687,10 @@ export default {
           }
         )
       } else if (this.type === 'multiome') {
+        this.$notifier.showMessage({
+          content: `Running preprocessing. Estimate: 2 mins`,
+          color: 'accent',
+        })
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load-multiome/',
           {

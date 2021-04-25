@@ -843,14 +843,16 @@
                   :h="layout[3].h"
                   :i="layout[3].i"
                 ></enrichment-table>
-                <coverage-plot
-                  :genes="genes"
-                  :x="layout[4].x"
-                  :y="layout[4].y"
-                  :w="layout[4].w"
-                  :h="layout[4].h"
-                  :i="layout[4].i"
-                ></coverage-plot>
+                <div v-if="jobid === 'example'">
+                  <coverage-plot
+                    :genes="genes"
+                    :x="layout[4].x"
+                    :y="layout[4].y"
+                    :w="layout[4].w"
+                    :h="layout[4].h"
+                    :i="layout[4].i"
+                  ></coverage-plot>
+                </div>
               </grid-layout>
             </div>
           </div>
@@ -975,10 +977,10 @@ export default {
     currentIdent: '',
     currentIdentMerge: [],
     currentIdentLevels: [],
-    currentEmbedding: '',
-    allEmbeddings: ['pca', 'umap.rna', 'umap.atac', 'wnn.umap', 'HGT'],
+    currentEmbedding: 'umap.rna',
+    allEmbeddings: ['pca', 'umap.rna', 'umap.atac', 'HGT'],
     currentAssay: '',
-    allAssays: ['RNA', 'SCT', 'ATAC', 'MAESTRO'],
+    allAssays: ['RNA', 'SCT', 'ATAC', 'MAESTRO', 'GAS'],
     currentAtlas: '',
     reductionSelect: 'PCA',
     reductionMethods: ['PCA'],
@@ -1035,6 +1037,9 @@ export default {
     },
   }),
   computed: {
+    jobid() {
+      return this.$route.params.id
+    },
     cellClusterArray() {
       return this.currentIdentLevels
     },
@@ -1155,6 +1160,12 @@ export default {
           categoryName: this.currentIdent,
         }
       )
+      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
+        this.allIdents = response.data
+        this.idents = response.data.map((item) => item.ident)
+        this.violinSplitItems = response.data
+        this.violinSplitItems.push('NULL')
+      })
     },
     async setActiveAssay(currentAssay) {
       this.$notifier.showMessage({
@@ -1179,8 +1190,9 @@ export default {
     },
     async runCellCluster() {
       this.$notifier.showMessage({
-        content: 'Running clustering...',
+        content: 'Running clustering... Estimate time: 3 mins',
         color: 'accent',
+        timeout: 70000,
       })
       this.clusterResult = await ApiService.postCommand(
         'deepmaps/api/queue/cluster-multiome/',
@@ -1350,7 +1362,7 @@ export default {
 
                   clearInterval(checkComplete)
                 }
-                if (++i === 10) {
+                if (++i === 100) {
                   clearInterval(checkComplete)
                 }
               })
@@ -1470,7 +1482,7 @@ export default {
 
                   clearInterval(checkComplete)
                 }
-                if (++i === 10) {
+                if (++i === 100) {
                   clearInterval(checkComplete)
                 }
               })
@@ -1530,7 +1542,7 @@ export default {
                 if (response.data.returnvalue !== null) {
                   clearInterval(checkComplete)
                 }
-                if (++i === 10) {
+                if (++i === 100) {
                   clearInterval(checkComplete)
                 }
               })
@@ -1603,7 +1615,7 @@ export default {
 
                   clearInterval(checkComplete)
                 }
-                if (++i === 10) {
+                if (++i === 100) {
                   clearInterval(checkComplete)
                 }
               })

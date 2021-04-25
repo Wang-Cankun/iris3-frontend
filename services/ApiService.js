@@ -34,7 +34,7 @@ export default {
     })
   },
 
-  async pollQueue(queueId, ms, maxAttempts = 50) {
+  async pollQueue(queueId, ms, maxAttempts = 500) {
     let result = await apiClient.get('deepmaps/api/queue/' + queueId)
     let attempts = 0
     while ((result.data.returnvalue === null) & (attempts < maxAttempts)) {

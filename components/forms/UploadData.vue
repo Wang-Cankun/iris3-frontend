@@ -68,7 +68,7 @@
       <v-tabs v-model="tab" grow background-color="white">
         <v-tab @click="switchTabs()">scRNA-Seq data </v-tab>
         <v-tab @click="switchTabs()">Multiple scRNA-Seq data </v-tab>
-        <v-tab @click="switchTabs()">scRNA-Seq & scATAC-seq data </v-tab>
+        <v-tab @click="switchTabs()">10x Genomics single-cell Multiome </v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="tab">
@@ -79,7 +79,7 @@
             counter
             chips
             :rules="fileRules"
-            label="Click to upload (csv, txt, h5)"
+            label="Support format: *.csv, *.txt, *.h5"
             prepend-icon="mdi-paperclip"
             outlined
             required
@@ -121,7 +121,7 @@
           </v-col>
           <v-col cols="12"
             ><v-row>
-              <p class="subtitle mt-4">Upload metadata (Optional)</p>
+              <p class="subtitle mt-4">Optional: Custom metadata</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
@@ -144,7 +144,7 @@
             color="primary"
             counter
             chips
-            label="Click to upload (csv, txt)"
+            label="Support format: *.csv, *.txt"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
@@ -152,7 +152,6 @@
         <v-tab-item>
           <p class="subtitle ma-0">Upload count matrix</p>
           <div v-for="(n, i) in multipleDatasetsLength" :key="n">
-            {{ i }}
             <v-file-input
               v-model="expFile.multiRna[i]"
               color="primary"
@@ -168,14 +167,14 @@
           <v-btn @click="addMultipleDataset">Add a row</v-btn>
           <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
 
-          <p class="subtitle">Upload metadata (Optional)</p>
+          <p class="subtitle">Optional: custom metadata</p>
 
           <v-file-input
             v-model="labelFile.multiRna"
             color="primary"
             counter
             chips
-            label="Click to upload (csv, txt, h5)"
+            label="Support format: *.csv, *.txt, *.h5"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
@@ -205,33 +204,45 @@
           </v-col>
         </v-tab-item>
         <v-tab-item>
-          <p class="subtitle ma-0">Upload scRNA-seq data</p>
+          <p class="subtitle ma-0">Feature barcode matrix</p>
           <v-file-input
             v-model="expFile.multiome[0]"
             color="primary"
             counter
             chips
             :rules="fileRules"
-            label="Upload count matrix (csv, txt, h5)"
+            label="Support format: *.h5, *.hdf5"
             prepend-icon="mdi-paperclip"
             outlined
             required
           ></v-file-input>
-          <p class="subtitle ma-0">Upload scATAC-seq count matrix</p>
+          <p class="subtitle ma-0">Optional: scATAC-seq fragments</p>
           <v-file-input
             v-model="expFile.multiome[1]"
             color="primary"
             counter
             chips
             :rules="fileRules"
-            label="Upload ATAC fragment file (csv, txt, h5)"
+            label="Support format: *fragments.tsv.gz"
+            prepend-icon="mdi-paperclip"
+            outlined
+            required
+          ></v-file-input>
+          <p class="subtitle ma-0">Optional: scATAC-seq fragments index</p>
+          <v-file-input
+            v-model="expFile.multiome[2]"
+            color="primary"
+            counter
+            chips
+            :rules="fileRules"
+            label="Support format: *fragments.tsv.gz.tbi"
             prepend-icon="mdi-paperclip"
             outlined
             required
           ></v-file-input>
           <v-col cols="12"
             ><v-row>
-              <p class="subtitle mt-4">Upload metadata (Optional)</p>
+              <p class="subtitle mt-4">Optional: custom metadata</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
@@ -254,13 +265,13 @@
             color="primary"
             counter
             chips
-            label="Click to upload (csv, txt)"
+            label="Support format: *.csv, *.txt"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
           <v-col cols="12"
             ><v-row>
-              <p class="subtitle mt-4">Upload scRNA-seq BAM file (Optional)</p>
+              <p class="subtitle mt-4">Upload scRNA data BAM file (Optional)</p>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-icon color="primary" dark v-on="on"
@@ -277,7 +288,7 @@
             color="primary"
             counter
             chips
-            label="Click to upload (.bam)"
+            label="Support format: .bam"
             prepend-icon="mdi-paperclip"
             outlined
           ></v-file-input>
@@ -444,6 +455,14 @@ export default {
         item: 'Download cell label file (Zeisel et al, 2015)',
         link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_index_label.csv',
       },
+      {
+        item: 'Download gene expression matrix (Yan et al, 2013) ',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_label.csv',
+      },
+      {
+        item: 'Download cell label file (Yan et al, 2013)',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_label.csv',
+      },
     ],
     multiRnaExample: [
       {
@@ -451,27 +470,26 @@ export default {
           'Load example (Human IFNB-Stimulated and Control PBMCs, 2800 cells)',
       },
       {
-        item: 'Download gene expression matrix and cell label (ifnb_2800.rda)',
-        link:
-          'https://raw.githubusercontent.com/Wang-Cankun/iris3api/master/data/ifnb_2800.rda',
+        item: 'To do',
+        link: 'https://bmbl.bmi.osumc.edu',
       },
     ],
     multiomeExample: [
       { item: 'Load example (10X Human PBMC 10k cells)' },
       {
-        item: 'Download 10X Human PBMC count matrix ',
+        item: 'Download data: Human Brain 3k cell',
         link:
-          'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5',
+          'https://bmbl.bmi.osumc.edu/iris3/storage/human_brain_3k_filtered_feature_bc_matrix.h5',
       },
       {
-        item: 'Download 10X Human PBMC ATAC fragment file ',
+        item: 'Download data: Human PBMC unsorted 3k cell',
         link:
-          'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz',
+          'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_unsorted_3k_filtered_feature_bc_matrix.h5',
       },
       {
-        item: 'Download 10X Human PBMC ATAC fragment file index',
+        item: 'Download data: Human PBMC granulocyte sorted 3k cell',
         link:
-          'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz',
+          'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_granulocyte_sorted_3k_filtered_feature_bc_matrix.h5',
       },
     ],
     email: '',
@@ -541,6 +559,7 @@ export default {
       this.multipleDatasetsLength = 1
       this.resetExpFile()
       this.speciesSelect = 'Mouse'
+      this.jobid = 'example'
       this.title = 'Mouse brain scRNA-seq dataset (Zeisel et al. 2015)'
       this.expFile.singleRna[0] = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
@@ -560,6 +579,7 @@ export default {
       this.multipleDatasetsLength = 2
       this.resetExpFile()
       this.speciesSelect = 'Human'
+      this.jobid = 'example'
       this.expFile.multiRna[0] = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
         'IFNB PBMCs (Dataset 1)'
@@ -583,11 +603,16 @@ export default {
       this.multipleDatasetsLength = 1
       this.resetExpFile()
       this.speciesSelect = 'Human'
+      this.jobid = 'example'
       this.expFile.multiome[0] = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
         'PBMC scRNA-seq data'
       )
       this.expFile.multiome[1] = dataURLtoFile(
+        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+        'PBMC scATAC-seq data'
+      )
+      this.expFile.multiome[2] = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
         'PBMC scATAC-seq data'
       )
@@ -612,7 +637,6 @@ export default {
       this.$refs.form.reset()
     },
     resetValidation() {
-      console.log('reset validation')
       this.$refs.form.resetValidation()
     },
     async submit() {
@@ -626,8 +650,21 @@ export default {
       this.dialog = true
       this.uploadStatus = 'Uploading ...'
       const formData = new FormData()
-      this.jobid = new Date().getTime()
+
+      if (this.jobid === 'example') {
+        this.$store.commit('SET_UPLOAD_FILES', 'Example data')
+      } else {
+        this.jobid = new Date().getTime()
+        const filenames = [
+          ...this.expFile.singleRna.map((file) => file.name),
+          ...this.expFile.multiRna.map((file) => file.name),
+          ...this.expFile.multiome.map((file) => file.name),
+        ]
+        this.$store.commit('SET_UPLOAD_FILES', filenames)
+      }
       this.$store.commit('SET_JOBID', this.jobid)
+      this.$store.commit('SET_SPECIES', this.speciesSelect)
+
       formData.append('method', 'post')
       formData.append('name', 'list')
       formData.append('title', this.title)
@@ -641,11 +678,11 @@ export default {
         formData.append('index', index)
       })
       this.expFile.multiRna.forEach((file, index) => {
-        formData.append('multiRna[]', file)
+        formData.append('multiRna', file)
         formData.append('index', index)
       })
       this.expFile.multiome.forEach((file, index) => {
-        formData.append('multiome[]', file)
+        formData.append('multiome', file)
         formData.append('index', index)
       })
       formData.append('labelFile-singleRna', this.labelFile.singleRna)
@@ -668,6 +705,7 @@ export default {
           },
         }
       )
+      console.log(uploadRes)
       // eslint-disable-next-line no-constant-condition
       if (uploadRes) {
         setTimeout(() => {
@@ -675,17 +713,15 @@ export default {
             content: 'Jobid: ' + this.jobid + ' Upload success!',
             color: 'success',
           })
-          if (this.title === 'Human Multiome PBMCs 10k cells') {
+          if (this.tab === 2) {
             this.$router.push({
               path: '/submit/multiome/' + this.jobid,
             })
-          } else if (
-            this.title === 'Human IFNB-Stimulated and Control PBMCs, 2800 cells'
-          ) {
+          } else if (this.tab === 1) {
             this.$router.push({
               path: '/submit/multiple-rna/' + this.jobid,
             })
-          } else {
+          } else if (this.tab === 0) {
             this.$router.push({ path: '/submit/single-rna/' + this.jobid })
           }
         }, 3000)

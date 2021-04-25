@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="show" width="100%" :color="color" top>
+  <v-snackbar v-model="show" width="100%" :color="color" top :timeout="timeout">
     <div class="text-subtitle-1 font-weight-bold">{{ message }}</div>
     <v-spacer></v-spacer>
     <template v-slot:action="{ attrs }">
@@ -22,6 +22,7 @@ export default {
       show: false,
       message: '',
       color: '',
+      timeout: 10000,
     }
   },
   created() {
@@ -30,6 +31,7 @@ export default {
         this.message = state.snackbar.content
         this.color = state.snackbar.color
         this.show = true
+        this.timeout = state.snackbar.timeout
       }
     })
   },
