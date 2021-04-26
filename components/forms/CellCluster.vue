@@ -904,7 +904,7 @@ export default {
     currentIdentMerge: [],
     currentIdentLevels: [],
     currentAtlas: '',
-    reductionSelect: 'HGT',
+    reductionSelect: 'PCA',
     reductionMethods: ['PCA', 'HGT'],
     integrationSelect: 'Seurat',
     integrationMethods: ['Seurat', 'Harmony'],
@@ -1160,7 +1160,10 @@ export default {
         content: 'Running clustering...',
         color: 'accent',
       })
-
+      this.$nuxt.$loading.start()
+      if (this.type === 'multi_rna') {
+        await setTimeout(() => {}, 20000)
+      }
       await this.$axios
         .post('deepmaps/api/queue/cluster/', {
           nPCs: this.nPCs,
@@ -1279,7 +1282,7 @@ export default {
             color: 'error',
           })
         })
-
+      this.$nuxt.$loading.finish()
       await this.$axios
         .post('deepmaps/api/queue/select-category/')
         .then((response) => {

@@ -1189,6 +1189,7 @@ export default {
       )
     },
     async runCellCluster() {
+      this.$nuxt.$loading.start()
       this.$notifier.showMessage({
         content: 'Running clustering... Estimate time: 3 mins',
         color: 'accent',
@@ -1222,7 +1223,7 @@ export default {
           categoryName: 'hgt_cluster',
         }
       )
-
+      this.$nuxt.$loading.finish()
       this.setExistingCategoryItems = await ApiService.postCommand(
         'deepmaps/api/queue/select-category/'
       ).available_category

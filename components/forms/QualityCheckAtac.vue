@@ -648,6 +648,7 @@ export default {
 
     async runPreProcess() {
       this.metadata = []
+      this.$nuxt.$loading.start()
       this.$notifier.showMessage({
         content: `Running ATAC data preprocessing. Estimate: 2 mins`,
         color: 'accent',
@@ -691,6 +692,7 @@ export default {
         'deepmaps/api/queue/var-genes-plot/'
       )
       this.qcComplete = true
+      this.$nuxt.$loading.finish()
     },
   },
 }

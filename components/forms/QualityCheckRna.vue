@@ -676,7 +676,7 @@ export default {
           }
         )
       } else if (this.type === 'multi_rna') {
-        await setTimeout(() => {}, 8000)
+        await setTimeout(() => {}, 20000)
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load-multi-rna/',
           {
