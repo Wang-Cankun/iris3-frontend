@@ -89,7 +89,7 @@
                       color="primary"
                       width="150"
                       rounded
-                      to="/submit/single-rna"
+                      to="/submit/single-rna/example"
                       >Example</v-btn
                     >
                   </v-row>
@@ -121,7 +121,7 @@
                       color="primary"
                       width="150"
                       rounded
-                      to="/submit/multiple-rna"
+                      to="/submit/multiple-rna/example"
                       >Example</v-btn
                     >
                   </v-row>
@@ -153,7 +153,7 @@
                       color="primary"
                       width="150"
                       rounded
-                      to="/submit/multiome"
+                      to="/submit/multiome/example"
                       >Example</v-btn
                     >
                   </v-row>
