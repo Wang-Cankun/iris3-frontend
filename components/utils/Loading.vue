@@ -1,6 +1,7 @@
 <template lang="html">
   <div v-if="loading" class="loading-page">
-    <h2>Calculating...</h2>
+    <!--<h2>Calculating...</h2>-->
+    <h2>Loading...</h2>
     <v-progress-circular
       width="6"
       color="primary"
