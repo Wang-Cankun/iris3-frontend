@@ -396,6 +396,9 @@ import Barplot from '~/components/utils/Barplot'
 import GeneCorrelationScatter from '~/components/utils/GeneCorrelationScatter'
 
 import ApiService from '~/services/ApiService.js'
+export const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 export default {
   components: {
@@ -676,7 +679,11 @@ export default {
           }
         )
       } else if (this.type === 'multi_rna') {
-        await setTimeout(() => {}, 20000)
+        if (this.$route.params.id === 'example') {
+          await sleep(8000)
+        } else {
+          await sleep(30000)
+        }
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load-multi-rna/',
           {

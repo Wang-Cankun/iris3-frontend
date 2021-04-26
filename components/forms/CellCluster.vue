@@ -22,7 +22,7 @@
                         >
                       </template>
                       <p>Integration method method:</p>
-                      <p>Which integration method to use? Default: Seurat</p>
+                      <p>Which integration method to use?</p>
                     </v-tooltip>
                     <v-col class="py-0" cols="11"
                       ><v-select
@@ -37,7 +37,7 @@
                       class="mx-2 my-4"
                       color="Primary"
                       width="150"
-                      @click="runCellCluster()"
+                      @click="runIntegration()"
                       >Run integration</v-btn
                     >
                   </v-row>
@@ -801,7 +801,9 @@ import ResizeImage from '~/components/utils/ResizeImage'
 import EnrichmentTable from '~/components/tables/EnrichmentTable'
 
 import ApiService from '~/services/ApiService.js'
-
+export const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 export default {
   components: {
     scatter: ResizeImage,
@@ -1155,6 +1157,16 @@ export default {
           })
         })
     },
+    async runIntegration() {
+      this.$nuxt.$loading.start()
+      if (this.$route.params.id === 'example') {
+        await sleep(8000)
+      } else {
+        await sleep(30000)
+      }
+      this.panel = [1]
+      this.$nuxt.$loading.finish()
+    },
     async runCellCluster() {
       this.$notifier.showMessage({
         content: 'Running clustering...',
@@ -1282,6 +1294,7 @@ export default {
             color: 'error',
           })
         })
+
       this.$nuxt.$loading.finish()
       await this.$axios
         .post('deepmaps/api/queue/select-category/')

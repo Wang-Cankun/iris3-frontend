@@ -1062,13 +1062,7 @@ export default {
       this.windowSize.x = newWPx
       this.windowSize.y = newHPx
     },
-    async runIntegration() {
-      this.umapStatic = await ApiService.postCommand(
-        'deepmaps/api/queue/umap-static/',
-        {
-          categoryName: 'hgt_cluster',
-        }
-      )
+    runIntegration() {
       return 1
     },
     async mergeIdents() {
@@ -1204,7 +1198,7 @@ export default {
         }
       )
 
-      this.currentIdent = ['hgt_cluster']
+      // this.currentIdent = ['hgt_cluster']
 
       this.currentIdentLevels = await ApiService.postCommand(
         'deepmaps/api/queue/set-idents/',
