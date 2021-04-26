@@ -14,7 +14,7 @@
           >Network construction</v-stepper-step
         >
       </v-stepper-header>
-      <project-info :jobid="jobid"></project-info>
+      <project-info :jobid="jobid" :type="type"></project-info>
       <v-stepper-items>
         <v-stepper-content step="1">
           <v-row>
@@ -75,6 +75,7 @@ export default {
     return {
       e1: 1,
       qcTab: null,
+      type: 'multiome',
     }
   },
   computed: {

@@ -657,6 +657,10 @@ export default {
     async runPreProcess() {
       this.metadata = []
       this.$nuxt.$loading.start()
+      this.$notifier.showMessage({
+        content: `Running preprocessing. Estimate: 1 mins`,
+        color: 'accent',
+      })
       if (this.idx === 0 && this.type === 'single_rna') {
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load/',
@@ -677,7 +681,6 @@ export default {
           {
             idx: this.idx,
             jobid: this.jobid,
-            filename: 'ifnb_2800',
             type: 'multiRna',
             min_cells: this.cellFilter,
             min_genes: this.geneFilter,
@@ -687,16 +690,11 @@ export default {
           }
         )
       } else if (this.type === 'multiome') {
-        this.$notifier.showMessage({
-          content: `Running preprocessing. Estimate: 2 mins`,
-          color: 'accent',
-        })
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load-multiome/',
           {
             idx: this.idx,
             jobid: this.jobid,
-            filename: 'ifnb_2800',
             type: 'multiome',
             min_cells: this.cellFilter,
             min_genes: this.geneFilter,

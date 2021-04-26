@@ -75,17 +75,28 @@
   </v-col>
 </template>
 <script>
+export const onlyUnique = (value, index, self) => {
+  return self.indexOf(value) === index
+}
+
 export default {
   props: {
     jobid: { type: String, required: true, default: 'example' },
+    type: { type: String, required: true, default: 'singleRna' },
   },
 
   async fetch() {
     const files = await this.$axios
       .get('deepmaps/api/file/upload/' + this.jobid)
       .then((res) => res.data)
-    this.uploadFiles = files.map((file) => file.originalname)
-    this.species = files.map((file) => file.species)
+    this.uploadFiles = files
+      .filter((file) => !!file && file.fieldname === this.type)
+      .map((file) => file.originalname)
+      .filter(onlyUnique)
+    this.species = files
+      .filter((file) => !!file && file.fieldname === this.type)
+      .map((file) => file.species)
+      .filter(onlyUnique)
   },
   data() {
     return {

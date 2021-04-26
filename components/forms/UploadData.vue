@@ -219,6 +219,26 @@
                     ></v-list-item-title
                   >
                 </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="multiRnaExample[2].link"
+                    >
+                      {{ multiRnaExample[2].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <a
+                      class="text-decoration-none"
+                      :href="multiRnaExample[3].link"
+                    >
+                      {{ multiRnaExample[3].item }}</a
+                    ></v-list-item-title
+                  >
+                </v-list-item>
               </v-list>
             </v-menu>
           </v-col>
@@ -486,12 +506,21 @@ export default {
     ],
     multiRnaExample: [
       {
-        item:
-          'Load example (Human IFNB-Stimulated and Control PBMCs, 2800 cells)',
+        item: 'Load example (Human IFNB PBMCs, 2800 cells)',
       },
       {
-        item: 'To do',
-        link: 'https://bmbl.bmi.osumc.edu',
+        item: 'Download gene expression matrix: Human IFNB (sample 1)',
+        link:
+          'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_sample1_expr.csv',
+      },
+      {
+        item: 'Download gene expression matrix: Human IFNB (sample 2)',
+        link:
+          'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_sample2_expr.csv',
+      },
+      {
+        item: 'Download cell label file: Human IFNB',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_label.csv',
       },
     ],
     multiomeExample: [
@@ -699,7 +728,6 @@ export default {
       })
       this.expFile.multiRna.forEach((file, index) => {
         formData.append('multiRna', file)
-        formData.append('index', index)
       })
       this.expFile.multiome.forEach((file, index) => {
         formData.append('multiome', file)
@@ -714,7 +742,6 @@ export default {
         content: 'Uploading data...',
         color: 'accent',
       })
-
       const uploadRes = await this.$axios.post(
         'deepmaps/api/file/upload/',
         formData,
