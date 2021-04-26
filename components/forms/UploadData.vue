@@ -696,6 +696,7 @@ export default {
         })
         return
       }
+      this.$nuxt.$loading.start()
       this.dialog = true
       this.uploadStatus = 'Uploading ...'
       const formData = new FormData()
@@ -752,7 +753,7 @@ export default {
           },
         }
       )
-      console.log(uploadRes)
+      this.$nuxt.$loading.finish()
       // eslint-disable-next-line no-constant-condition
       if (uploadRes) {
         setTimeout(() => {
