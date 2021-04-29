@@ -3,12 +3,18 @@ export default {
     API_URL: process.env.API_URL || 'https://bmbls.bmi.osumc.edu',
   },
   components: true,
+  docs: {
+    primaryColor: '#30588C',
+  },
   /*
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
    */
   loading: '~/components/utils/Loading.vue',
 
+  content: {
+    liveEdit: false,
+  },
   mode: 'universal',
   /*
    ** Nuxt target

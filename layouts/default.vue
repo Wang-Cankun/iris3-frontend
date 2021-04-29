@@ -366,8 +366,8 @@ export default {
           path: '/news',
         },
         {
-          title: 'Changing logs',
-          path: '/changinglogs',
+          title: 'Changelog',
+          path: '/changelog',
         },
         {
           title: 'Bar plot',
