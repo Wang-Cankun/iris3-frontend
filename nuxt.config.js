@@ -12,9 +12,6 @@ export default {
    */
   loading: '~/components/utils/Loading.vue',
 
-  content: {
-    liveEdit: false,
-  },
   mode: 'universal',
   /*
    ** Nuxt target
@@ -107,7 +104,9 @@ export default {
    ** Content module configuration
    ** See https://content.nuxtjs.org/configuration
    */
-  content: {},
+  content: {
+    liveEdit: false,
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
