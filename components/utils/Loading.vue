@@ -1,15 +1,21 @@
 <template lang="html">
   <div v-if="loading" class="loading-page">
     <!--<h2>Calculating...</h2>-->
-    <h2>Loading...</h2>
     <v-progress-circular
-      width="6"
+      width="5"
       color="primary"
       style="color: #30588c; width: 80px; height: 80px"
       indeterminate
     ></v-progress-circular>
-    <div v-for="(progress, idx) in jobProgress" :key="idx">
-      <p class="body-2">{{ progress }}</p>
+    <div v-if="uploadProgress" class="text-left body-2">
+      <p>Upload progress: {{ uploadProgress }}%</p>
+    </div>
+    <div
+      v-for="(progress, idx) in jobProgress"
+      :key="idx"
+      class="text-left body-2"
+    >
+      <p>{{ progress }}</p>
     </div>
   </div>
 </template>
@@ -27,10 +33,12 @@ export default {
   computed: {
     ...mapState({
       jobProgress: (state) => state.socket.jobProgress,
+      uploadProgress: (state) => state.socket.uploadProgress,
     }),
   },
   methods: {
     start() {
+      this.$store.commit('socket/CLEAR_JOB_PROGRESS')
       this.loading = true
     },
     stop() {
@@ -56,10 +64,10 @@ export default {
   height: 100%;
   background: rgba(255, 255, 255, 0.1);
   text-align: center;
-  padding-top: 200px;
-  font-size: 40px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  padding-top: 100px;
+
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   z-index: 1000;
 }
 </style>
