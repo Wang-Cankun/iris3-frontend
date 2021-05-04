@@ -497,7 +497,8 @@ export default {
       },
       {
         item: 'Download gene expression matrix (Yan et al, 2013) ',
-        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_label.csv',
+        link:
+          'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_expression.csv',
       },
       {
         item: 'Download cell label file (Yan et al, 2013)',
