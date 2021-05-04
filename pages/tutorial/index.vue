@@ -3,20 +3,48 @@
     <v-row class="my-12 justify-center">
       <v-row class="justify-center">
         <p class="text-h4">Tutorial</p>
-        <file-upload></file-upload>
+        {{ jobProgress }}
+        <v-btn @click="getMessage">emit</v-btn>
       </v-row>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import FileUpload from '~/components/utils/Upload'
+import { mapState } from 'vuex'
 
 export default {
-  components: { FileUpload },
   data() {
-    return {}
+    return {
+      sock: null,
+      messageRxd: '123',
+    }
   },
-  methods: {},
+
+  computed: {
+    ...mapState({
+      jobProgress: (state) => state.socket.jobProgress,
+    }),
+  },
+  mounted() {
+    this.socket = this.$nuxtSocket({ name: 'main' })
+    this.socket.on('jobProgress', (msg) => {
+      /* Handle event */
+      console.log(msg)
+      // this.progress = msg
+    })
+  },
+  methods: {
+    getMessage() {
+      // this.socket.emit('jobProgress', { id: 'abc123' }, (resp) => {
+      //   this.messageRxd = resp
+      // })
+      this.$nuxt.$loading.start()
+      setTimeout(() => {
+        console.log('sleep end')
+        this.$nuxt.$loading.finish()
+      }, 6000)
+    },
+  },
 }
 </script>

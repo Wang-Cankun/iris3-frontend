@@ -8,16 +8,27 @@
       style="color: #30588c; width: 80px; height: 80px"
       indeterminate
     ></v-progress-circular>
+    <div v-for="(progress, idx) in jobProgress" :key="idx">
+      <p class="body-2">{{ progress }}</p>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data: () => ({
     loading: false,
+    continuous: true,
     progress: 0,
     error: '',
   }),
+  computed: {
+    ...mapState({
+      jobProgress: (state) => state.socket.jobProgress,
+    }),
+  },
   methods: {
     start() {
       this.loading = true
@@ -26,6 +37,7 @@ export default {
       this.loading = false
     },
     finish() {
+      this.$store.commit('socket/CLEAR_JOB_PROGRESS')
       this.loading = false
     },
     fail(error) {

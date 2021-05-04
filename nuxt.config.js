@@ -75,12 +75,26 @@ export default {
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     '@nuxtjs/auth',
+    'nuxt-socket-io',
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: { baseURL: process.env.API_URL },
+  io: {
+    // module options
+    sockets: [
+      {
+        name: 'main',
+        url: process.env.SOCKET_URL,
+        default: true,
+        vuex: {
+          actions: [{ jobProgress: 'socket/FORMAT_JOB_PROGRESS' }],
+        },
+      },
+    ],
+  },
   auth: {
     strategies: {
       local: {
