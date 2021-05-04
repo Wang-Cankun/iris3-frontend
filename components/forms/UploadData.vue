@@ -740,17 +740,20 @@ export default {
       formData.append('labelFile-multiome', this.labelFile.multiome)
 
       formData.append('status', 'upload')
-      this.$notifier.showMessage({
-        content: 'Uploading data...',
-        color: 'accent',
-      })
+
       const uploadRes = await this.$axios.post(
         'deepmaps/api/file/upload/',
         formData,
         {
           headers: {
-            'Content-Type':
-              'multipart/form-data; boundary=<calculated when request is sent>',
+            'Content-Type': 'multipart/form-data',
+          },
+          onUploadProgress: (progressEvent) => {
+            const uploadPercentage = parseInt(
+              Math.round((progressEvent.loaded / progressEvent.total) * 100)
+            )
+
+            this.$store.commit('socket/SET_UPLOAD_PROGRESS', uploadPercentage)
           },
         }
       )

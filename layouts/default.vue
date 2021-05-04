@@ -430,6 +430,14 @@ export default {
       title: 'DeepMAPS',
     }
   },
+  mounted() {
+    this.socket = this.$nuxtSocket({ name: 'main' })
+    this.socket.on('jobProgress', (msg) => {
+      /* Handle event */
+      console.log(msg)
+      // this.progress = msg
+    })
+  },
   computed: {
     ...mapGetters(['isAuthenticated', 'loggedInUser']),
   },
