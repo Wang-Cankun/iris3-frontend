@@ -23,7 +23,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-head
    */
   head: {
-    titleTemplate: '%s - DeepMAPS',
+    titleTemplate: 'DeepMAPS',
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
