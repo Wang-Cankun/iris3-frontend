@@ -247,7 +247,7 @@
                     v-model="currentIdent"
                     class="ml-4"
                     :items="idents"
-                    label="Select identity"
+                    label="Select category"
                     @change="setActiveIdents(currentIdent)"
                   ></v-select>
                   <v-divider />
@@ -1084,7 +1084,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Merged cell category',
                     color: 'success',
                   })
                 }
@@ -1107,7 +1107,7 @@ export default {
     async setActiveIdents() {
       this.currentIdentMerge = []
       this.$notifier.showMessage({
-        content: `Set cell identity to ${this.currentIdent}`,
+        content: `Set cell category to ${this.currentIdent}`,
         color: 'accent',
       })
       this.currentIdentLevels = await ApiService.postCommand(
@@ -1192,6 +1192,7 @@ export default {
       this.clusterResult = await ApiService.postCommand(
         'deepmaps/api/queue/cluster-multiome/',
         {
+          method: 'HGT',
           nPCs: this.nPCs,
           resolution: this.resolution,
           neighbor: this.neighbor,
@@ -1274,7 +1275,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated cell category',
                     color: 'success',
                   })
                 }
@@ -1386,7 +1387,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1506,7 +1507,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1566,7 +1567,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }

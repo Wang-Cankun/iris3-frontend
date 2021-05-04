@@ -205,7 +205,7 @@
                     v-model="currentIdent"
                     class="ml-4"
                     :items="idents"
-                    label="Select identity"
+                    label="Select category"
                     @change="setActiveIdents(currentIdent)"
                   ></v-select>
                   <v-divider></v-divider>
@@ -733,7 +733,7 @@
                             v-model="violinSplit"
                             class="ml-4"
                             :items="idents"
-                            label="Select identity"
+                            label="Select category"
                           ></v-autocomplete>
                         </div>
                       </v-col>
@@ -1104,7 +1104,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1142,7 +1142,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1248,7 +1248,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1280,7 +1280,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1295,7 +1295,6 @@ export default {
           })
         })
 
-      this.$nuxt.$loading.finish()
       await this.$axios
         .post('deepmaps/api/queue/select-category/')
         .then((response) => {
@@ -1311,7 +1310,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated cell category',
                     color: 'success',
                   })
                 }
@@ -1335,6 +1334,7 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+      this.$nuxt.$loading.finish()
     },
 
     async renameCluster() {
@@ -1398,7 +1398,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Changed cell category',
                     color: 'success',
                   })
                 }
@@ -1517,7 +1517,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1639,7 +1639,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
@@ -1700,7 +1700,7 @@ export default {
                     1000
                   clearInterval(checkComplete)
                   this.$notifier.showMessage({
-                    content: 'Cell Clustering success!',
+                    content: 'Updated UMAP plot',
                     color: 'success',
                   })
                 }
