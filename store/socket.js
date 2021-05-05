@@ -13,6 +13,7 @@ export const mutations = {
   },
   CLEAR_JOB_PROGRESS(state) {
     state.jobProgress = []
+    state.uploadProgress = 0
   },
 }
 
