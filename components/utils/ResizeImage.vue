@@ -7,39 +7,45 @@
       :y="y"
       :i="i"
       class="grid-item-border"
+      drag-ignore-from=".no-drag"
       @resized="changeSize"
     >
-      <v-card-title class="primary white--text caption px-2 py-1"
+      <v-card-title
+        class="primary white--text caption px-2 py-1"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
         >{{ title }} <v-spacer></v-spacer>
-        <v-menu bottom left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-download-outline</v-icon>
-            </v-btn>
-          </template>
+        <div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon v-show="hover === true" color="white" v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>TODO</p>
+          </v-tooltip>
+          <v-menu bottom left :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark icon v-bind="attrs" v-on="on">
+                <v-icon v-show="hover === true">mdi-download-outline</v-icon>
+              </v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download PNG</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download JPG</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadPDF">
-              <v-list-item-title>Download PDF</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="downloadPDF">
-              <v-list-item-title>Download file (CSV)</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu></v-card-title
-      >
+            <v-list>
+              <v-list-item @click="downloadPNG">
+                <v-list-item-title>Download PNG</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+      </v-card-title>
       <v-img
         contain
         :height="windowSize.y - 70"
         :max-width="windowSize.x + 'px'"
         :max-height="windowSize.y + 'px'"
         :src="src"
+        class="no-drag"
       ></v-img> </grid-item
   ></v-card>
 </template>
@@ -57,6 +63,7 @@ export default {
   },
   data() {
     return {
+      hover: false,
       windowSize: {
         x: 600,
         y: 600,

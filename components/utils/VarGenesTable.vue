@@ -1,27 +1,45 @@
 <template>
   <v-card class="ma-0"
-    ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
+    ><grid-item
+      :w="w"
+      :h="h"
+      :x="x"
+      :y="y"
+      :i="i"
+      class="grid-item-border"
+      drag-ignore-from=".no-drag"
+    >
       <v-card-title
         class="primary white--text caption px-2 py-1"
         @mouseover="hover = true"
         @mouseleave="hover = false"
         >{{ title }} <v-spacer></v-spacer>
-        <v-menu bottom left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-download-outline</v-icon>
-            </v-btn>
-          </template>
+        <div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon v-show="hover === true" color="white" v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>TODO</p>
+          </v-tooltip>
+          <v-menu bottom left :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark icon v-bind="attrs" v-on="on">
+                <v-icon v-show="hover === true">mdi-download-outline</v-icon>
+              </v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item @click="downloadCSV">
-              <download-excel class="mr-4" :data="src" type="csv">
-                <v-list-item-title>Download file (CSV)</v-list-item-title>
-              </download-excel>
-            </v-list-item>
-          </v-list>
-        </v-menu></v-card-title
-      >
+            <v-list>
+              <v-list-item @click="downloadCSV">
+                <download-excel class="mr-4" :data="src" type="csv">
+                  <v-list-item-title>Download file (CSV)</v-list-item-title>
+                </download-excel>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+      </v-card-title>
       <div class="no-drag">
         <v-text-field
           v-model="search"
@@ -57,6 +75,7 @@ export default {
   },
   data() {
     return {
+      hover: false,
       search: '',
       headers: [
         {

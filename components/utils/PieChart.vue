@@ -1,24 +1,32 @@
 <template>
   <v-card class="ma-0"
-    ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
+    ><grid-item
+      :w="w"
+      :h="h"
+      :x="x"
+      :y="y"
+      :i="i"
+      class="grid-item-border"
+      drag-ignore-from=".no-drag"
+    >
       <v-card-title
         class="primary white--text caption px-2 py-1"
         @mouseover="hover = true"
         @mouseleave="hover = false"
         >{{ title }} <v-spacer></v-spacer>
-        <div v-show="hover === true">
-          <v-tooltip top class="my-0 py-0">
+        <div>
+          <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-icon color="white" dark v-on="on"
+              <v-icon v-show="hover === true" color="white" v-on="on"
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>Tooltip content</p>
+            <p>TODO</p>
           </v-tooltip>
-          <v-menu bottom left>
+          <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn dark icon v-bind="attrs" v-on="on">
-                <v-icon>mdi-download-outline</v-icon>
+                <v-icon v-show="hover === true">mdi-download-outline</v-icon>
               </v-btn>
             </template>
 
@@ -36,9 +44,9 @@
               </v-list-item>
             </v-list>
           </v-menu>
-        </div></v-card-title
-      >
-      <ECharts ref="chart" :option="option" /> </grid-item
+        </div>
+      </v-card-title>
+      <ECharts ref="chart" :option="option" class="no-drag" /> </grid-item
   ></v-card>
 </template>
 

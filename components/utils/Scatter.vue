@@ -1,6 +1,14 @@
 <template>
   <v-card class="ma-0"
-    ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
+    ><grid-item
+      :w="w"
+      :h="h"
+      :x="x"
+      :y="y"
+      :i="i"
+      class="grid-item-border"
+      drag-ignore-from=".no-drag"
+    >
       <v-card-title class="primary white--text caption px-2 py-1"
         >{{ title }} <v-spacer></v-spacer>
         <v-menu bottom left>
@@ -20,7 +28,7 @@
           </v-list>
         </v-menu></v-card-title
       >
-      <ECharts ref="chart" :option="option" /> </grid-item
+      <ECharts ref="chart" :option="option" class="no-drag" /> </grid-item
   ></v-card>
 </template>
 
@@ -73,6 +81,7 @@ export default {
         })
       }
       return {
+        hover: false,
         dataset: [
           {
             source: data,

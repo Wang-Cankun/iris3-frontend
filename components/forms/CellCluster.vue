@@ -537,43 +537,69 @@
                     :h="layout[1].h"
                     :i="layout[1].i"
                     class="grid-item-border"
+                    drag-ignore-from=".no-drag"
                   >
-                    <v-card-title class="primary white--text caption px-2 py-1"
+                    <v-card-title
+                      class="primary white--text caption px-2 py-1"
+                      @mouseover="degHover = true"
+                      @mouseleave="degHover = false"
                       >Differential expression testing <v-spacer></v-spacer>
-                      <v-menu bottom left>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn dark icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-download-outline</v-icon>
-                          </v-btn>
-                        </template>
-
-                        <v-list>
-                          <v-list-item @click="downloadPDF">
-                            <v-list-item-title
-                              >Download Table</v-list-item-title
+                      <div>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon
+                              v-show="degHover === true"
+                              color="white"
+                              v-on="on"
+                              >mdi-help-circle-outline</v-icon
                             >
-                          </v-list-item>
-                        </v-list>
-                      </v-menu></v-card-title
+                          </template>
+                          <p>TODO</p>
+                        </v-tooltip>
+                        <v-menu bottom left :close-on-content-click="false">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn dark icon v-bind="attrs" v-on="on">
+                              <v-icon v-show="degHover === true"
+                                >mdi-download-outline</v-icon
+                              >
+                            </v-btn>
+                          </template>
+
+                          <v-list>
+                            <v-list-item @click="1">
+                              <download-excel
+                                class="mr-4"
+                                :data="deResult"
+                                type="csv"
+                              >
+                                <v-list-item-title
+                                  >Download file (CSV)</v-list-item-title
+                                >
+                              </download-excel>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
+                      </div></v-card-title
                     >
-                    <v-row>
-                      <v-col cols="6">
-                        <v-autocomplete
-                          v-model="ident1"
-                          class="ml-4"
-                          :items="currentIdentLevels"
-                          label="Group 1"
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-autocomplete
-                          v-model="ident2"
-                          class="ml-4"
-                          :items="currentIdentLevels"
-                          label="Group 2"
-                        ></v-autocomplete>
-                      </v-col>
-                      <!--<v-col cols="6" class="ma-0">
+                    <div class="no-drag">
+                      <v-row>
+                        <v-col cols="6">
+                          <v-autocomplete
+                            v-model="ident1"
+                            class="ml-4"
+                            :items="currentIdentLevels"
+                            label="Group 1"
+                          ></v-autocomplete>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-autocomplete
+                            v-model="ident2"
+                            class="ml-4"
+                            :items="currentIdentLevels"
+                            label="Group 2"
+                          ></v-autocomplete>
+                        </v-col>
+                        <!--<v-col cols="6" class="ma-0">
                         <p class="ml-4 mb-0 title-h4">
                           Assay
                           <v-tooltip top>
@@ -594,100 +620,100 @@
                         </p>
                       </v-col>
                       -->
-                    </v-row>
-                    <v-row>
-                      <v-col cols="4" class="ma-0">
-                        <p class="ml-4 mb-0 title-h4">
-                          P-value cutoff
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on }">
-                              <v-icon color="primary" dark v-on="on"
-                                >mdi-help-circle-outline</v-icon
-                              >
-                            </template>
-                            <p>pvalue</p>
-                          </v-tooltip>
-                          <v-text-field
-                            v-model="degPvalue"
-                            class="px-0"
-                            outlined
-                            type="number"
-                            step="0.01"
-                            background-color="white"
-                            dense
-                          ></v-text-field>
-                        </p>
-                      </v-col>
-                      <v-col cols="4">
-                        <p class="ml-4 mb-0 title-h4">
-                          Min cell percent
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on }">
-                              <v-icon color="primary" dark v-on="on"
-                                >mdi-help-circle-outline</v-icon
-                              >
-                            </template>
-                            <p>
-                              Only test genes that are detected in a minimum
-                              fraction of min.pct cells in either of the two
-                              populations. Meant to speed up the function by not
-                              testing genes that are very infrequently
-                              expressed. Default is 0.2
-                            </p>
-                          </v-tooltip>
-                          <v-text-field
-                            v-model="minPct"
-                            class="px-0"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-text-field>
-                        </p>
-                      </v-col>
-                      <v-col cols="4" class="ma-0">
-                        <p class="ml-4 mb-0 title-h4">
-                          LogFC threshold
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on }">
-                              <v-icon color="primary" dark v-on="on"
-                                >mdi-help-circle-outline</v-icon
-                              >
-                            </template>
-                            <p>
-                              Limit testing to genes which show, on average, at
-                              least X-fold difference (log-scale) between the
-                              two groups of cells. Default is 0.25 Increasing
-                              logfc.threshold speeds up the function, but can
-                              miss weaker signals.
-                            </p>
-                          </v-tooltip>
-                          <v-text-field
-                            v-model="minLfc"
-                            class="px-0"
-                            outlined
-                            dense
-                            background-color="white"
-                          ></v-text-field>
-                        </p>
-                      </v-col>
-                    </v-row>
-                    <v-row justify="center" class="mx-2 mb-2 mt-0">
-                      <v-btn
-                        class="mx-2 mb-2 mt-0"
-                        color="Primary"
-                        width="200"
-                        @click="runDeg()"
-                        >Update</v-btn
-                      >
-                    </v-row>
-                    <v-data-table
-                      dense
-                      :headers="headers"
-                      :items="deResult"
-                      item-key="name"
-                      :items-per-page="5"
-                      class="elevation-1"
-                    ></v-data-table></grid-item
+                      </v-row>
+                      <v-row>
+                        <v-col cols="4" class="ma-0">
+                          <p class="ml-4 mb-0 title-h4">
+                            P-value cutoff
+                            <v-tooltip top>
+                              <template v-slot:activator="{ on }">
+                                <v-icon color="primary" dark v-on="on"
+                                  >mdi-help-circle-outline</v-icon
+                                >
+                              </template>
+                              <p>pvalue</p>
+                            </v-tooltip>
+                            <v-text-field
+                              v-model="degPvalue"
+                              class="px-0"
+                              outlined
+                              type="number"
+                              step="0.01"
+                              background-color="white"
+                              dense
+                            ></v-text-field>
+                          </p>
+                        </v-col>
+                        <v-col cols="4">
+                          <p class="ml-4 mb-0 title-h4">
+                            Min cell percent
+                            <v-tooltip top>
+                              <template v-slot:activator="{ on }">
+                                <v-icon color="primary" dark v-on="on"
+                                  >mdi-help-circle-outline</v-icon
+                                >
+                              </template>
+                              <p>
+                                Only test genes that are detected in a minimum
+                                fraction of min.pct cells in either of the two
+                                populations. Meant to speed up the function by
+                                not testing genes that are very infrequently
+                                expressed. Default is 0.2
+                              </p>
+                            </v-tooltip>
+                            <v-text-field
+                              v-model="minPct"
+                              class="px-0"
+                              outlined
+                              dense
+                              background-color="white"
+                            ></v-text-field>
+                          </p>
+                        </v-col>
+                        <v-col cols="4" class="ma-0">
+                          <p class="ml-4 mb-0 title-h4">
+                            LogFC threshold
+                            <v-tooltip top>
+                              <template v-slot:activator="{ on }">
+                                <v-icon color="primary" dark v-on="on"
+                                  >mdi-help-circle-outline</v-icon
+                                >
+                              </template>
+                              <p>
+                                Limit testing to genes which show, on average,
+                                at least X-fold difference (log-scale) between
+                                the two groups of cells. Default is 0.25
+                                Increasing logfc.threshold speeds up the
+                                function, but can miss weaker signals.
+                              </p>
+                            </v-tooltip>
+                            <v-text-field
+                              v-model="minLfc"
+                              class="px-0"
+                              outlined
+                              dense
+                              background-color="white"
+                            ></v-text-field>
+                          </p>
+                        </v-col>
+                      </v-row>
+                      <v-row justify="center" class="mx-2 mb-2 mt-0">
+                        <v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          width="200"
+                          @click="runDeg()"
+                          >Update</v-btn
+                        >
+                      </v-row>
+                      <v-data-table
+                        dense
+                        :headers="headers"
+                        :items="deResult"
+                        item-key="name"
+                        :items-per-page="5"
+                        class="elevation-1"
+                      ></v-data-table></div></grid-item
                 ></v-card>
                 <v-card class="ma-0"
                   ><grid-item
@@ -697,87 +723,115 @@
                     :h="layout[2].h"
                     :i="layout[2].i"
                     class="grid-item-border"
+                    drag-ignore-from=".no-drag"
                     @resized="changeSize"
                   >
-                    <v-card-title class="primary white--text caption px-2 py-1"
+                    <v-card-title
+                      class="primary white--text caption px-2 py-1"
+                      @mouseover="genePlotsHover = true"
+                      @mouseleave="genePlotsHover = false"
                       >Gene plots<v-spacer></v-spacer>
-                      <v-menu bottom left>
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-icon
+                            v-show="genePlotsHover === true"
+                            color="white"
+                            v-on="on"
+                            >mdi-help-circle-outline</v-icon
+                          >
+                        </template>
+                        <p>TODO</p>
+                      </v-tooltip>
+                      <v-menu bottom left :close-on-content-click="false">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn dark icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-download-outline</v-icon>
+                            <v-icon v-show="genePlotsHover === true"
+                              >mdi-download-outline</v-icon
+                            >
                           </v-btn>
                         </template>
 
                         <v-list>
-                          <v-list-item @click="downloadPDF">
+                          <v-list-item @click="downloadPNG(violinGene)">
                             <v-list-item-title
-                              >Download Table</v-list-item-title
+                              >Download violin plot</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="downloadPNG(featureGene)">
+                            <v-list-item-title
+                              >Download umap plot</v-list-item-title
                             >
                           </v-list-item>
                         </v-list>
-                      </v-menu></v-card-title
-                    >
-                    <v-row
-                      ><v-col cols="4">
-                        <v-autocomplete
-                          v-model="gene"
-                          class="ml-4"
-                          :items="genes"
-                          label="Gene"
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col cols="4">
-                        <div v-if="idents != ''">
-                          <p class="subtitle-2 text--primary mx-4">Split by:</p>
+                      </v-menu>
+                    </v-card-title>
+                    <div class="no-drag">
+                      <v-row
+                        ><v-col cols="4">
                           <v-autocomplete
-                            v-model="violinSplit"
+                            v-model="gene"
                             class="ml-4"
-                            :items="idents"
-                            label="Select category"
+                            :items="genes"
+                            label="Gene"
                           ></v-autocomplete>
-                        </div>
-                      </v-col>
-                      <v-col cols="4">
-                        <div v-if="idents != ''">
-                          <p class="subtitle-2 text--primary mx-4">Group by:</p>
-                          <v-autocomplete
-                            v-model="violinGroup"
-                            class="ml-4"
-                            :items="idents"
-                            label="Select cell category"
-                          ></v-autocomplete>
-                        </div>
-                      </v-col>
-                    </v-row>
-                    <v-row justify="center" class="mx-2 mb-2 mt-0">
-                      <v-btn
-                        class="mx-2 mb-2 mt-0"
-                        color="Primary"
-                        width="200"
-                        @click="runGenePlot()"
-                        >Plot</v-btn
-                      >
-                    </v-row>
-                    <v-row v-show="violinGene">
-                      <v-col cols="6"
-                        ><v-img
-                          contain
-                          :height="windowSize.y - 130"
-                          :max-width="windowSize.x / 2 + 'px'"
-                          :max-height="windowSize.y / 2 + 'px'"
-                          :src="violinGene"
-                        ></v-img
-                      ></v-col>
-                      <v-col cols="6"
-                        ><v-img
-                          contain
-                          :height="windowSize.y - 130"
-                          :max-width="windowSize.x / 2 + 'px'"
-                          :max-height="windowSize.y / 2 + 'px'"
-                          :src="featureGene"
-                        ></v-img
-                      ></v-col>
-                    </v-row> </grid-item
+                        </v-col>
+                        <v-col cols="4">
+                          <div v-if="idents != ''">
+                            <p class="subtitle-2 text--primary mx-4">
+                              Split by:
+                            </p>
+                            <v-autocomplete
+                              v-model="violinSplit"
+                              class="ml-4"
+                              :items="idents"
+                              label="Select category"
+                            ></v-autocomplete>
+                          </div>
+                        </v-col>
+                        <v-col cols="4">
+                          <div v-if="idents != ''">
+                            <p class="subtitle-2 text--primary mx-4">
+                              Group by:
+                            </p>
+                            <v-autocomplete
+                              v-model="violinGroup"
+                              class="ml-4"
+                              :items="idents"
+                              label="Select cell category"
+                            ></v-autocomplete>
+                          </div>
+                        </v-col>
+                      </v-row>
+                      <v-row justify="center" class="mx-2 mb-2 mt-0">
+                        <v-btn
+                          class="mx-2 mb-2 mt-0"
+                          color="Primary"
+                          width="200"
+                          @click="runGenePlot()"
+                          >Plot</v-btn
+                        >
+                      </v-row>
+                      <v-row v-show="violinGene">
+                        <v-col cols="6"
+                          ><v-img
+                            contain
+                            :height="windowSize.y - 130"
+                            :max-width="windowSize.x / 2 + 'px'"
+                            :max-height="windowSize.y / 2 + 'px'"
+                            :src="violinGene"
+                          ></v-img
+                        ></v-col>
+                        <v-col cols="6"
+                          ><v-img
+                            contain
+                            :height="windowSize.y - 130"
+                            :max-width="windowSize.x / 2 + 'px'"
+                            :max-height="windowSize.y / 2 + 'px'"
+                            :src="featureGene"
+                          ></v-img
+                        ></v-col>
+                      </v-row>
+                    </div> </grid-item
                 ></v-card>
                 <enrichment-table
                   :genes="deResult"
@@ -813,6 +867,8 @@ export default {
     type: { type: String, required: true, default: 'single_rna' },
   },
   data: () => ({
+    degHover: false,
+    genePlotsHover: false,
     layout: [
       {
         x: 0,
@@ -950,7 +1006,6 @@ export default {
     oldClusterName: '',
     newClusterName: '',
     // GSEA
-    gseaResult: [],
     gseaDatabase: '',
     allGseaDatabases: [
       { name: 'Hallmark gene sets (H)', value: 'H' },
@@ -1719,6 +1774,7 @@ export default {
 
     async runDeg() {
       this.deResult = []
+      this.$nuxt.$loading.start()
       await this.$axios
         .post('deepmaps/api/queue/deg/', {
           ident1: this.ident1,
@@ -1737,10 +1793,6 @@ export default {
                 if (response.data.returnvalue !== null) {
                   this.deResult = response.data.returnvalue[0]
                   this.deg = _.map(this.deResult, 'gene')
-                  this.$notifier.showMessage({
-                    content: 'Running DE testing...',
-                    color: 'accent',
-                  })
 
                   clearInterval(checkComplete)
                 }
@@ -1756,10 +1808,7 @@ export default {
             color: 'error',
           })
         })
-      this.$notifier.showMessage({
-        content: 'Running DE testing...',
-        color: 'accent',
-      })
+      this.$nuxt.$loading.finish()
     },
 
     async runGenePlot() {
@@ -1939,8 +1988,13 @@ export default {
         this.violinSplitItems.push('NULL')
       })
     },
-    resetAddMetadata() {
-      console.log(' ~ file: CellCluster.vue ~ line 944 ~ resetAddMetadata ~ ')
+
+    downloadPNG(src) {
+      const link = document.createElement('a')
+      link.href = src
+      link.setAttribute('download', 'Image_png.png')
+      document.body.appendChild(link)
+      link.click()
     },
   },
 }

@@ -6,8 +6,8 @@
           <v-expansion-panels v-model="panel" multiple>
             <v-expansion-panel>
               <v-expansion-panel-header
-                >Quality control</v-expansion-panel-header
-              >
+                >Quality control
+              </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-card
                   v-if="qcResult !== null"
@@ -368,18 +368,20 @@
               :i="layout[9].i"
               :genes="genes"
             ></gene-correlation-scatter>
-            <div v-for="(item, i) in metaList" :key="i">
-              <pie-chart
-                :key="layout[i + 10].i"
-                :x="layout[i + 10].x"
-                :y="layout[i + 10].y"
-                :w="layout[i + 10].w"
-                :h="layout[i + 10].h"
-                :i="layout[i + 10].i"
-                :values="item.val"
-                :name="item.name"
-                :title="'Metadata: ' + item.title[0]"
-              ></pie-chart>
+
+            <div>
+              <div v-for="(item, pieIdx) in metaList" :key="pieIdx">
+                <pie-chart
+                  :x="layout[pieIdx + 10].x"
+                  :y="layout[pieIdx + 10].y"
+                  :w="layout[pieIdx + 10].w"
+                  :h="layout[pieIdx + 10].h"
+                  :i="layout[pieIdx + 10].i"
+                  :values="item.val"
+                  :name="item.name"
+                  :title="'Metadata: ' + item.title[0]"
+                ></pie-chart>
+              </div>
             </div>
           </grid-layout>
         </v-col>

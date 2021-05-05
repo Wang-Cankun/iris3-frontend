@@ -1,57 +1,79 @@
 <template>
   <v-card class="ma-0"
-    ><grid-item :w="w" :h="h" :x="x" :y="y" :i="i" class="grid-item-border">
-      <v-card-title class="primary white--text caption px-2 py-1"
-        >Gene set enrichment analysis<v-spacer></v-spacer>
-        <v-menu bottom left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-download-outline</v-icon>
-            </v-btn>
-          </template>
+    ><grid-item
+      :w="w"
+      :h="h"
+      :x="x"
+      :y="y"
+      :i="i"
+      class="grid-item-border"
+      drag-ignore-from=".no-drag"
+    >
+      <v-card-title
+        class="primary white--text caption px-2 py-1"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
+        >Gene set enrichment analysis <v-spacer></v-spacer>
+        <div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon v-show="hover === true" color="white" v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>TODO</p>
+          </v-tooltip>
+          <v-menu bottom left :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark icon v-bind="attrs" v-on="on">
+                <v-icon v-show="hover === true">mdi-download-outline</v-icon>
+              </v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item @click="downloadTable">
-              <download-excel class="mr-4" :data="gseaResult" type="csv">
-                <v-list-item-title>Download file (CSV)</v-list-item-title>
-              </download-excel>
-            </v-list-item>
-          </v-list>
-        </v-menu></v-card-title
+            <v-list>
+              <v-list-item @click="1">
+                <download-excel class="mr-4" :data="gseaResult[0]" type="csv">
+                  <v-list-item-title>Download file (CSV)</v-list-item-title>
+                </download-excel>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div></v-card-title
       >
-      <v-row>
-        <v-col cols="12">
-          <v-autocomplete
-            v-model="gseaDatabase"
-            class="ml-4"
-            :items="allGseaDatabases"
-            label="MSigDB database"
-            return-object
-            item-text="name"
-            item-value="value"
-          >
-          </v-autocomplete> </v-col
-      ></v-row>
+      <div class="no-drag">
+        <v-row>
+          <v-col cols="12">
+            <v-autocomplete
+              v-model="gseaDatabase"
+              class="ml-4"
+              :items="allGseaDatabases"
+              label="MSigDB database"
+              return-object
+              item-text="name"
+              item-value="value"
+            >
+            </v-autocomplete> </v-col
+        ></v-row>
 
-      <v-row justify="center" class="mx-2 mb-2 mt-0">
-        <v-btn
-          class="mx-2 mb-2 mt-0"
-          color="Primary"
-          width="200"
-          @click="runGSEA()"
-          >Run</v-btn
-        >
-      </v-row>
-      <div v-if="gseaResult.length">
-        <v-data-table
-          dense
-          :headers="gseaHeaders"
-          :items="gseaResult[0]"
-          item-key="name"
-          :items-per-page="5"
-          class="elevation-1"
-        ></v-data-table>
-      </div> </grid-item
+        <v-row justify="center" class="mx-2 mb-2 mt-0">
+          <v-btn
+            class="mx-2 mb-2 mt-0"
+            color="Primary"
+            width="200"
+            @click="runGSEA()"
+            >Run</v-btn
+          >
+        </v-row>
+        <div v-if="gseaResult.length">
+          <v-data-table
+            dense
+            :headers="gseaHeaders"
+            :items="gseaResult[0]"
+            item-key="name"
+            :items-per-page="5"
+            class="elevation-1"
+          ></v-data-table>
+        </div></div></grid-item
   ></v-card>
 </template>
 
@@ -69,6 +91,7 @@ export default {
   },
   data() {
     return {
+      hover: false,
       gseaHeaders: [
         { text: 'pathway', value: 'pathway' },
         { text: 'Adjusted p-value', value: 'padj' },
