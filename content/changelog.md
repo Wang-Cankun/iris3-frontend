@@ -7,8 +7,28 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
-## [0.3] - 04/29/2021
+## [0.3.1] - 05/04/2021
  
+### Added
+
+- Show job running progess during loading, utilized socket-io and redis
+- Show file upload progress during loading
+- Allow download figures and tables
+
+### Changes
+
+- Updated all grid items with the same header/title style
+
+### Fixed
+
+- Too many digits in DEG results
+- Align the 'RENAME' button within settings section
+- Update info not clear
+- Example data naming error
+- Set default clustering method to HGT
+
+## [0.3] - 04/29/2021
+
 ### Added
 
 - Allow users to upload custom dataset
@@ -16,17 +36,19 @@ All notable changes to DeepMAPS will be documented in this page.
 - Built Docker images for R and Python backend
 
 ### Changes
+
 - Use [JASPAR binding sites database](http://jaspar.genereg.net/genome-tracks/) for motif tasks
 - Updated new HGT backend workflow
 
 ### Fixed
+
 - API returns too many digits of data
 - Replaced example cell label with healthy/disease
 - Renamed gene regulatory network title
 - Minor typos and layout changes
 
 ## [0.2] - 04/15/2021
- 
+
 ### Added
 
 - Options to select assay in plotting genes and DEGs
@@ -40,6 +62,7 @@ All notable changes to DeepMAPS will be documented in this page.
 - Enable search function in variable genes table
 
 ### Fixed
+
 - Static plot to adjust based on grid item resize event
 - Gene-gene correlation function not working
 
@@ -48,6 +71,7 @@ All notable changes to DeepMAPS will be documented in this page.
 DeepMAPS is online at [https://bmbls.bmi.osumc.edu/deepmaps/](https://bmbls.bmi.osumc.edu/deepmaps/)
 
 ### Added
+
 - Allow partial select cell labels or genes for regulon inference
 - New homepage UI design
 - Redis message queue
