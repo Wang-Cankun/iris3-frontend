@@ -516,11 +516,11 @@ export default {
         },
         {
           x: 4,
-          y: 1,
+          y: 2,
           w: 2,
           h: 1,
           i: '11',
-          title: 'Number of ATAC fragments',
+          title: 'Highly variable features',
         },
         {
           x: 2,

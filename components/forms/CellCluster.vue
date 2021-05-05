@@ -225,7 +225,7 @@
                         dense
                       ></v-select
                     ></v-col>
-                    <v-col cols="8">
+                    <v-col cols="12">
                       <v-text-field
                         v-model="newClusterName"
                         label="New cluster name"
