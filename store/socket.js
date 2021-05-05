@@ -5,7 +5,6 @@ export const state = () => ({
 
 export const mutations = {
   SET_UPLOAD_PROGRESS(state, uploadProgress) {
-    console.log(uploadProgress)
     state.uploadProgress = uploadProgress
   },
   SET_JOB_PROGRESS(state, jobProgress) {
