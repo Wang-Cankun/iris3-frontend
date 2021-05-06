@@ -242,7 +242,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import Scatter from '~/components/utils/Scatter'
+import Scatter from '~/components/figures/Scatter'
 
 export default {
   components: {

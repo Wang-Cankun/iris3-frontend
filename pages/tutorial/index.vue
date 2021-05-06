@@ -3,8 +3,8 @@
     <v-row class="my-12 justify-center">
       <v-row class="justify-center">
         <p class="text-h4">Tutorial</p>
-        {{ jobProgress }}
         <v-btn @click="getMessage">emit</v-btn>
+        <v-progress-linear color="primary" indeterminate></v-progress-linear>
       </v-row>
     </v-row>
   </v-container>
@@ -26,24 +26,14 @@ export default {
       jobProgress: (state) => state.socket.jobProgress,
     }),
   },
-  mounted() {
-    this.socket = this.$nuxtSocket({ name: 'main' })
-    this.socket.on('jobProgress', (msg) => {
-      /* Handle event */
-      console.log(msg)
-      // this.progress = msg
-    })
-  },
+
   methods: {
     getMessage() {
-      // this.socket.emit('jobProgress', { id: 'abc123' }, (resp) => {
-      //   this.messageRxd = resp
-      // })
       this.$nuxt.$loading.start()
       setTimeout(() => {
-        console.log('sleep end')
+        this.$store.commit('socket/SET_JOB_PROGRESS', '1')
         this.$nuxt.$loading.finish()
-      }, 6000)
+      }, 10000)
     },
   },
 }

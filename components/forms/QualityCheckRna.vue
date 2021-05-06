@@ -390,12 +390,12 @@
   </v-col>
 </template>
 <script>
-import ResizeImage from '~/components/utils/ResizeImage'
-import VarGenesTable from '~/components/utils/VarGenesTable'
-import PieChart from '~/components/utils/PieChart'
-import Boxplot from '~/components/utils/Boxplot'
-import Barplot from '~/components/utils/Barplot'
-import GeneCorrelationScatter from '~/components/utils/GeneCorrelationScatter'
+import ResizeImage from '~/components/figures/ResizeImage'
+import VarGenesTable from '~/components/tables/VarGenesTable'
+import PieChart from '~/components/figures/PieChart'
+import Boxplot from '~/components/figures/Boxplot'
+import Barplot from '~/components/figures/Barplot'
+import GeneCorrelationScatter from '~/components/figures/GeneCorrelationScatter'
 
 import ApiService from '~/services/ApiService.js'
 export const sleep = (ms) => {

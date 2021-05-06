@@ -406,9 +406,9 @@
   </v-col>
 </template>
 <script>
-import ResizeImage from '~/components/utils/ResizeImage'
-import Boxplot from '~/components/utils/Boxplot'
-import Barplot from '~/components/utils/Barplot'
+import ResizeImage from '~/components/figures/ResizeImage'
+import Boxplot from '~/components/figures/Boxplot'
+import Barplot from '~/components/figures/Barplot'
 
 import ApiService from '~/services/ApiService.js'
 

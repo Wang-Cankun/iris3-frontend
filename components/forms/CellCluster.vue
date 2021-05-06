@@ -851,7 +851,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import ResizeImage from '~/components/utils/ResizeImage'
+import ResizeImage from '~/components/figures/ResizeImage'
 import EnrichmentTable from '~/components/tables/EnrichmentTable'
 
 import ApiService from '~/services/ApiService.js'
