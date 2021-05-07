@@ -105,11 +105,10 @@
             >Plot</v-btn
           >
         </v-row>
-        <ECharts
-          ref="chart"
-          :option="option2d"
-          class="no-drag"
-        /></div></grid-item
+
+        <div v-if="src.axis[0] !== 0"></div>
+      </div>
+      <ECharts ref="chart" :option="option2d" class="no-drag" /></grid-item
   ></v-card>
 </template>
 
@@ -155,7 +154,7 @@ export default {
       },
       violinGroup: 'seurat_clusters',
       gene: 'Gad1',
-      src: { axis: [0, 1], legend: [0], dimension: 1 },
+      src: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     }
   },
   computed: {

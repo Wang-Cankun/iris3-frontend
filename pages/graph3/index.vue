@@ -27,6 +27,7 @@
         :w="layout[0].w"
         :h="layout[0].h"
         :i="layout[0].i"
+        :genes="['Gad1', 'Gad2']"
         :src="res1"
       ></feature-scatter>
     </grid-layout>
