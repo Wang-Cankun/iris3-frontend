@@ -7,13 +7,14 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
-## [0.3.1] - 05/04/2021
+## [0.4] - 05/06/2021
  
 ### Added
 
 - Show job running progess during loading, utilized socket-io and redis
 - Show file upload progress during loading
 - Allow download figures and tables
+- Interactive scatter plot for clustering and gene expression
 
 ### Changes
 
