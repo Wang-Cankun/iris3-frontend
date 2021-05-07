@@ -500,7 +500,7 @@
                 :margin="[10, 10]"
                 :use-css-transforms="true"
               >
-                <scatter
+                <cluster-scatter
                   :key="layout[0].i"
                   :x="layout[0].x"
                   :y="layout[0].y"
@@ -509,10 +509,10 @@
                   :i="layout[0].i"
                   :imagew="600"
                   :imageh="550"
-                  :src="umapStatic"
+                  :src="clusterScatterData"
                   :title="layout[0].title"
                 >
-                </scatter>
+                </cluster-scatter>
                 <!--
                     <scatter
                       :key="layout[0].i"
@@ -715,124 +715,15 @@
                         class="elevation-1"
                       ></v-data-table></div></grid-item
                 ></v-card>
-                <v-card class="ma-0"
-                  ><grid-item
-                    :x="layout[2].x"
-                    :y="layout[2].y"
-                    :w="layout[2].w"
-                    :h="layout[2].h"
-                    :i="layout[2].i"
-                    class="grid-item-border"
-                    drag-ignore-from=".no-drag"
-                    @resized="changeSize"
-                  >
-                    <v-card-title
-                      class="primary white--text caption px-2 py-1"
-                      @mouseover="genePlotsHover = true"
-                      @mouseleave="genePlotsHover = false"
-                      >Gene plots<v-spacer></v-spacer>
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-icon
-                            v-show="genePlotsHover === true"
-                            color="white"
-                            v-on="on"
-                            >mdi-help-circle-outline</v-icon
-                          >
-                        </template>
-                        <p>TODO</p>
-                      </v-tooltip>
-                      <v-menu bottom left :close-on-content-click="false">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn dark icon v-bind="attrs" v-on="on">
-                            <v-icon v-show="genePlotsHover === true"
-                              >mdi-download-outline</v-icon
-                            >
-                          </v-btn>
-                        </template>
-
-                        <v-list>
-                          <v-list-item @click="downloadPNG(violinGene)">
-                            <v-list-item-title
-                              >Download violin plot</v-list-item-title
-                            >
-                          </v-list-item>
-                          <v-list-item @click="downloadPNG(featureGene)">
-                            <v-list-item-title
-                              >Download umap plot</v-list-item-title
-                            >
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-card-title>
-                    <div class="no-drag">
-                      <v-row
-                        ><v-col cols="4">
-                          <v-autocomplete
-                            v-model="gene"
-                            class="ml-4"
-                            :items="genes"
-                            label="Gene"
-                          ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="4">
-                          <div v-if="idents != ''">
-                            <p class="subtitle-2 text--primary mx-4">
-                              Split by:
-                            </p>
-                            <v-autocomplete
-                              v-model="violinSplit"
-                              class="ml-4"
-                              :items="idents"
-                              label="Select category"
-                            ></v-autocomplete>
-                          </div>
-                        </v-col>
-                        <v-col cols="4">
-                          <div v-if="idents != ''">
-                            <p class="subtitle-2 text--primary mx-4">
-                              Group by:
-                            </p>
-                            <v-autocomplete
-                              v-model="violinGroup"
-                              class="ml-4"
-                              :items="idents"
-                              label="Select cell category"
-                            ></v-autocomplete>
-                          </div>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center" class="mx-2 mb-2 mt-0">
-                        <v-btn
-                          class="mx-2 mb-2 mt-0"
-                          color="Primary"
-                          width="200"
-                          @click="runGenePlot()"
-                          >Plot</v-btn
-                        >
-                      </v-row>
-                      <v-row v-show="violinGene">
-                        <v-col cols="6"
-                          ><v-img
-                            contain
-                            :height="windowSize.y - 130"
-                            :max-width="windowSize.x / 2 + 'px'"
-                            :max-height="windowSize.y / 2 + 'px'"
-                            :src="violinGene"
-                          ></v-img
-                        ></v-col>
-                        <v-col cols="6"
-                          ><v-img
-                            contain
-                            :height="windowSize.y - 130"
-                            :max-width="windowSize.x / 2 + 'px'"
-                            :max-height="windowSize.y / 2 + 'px'"
-                            :src="featureGene"
-                          ></v-img
-                        ></v-col>
-                      </v-row>
-                    </div> </grid-item
-                ></v-card>
+                <feature-scatter
+                  :title="layout[2].title"
+                  :x="layout[2].x"
+                  :y="layout[2].y"
+                  :w="layout[2].w"
+                  :h="layout[2].h"
+                  :i="layout[2].i"
+                  :genes="genes"
+                ></feature-scatter>
                 <enrichment-table
                   :genes="deResult"
                   :x="layout[3].x"
@@ -851,7 +742,8 @@
 </template>
 <script>
 import _ from 'lodash'
-import ResizeImage from '~/components/figures/ResizeImage'
+import FeatureScatter from '@/components/figures/FeatureScatter'
+import ClusterScatter from '~/components/figures/ClusterScatter'
 import EnrichmentTable from '~/components/tables/EnrichmentTable'
 
 import ApiService from '~/services/ApiService.js'
@@ -860,8 +752,9 @@ export const sleep = (ms) => {
 }
 export default {
   components: {
-    scatter: ResizeImage,
+    'cluster-scatter': ClusterScatter,
     'enrichment-table': EnrichmentTable,
+    'feature-scatter': FeatureScatter,
   },
   props: {
     type: { type: String, required: true, default: 'single_rna' },
@@ -876,7 +769,7 @@ export default {
         w: 3,
         h: 2,
         i: '0',
-        title: 'UMAP plot',
+        title: 'Clustering plot',
       },
       {
         x: 3,
@@ -892,7 +785,7 @@ export default {
         w: 4,
         h: 2,
         i: '2',
-        title: 'Plotting genes',
+        title: 'Feature plot',
       },
       {
         x: 4,
@@ -940,6 +833,7 @@ export default {
     timeElapsed: 0,
     qcResult: null,
     umapCluster: '',
+    clusterScatterData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     umapGene: '',
     violinGene: '',
     featureGene: '',
@@ -1102,14 +996,12 @@ export default {
         this.violinSplitItems.push('NULL')
       })
       await this.setActiveIdents(this.currentIdent)
-      setTimeout(async () => {
-        this.umapStatic = await ApiService.postCommand(
-          'deepmaps/api/queue/umap-static/',
-          {
-            categoryName: this.currentIdent,
-          }
-        )
-      }, 2000)
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
     },
 
     async setActiveIdents(currentIdent) {
@@ -1181,36 +1073,12 @@ export default {
         this.violinSplitItems.push('NULL')
       })
 
-      await this.$axios
-        .post('deepmaps/api/queue/umap-static/', {
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
           categoryName: this.currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated UMAP plot',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+        }
+      )
     },
     async runIntegration() {
       this.$nuxt.$loading.start()
@@ -1318,37 +1186,12 @@ export default {
           })
         })
 
-      await this.$axios
-        .post('deepmaps/api/queue/umap-static/', {
-          categoryName: 'seurat_clusters',
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  console.log(this.umapStatic)
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated UMAP plot',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
 
       await this.$axios
         .post('deepmaps/api/queue/select-category/')
@@ -1400,12 +1243,7 @@ export default {
           new_name: this.newClusterName,
         }
       )
-      this.umapStatic = await ApiService.postCommand(
-        'deepmaps/api/queue/umap-static/',
-        {
-          categoryName: this.currentIdent,
-        }
-      )
+
       this.currentIdentLevels = await ApiService.postCommand(
         'deepmaps/api/queue/set-idents/',
         {
@@ -1421,6 +1259,12 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
     },
     async setCategory(name) {
       await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
@@ -1556,38 +1400,13 @@ export default {
           })
         })
 
-      await this.$axios
-        .post('deepmaps/api/queue/umap-static/', {
-          categoryName: this.setExistingCategory,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated UMAP plot',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
-
       await this.setActiveIdents(this.currentIdent)
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
       return 1
     },
 
@@ -1678,37 +1497,13 @@ export default {
           })
         })
 
-      await this.$axios
-        .post('deepmaps/api/queue/umap-static/', {
-          categoryName: this.currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated UMAP plot',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
       await this.setActiveIdents(this.currentIdent)
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
       return 1
     },
 
@@ -1738,37 +1533,12 @@ export default {
             color: 'error',
           })
         })
-
-      await this.$axios
-        .post('deepmaps/api/queue/umap-static/', {
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
           categoryName: this.currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated UMAP plot',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+        }
+      )
       return 1
     },
 
@@ -1833,21 +1603,13 @@ export default {
               })
           }, 3000)
         })
-      await this.$axios
-        .post('deepmaps/api/queue/feature-gene/', {
+      this.featureScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/feature-coords/',
+        {
           gene: this.gene,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.featureGene = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
+          assay: 'RNA',
+        }
+      )
     },
     async showDotPlot() {
       await this.$axios

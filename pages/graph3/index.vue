@@ -1,88 +1,89 @@
 <template>
-  <ECharts ref="chart" :option="option" />
+  <div>
+    <v-btn @click="run">Plot</v-btn>
+    <v-select
+      v-model="currentIdent"
+      :items="IdentList"
+      label="Ident"
+      dense
+      @change="run"
+    ></v-select>
+    <grid-layout
+      :layout.sync="layout"
+      :col-num="6"
+      :row-height="300"
+      :is-draggable="true"
+      :is-resizable="true"
+      :is-mirrored="false"
+      :vertical-compact="true"
+      :margin="[10, 10]"
+      :use-css-transforms="true"
+    >
+      <div v-if="res1"></div>
+      <feature-scatter
+        title="cluster"
+        :x="layout[0].x"
+        :y="layout[0].y"
+        :w="layout[0].w"
+        :h="layout[0].h"
+        :i="layout[0].i"
+        :src="res1"
+      ></feature-scatter>
+    </grid-layout>
+    {{ res1 }}
+  </div>
 </template>
 
 <script>
-import * as echarts from 'echarts'
-import { createComponent } from 'echarts-for-vue'
-import graph from 'static/json/les-miserables.json'
+import FeatureScatter from '@/components/figures/FeatureScatter'
+import res from 'static/json/cluster_res.json'
+import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
-    ECharts: createComponent({ echarts }), // use as a component
+    'feature-scatter': FeatureScatter,
   },
-
   data() {
-    return {}
-  },
-  computed: {
-    option() {
-      graph.nodes.forEach(function (node) {
-        node.label = {
-          show: node.symbolSize > 30,
-        }
-      })
-
-      const node2 = graph.nodes.map((node) => {
-        return { id: node.id, name: node.name, category: node.category }
-      })
-      return {
-        title: {
-          text: 'Les Miserables',
-          subtext: 'Circular layout',
-          top: 'bottom',
-          left: 'right',
+    return {
+      layout: [
+        {
+          x: 0,
+          y: 0,
+          w: 3,
+          h: 2,
+          i: '0',
+          title: 'UMAP plot',
         },
-        tooltip: {},
-        legend: [
-          {
-            data: graph.categories.map(function (a) {
-              return a.name
-            }),
-          },
-        ],
-        animationDurationUpdate: 1500,
-        animationEasingUpdate: 'quinticInOut',
-        series: [
-          {
-            name: 'Example Regulon TF-Gene network',
-            type: 'graph',
-            layout: 'circular',
-            circular: {
-              rotateLabel: true,
-            },
-            data: node2,
-            links: graph.links,
-            categories: graph.categories,
-            roam: true,
-            label: {
-              position: 'right',
-              formatter: '{b}',
-            },
-            lineStyle: {
-              color: 'source',
-              curveness: 0.3,
-            },
-            emphasis: {
-              blurScope: 'global',
-              focus: 'adjacency',
-              label: {
-                position: 'right',
-                show: true,
-              },
-              lineStyle: {
-                width: 10,
-              },
-            },
-          },
-        ],
-      }
-    },
+        {
+          x: 3,
+          y: 0,
+          w: 2,
+          h: 2,
+          i: '1',
+          title: 'Differential gene expression',
+        },
+      ],
+      result: '',
+      res1: { axis: [0, 1], legend: [0, 1], dimension: 1 },
+      currentIdent: 'seurat_clusters',
+      IdentList: ['seurat_clusters', 'Sex', 'Label'],
+    }
   },
+  computed: {},
   methods: {
-    doSomething() {
-      this.$refs.chart.inst.getWidth() // call the method of ECharts instance
+    async run() {
+      console.log(res)
+      this.res1 = await ApiService.postCommand(
+        'deepmaps/api/queue/feature-coords/',
+        {
+          gene: 'Gad1',
+          assay: 'RNA',
+        }
+      )
+      console.log(this.res1)
     },
   },
 }
 </script>
+
+<style lang="scss" scoped></style>

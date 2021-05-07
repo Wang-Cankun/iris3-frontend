@@ -283,6 +283,7 @@
                 ></register-dialog>
               </v-col>
             </v-row>
+            <fab></fab>
           </v-container>
         </v-footer>
       </v-card>
@@ -293,6 +294,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import fab from '../components/utils/Fab'
 import Snackbar from '../components/utils/SnackBar'
 import Alert from '../components/utils/Alert'
 import LoginDialog from '../components/utils/LoginDialog'
@@ -303,6 +305,7 @@ export default {
     snackbar: Snackbar,
     'login-dialog': LoginDialog,
     'register-dialog': RegisterDialog,
+    fab,
   },
   data() {
     return {

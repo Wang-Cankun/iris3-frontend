@@ -29,15 +29,8 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import cola from 'cytoscape-cola'
-import avsdf from 'cytoscape-avsdf'
-import cise from 'cytoscape-cise'
-import coseBilkent from 'cytoscape-cose-bilkent'
-import fcose from 'cytoscape-fcose'
 import euler from 'cytoscape-euler'
 import spread from 'cytoscape-spread'
-import dagre from 'cytoscape-dagre'
-import klay from 'cytoscape-klay'
-
 import nodes from 'static/json/example_cyto_nodes.json'
 import edges from 'static/json/example_cyto_edges.json'
 import exampleConfig from '~/static/json/test_cyto'
@@ -83,14 +76,8 @@ export default {
       console.log('calling pre-config')
       // cytoscape: this is the cytoscape constructor
       cytoscape.use(cola)
-      cytoscape.use(cise)
-      cytoscape.use(avsdf)
-      cytoscape.use(coseBilkent)
-      cytoscape.use(fcose)
       cytoscape.use(euler)
       cytoscape.use(spread)
-      cytoscape.use(dagre)
-      cytoscape.use(klay)
     },
     afterCreated(cy) {
       // cy: this is the cytoscape instance

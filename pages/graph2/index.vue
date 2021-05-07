@@ -1,78 +1,88 @@
 <template>
-  <ECharts ref="chart" :option="option" />
+  <div>
+    <v-btn @click="run">Plot</v-btn>
+    <v-select
+      v-model="currentIdent"
+      :items="IdentList"
+      label="Ident"
+      dense
+      @change="run"
+    ></v-select>
+    <grid-layout
+      :layout.sync="layout"
+      :col-num="6"
+      :row-height="300"
+      :is-draggable="true"
+      :is-resizable="true"
+      :is-mirrored="false"
+      :vertical-compact="true"
+      :margin="[10, 10]"
+      :use-css-transforms="true"
+    >
+      <div v-if="res1"></div>
+      <cluster-scatter
+        title="cluster"
+        :x="layout[0].x"
+        :y="layout[0].y"
+        :w="layout[0].w"
+        :h="layout[0].h"
+        :i="layout[0].i"
+        :src="res1"
+      ></cluster-scatter>
+    </grid-layout>
+    {{ res1 }}
+  </div>
 </template>
 
 <script>
-import * as echarts from 'echarts'
-import { createComponent } from 'echarts-for-vue'
-import graph from 'static/json/npmdepgraph.min10.json'
+import ClusterScatter from '@/components/figures/ClusterScatter'
+import res from 'static/json/cluster_res.json'
+import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
-    ECharts: createComponent({ echarts }), // use as a component
+    'cluster-scatter': ClusterScatter,
   },
-
   data() {
-    return {}
-  },
-  computed: {
-    option() {
-      graph.nodes.forEach(function (node) {
-        node.label = {
-          show: node.symbolSize > 30,
-        }
-      })
-      return {
-        title: {
-          text: 'Graph',
+    return {
+      layout: [
+        {
+          x: 0,
+          y: 0,
+          w: 3,
+          h: 2,
+          i: '0',
+          title: 'UMAP plot',
         },
-        animationDurationUpdate: 1500,
-        animationEasingUpdate: 'quinticInOut',
-        series: [
-          {
-            type: 'graph',
-            layout: 'none',
-            // progressiveThreshold: 700,
-            data: graph.nodes.map(function (node) {
-              return {
-                x: node.x,
-                y: node.y,
-                id: node.id,
-                name: node.label,
-                symbolSize: node.size,
-                itemStyle: {
-                  color: node.color,
-                },
-              }
-            }),
-            edges: graph.edges.map(function (edge) {
-              return {
-                source: edge.sourceID,
-                target: edge.targetID,
-              }
-            }),
-            emphasis: {
-              focus: 'adjacency',
-              label: {
-                position: 'right',
-                show: true,
-              },
-            },
-            roam: true,
-            lineStyle: {
-              width: 0.5,
-              curveness: 0.3,
-              opacity: 0.7,
-            },
-          },
-        ],
-      }
-    },
+        {
+          x: 3,
+          y: 0,
+          w: 2,
+          h: 2,
+          i: '1',
+          title: 'Differential gene expression',
+        },
+      ],
+      result: '',
+      res1: { axis: [0, 1], legend: [0, 1], dimension: 1 },
+      currentIdent: 'seurat_clusters',
+      IdentList: ['seurat_clusters', 'Sex', 'Label'],
+    }
   },
+  computed: {},
   methods: {
-    doSomething() {
-      this.$refs.chart.inst.getWidth() // call the method of ECharts instance
+    async run() {
+      console.log(res)
+      this.res1 = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
+      console.log(this.res1)
     },
   },
 }
 </script>
+
+<style lang="scss" scoped></style>
