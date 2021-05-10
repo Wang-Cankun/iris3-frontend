@@ -662,10 +662,6 @@ export default {
     async runPreProcess() {
       this.metadata = []
       this.$nuxt.$loading.start()
-      this.$notifier.showMessage({
-        content: `Running preprocessing. Estimate: 1 mins`,
-        color: 'accent',
-      })
       if (this.idx === 0 && this.type === 'single_rna') {
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load/',

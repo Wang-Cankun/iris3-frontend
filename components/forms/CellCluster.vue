@@ -543,7 +543,8 @@
                       class="primary white--text caption px-2 py-1"
                       @mouseover="degHover = true"
                       @mouseleave="degHover = false"
-                      >Differential expression testing <v-spacer></v-spacer>
+                      >Differential gene expression analysis<v-spacer
+                      ></v-spacer>
                       <div>
                         <v-tooltip top>
                           <template v-slot:activator="{ on }">
@@ -623,7 +624,7 @@
                       </v-row>
                       <v-row>
                         <v-col cols="4" class="ma-0">
-                          <p class="ml-4 mb-0 title-h4">
+                          <p class="ml-4 mb-0 body-1">
                             P-value cutoff
                             <v-tooltip top>
                               <template v-slot:activator="{ on }">
@@ -645,7 +646,7 @@
                           </p>
                         </v-col>
                         <v-col cols="4">
-                          <p class="ml-4 mb-0 title-h4">
+                          <p class="ml-4 mb-0 body-1">
                             Min cell percent
                             <v-tooltip top>
                               <template v-slot:activator="{ on }">
@@ -671,7 +672,7 @@
                           </p>
                         </v-col>
                         <v-col cols="4" class="ma-0">
-                          <p class="ml-4 mb-0 title-h4">
+                          <p class="ml-4 mb-0 body-1">
                             LogFC threshold
                             <v-tooltip top>
                               <template v-slot:activator="{ on }">
@@ -774,10 +775,10 @@ export default {
       {
         x: 3,
         y: 0,
-        w: 2,
+        w: 3,
         h: 2,
         i: '1',
-        title: 'Differential gene expression',
+        title: 'Differential gene expression analysis',
       },
       {
         x: 0,
@@ -1562,6 +1563,12 @@ export default {
               .then((response) => {
                 if (response.data.returnvalue !== null) {
                   this.deResult = response.data.returnvalue[0]
+                  if (!response.data.returnvalue[0]) {
+                    this.$notifier.showMessage({
+                      content: 'DEG not found',
+                      color: 'error',
+                    })
+                  }
                   this.deg = _.map(this.deResult, 'gene')
 
                   clearInterval(checkComplete)
@@ -1574,7 +1581,7 @@ export default {
         })
         .catch((error) => {
           this.$notifier.showMessage({
-            content: 'Calculate QC metrics error: ' + error,
+            content: 'Error: ' + error,
             color: 'error',
           })
         })

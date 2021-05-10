@@ -20,29 +20,28 @@
       :use-css-transforms="true"
     >
       <div v-if="res1"></div>
-      <feature-scatter
-        title="cluster"
+      <feature-violin
+        title="Violin"
         :x="layout[0].x"
         :y="layout[0].y"
         :w="layout[0].w"
         :h="layout[0].h"
         :i="layout[0].i"
         :genes="['Gad1', 'Gad2']"
-        :src="res1"
-      ></feature-scatter>
+      ></feature-violin>
     </grid-layout>
     {{ res1 }}
   </div>
 </template>
 
 <script>
-import FeatureScatter from '@/components/figures/FeatureScatter'
-import res from 'static/json/cluster_res.json'
+import FeatureViolin from '@/components/figures/FeatureViolin'
+import res from 'static/json/feature_coord.json'
 import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
-    'feature-scatter': FeatureScatter,
+    'feature-violin': FeatureViolin,
   },
   data() {
     return {
@@ -65,7 +64,24 @@ export default {
         },
       ],
       result: '',
-      res1: { axis: [0, 1], legend: [0, 1], dimension: 1 },
+      res1: [
+        {
+          date: '2000',
+          value: '208.4968974',
+        },
+        {
+          date: '2000',
+          value: '160.5328879',
+        },
+        {
+          date: '2002',
+          value: '292.3321976',
+        },
+        {
+          date: '1998',
+          value: '95.07969441',
+        },
+      ],
       currentIdent: 'seurat_clusters',
       IdentList: ['seurat_clusters', 'Sex', 'Label'],
     }

@@ -183,7 +183,7 @@ export default {
             type: 'slider',
             yAxisIndex: [0],
             filterMode: 'empty',
-            right: 120,
+            left: 10,
           },
         ],
         visualMap: {
@@ -204,6 +204,7 @@ export default {
         tooltip: {
           position: 'top',
           backgroundColor: ['rgba(255,255,255,0.7)'],
+
           formatter(obj) {
             const value = obj.value
             return (
@@ -213,22 +214,18 @@ export default {
               '</div><div>' +
               value[0] +
               '</div><div>' +
-              '[' +
-              value[1] +
-              ', ' +
-              value[2] +
-              ']' +
               '<br>'
             )
           },
         },
         grid: {
-          left: 30,
-          right: 160,
-          bottom: 60,
+          left: 20,
+          right: 100,
+          bottom: 20,
           containLabel: true,
         },
         xAxis: {
+          show: false,
           name: this.src.axis[0],
           type: 'value',
           nameGap: 16,
@@ -240,6 +237,7 @@ export default {
           },
         },
         yAxis: {
+          show: false,
           name: this.src.axis[1],
           type: 'value',
           nameGap: 16,

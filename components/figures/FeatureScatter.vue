@@ -87,7 +87,7 @@
       </v-card-title>
       <div class="no-drag">
         <v-row>
-          <v-col cols="12">
+          <v-col cols="7">
             <v-autocomplete
               v-model="gene"
               class="ml-4"
@@ -95,15 +95,15 @@
               label="Gene"
             ></v-autocomplete>
           </v-col>
-        </v-row>
-        <v-row justify="center" class="mx-2 mb-2 mt-0">
-          <v-btn
-            class="mx-2 mb-2 mt-0"
-            color="Primary"
-            width="200"
-            @click="run()"
-            >Plot</v-btn
-          >
+          <v-col cols="4">
+            <v-btn
+              class="mx-2 mb-2 mt-2"
+              color="Primary"
+              width="120"
+              @click="run()"
+              >Plot</v-btn
+            >
+          </v-col>
         </v-row>
 
         <div v-if="src.axis[0] !== 0"></div>
@@ -163,6 +163,21 @@ export default {
 
       return {
         hover: true,
+        dataZoom: [
+          {
+            id: 'dataZoomX',
+            type: 'slider',
+            xAxisIndex: [0],
+            filterMode: 'filter',
+          },
+          {
+            id: 'dataZoomY',
+            type: 'slider',
+            yAxisIndex: [0],
+            filterMode: 'empty',
+            left: 10,
+          },
+        ],
         visualMap: {
           min: this.src.legend[0],
           max: this.src.legend[1],
@@ -188,22 +203,18 @@ export default {
               '</div><div>' +
               value[0] +
               '</div><div>' +
-              '[' +
-              value[1] +
-              ', ' +
-              value[2] +
-              ']' +
               '<br>'
             )
           },
         },
         grid: {
-          left: 20,
+          left: 60,
           right: 120,
-          bottom: 30,
+          bottom: 60,
           containLabel: true,
         },
         xAxis: {
+          show: false,
           name: this.src.axis[0],
           type: 'value',
           nameGap: 16,
@@ -215,6 +226,7 @@ export default {
           },
         },
         yAxis: {
+          show: false,
           name: this.src.axis[1],
           type: 'value',
           nameGap: 16,
