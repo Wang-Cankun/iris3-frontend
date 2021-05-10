@@ -400,7 +400,7 @@ export default {
   width: 100%;
 }
 #cytoscape-div {
-  min-height: 450px !important;
+  min-height: 650px !important;
   display: block;
 }
 </style>

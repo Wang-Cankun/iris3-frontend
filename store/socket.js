@@ -21,7 +21,7 @@ export const actions = {
     if (!jobProgress) {
       jobProgress = 'Error while reading job progress...'
     }
-    const progressFormat = `${new Date().toLocaleString()}: ${jobProgress}`
+    const progressFormat = `${jobProgress}`
     commit('SET_JOB_PROGRESS', progressFormat)
   },
 }

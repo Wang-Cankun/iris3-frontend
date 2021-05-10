@@ -124,7 +124,7 @@ export default {
     async runGSEA() {
       if (!this.genes.length) {
         this.$notifier.showMessage({
-          content: 'No genes selected!',
+          content: 'Please run differential gene expression analysis first',
           color: 'error',
         })
       } else {
