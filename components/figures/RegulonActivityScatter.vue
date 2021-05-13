@@ -41,13 +41,13 @@
                     <v-select
                       v-model="lowColor"
                       :items="colorList"
-                      label="low expression color"
+                      label="low regulon activity color"
                       dense
                     ></v-select>
                     <v-select
                       v-model="highColor"
                       :items="colorList"
-                      label="high expression color"
+                      label="high regulon activity color"
                       dense
                     ></v-select>
                     <v-slider
@@ -89,10 +89,10 @@
         <v-row>
           <v-col cols="7">
             <v-autocomplete
-              v-model="gene"
+              v-model="regulon"
               class="ml-4"
-              :items="genes"
-              label="Gene"
+              :items="regulons"
+              label="Regulon"
             ></v-autocomplete>
           </v-col>
           <v-col cols="4">
@@ -125,7 +125,7 @@ export default {
   props: {
     // src: { type: String, required: true },
     title: { type: String, required: true },
-    genes: { type: Array, required: true },
+    regulons: { type: Array, required: true },
     // src: {
     //   type: Object,
     //   required: true,
@@ -149,7 +149,7 @@ export default {
       colorList: ['grey', 'blue', 'red', 'green'],
 
       violinGroup: 'seurat_clusters',
-      gene: 'Gad1',
+      regulon: 'ATF2',
       src: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     }
   },

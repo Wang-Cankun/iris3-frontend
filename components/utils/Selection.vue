@@ -38,6 +38,14 @@
       thumb-label="always"
       @change="updateSelectedByIndex"
     ></v-slider>
+    <v-slider
+      v-model="centralityThres"
+      label="Centrality threshold to select regulon"
+      max="1"
+      min="0"
+      step="0.05"
+      thumb-label="always"
+    ></v-slider>
   </div>
 </template>
 
@@ -49,6 +57,7 @@ export default {
   data() {
     return {
       selected: [],
+      centralityThres: 0.1,
     }
   },
   computed: {

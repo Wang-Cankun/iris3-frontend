@@ -86,35 +86,16 @@
         </div>
       </v-card-title>
       <div class="no-drag">
-        <v-row>
-          <v-col cols="7">
-            <v-autocomplete
-              v-model="gene"
-              class="ml-4"
-              :items="genes"
-              label="Gene"
-            ></v-autocomplete>
-          </v-col>
-          <v-col cols="4">
-            <v-btn
-              class="mx-2 mb-2 mt-3"
-              color="Primary"
-              width="120"
-              @click="run()"
-              >Plot</v-btn
-            >
-          </v-col>
-        </v-row>
-
         <div v-if="src.axis[0] !== 0"></div>
       </div>
-      <ECharts ref="chart" :option="option2d" class="no-drag" /></grid-item
+      <ECharts ref="chart" :option="option" class="no-drag" /></grid-item
   ></v-card>
 </template>
 
 <script>
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
+import graph from 'static/json/les-miserables.json'
 import EchartsService from '~/services/EchartsService.js'
 import ApiService from '~/services/ApiService.js'
 
@@ -126,11 +107,6 @@ export default {
     // src: { type: String, required: true },
     title: { type: String, required: true },
     genes: { type: Array, required: true },
-    // src: {
-    //   type: Object,
-    //   required: true,
-    //   default: () => ({ axis: [0, 1], legend: [0, 1], dimension: 1 }),
-    // },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },
@@ -154,92 +130,51 @@ export default {
     }
   },
   computed: {
-    option2d() {
-      const data = this.src.embedding
-
+    option() {
+      graph.nodes.forEach(function (node) {
+        node.label = {
+          show: node.symbolSize > 30,
+        }
+      })
       return {
-        hover: true,
-        dataZoom: [
+        title: {
+          text: 'Example circos',
+          subtext: 'Circular layout',
+          top: 'bottom',
+          left: 'right',
+        },
+        tooltip: {},
+        legend: [
           {
-            id: 'dataZoomX',
-            type: 'slider',
-            xAxisIndex: [0],
-            filterMode: 'filter',
-          },
-          {
-            id: 'dataZoomY',
-            type: 'slider',
-            yAxisIndex: [0],
-            filterMode: 'empty',
-            left: 10,
+            data: graph.categories.map(function (a) {
+              return a.name
+            }),
           },
         ],
-        visualMap: {
-          min: this.src.legend[0],
-          max: this.src.legend[1],
-          dimension: 4,
-          orient: 'vertical',
-          right: 10,
-          top: 'center',
-          text: ['HIGH', 'LOW'],
-          calculable: true,
-          inRange: {
-            color: [this.lowColor, this.highColor],
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series: [
+          {
+            name: 'Example circos',
+            type: 'graph',
+            layout: 'circular',
+            circular: {
+              rotateLabel: true,
+            },
+            data: graph.nodes,
+            links: graph.links,
+            categories: graph.categories,
+            roam: true,
+            label: {
+              position: 'right',
+              formatter: '{b}',
+            },
+            lineStyle: {
+              color: 'source',
+              curveness: 0.3,
+            },
           },
-        },
-        tooltip: {
-          position: 'top',
-          backgroundColor: ['rgba(255,255,255,0.7)'],
-          formatter(obj) {
-            const value = obj.value
-            return (
-              '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-              ' ' +
-              value[4] +
-              '</div><div>' +
-              value[0] +
-              '</div><div>' +
-              '<br>'
-            )
-          },
-        },
-        grid: {
-          left: 60,
-          right: 120,
-          bottom: 60,
-          containLabel: true,
-        },
-        xAxis: {
-          show: false,
-          name: this.src.axis[0],
-          type: 'value',
-          nameGap: 16,
-          nameTextStyle: {
-            fontSize: 12,
-          },
-          splitLine: {
-            show: false,
-          },
-        },
-        yAxis: {
-          show: false,
-          name: this.src.axis[1],
-          type: 'value',
-          nameGap: 16,
-          nameTextStyle: {
-            fontSize: 12,
-          },
-          splitLine: {
-            show: false,
-          },
-        },
-        series: {
-          name: 'featureplot',
-          data,
-          type: 'scatter',
-          encode: { x: 1, y: 2 },
-          symbolSize: this.pointSize,
-        },
+        ],
       }
     },
   },

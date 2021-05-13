@@ -13,7 +13,7 @@
         class="primary white--text caption px-2 py-1"
         @mouseover="hover = true"
         @mouseleave="hover = false"
-        >Gene set enrichment analysis <v-spacer></v-spacer>
+        >{{ title }} <v-spacer></v-spacer>
         <div>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
@@ -32,7 +32,7 @@
 
             <v-list>
               <v-list-item @click="1">
-                <download-excel class="mr-4" :data="gseaResult[0]" type="csv">
+                <download-excel class="mr-4" data="" type="csv">
                   <v-list-item-title>Download file (CSV)</v-list-item-title>
                 </download-excel>
               </v-list-item>
@@ -42,33 +42,37 @@
       >
       <div class="no-drag">
         <v-row>
-          <v-col cols="8">
+          <v-col cols="6">
             <v-autocomplete
-              v-model="gseaDatabase"
+              v-model="ident1"
               class="ml-4"
-              :items="allGseaDatabases"
-              label="MSigDB database"
-              return-object
-              item-text="name"
-              item-value="value"
-            >
-            </v-autocomplete>
+              :items="currentIdentLevels"
+              label="Group 1"
+            ></v-autocomplete>
           </v-col>
-          <v-col cols="4"
-            ><v-btn
-              class="mx-2 mb-2 mt-3"
-              width="120"
-              color="Primary"
-              @click="runGSEA()"
-              >Run</v-btn
-            ></v-col
-          ></v-row
-        >
-        <div v-if="gseaResult.length">
+          <v-col cols="6">
+            <v-autocomplete
+              v-model="ident2"
+              class="ml-4"
+              :items="currentIdentLevels"
+              label="Group 2"
+            ></v-autocomplete>
+          </v-col>
+        </v-row>
+        <v-row justify="center" class="mx-2 mb-2 mt-0">
+          <v-btn
+            class="mx-2 mb-2 mt-0"
+            color="Primary"
+            width="200"
+            @click="run()"
+            >Update</v-btn
+          >
+        </v-row>
+        <div v-if="result.length">
           <v-data-table
             dense
-            :headers="gseaHeaders"
-            :items="gseaResult[0]"
+            :headers="headers"
+            :items="result[0]"
             item-key="name"
             :items-per-page="5"
             class="elevation-1"
@@ -78,11 +82,10 @@
 </template>
 
 <script>
-import ApiService from '~/services/ApiService.js'
-
 export default {
   props: {
     genes: { type: Array, required: true },
+    title: { type: String, required: true },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },
@@ -92,25 +95,17 @@ export default {
   data() {
     return {
       hover: false,
-      gseaHeaders: [
+      headers: [
         { text: 'pathway', value: 'pathway' },
         { text: 'Adjusted p-value', value: 'padj' },
         { text: 'NES', value: 'NES' },
         { text: 'size', value: 'size' },
         { text: '', value: 'data-table-expand' },
       ],
-      gseaResult: [],
-      gseaDatabase: '',
-      allGseaDatabases: [
-        { name: 'Hallmark gene sets (H)', value: 'H' },
-        { name: 'Positional gene sets (C1)', value: 'C1' },
-        { name: 'Curated gene sets (C2)', value: 'C2' },
-        { name: 'Regulatory target gene sets (C3)', value: 'C3' },
-        { name: 'Computational gene sets (C4)', value: 'C4' },
-        { name: 'Ontology gene sets (C5)', value: 'C5' },
-        { name: 'Oncogenic signature gene sets (C6)', value: 'C6' },
-        { name: 'Immunologic signature gene sets (C7)', value: 'C7' },
-      ],
+      result: [],
+      ident1: '',
+      ident2: '',
+      currentIdentLevels: [],
     }
   },
 
@@ -121,26 +116,8 @@ export default {
         color: 'Success',
       })
     },
-    async runGSEA() {
-      if (!this.genes.length) {
-        this.$notifier.showMessage({
-          content: 'Please run differential gene expression analysis first',
-          color: 'error',
-        })
-      } else {
-        this.$notifier.showMessage({
-          content: 'Running GSEA...',
-          color: 'accent',
-        })
-        this.gseaResult = await ApiService.postCommand(
-          'deepmaps/api/queue/gsea-table/',
-          {
-            genes: '1',
-            database: this.gseaDatabase.value,
-          }
-        )
-        console.log(this.gseaResult)
-      }
+    async run() {
+      return await 1
     },
     resizeEvent(i, newH, newW, newHPx, newWPx) {
       console.log(

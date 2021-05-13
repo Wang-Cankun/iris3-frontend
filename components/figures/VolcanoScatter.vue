@@ -39,15 +39,11 @@
                       Settings
                     </p>
                     <v-select
-                      v-model="lowColor"
-                      :items="colorList"
-                      label="low expression color"
-                      dense
-                    ></v-select>
-                    <v-select
-                      v-model="highColor"
-                      :items="colorList"
-                      label="high expression color"
+                      v-model="colorPalette"
+                      :items="colorPaletteList"
+                      label="Color palette"
+                      item-text="name"
+                      item-value="color"
                       dense
                     ></v-select>
                     <v-slider
@@ -77,7 +73,7 @@
                 <v-list-item-title>Download JPG</v-list-item-title>
               </v-list-item>
               <v-list-item @click="1">
-                <download-excel class="mr-4" :data="src.embedding" type="csv">
+                <download-excel class="mr-4" :data="src" type="csv">
                   <v-list-item-title>Download file (CSV)</v-list-item-title>
                 </download-excel>
               </v-list-item>
@@ -85,30 +81,7 @@
           </v-menu>
         </div>
       </v-card-title>
-      <div class="no-drag">
-        <v-row>
-          <v-col cols="7">
-            <v-autocomplete
-              v-model="gene"
-              class="ml-4"
-              :items="genes"
-              label="Gene"
-            ></v-autocomplete>
-          </v-col>
-          <v-col cols="4">
-            <v-btn
-              class="mx-2 mb-2 mt-3"
-              color="Primary"
-              width="120"
-              @click="run()"
-              >Plot</v-btn
-            >
-          </v-col>
-        </v-row>
-
-        <div v-if="src.axis[0] !== 0"></div>
-      </div>
-      <ECharts ref="chart" :option="option2d" class="no-drag" /></grid-item
+      <ECharts ref="chart" :option="option2d" class="no-drag" /> </grid-item
   ></v-card>
 </template>
 
@@ -116,7 +89,7 @@
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
 import EchartsService from '~/services/EchartsService.js'
-import ApiService from '~/services/ApiService.js'
+import { COLOR_PALETTE } from '~/static/color_palette.js'
 
 export default {
   components: {
@@ -125,12 +98,11 @@ export default {
   props: {
     // src: { type: String, required: true },
     title: { type: String, required: true },
-    genes: { type: Array, required: true },
-    // src: {
-    //   type: Object,
-    //   required: true,
-    //   default: () => ({ axis: [0, 1], legend: [0, 1], dimension: 1 }),
-    // },
+    src: {
+      type: Object,
+      required: true,
+      default: () => ({ axis: [0, 1], legend: [0], dimension: 1 }),
+    },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },
@@ -144,19 +116,59 @@ export default {
       theme: 'light',
       themeList: ['light', 'dark'],
       pointSize: 4,
-      lowColor: 'grey',
-      highColor: 'blue',
-      colorList: ['grey', 'blue', 'red', 'green'],
-
-      violinGroup: 'seurat_clusters',
-      gene: 'Gad1',
-      src: { axis: [0, 1], legend: [0, 1], dimension: 1 },
+      colorPalette: [
+        '#5A5156',
+        '#F6222E',
+        '#FE00FA',
+        '#16FF32',
+        '#3283FE',
+        '#FEAF16',
+        '#B00068',
+        '#1CFFCE',
+        '#90AD1C',
+        '#2ED9FF',
+        '#DEA0FD',
+        '#AA0DFE',
+        '#F8A19F',
+        '#325A9B',
+        '#C4451C',
+        '#1C8356',
+        '#85660D',
+        '#B10DA1',
+        '#FBE426',
+        '#1CBE4F',
+        '#FA0087',
+        '#FC1CBF',
+        '#F7E1A0',
+        '#C075A6',
+        '#782AB6',
+        '#AAF400',
+        '#BDCDFF',
+        '#822E1C',
+        '#B5EFB5',
+        '#7ED7D1',
+        '#1C7F93',
+        '#D85FF7',
+        '#683B79',
+        '#66B0FF',
+        '#3B00FB',
+      ],
+      colorPaletteList: COLOR_PALETTE,
     }
   },
   computed: {
     option2d() {
+      const colorList = this.colorPalette
       const data = this.src.embedding
 
+      const pieces = []
+      for (let i = 0; i < this.src.legend.length; i++) {
+        pieces.push({
+          value: this.src.legend[i],
+          label: this.src.legend[i],
+          color: colorList[i],
+        })
+      }
       return {
         hover: true,
         dataZoom: [
@@ -175,21 +187,24 @@ export default {
           },
         ],
         visualMap: {
-          min: this.src.legend[0],
-          max: this.src.legend[1],
-          dimension: 4,
-          orient: 'vertical',
-          right: 10,
+          type: 'piecewise',
           top: 'center',
-          text: ['HIGH', 'LOW'],
-          calculable: true,
-          inRange: {
-            color: [this.lowColor, this.highColor],
-          },
+          orient: 'vertical',
+          showLabel: true,
+          align: 'right',
+          right: 10,
+          min: 0,
+          max: this.src.legend.length,
+          splitNumber: 4,
+          dimension: 4,
+          padding: 5,
+          inverse: false,
+          pieces,
         },
         tooltip: {
           position: 'top',
           backgroundColor: ['rgba(255,255,255,0.7)'],
+
           formatter(obj) {
             const value = obj.value
             return (
@@ -204,9 +219,9 @@ export default {
           },
         },
         grid: {
-          left: 60,
-          right: 120,
-          bottom: 60,
+          left: 20,
+          right: 100,
+          bottom: 20,
           containLabel: true,
         },
         xAxis: {
@@ -234,11 +249,20 @@ export default {
           },
         },
         series: {
-          name: 'featureplot',
           data,
           type: 'scatter',
           encode: { x: 1, y: 2 },
           symbolSize: this.pointSize,
+
+          itemStyle: {
+            borderColor: '#555',
+            normal: {
+              // The color setting of each column
+              color(params) {
+                return colorList[params.data[5]]
+              },
+            },
+          },
         },
       }
     },
@@ -255,15 +279,6 @@ export default {
     },
     doSomething() {
       this.$refs.chart.inst.getWidth() // call the method of ECharts instance
-    },
-    async run() {
-      this.src = await ApiService.postCommand(
-        'deepmaps/api/queue/feature-coords/',
-        {
-          gene: this.gene,
-          assay: 'RNA',
-        }
-      )
     },
   },
 }

@@ -96,7 +96,7 @@
                     ></v-switch>
                     <v-slider
                       v-model="tfNodeSize"
-                      label="TF node size"
+                      label="TF node scale"
                       :max="200"
                       min="1"
                       thumb-label="always"
@@ -142,14 +142,14 @@
           :config="networkConfig"
           :pre-config="preConfig"
           :afte-created="afterCreated"
-          @mousedown="addNode"
+          @mousedown="resetHighlightNode"
           @cxttapstart="updateNode"
         >
           <cy-element
             v-for="def in elements"
             :key="`${def.data.id}`"
             :definition="def"
-            @mousedown="deleteNode($event, def.data.id)"
+            @mousedown="highlightNode($event, def.data.id)"
           />
         </cytoscape>
       </div> </grid-item
@@ -192,7 +192,7 @@ export default {
       geneSymbolSwitch: false,
       tfSymbolSwitch: true,
       geneNodeSize: 20,
-      tfNodeSize: 50,
+      tfNodeSize: 60,
       geneNodeTextSize: 20,
       tfNodeTextSize: 30,
       edgeWidth: 3,
@@ -217,7 +217,6 @@ export default {
       nodeShapeList: [
         'circle',
         'triangle',
-        'round-triangle',
         'rectangle',
         'bottom-round-rectangle',
         'cut-rectangle',
@@ -235,6 +234,7 @@ export default {
       ],
       tfNodeColor: '',
       geneNodeColor: '',
+      selectedTfCytoscape: '',
     }
   },
   computed: {
@@ -279,7 +279,7 @@ export default {
           selector: 'node[type="gene"]',
           style: {
             shape: this.geneNodeShape,
-            'background-color': this.geneNodeColor,
+            'background-color': 'data(color)',
             label: geneLabel,
             'font-size': this.geneNodeTextSize + 'px',
             width: geneNodeSize,
@@ -290,10 +290,10 @@ export default {
           selector: 'node[type="tf"]',
           style: {
             shape: this.tfNodeShape,
-            'background-color': this.tfNodeColor,
+            'background-color': 'data(color)',
             label: tfLabel,
-            width: tfNodeSize,
-            height: tfNodeSize,
+            width: `mapData(centrality, 0, 1, 20, ${tfNodeSize * 2})`,
+            height: `mapData(centrality, 0, 1, 20, ${tfNodeSize * 2})`,
             'font-size': this.tfNodeTextSize + 'px',
           },
         },
@@ -307,7 +307,6 @@ export default {
             'curve-style': this.edgeType,
           },
         },
-
         {
           selector: '*[background_color]',
           style: {
@@ -315,6 +314,26 @@ export default {
             'text-outline-color': 'data(background_color)',
             'line-color': 'data(background_color)',
           },
+        },
+        {
+          selector: 'node.highlight',
+          style: {
+            'border-color': '#FFF',
+            'border-width': '2px',
+            label: 'data(name)',
+          },
+        },
+        {
+          selector: 'node.semitransp',
+          style: { opacity: '0.5' },
+        },
+        {
+          selector: 'edge.highlight',
+          style: { 'mid-target-arrow-color': '#FFF' },
+        },
+        {
+          selector: 'edge.semitransp',
+          style: { opacity: '0.2' },
         },
       ]
       return style
@@ -334,6 +353,10 @@ export default {
       this.cy.style(this.design)
       this.changeLayout(this.currentLayout)
     },
+
+    selectedTfCytoscape() {
+      this.$emit('update:selected', this.selectedTfCytoscape)
+    },
   },
   methods: {
     preConfig(cytoscape) {
@@ -347,12 +370,30 @@ export default {
       // cy: this is the cytoscape instance
       console.log('after config')
     },
-    addNode(event) {
-      console.log(event.target, this.cy)
-      if (event.target === this.cy) console.log('adding node', event.target)
+    resetHighlightNode(e) {
+      if (this.selectedTfCytoscape) {
+        const sel = this.cy.getElementById(this.selectedTfCytoscape)
+        this.cy.elements().removeClass('semitransp')
+        sel
+          .removeClass('highlight')
+          .outgoers()
+          .union(sel.incomers())
+          .removeClass('highlight')
+      }
     },
-    deleteNode(id) {
-      console.log('node clicked', id)
+    highlightNode(e, id) {
+      const sel = e.target
+      this.selectedTfCytoscape = id
+      this.cy
+        .elements()
+        .difference(sel.outgoers().union(sel.incomers()))
+        .not(sel)
+        .addClass('semitransp')
+      sel
+        .addClass('highlight')
+        .outgoers()
+        .union(sel.incomers())
+        .addClass('highlight')
     },
     updateNode(event) {
       console.log('right click node', event)
@@ -400,7 +441,7 @@ export default {
   width: 100%;
 }
 #cytoscape-div {
-  min-height: 650px !important;
+  min-height: 600px !important;
   display: block;
 }
 </style>

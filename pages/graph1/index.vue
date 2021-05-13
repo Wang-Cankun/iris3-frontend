@@ -31,8 +31,8 @@
 import cola from 'cytoscape-cola'
 import euler from 'cytoscape-euler'
 import spread from 'cytoscape-spread'
-import nodes from 'static/json/example_cyto_nodes.json'
-import edges from 'static/json/example_cyto_edges.json'
+import nodes from 'static/json/regulon/example_cyto_nodes.json'
+import edges from 'static/json/regulon/example_cyto_edges.json'
 import exampleConfig from '~/static/json/test_cyto'
 
 export default {

@@ -1,88 +1,73 @@
 <template>
-  <div>
-    <v-btn @click="run">Plot</v-btn>
-    <v-select
-      v-model="currentIdent"
-      :items="IdentList"
-      label="Ident"
-      dense
-      @change="run"
-    ></v-select>
-    <grid-layout
-      :layout.sync="layout"
-      :col-num="6"
-      :row-height="300"
-      :is-draggable="true"
-      :is-resizable="true"
-      :is-mirrored="false"
-      :vertical-compact="true"
-      :margin="[10, 10]"
-      :use-css-transforms="true"
-    >
-      <div v-if="res1"></div>
-      <cluster-scatter
-        title="cluster"
-        :x="layout[0].x"
-        :y="layout[0].y"
-        :w="layout[0].w"
-        :h="layout[0].h"
-        :i="layout[0].i"
-        :src="res1"
-      ></cluster-scatter>
-    </grid-layout>
-    {{ res1 }}
-  </div>
+  <ECharts ref="chart" :option="option" />
 </template>
 
 <script>
-import ClusterScatter from '@/components/figures/ClusterScatter'
-import res from 'static/json/cluster_res.json'
-import ApiService from '~/services/ApiService.js'
+import * as echarts from 'echarts'
+import { createComponent } from 'echarts-for-vue'
+import graph from 'static/json/les-miserables.json'
 
 export default {
   components: {
-    'cluster-scatter': ClusterScatter,
+    ECharts: createComponent({ echarts }), // use as a component
   },
+
   data() {
-    return {
-      layout: [
-        {
-          x: 0,
-          y: 0,
-          w: 3,
-          h: 2,
-          i: '0',
-          title: 'UMAP plot',
-        },
-        {
-          x: 3,
-          y: 0,
-          w: 2,
-          h: 2,
-          i: '1',
-          title: 'Differential gene expression',
-        },
-      ],
-      result: '',
-      res1: { axis: [0, 1], legend: [0, 1], dimension: 1 },
-      currentIdent: 'seurat_clusters',
-      IdentList: ['seurat_clusters', 'Sex', 'Label'],
-    }
+    return {}
   },
-  computed: {},
-  methods: {
-    async run() {
-      console.log(res)
-      this.res1 = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
+  computed: {
+    option() {
+      graph.nodes.forEach(function (node) {
+        node.label = {
+          show: node.symbolSize > 30,
         }
-      )
-      console.log(this.res1)
+      })
+      return {
+        title: {
+          text: 'Les Miserables',
+          subtext: 'Circular layout',
+          top: 'bottom',
+          left: 'right',
+        },
+        tooltip: {},
+        legend: [
+          {
+            data: graph.categories.map(function (a) {
+              return a.name
+            }),
+          },
+        ],
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series: [
+          {
+            name: 'Les Miserables',
+            type: 'graph',
+            layout: 'circular',
+            circular: {
+              rotateLabel: true,
+            },
+            data: graph.nodes,
+            links: graph.links,
+            categories: graph.categories,
+            roam: true,
+            label: {
+              position: 'right',
+              formatter: '{b}',
+            },
+            lineStyle: {
+              color: 'source',
+              curveness: 0.3,
+            },
+          },
+        ],
+      }
+    },
+  },
+  methods: {
+    doSomething() {
+      this.$refs.chart.inst.getWidth() // call the method of ECharts instance
     },
   },
 }
 </script>
-
-<style lang="scss" scoped></style>

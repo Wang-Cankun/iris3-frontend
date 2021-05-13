@@ -55,6 +55,9 @@
                       >Run</v-btn
                     >
                   </v-row>
+                  <v-row justify="center"
+                    >Selected Node: {{ selectedTfCytoscape }}</v-row
+                  >
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -74,7 +77,7 @@
               :use-css-transforms="true"
             >
               <network
-                :key="layout[0].i"
+                :title="layout[0].title"
                 :x="layout[0].x"
                 :y="layout[0].y"
                 :w="layout[0].w"
@@ -83,11 +86,11 @@
                 :nodes="graphNodes"
                 :edges="graphEdges"
                 :show="showNetwork"
-                :title="layout[0].title"
+                :selected.sync="selectedTfCytoscape"
               >
               </network>
               <regulon-table
-                :key="layout[1].i"
+                :title="layout[1].title"
                 :x="layout[1].x"
                 :y="layout[1].y"
                 :w="layout[1].w"
@@ -98,71 +101,74 @@
                 :selected.sync="selectedRegulon"
               >
               </regulon-table>
-              <v-card class="ma-0"
-                ><grid-item
+              <div v-if="selectedTfCytoscape">
+                <regulon-activity-scatter
+                  :title="layout[2].title"
                   :x="layout[2].x"
                   :y="layout[2].y"
                   :w="layout[2].w"
                   :h="layout[2].h"
                   :i="layout[2].i"
-                  class="grid-item-border"
-                  @resized="changeSize"
+                  :regulons="selectedTf"
                 >
-                  <v-card-title class="primary white--text caption px-2 py-1"
-                    >Gene plots<v-spacer></v-spacer>
-                    <v-menu bottom left>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn dark icon v-bind="attrs" v-on="on">
-                          <v-icon>mdi-download-outline</v-icon>
-                        </v-btn>
-                      </template>
-
-                      <v-list>
-                        <v-list-item>
-                          <v-list-item-title>TODO</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu></v-card-title
-                  >
-
-                  <v-row v-show="regulonUmapStatic">
-                    <v-col cols="6"
-                      ><v-img
-                        contain
-                        :height="windowSize.y - 130"
-                        :max-width="windowSize.x / 2 + 'px'"
-                        :max-height="windowSize.y / 2 + 'px'"
-                        :src="clusterUmapStatic"
-                      ></v-img
-                    ></v-col>
-                    <v-col cols="6"
-                      ><v-img
-                        contain
-                        :height="windowSize.y - 130"
-                        :max-width="windowSize.x / 2 + 'px'"
-                        :max-height="windowSize.y / 2 + 'px'"
-                        :src="regulonUmapStatic"
-                      ></v-img
-                    ></v-col>
-                  </v-row> </grid-item
-              ></v-card>
-              <enrichment-table
-                :genes="selectedRegulonGenes"
-                :x="layout[3].x"
-                :y="layout[3].y"
-                :w="layout[3].w"
-                :h="layout[3].h"
-                :i="layout[3].i"
-              ></enrichment-table>
-              <regulon-heatmap
-                :key="layout[4].i"
-                :x="layout[4].x"
-                :y="layout[4].y"
-                :w="layout[4].w"
-                :h="layout[4].h"
-                :i="layout[4].i"
-                :genes="selectedRegulonGenes"
-              ></regulon-heatmap>
+                </regulon-activity-scatter>
+                <feature-scatter
+                  :title="layout[3].title"
+                  :x="layout[3].x"
+                  :y="layout[3].y"
+                  :w="layout[3].w"
+                  :h="layout[3].h"
+                  :i="layout[3].i"
+                  :genes="selectedRegulonGenes"
+                >
+                </feature-scatter>
+                <enrichment-table
+                  :genes="selectedRegulonGenes"
+                  :title="layout[4].title"
+                  :x="layout[4].x"
+                  :y="layout[4].y"
+                  :w="layout[4].w"
+                  :h="layout[4].h"
+                  :i="layout[4].i"
+                ></enrichment-table>
+                <regulon-heatmap
+                  :title="layout[5].title"
+                  :x="layout[5].x"
+                  :y="layout[5].y"
+                  :w="layout[5].w"
+                  :h="layout[5].h"
+                  :i="layout[5].i"
+                  :genes="selectedRegulonGenes"
+                ></regulon-heatmap>
+                <regulon-circos
+                  :title="layout[6].title"
+                  :x="layout[6].x"
+                  :y="layout[6].y"
+                  :w="layout[6].w"
+                  :h="layout[6].h"
+                  :i="layout[6].i"
+                  :genes="selectedRegulonGenes"
+                ></regulon-circos>
+                <differential-regulon
+                  :genes="selectedRegulonGenes"
+                  :title="layout[7].title"
+                  :x="layout[7].x"
+                  :y="layout[7].y"
+                  :w="layout[7].w"
+                  :h="layout[7].h"
+                  :i="layout[7].i"
+                ></differential-regulon>
+                <volcano-scatter
+                  :title="layout[8].title"
+                  :x="layout[8].x"
+                  :y="layout[8].y"
+                  :w="layout[8].w"
+                  :h="layout[8].h"
+                  :i="layout[8].i"
+                  :src="{ axis: [0, 1], legend: [0], dimension: 1 }"
+                >
+                </volcano-scatter>
+              </div>
             </grid-layout>
           </div>
         </v-col>
@@ -171,14 +177,21 @@
   </v-col>
 </template>
 <script>
-import RegulonList from 'static/json/example_regulon.json'
-import ExampleNodes from 'static/json/example_nodes.json'
-import ExampleEdges from 'static/json/example_edges.json'
+import RegulonList from 'static/json/regulon/example_regulon.json'
+import ExampleNodes from 'static/json/regulon/example_cyto_nodes.json'
+import ExampleEdges from 'static/json/regulon/example_cyto_edges.json'
 import RegulonNetwork from '~/components/network/RegulonNetwork'
 import selection from '~/components/utils/Selection'
+
+import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
+import FeatureScatter from '~/components/figures/FeatureScatter'
+import RegulonActivityScatter from '~/components/figures/RegulonActivityScatter'
+import RegulonCircos from '~/components/figures/RegulonCircos'
+import VolcanoScatter from '~/components/figures/VolcanoScatter'
+
 import RegulonTable from '~/components/tables/RegulonTable'
 import EnrichmentTable from '~/components/tables/EnrichmentTable'
-import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
+import DifferentialRegulon from '~/components/tables/DifferentialRegulon'
 
 export default {
   components: {
@@ -187,6 +200,11 @@ export default {
     'regulon-table': RegulonTable,
     'enrichment-table': EnrichmentTable,
     'regulon-heatmap': RegulonHeatmap,
+    'feature-scatter': FeatureScatter,
+    'regulon-activity-scatter': RegulonActivityScatter,
+    'regulon-circos': RegulonCircos,
+    'volcano-scatter': VolcanoScatter,
+    'differential-regulon': DifferentialRegulon,
   },
   props: {},
   data: () => ({
@@ -214,7 +232,7 @@ export default {
         w: 2,
         h: 2,
         i: '2',
-        title: 'Regulon scatter',
+        title: 'Regulon activity plot',
       },
       {
         x: 2,
@@ -222,7 +240,7 @@ export default {
         w: 2,
         h: 2,
         i: '3',
-        title: 'GSEA',
+        title: 'Gene expression plot',
       },
       {
         x: 4,
@@ -231,6 +249,38 @@ export default {
         h: 2,
         i: '4',
         title: 'Regulon heatmap',
+      },
+      {
+        x: 0,
+        y: 4,
+        w: 2,
+        h: 2,
+        i: '5',
+        title: 'Regulon heatmap',
+      },
+      {
+        x: 2,
+        y: 4,
+        w: 2,
+        h: 2,
+        i: '6',
+        title: 'Regulon circos plot',
+      },
+      {
+        x: 4,
+        y: 4,
+        w: 2,
+        h: 2,
+        i: '7',
+        title: 'Differential regulons',
+      },
+      {
+        x: 0,
+        y: 6,
+        w: 2,
+        h: 2,
+        i: '8',
+        title: 'Volcano plot of differential regulons',
       },
     ],
     degList: [
@@ -261,12 +311,7 @@ export default {
     selectedCt: 1,
     sliderTf: 1,
     showNetwork: false,
-
-    // Regulon visualize
-    windowSize: {
-      x: 700,
-      y: 700,
-    },
+    selectedTfCytoscape: '',
     selectedRegulon: {},
     selectedRegulonGenes: [],
     regulonUmapStatic: '',
@@ -304,6 +349,7 @@ export default {
   watch: {
     selectedRegulon() {
       console.log(this.selectedRegulon)
+      this.selectedTfCytoscape = this.selectedRegulon.tf
       this.selectedRegulonGenes = this.selectedRegulon.genes.split(',')
     },
   },
@@ -311,10 +357,6 @@ export default {
     this.showNetwork = false
   },
   methods: {
-    changeSize(i, newH, newW, newHPx, newWPx) {
-      this.windowSize.x = newWPx
-      this.windowSize.y = newHPx
-    },
     runNetwork() {
       this.showNetwork = true
     },
