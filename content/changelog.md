@@ -7,6 +7,26 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+## [0.5] - 05/13/2021
+ 
+### Added
+
+- Cytoscape: select to highlight genes; reset network
+- Example regulon activity
+- Example regulon gene expression
+- Gene set enrichment analysis using EnrichR
+- Example regulon heatmap
+
+### Changes
+
+- Update regulon page layout
+- Loading page design to display progress
+
+### Fixed
+
+- Data table to auto adjust card height
+
+
 ## [0.4] - 05/06/2021
  
 ### Added
