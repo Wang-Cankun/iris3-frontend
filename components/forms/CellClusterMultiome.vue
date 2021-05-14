@@ -571,6 +571,7 @@
                     :i="layout[1].i"
                     class="grid-item-border"
                     drag-ignore-from=".no-drag"
+                    @resized="changeTableSize"
                   >
                     <v-card-title
                       class="primary white--text caption px-2 py-1"
@@ -747,7 +748,7 @@
                         :items="deResult"
                         item-key="name"
                         :items-per-page="5"
-                        class="elevation-1"
+                        class="elevation-0"
                       ></v-data-table></div></grid-item
                 ></v-card>
                 <feature-scatter
@@ -1692,6 +1693,9 @@ export default {
       link.setAttribute('download', 'Image_png.png')
       document.body.appendChild(link)
       link.click()
+    },
+    changeTableSize(i, newH, newW, newHPx, newWPx) {
+      this.tableHeight = newHPx - 155
     },
   },
 }

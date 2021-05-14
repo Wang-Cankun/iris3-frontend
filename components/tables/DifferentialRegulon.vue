@@ -8,6 +8,7 @@
       :i="i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
+      @resized="changeSize"
     >
       <v-card-title
         class="primary white--text caption px-2 py-1"
@@ -47,7 +48,7 @@
               v-model="ident1"
               class="ml-4"
               :items="currentIdentLevels"
-              label="Group 1"
+              label="Select cell type"
             ></v-autocomplete>
           </v-col>
           <v-col cols="6">
@@ -55,7 +56,7 @@
               v-model="ident2"
               class="ml-4"
               :items="currentIdentLevels"
-              label="Group 2"
+              label="Select cell type"
             ></v-autocomplete>
           </v-col>
         </v-row>
@@ -67,6 +68,9 @@
             @click="run()"
             >Update</v-btn
           >
+        </v-row>
+        <v-row justify="center" class="mx-2 mb-2 mt-0">
+          p-value: {{ drResult }}
         </v-row>
         <div v-if="result.length">
           <v-data-table
@@ -96,42 +100,44 @@ export default {
     return {
       hover: false,
       headers: [
-        { text: 'pathway', value: 'pathway' },
-        { text: 'Adjusted p-value', value: 'padj' },
-        { text: 'NES', value: 'NES' },
-        { text: 'size', value: 'size' },
-        { text: '', value: 'data-table-expand' },
+        { text: 'Cell type', value: 'cell_type' },
+        { text: 'p-value', value: 'pvalue' },
       ],
       result: [],
       ident1: '',
       ident2: '',
-      currentIdentLevels: [],
+      drResult: [],
+      currentIdentLevels: [1, 2, 3, 4, 5, 6, 7],
+      tableHeight: 435,
+      footerHeight: 155,
     }
   },
 
   methods: {
-    downloadTable() {
-      this.$notifier.showMessage({
-        content: 'Downloading enrichment result...',
-        color: 'Success',
-      })
-    },
     async run() {
+      if (this.ident1 && this.ident2) {
+        this.$notifier.showMessage({
+          content: 'Calculating differential regulons',
+          color: 'accent',
+        })
+        this.drResult = 0.1
+        // await ApiService.postCommand(
+        //   'deepmaps/api/queue/differential-regulon/',
+        //   {
+        //     ident1: this.ident1,
+        //     ident2: this.ident2,
+        //   }
+        // )
+      } else {
+        this.$notifier.showMessage({
+          content: 'Select cell type',
+          color: 'error',
+        })
+      }
       return await 1
     },
-    resizeEvent(i, newH, newW, newHPx, newWPx) {
-      console.log(
-        'RESIZE i=' +
-          i +
-          ', H=' +
-          newH +
-          ', W=' +
-          newW +
-          ', H(px)=' +
-          newHPx +
-          ', W(px)=' +
-          newWPx
-      )
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.tableHeight = newHPx - this.footerHeight
     },
   },
 }

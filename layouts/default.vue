@@ -332,10 +332,6 @@ export default {
           title: 'Public deepmaps projects',
           path: '/public',
         },
-        {
-          title: 'Search',
-          path: '/search',
-        },
       ],
       helpmenu: [
         {

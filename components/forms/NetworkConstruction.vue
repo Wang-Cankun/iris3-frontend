@@ -11,53 +11,52 @@
                   <p class="subtitle-1 font-weight-bold text-center">Network</p>
 
                   <v-col>
-                    <p class="title-h4">
-                      Select cell type
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-icon color="primary" dark v-on="on"
-                            >mdi-help-circle-outline</v-icon
-                          >
-                        </template>
-                        <p>Select cell type to display</p>
-                      </v-tooltip>
-                    </p>
-                    Selected:
-                    <v-select
-                      v-model="selectedCt"
-                      :items="ctList"
-                      dense
-                    ></v-select>
-                    <p class="title-h4">
-                      Select regulons
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-icon color="primary" dark v-on="on"
-                            >mdi-help-circle-outline</v-icon
-                          >
-                        </template>
-                        <p>Select regulons to display</p>
-                      </v-tooltip>
-                    </p>
-                    Selected:
-                    <selection
-                      :all="tfList"
-                      :selected.sync="selectedTf"
-                    ></selection>
+                    <v-row justify="center">
+                      <v-btn
+                        class="mx-2 my-4"
+                        color="Primary"
+                        width="150"
+                        dense
+                        @click="runNetwork()"
+                        >Run</v-btn
+                      >
+                    </v-row>
+                    <div v-show="showNetwork">
+                      <p class="title-h4">
+                        Select cell type
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon color="primary" dark v-on="on"
+                              >mdi-help-circle-outline</v-icon
+                            >
+                          </template>
+                          <p>Select cell type to display</p>
+                        </v-tooltip>
+                      </p>
+                      Selected:
+                      <v-select
+                        v-model="selectedCt"
+                        :items="ctList"
+                        dense
+                      ></v-select>
+                      <p class="title-h4">
+                        Select regulons
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon color="primary" dark v-on="on"
+                              >mdi-help-circle-outline</v-icon
+                            >
+                          </template>
+                          <p>Select regulons to display</p>
+                        </v-tooltip>
+                      </p>
+                      Selected:
+                      <selection
+                        :all="tfList"
+                        :selected.sync="selectedTf"
+                      ></selection>
+                    </div>
                   </v-col>
-                  <v-row justify="center">
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Primary"
-                      width="150"
-                      dense
-                      @click="runNetwork()"
-                      >Run</v-btn
-                    >
-                  </v-row>
-                  <v-row justify="center"
-                    >Selected Node: {{ selectedTfCytoscape }}</v-row
-                  >
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -96,12 +95,11 @@
                 :w="layout[1].w"
                 :h="layout[1].h"
                 :i="layout[1].i"
-                :headers="headers"
                 :items="regulonTable"
                 :selected.sync="selectedRegulon"
               >
               </regulon-table>
-              <div v-if="selectedTfCytoscape">
+              <div v-if="selectedRegulon.tf">
                 <regulon-activity-scatter
                   :title="layout[2].title"
                   :x="layout[2].x"
@@ -109,10 +107,11 @@
                   :w="layout[2].w"
                   :h="layout[2].h"
                   :i="layout[2].i"
+                  :regulon="selectedRegulon.tf"
                   :regulons="selectedTf"
                 >
                 </regulon-activity-scatter>
-                <feature-scatter
+                <regulon-gene-scatter
                   :title="layout[3].title"
                   :x="layout[3].x"
                   :y="layout[3].y"
@@ -121,7 +120,7 @@
                   :i="layout[3].i"
                   :genes="selectedRegulonGenes"
                 >
-                </feature-scatter>
+                </regulon-gene-scatter>
                 <enrichment-table
                   :genes="selectedRegulonGenes"
                   :title="layout[4].title"
@@ -158,16 +157,18 @@
                   :h="layout[7].h"
                   :i="layout[7].i"
                 ></differential-regulon>
-                <volcano-scatter
-                  :title="layout[8].title"
-                  :x="layout[8].x"
-                  :y="layout[8].y"
-                  :w="layout[8].w"
-                  :h="layout[8].h"
-                  :i="layout[8].i"
-                  :src="{ axis: [0, 1], legend: [0], dimension: 1 }"
-                >
-                </volcano-scatter>
+                <div v-if="false">
+                  <volcano-scatter
+                    :title="layout[8].title"
+                    :x="layout[8].x"
+                    :y="layout[8].y"
+                    :w="layout[8].w"
+                    :h="layout[8].h"
+                    :i="layout[8].i"
+                    :src="{ axis: [0, 1], legend: [0], dimension: 1 }"
+                  >
+                  </volcano-scatter>
+                </div>
               </div>
             </grid-layout>
           </div>
@@ -184,13 +185,13 @@ import RegulonNetwork from '~/components/network/RegulonNetwork'
 import selection from '~/components/utils/Selection'
 
 import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
-import FeatureScatter from '~/components/figures/FeatureScatter'
+import RegulonGeneScatter from '~/components/figures/RegulonGeneScatter'
 import RegulonActivityScatter from '~/components/figures/RegulonActivityScatter'
 import RegulonCircos from '~/components/figures/RegulonCircos'
 import VolcanoScatter from '~/components/figures/VolcanoScatter'
 
 import RegulonTable from '~/components/tables/RegulonTable'
-import EnrichmentTable from '~/components/tables/EnrichmentTable'
+import RegulonEnrichmentTable from '~/components/tables/RegulonEnrichmentTable'
 import DifferentialRegulon from '~/components/tables/DifferentialRegulon'
 
 export default {
@@ -198,9 +199,9 @@ export default {
     network: RegulonNetwork,
     selection,
     'regulon-table': RegulonTable,
-    'enrichment-table': EnrichmentTable,
+    'enrichment-table': RegulonEnrichmentTable,
     'regulon-heatmap': RegulonHeatmap,
-    'feature-scatter': FeatureScatter,
+    'regulon-gene-scatter': RegulonGeneScatter,
     'regulon-activity-scatter': RegulonActivityScatter,
     'regulon-circos': RegulonCircos,
     'volcano-scatter': VolcanoScatter,
@@ -293,18 +294,6 @@ export default {
         iron: '1%',
       },
     ],
-    headers: [
-      { text: 'Cell type', value: 'ct' },
-      {
-        text: 'TF',
-        align: 'start',
-        value: 'tf',
-      },
-      { text: 'Number of genes', value: 'n' },
-      { text: 'Score', value: 'rss' },
-      { text: 'Visualize', value: 'actions', sortable: false },
-      { text: 'Expand', value: 'data-table-expand' },
-    ],
 
     // TF selection
     selectedTf: [],
@@ -348,7 +337,6 @@ export default {
   },
   watch: {
     selectedRegulon() {
-      console.log(this.selectedRegulon)
       this.selectedTfCytoscape = this.selectedRegulon.tf
       this.selectedRegulonGenes = this.selectedRegulon.genes.split(',')
     },

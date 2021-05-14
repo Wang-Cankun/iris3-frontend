@@ -41,13 +41,13 @@
                     <v-select
                       v-model="lowColor"
                       :items="colorList"
-                      label="low regulon activity color"
+                      label="low expression color"
                       dense
                     ></v-select>
                     <v-select
                       v-model="highColor"
                       :items="colorList"
-                      label="high regulon activity color"
+                      label="high expression color"
                       dense
                     ></v-select>
                     <v-slider
@@ -85,6 +85,29 @@
           </v-menu>
         </div>
       </v-card-title>
+      <div class="no-drag">
+        <v-row>
+          <v-col cols="7">
+            <v-autocomplete
+              v-model="gene"
+              class="ml-4"
+              :items="genes"
+              label="Gene"
+            ></v-autocomplete>
+          </v-col>
+          <v-col cols="4">
+            <v-btn
+              class="mx-2 mb-2 mt-3"
+              color="Primary"
+              width="120"
+              @click="run()"
+              >Plot</v-btn
+            >
+          </v-col>
+        </v-row>
+
+        <div v-if="src.axis[0] !== 0"></div>
+      </div>
       <ECharts ref="chart" :option="option2d" class="no-drag" /></grid-item
   ></v-card>
 </template>
@@ -93,8 +116,9 @@
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
 import Coords from 'static/json/regulon/feature_coord.json'
+
 import EchartsService from '~/services/EchartsService.js'
-// import ApiService from '~/services/ApiService.js'
+import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
@@ -103,8 +127,7 @@ export default {
   props: {
     // src: { type: String, required: true },
     title: { type: String, required: true },
-    regulon: { type: String, required: true },
-    regulons: { type: Array, required: true },
+    genes: { type: Array, required: true },
     // src: {
     //   type: Object,
     //   required: true,
@@ -128,7 +151,7 @@ export default {
       colorList: ['grey', 'blue', 'red', 'green'],
 
       violinGroup: 'seurat_clusters',
-
+      gene: 'Gad1',
       src: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     }
   },
@@ -222,11 +245,6 @@ export default {
       }
     },
   },
-  watch: {
-    regulon() {
-      this.src = Coords
-    },
-  },
   methods: {
     downloadPNG() {
       EchartsService.downloadImg(this.$refs.chart.inst, 'png')
@@ -239,6 +257,15 @@ export default {
     },
     doSomething() {
       this.$refs.chart.inst.getWidth() // call the method of ECharts instance
+    },
+    async run1() {
+      this.src = await ApiService.postCommand(
+        'deepmaps/api/queue/feature-coords/',
+        {
+          gene: this.gene,
+          assay: 'RNA',
+        }
+      )
     },
     async run() {
       this.src = await Coords

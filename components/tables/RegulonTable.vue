@@ -8,24 +8,38 @@
       :i="i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
+      @resized="changeSize"
     >
-      <v-card-title class="primary white--text caption px-2 py-1"
+      <v-card-title
+        class="primary white--text caption px-2 py-1"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
         >Regulons <v-spacer></v-spacer>
-        <v-menu bottom left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-download-outline</v-icon>
-            </v-btn>
-          </template>
+        <div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon v-show="hover === true" color="white" v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>TODO</p>
+          </v-tooltip>
+          <v-menu bottom left :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark icon v-bind="attrs" v-on="on">
+                <v-icon v-show="hover === true">mdi-download-outline</v-icon>
+              </v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item @click="downloadTable">
-              <download-excel class="mr-4" :data="items" type="csv">
-                <v-list-item-title>Download file (CSV)</v-list-item-title>
-              </download-excel>
-            </v-list-item>
-          </v-list>
-        </v-menu></v-card-title
+            <v-list>
+              <v-list-item @click="1">
+                <download-excel class="mr-4" :data="items" type="csv">
+                  <v-list-item-title>Download file (CSV)</v-list-item-title>
+                </download-excel>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div></v-card-title
       >
       <div class="no-drag">
         <v-text-field
@@ -37,12 +51,13 @@
         ></v-text-field>
         <v-data-table
           dense
+          :height="tableHeight"
           :search="search"
           :headers="headers"
           :items="items"
           :items-per-page="10"
           item-key="index"
-          class="elevation-1"
+          class="elevation-0"
           :expanded.sync="expanded"
           show-expand
         >
@@ -54,7 +69,7 @@
           <template v-slot:expanded-item="{ item }">
             <td :colspan="headers.length">
               <v-virtual-scroll
-                height="125"
+                height="425"
                 item-height="40"
                 :items="item.genes.split(',')"
               >
@@ -107,7 +122,6 @@
 <script>
 export default {
   props: {
-    headers: { type: Array, required: true },
     items: { type: Array, required: true },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
@@ -116,30 +130,33 @@ export default {
     i: { type: String, required: true, default: '0' },
   },
   data() {
-    return { search: '', expanded: [] }
+    return {
+      search: '',
+      hover: false,
+      tableHeight: 455,
+      footerHeight: 155,
+      expanded: [],
+      headers: [
+        { text: 'Cell type', value: 'ct' },
+        {
+          text: 'TF',
+          align: 'start',
+          value: 'tf',
+        },
+        { text: 'Number of genes', value: 'n' },
+        { text: 'Score', value: 'rss' },
+        { text: 'Visualize', value: 'actions', sortable: false },
+        { text: 'Genes', value: 'data-table-expand' },
+      ],
+    }
   },
-
+  created() {},
   methods: {
     downloadTable() {
       this.$notifier.showMessage({
         content: 'Downloading table...',
         color: 'Success',
       })
-    },
-
-    resizeEvent(i, newH, newW, newHPx, newWPx) {
-      console.log(
-        'RESIZE i=' +
-          i +
-          ', H=' +
-          newH +
-          ', W=' +
-          newW +
-          ', H(px)=' +
-          newHPx +
-          ', W(px)=' +
-          newWPx
-      )
     },
     async copyGenes(genes) {
       try {
@@ -151,18 +168,11 @@ export default {
     visualizeRegulon(item) {
       this.$emit('update:selected', item)
     },
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.tableHeight = newHPx - this.footerHeight
+    },
   },
 }
 </script>
 
-<style lang="scss" scoped>
-.grid-item-border {
-  border: 1px solid #d3d3d3;
-  flex-direction: column;
-  position: relative;
-  display: flex;
-  height: 100%;
-  border-radius: 4px;
-  background: white;
-}
-</style>
+<style lang="scss"></style>

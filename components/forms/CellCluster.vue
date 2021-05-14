@@ -538,6 +538,7 @@
                     :i="layout[1].i"
                     class="grid-item-border"
                     drag-ignore-from=".no-drag"
+                    @resized="changeTableSize"
                   >
                     <v-card-title
                       class="primary white--text caption px-2 py-1"
@@ -879,6 +880,7 @@ export default {
     degPvalue: 0.05,
     addTransferMetadataDialog: false,
     addMetadataDialog: false,
+    tableHeight: 455,
     // Add metadata
     displayAddMetadata: '',
     addCategoryName: '',
@@ -1764,6 +1766,9 @@ export default {
       link.setAttribute('download', 'Image_png.png')
       document.body.appendChild(link)
       link.click()
+    },
+    changeTableSize(i, newH, newW, newHPx, newWPx) {
+      this.tableHeight = newHPx - 155
     },
   },
 }

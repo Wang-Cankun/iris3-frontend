@@ -68,11 +68,11 @@
                     </p>
                     <v-switch
                       v-model="geneSymbolSwitch"
-                      :label="`Show gene label: ${geneSymbolSwitch.toString()}`"
+                      :label="`Show gene names: ${geneSymbolSwitch.toString()}`"
                     ></v-switch>
                     <v-slider
                       v-model="geneNodeSize"
-                      label="Gene node size"
+                      label="Gene node scale"
                       :max="200"
                       min="1"
                       thumb-label="always"
@@ -137,6 +137,7 @@
         </div>
       </v-card-title>
       <div id="holder" class="no-drag">
+        <v-btn @click="resetPosition">RESET</v-btn>
         <cytoscape
           ref="cy"
           :config="networkConfig"
@@ -421,6 +422,10 @@ export default {
     },
     downloadPNG() {},
     downloadJPG() {},
+    resetPosition() {
+      this.cy.reset()
+      this.changeLayout(this.currentLayout)
+    },
   },
 }
 </script>
@@ -441,7 +446,7 @@ export default {
   width: 100%;
 }
 #cytoscape-div {
-  min-height: 600px !important;
+  min-height: 510px !important;
   display: block;
 }
 </style>

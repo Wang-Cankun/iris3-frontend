@@ -1,6 +1,5 @@
 <template>
   <div id="holder">
-    {{ elements }}
     <v-autocomplete
       v-model="currentLayouts"
       class="ml-4"
