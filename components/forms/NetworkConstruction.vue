@@ -53,6 +53,7 @@
                       Selected:
                       <selection
                         :all="tfList"
+                        :centrality="tfCentrality"
                         :selected.sync="selectedTf"
                       ></selection>
                     </div>
@@ -332,6 +333,11 @@ export default {
     tfList() {
       return RegulonList.filter((i) => i.ct === this.selectedCt).map(
         (i) => i.tf
+      )
+    },
+    tfCentrality() {
+      return RegulonList.filter((i) => i.ct === this.selectedCt).map(
+        (i) => i.rss
       )
     },
   },

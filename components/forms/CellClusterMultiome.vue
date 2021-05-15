@@ -955,6 +955,7 @@ export default {
     degAssay: 'RNA',
     degPvalue: 0.05,
     degPvalueList: [0.01, 0.05, 0.1],
+    tableHeight: 455,
     // Gene plots
     plotGeneSymbol: '',
     plotGeneAssay: '',

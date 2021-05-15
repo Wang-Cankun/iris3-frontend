@@ -11,7 +11,7 @@ All notable changes to DeepMAPS will be documented in this page.
  
 ### Added
 
-- Cytoscape: select to highlight genes; reset network
+- Cytoscape: select to highlight genes; reset network; export to JPG, PNG, or CSV
 - Example regulon activity
 - Example regulon gene expression
 - Gene set enrichment analysis using EnrichR

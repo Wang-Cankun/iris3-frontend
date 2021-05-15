@@ -31,20 +31,13 @@
         <v-divider class="mt-2"></v-divider> </template
     ></v-select>
     <v-slider
-      v-model="topNumber"
-      label="Select top N regulons"
-      :max="all.length"
-      min="0"
-      thumb-label="always"
-      @change="updateSelectedByIndex"
-    ></v-slider>
-    <v-slider
       v-model="centralityThres"
       label="Centrality threshold to select regulon"
       max="1"
       min="0"
       step="0.05"
       thumb-label="always"
+      @change="updateSelectedByCentrality"
     ></v-slider>
   </div>
 </template>
@@ -53,6 +46,7 @@
 export default {
   props: {
     all: { type: Array, required: true },
+    centrality: { type: Array, required: true },
   },
   data() {
     return {
@@ -101,6 +95,9 @@ export default {
     },
     updateSelectedByIndex() {
       this.selected = this.all.slice(0, this.topNumber)
+    },
+    updateSelectedByCentrality() {
+      this.selected = this.all.slice(0, 5)
     },
   },
 }

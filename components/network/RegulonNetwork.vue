@@ -73,14 +73,14 @@
                     <v-slider
                       v-model="geneNodeSize"
                       label="Gene node scale"
-                      :max="200"
+                      max="250"
                       min="1"
                       thumb-label="always"
                     ></v-slider>
                     <v-slider
                       v-model="geneNodeTextSize"
                       label="Gene text size"
-                      :max="200"
+                      max="250"
                       min="1"
                       thumb-label="always"
                     ></v-slider>
@@ -97,14 +97,14 @@
                     <v-slider
                       v-model="tfNodeSize"
                       label="TF node scale"
-                      :max="200"
+                      max="250"
                       min="1"
                       thumb-label="always"
                     ></v-slider>
                     <v-slider
                       v-model="tfNodeTextSize"
                       label="TF text size"
-                      :max="200"
+                      max="250"
                       min="1"
                       thumb-label="always"
                     ></v-slider>
@@ -127,10 +127,15 @@
 
             <v-list>
               <v-list-item @click="downloadPNG">
-                <v-list-item-title>TODO</v-list-item-title>
+                <v-list-item-title>Download image (PNG)</v-list-item-title>
               </v-list-item>
               <v-list-item @click="downloadJPG">
-                <v-list-item-title>TODO</v-list-item-title>
+                <v-list-item-title>Download image (JPG)</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="downloadCSV">
+                <download-excel class="mr-4" :data="cyResult" type="csv">
+                  <v-list-item-title>Export to CSV</v-list-item-title>
+                </download-excel>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -242,11 +247,15 @@ export default {
     cy() {
       return this.$refs.cy.instance
     },
+
     elements() {
       const graph = [...this.nodes, ...this.edges].map((item) => {
         return { data: item }
       })
       return graph
+    },
+    cyResult() {
+      return this.edges
     },
 
     networkConfig() {
@@ -277,17 +286,6 @@ export default {
           style: {},
         },
         {
-          selector: 'node[type="gene"]',
-          style: {
-            shape: this.geneNodeShape,
-            'background-color': 'data(color)',
-            label: geneLabel,
-            'font-size': this.geneNodeTextSize + 'px',
-            width: geneNodeSize,
-            height: geneNodeSize,
-          },
-        },
-        {
           selector: 'node[type="tf"]',
           style: {
             shape: this.tfNodeShape,
@@ -296,6 +294,17 @@ export default {
             width: `mapData(centrality, 0, 1, 20, ${tfNodeSize * 2})`,
             height: `mapData(centrality, 0, 1, 20, ${tfNodeSize * 2})`,
             'font-size': this.tfNodeTextSize + 'px',
+          },
+        },
+        {
+          selector: 'node[type="gene"]',
+          style: {
+            shape: this.geneNodeShape,
+            'background-color': 'data(color)',
+            label: geneLabel,
+            'font-size': this.geneNodeTextSize + 'px',
+            width: geneNodeSize,
+            height: geneNodeSize,
           },
         },
         {
@@ -420,11 +429,28 @@ export default {
           newWPx
       )
     },
-    downloadPNG() {},
-    downloadJPG() {},
+    downloadJPG() {
+      const link = document.createElement('a')
+      link.href = this.cy.jpg()
+      link.setAttribute('download', 'cytoscape_export_jpg.jpg')
+      document.body.appendChild(link)
+      link.click()
+    },
+    downloadPNG() {
+      const link = document.createElement('a')
+      link.href = this.cy.png()
+      link.setAttribute('download', 'cytoscape_export_png.png')
+      document.body.appendChild(link)
+      link.click()
+    },
+    downloadCSV() {},
+
     resetPosition() {
       this.cy.reset()
       this.changeLayout(this.currentLayout)
+    },
+    exportJson() {
+      console.log(this.cy.json())
     },
   },
 }

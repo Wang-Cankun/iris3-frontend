@@ -144,7 +144,7 @@ export default {
           value: 'tf',
         },
         { text: 'Number of genes', value: 'n' },
-        { text: 'Score', value: 'rss' },
+        { text: 'Centrality', value: 'rss' },
         { text: 'Visualize', value: 'actions', sortable: false },
         { text: 'Genes', value: 'data-table-expand' },
       ],

@@ -108,6 +108,7 @@ export default {
 
   data() {
     return {
+      hover: false,
       heatmap: '',
       windowSize: {
         x: 420,
@@ -117,8 +118,8 @@ export default {
   },
   computed: {
     option() {
-      const hours = ['1', '2', '3', '5', '7']
-      const days = [
+      const row = ['1', '2', '3', '4', '5']
+      const column = [
         'CTCF',
         'DEAF1',
         'IKZF1',
@@ -369,17 +370,18 @@ export default {
         grid: {
           height: '80%',
           top: '5%',
+          left: '15%',
         },
         xAxis: {
           type: 'category',
-          data: hours,
+          data: row,
           splitArea: {
             show: true,
           },
         },
         yAxis: {
           type: 'category',
-          data: days,
+          data: column,
           splitArea: {
             show: true,
           },
@@ -390,16 +392,16 @@ export default {
           calculable: true,
           orient: 'horizontal',
           left: 'center',
-          bottom: '5%',
+          right: '5%',
+          inRange: {
+            color: ['white', 'red'],
+          },
         },
         series: [
           {
             name: 'Activity',
             type: 'heatmap',
             data,
-            label: {
-              show: true,
-            },
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
