@@ -219,7 +219,7 @@ export default {
         ['#0000FF', '#0000AA', '#000055'],
       ],
       geneNodeShape: 'circle',
-      tfNodeShape: 'triangle',
+      tfNodeShape: 'circle',
       nodeShapeList: [
         'circle',
         'triangle',
