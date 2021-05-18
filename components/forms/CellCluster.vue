@@ -541,7 +541,7 @@
                     @resized="changeTableSize"
                   >
                     <v-card-title
-                      class="primary white--text caption px-2 py-1"
+                      class="grey lighten-3 font-weight-bold caption px-2 py-1"
                       @mouseover="degHover = true"
                       @mouseleave="degHover = false"
                       >Differential gene expression analysis<v-spacer
@@ -549,10 +549,7 @@
                       <div>
                         <v-tooltip top>
                           <template v-slot:activator="{ on }">
-                            <v-icon
-                              v-show="degHover === true"
-                              color="white"
-                              v-on="on"
+                            <v-icon v-show="degHover === true" v-on="on"
                               >mdi-help-circle-outline</v-icon
                             >
                           </template>
@@ -560,7 +557,7 @@
                         </v-tooltip>
                         <v-menu bottom left :close-on-content-click="false">
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn dark icon v-bind="attrs" v-on="on">
+                            <v-btn icon v-bind="attrs" v-on="on">
                               <v-icon v-show="degHover === true"
                                 >mdi-download-outline</v-icon
                               >

@@ -9,11 +9,11 @@
       class="grid-item-border"
       @resized="changeSize"
     >
-      <v-card-title class="primary white--text caption px-2 py-1"
+      <v-card-title class="grey lighten-3 font-weight-bold caption px-2 py-1"
         >Coverage plot{{ type }} <v-spacer></v-spacer>
         <v-menu bottom left>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
+            <v-btn icon v-bind="attrs" v-on="on">
               <v-icon>mdi-download-outline</v-icon>
             </v-btn>
           </template>
