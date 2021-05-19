@@ -396,7 +396,7 @@ export default {
 
       this.rasData = await ApiService.postCommand('deepmaps/api/queue/run-r/', {
         type: 'ras',
-        gene: this.selectedRegulon,
+        gene: this.selectedRegulon.tf,
       })
 
       this.$nuxt.$loading.finish()
