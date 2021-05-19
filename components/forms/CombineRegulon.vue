@@ -8,7 +8,7 @@
         <v-card outlined hover>
           <v-row>
             <v-col cols="2">
-              <v-card class="mt-6" outlined hover color="blue-grey lighten-5">
+              <v-card class="mt-6" outlined hover color="grey lighten-3">
                 <p class="subtitle-1 font-weight-bold text-center">Jobs</p>
                 <p class="ml-4 title-h4">Bicluster overlap rate</p>
                 <v-text-field

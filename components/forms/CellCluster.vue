@@ -9,7 +9,7 @@
                 Data integration
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <v-card class="mt-6" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Data integration
                   </p>
@@ -49,7 +49,7 @@
                 Cell clustering
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <v-card class="mt-6" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Cell clustering
                   </p>
@@ -197,7 +197,7 @@
                 Active cell category
               </v-expansion-panel-header>
               <v-expansion-panel-content
-                ><v-card class="py-3" outlined color="blue-grey lighten-5">
+                ><v-card class="py-3" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Active cell category
                   </p>
@@ -248,7 +248,7 @@
                 Custom cell labeling
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <v-card class="mt-6" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Custom cell labeling
                   </p>
@@ -380,7 +380,7 @@
                 Cell selection
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <v-card class="mt-6" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Cell selection
                   </p>

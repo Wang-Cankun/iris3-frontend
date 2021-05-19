@@ -12,7 +12,7 @@
                 <v-card
                   v-if="qcResult !== null"
                   outlined
-                  color="blue-grey lighten-5"
+                  color="grey lighten-3"
                 >
                   <v-card-text>
                     <p class="subtitle-1 font-weight-bold text-center">
@@ -88,7 +88,7 @@
                   </v-row>
                 </v-card>
 
-                <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <v-card class="mt-6" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Preprocessing
                   </p>

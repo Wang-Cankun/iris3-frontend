@@ -7,6 +7,22 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+## [0.6] - 05/18/2021
+ 
+### Added
+
+- Complete workflow to calculate regulons
+
+### Changes
+
+- Updated regulon page layout
+- Changed network default design
+- Changed card title design
+
+### Fixed
+
+- Loading texts
+
 ## [0.5] - 05/13/2021
  
 ### Added

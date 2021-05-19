@@ -92,7 +92,7 @@
 <script>
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
-import Coords from 'static/json/regulon/feature_coord.json'
+// import Coords from 'static/json/regulon/feature_coord.json'
 import EchartsService from '~/services/EchartsService.js'
 // import ApiService from '~/services/ApiService.js'
 
@@ -103,8 +103,7 @@ export default {
   props: {
     // src: { type: String, required: true },
     title: { type: String, required: true },
-    regulon: { type: String, required: true },
-    regulons: { type: Array, required: true },
+    src: { type: Object, required: true },
     // src: {
     //   type: Object,
     //   required: true,
@@ -128,8 +127,6 @@ export default {
       colorList: ['grey', 'blue', 'red', 'green'],
 
       violinGroup: 'seurat_clusters',
-
-      src: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     }
   },
   computed: {
@@ -222,11 +219,7 @@ export default {
       }
     },
   },
-  watch: {
-    regulon() {
-      this.src = Coords
-    },
-  },
+  watch: {},
   methods: {
     downloadPNG() {
       EchartsService.downloadImg(this.$refs.chart.inst, 'png')
@@ -239,9 +232,6 @@ export default {
     },
     doSomething() {
       this.$refs.chart.inst.getWidth() // call the method of ECharts instance
-    },
-    async run() {
-      this.src = await Coords
     },
   },
 }

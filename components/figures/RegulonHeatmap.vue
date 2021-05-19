@@ -36,30 +36,11 @@
                 <div id="create">
                   <div fluid>
                     <p class="subtitle-1 font-weight-bold text-center">
-                      Settings
+                      Settings: todo
                     </p>
-                    <v-select
-                      v-model="lowColor"
-                      :items="colorList"
-                      label="low expression color"
-                      dense
-                    ></v-select>
-                    <v-select
-                      v-model="highColor"
-                      :items="colorList"
-                      label="high expression color"
-                      dense
-                    ></v-select>
-                    <v-slider
-                      v-model="pointSize"
-                      label="Point size"
-                      :max="10"
-                      min="1"
-                      thumb-label="always"
-                    ></v-slider>
-                    <v-divider />
-                  </div></div
-              ></v-list-item>
+                  </div>
+                </div></v-list-item
+              >
             </v-list>
           </v-menu>
           <v-menu bottom left :close-on-content-click="false">
@@ -92,7 +73,7 @@
 <script>
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
-
+import EchartsService from '~/services/EchartsService.js'
 export default {
   components: {
     ECharts: createComponent({ echarts }), // use as a component
@@ -419,6 +400,12 @@ export default {
     },
   },
   methods: {
+    downloadPNG() {
+      EchartsService.downloadImg(this.$refs.chart.inst, 'png')
+    },
+    downloadPDF() {
+      EchartsService.downloadImg(this.$refs.chart.inst, 'jpg')
+    },
     downloadTable() {
       this.$notifier.showMessage({
         content: 'Downloading table...',

@@ -30,15 +30,17 @@
         </v-list-item>
         <v-divider class="mt-2"></v-divider> </template
     ></v-select>
-    <v-slider
-      v-model="centralityThres"
-      label="Centrality threshold to select regulon"
-      max="1"
-      min="0"
-      step="0.05"
-      thumb-label="always"
-      @change="updateSelectedByCentrality"
-    ></v-slider>
+    <div v-show="false">
+      <v-slider
+        v-model="centralityThres"
+        label="Centrality threshold to select regulon"
+        max="1"
+        min="0"
+        step="0.05"
+        thumb-label="always"
+        @change="updateSelectedByCentrality"
+      ></v-slider>
+    </div>
   </div>
 </template>
 

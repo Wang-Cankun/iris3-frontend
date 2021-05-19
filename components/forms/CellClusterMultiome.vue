@@ -9,7 +9,7 @@
                 Integrative clustering
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="py-3" outlined color="blue-grey lighten-5">
+                <v-card class="py-3" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Integrative clustering
                     <v-tooltip top>
@@ -32,7 +32,7 @@
                   ></v-row>
                   <v-divider></v-divider>
                   <div v-if="integrationSelect === 'Seurat-WNN'">
-                    <v-card class="py-3" outlined color="blue-grey lighten-5">
+                    <v-card class="py-3" outlined color="grey lighten-3">
                       <p class="subtitle-1 font-weight-bold text-center">
                         Cell clustering
                       </p>
@@ -212,7 +212,7 @@
                 Active metadata
               </v-expansion-panel-header>
               <v-expansion-panel-content
-                ><v-card class="py-3" outlined color="blue-grey lighten-5">
+                ><v-card class="py-3" outlined color="grey lighten-3">
                   <!--<p class="subtitle-1 font-weight-bold text-center">
                     Active assay
                   </p>
@@ -290,7 +290,7 @@
                 Custom cell labeling
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="py-3" outlined color="blue-grey lighten-5">
+                <v-card class="py-3" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Custom cell labeling
                   </p>
@@ -427,7 +427,7 @@
                 Cell selection
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="py-3" outlined color="blue-grey lighten-5">
+                <v-card class="py-3" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">
                     Cell selection
                   </p>

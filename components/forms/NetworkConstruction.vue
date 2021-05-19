@@ -7,7 +7,7 @@
             <v-expansion-panel>
               <v-expansion-panel-header> Network </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="blue-grey lighten-5">
+                <v-card class="mt-6" outlined color="grey lighten-3">
                   <p class="subtitle-1 font-weight-bold text-center">Network</p>
 
                   <v-col>
@@ -101,46 +101,47 @@
               >
               </regulon-table>
               <div v-if="selectedRegulon.tf">
-                <regulon-activity-scatter
-                  :title="layout[2].title"
+                <cluster-scatter
+                  :key="layout[2].i"
                   :x="layout[2].x"
                   :y="layout[2].y"
                   :w="layout[2].w"
                   :h="layout[2].h"
                   :i="layout[2].i"
-                  :regulon="selectedRegulon.tf"
-                  :regulons="selectedTf"
+                  :src="clusterScatterData"
+                  :title="layout[2].title"
                 >
-                </regulon-activity-scatter>
-                <regulon-gene-scatter
+                </cluster-scatter>
+                <regulon-activity-scatter
                   :title="layout[3].title"
                   :x="layout[3].x"
                   :y="layout[3].y"
                   :w="layout[3].w"
                   :h="layout[3].h"
                   :i="layout[3].i"
-                  :genes="selectedRegulonGenes"
+                  :src="rasData"
                 >
-                </regulon-gene-scatter>
-                <enrichment-table
-                  :genes="selectedRegulonGenes"
+                </regulon-activity-scatter>
+                <regulon-gene-scatter
                   :title="layout[4].title"
                   :x="layout[4].x"
                   :y="layout[4].y"
                   :w="layout[4].w"
                   :h="layout[4].h"
                   :i="layout[4].i"
-                ></enrichment-table>
-                <regulon-heatmap
+                  :genes="selectedRegulonGenes"
+                >
+                </regulon-gene-scatter>
+                <enrichment-table
+                  :genes="selectedRegulonGenes"
                   :title="layout[5].title"
                   :x="layout[5].x"
                   :y="layout[5].y"
                   :w="layout[5].w"
                   :h="layout[5].h"
                   :i="layout[5].i"
-                  :genes="selectedRegulonGenes"
-                ></regulon-heatmap>
-                <regulon-circos
+                ></enrichment-table>
+                <regulon-heatmap
                   :title="layout[6].title"
                   :x="layout[6].x"
                   :y="layout[6].y"
@@ -148,15 +149,24 @@
                   :h="layout[6].h"
                   :i="layout[6].i"
                   :genes="selectedRegulonGenes"
-                ></regulon-circos>
-                <differential-regulon
-                  :genes="selectedRegulonGenes"
+                ></regulon-heatmap>
+                <regulon-circos
                   :title="layout[7].title"
                   :x="layout[7].x"
                   :y="layout[7].y"
                   :w="layout[7].w"
                   :h="layout[7].h"
                   :i="layout[7].i"
+                  :genes="selectedRegulonGenes"
+                ></regulon-circos>
+                <differential-regulon
+                  :genes="selectedRegulonGenes"
+                  :title="layout[8].title"
+                  :x="layout[8].x"
+                  :y="layout[8].y"
+                  :w="layout[8].w"
+                  :h="layout[8].h"
+                  :i="layout[8].i"
                 ></differential-regulon>
                 <div v-if="false">
                   <volcano-scatter
@@ -179,13 +189,14 @@
   </v-col>
 </template>
 <script>
-import RegulonList from 'static/json/regulon/example_regulon.json'
-import ExampleNodes from 'static/json/regulon/example_cyto_nodes.json'
-import ExampleEdges from 'static/json/regulon/example_cyto_edges.json'
+// import RegulonList from 'static/json/regulon/example_regulon.json'
+// import ExampleNodes from 'static/json/regulon/example_cyto_nodes.json'
+// import ExampleEdges from 'static/json/regulon/example_cyto_edges.json'
 import RegulonNetwork from '~/components/network/RegulonNetwork'
 import selection from '~/components/utils/Selection'
 
 import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
+import ClusterScatter from '~/components/figures/ClusterScatter'
 import RegulonGeneScatter from '~/components/figures/RegulonGeneScatter'
 import RegulonActivityScatter from '~/components/figures/RegulonActivityScatter'
 import RegulonCircos from '~/components/figures/RegulonCircos'
@@ -195,6 +206,8 @@ import RegulonTable from '~/components/tables/RegulonTable'
 import RegulonEnrichmentTable from '~/components/tables/RegulonEnrichmentTable'
 import DifferentialRegulon from '~/components/tables/DifferentialRegulon'
 
+import ApiService from '~/services/ApiService.js'
+
 export default {
   components: {
     network: RegulonNetwork,
@@ -202,6 +215,7 @@ export default {
     'regulon-table': RegulonTable,
     'enrichment-table': RegulonEnrichmentTable,
     'regulon-heatmap': RegulonHeatmap,
+    'cluster-scatter': ClusterScatter,
     'regulon-gene-scatter': RegulonGeneScatter,
     'regulon-activity-scatter': RegulonActivityScatter,
     'regulon-circos': RegulonCircos,
@@ -234,7 +248,7 @@ export default {
         w: 2,
         h: 2,
         i: '2',
-        title: 'Regulon activity plot',
+        title: 'Clustering plot',
       },
       {
         x: 2,
@@ -242,7 +256,7 @@ export default {
         w: 2,
         h: 2,
         i: '3',
-        title: 'Gene expression plot',
+        title: 'Regulon activity plot',
       },
       {
         x: 4,
@@ -250,7 +264,7 @@ export default {
         w: 2,
         h: 2,
         i: '4',
-        title: 'Regulon heatmap',
+        title: 'Gene expression plot',
       },
       {
         x: 0,
@@ -258,7 +272,7 @@ export default {
         w: 2,
         h: 2,
         i: '5',
-        title: 'Regulon heatmap',
+        title: 'Gene set enrichment analysis',
       },
       {
         x: 2,
@@ -266,7 +280,7 @@ export default {
         w: 2,
         h: 2,
         i: '6',
-        title: 'Regulon circos plot',
+        title: 'Regulon heatmap',
       },
       {
         x: 4,
@@ -274,7 +288,7 @@ export default {
         w: 2,
         h: 2,
         i: '7',
-        title: 'Differential regulons',
+        title: 'Regulon circos plot',
       },
       {
         x: 0,
@@ -282,7 +296,7 @@ export default {
         w: 2,
         h: 2,
         i: '8',
-        title: 'Volcano plot of differential regulons',
+        title: 'Differential regulons',
       },
     ],
     degList: [
@@ -295,7 +309,8 @@ export default {
         iron: '1%',
       },
     ],
-
+    // UMAP
+    clusterScatterData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     // TF selection
     selectedTf: [],
     selectedCt: 1,
@@ -304,39 +319,40 @@ export default {
     selectedTfCytoscape: '',
     selectedRegulon: {},
     selectedRegulonGenes: [],
-    regulonUmapStatic: '',
-    clusterUmapStatic: '',
-    regulonHeatmapStatic: '',
+    ExampleNodes: [],
+    ExampleEdges: [],
+    RegulonList: [],
+    rasData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
   }),
   computed: {
     selectedNodes() {
-      return ExampleEdges.filter((i) =>
+      return this.ExampleEdges.filter((i) =>
         this.selectedTf.includes(i.source)
       ).reduce((acc, cur) => acc.add(cur.target), new Set(this.selectedTf))
     },
     graphNodes() {
-      return ExampleNodes.filter((i) => this.selectedNodes.has(i.id))
+      return this.ExampleNodes.filter((i) => this.selectedNodes.has(i.id))
     },
     graphEdges() {
-      return ExampleEdges.filter((i) => this.selectedNodes.has(i.source))
+      return this.ExampleEdges.filter((i) => this.selectedNodes.has(i.source))
     },
 
     regulonTable() {
-      return RegulonList.filter((i) => i.ct === this.selectedCt)
+      return this.RegulonList.filter((i) => i.ct === this.selectedCt)
     },
 
     ctList() {
-      return RegulonList.map((item) => item.ct)
+      return this.RegulonList.map((item) => item.ct)
         .filter((v, i, a) => a.indexOf(v) === i)
         .sort()
     },
     tfList() {
-      return RegulonList.filter((i) => i.ct === this.selectedCt).map(
+      return this.RegulonList.filter((i) => i.ct === this.selectedCt).map(
         (i) => i.tf
       )
     },
     tfCentrality() {
-      return RegulonList.filter((i) => i.ct === this.selectedCt).map(
+      return this.RegulonList.filter((i) => i.ct === this.selectedCt).map(
         (i) => i.rss
       )
     },
@@ -345,18 +361,45 @@ export default {
     selectedRegulon() {
       this.selectedTfCytoscape = this.selectedRegulon.tf
       this.selectedRegulonGenes = this.selectedRegulon.genes.split(',')
+      this.updateSelectedRegulon()
     },
   },
   mounted() {
     this.showNetwork = false
   },
   methods: {
-    runNetwork() {
+    async runNetwork() {
+      this.$nuxt.$loading.start()
+      this.regulonData = await ApiService.postCommand(
+        'deepmaps/api/queue/run-r/',
+        {
+          type: 'regulon',
+        }
+      )
+      await ApiService.sleep(2000)
+      this.RegulonList = this.regulonData.regulons
+      this.ExampleNodes = this.regulonData.nodes
+      this.ExampleEdges = this.regulonData.edges
       this.showNetwork = true
+      this.$nuxt.$loading.finish()
     },
-    runRegulonUmap() {},
-    runRegulonHeatmap() {},
-    runRegulonGsea() {},
+    async updateSelectedRegulon() {
+      this.$nuxt.$loading.start()
+      await ApiService.sleep(2000)
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/run-r/',
+        {
+          type: 'regulon-clusters',
+        }
+      )
+
+      this.rasData = await ApiService.postCommand('deepmaps/api/queue/run-r/', {
+        type: 'ras',
+        gene: this.selectedRegulon,
+      })
+
+      this.$nuxt.$loading.finish()
+    },
   },
 }
 </script>

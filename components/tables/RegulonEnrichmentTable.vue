@@ -133,10 +133,7 @@ export default {
           color: 'error',
         })
       } else {
-        this.$notifier.showMessage({
-          content: 'Running EnrichR...',
-          color: 'accent',
-        })
+        this.$nuxt.$loading.start()
         this.enrichResult = await ApiService.postCommand(
           'deepmaps/api/queue/regulon-enrichment/',
           {
@@ -144,7 +141,8 @@ export default {
             database: this.selectedDatabase.value,
           }
         )
-        console.log(this.enrichResult)
+        await ApiService.sleep(2000)
+        this.$nuxt.$loading.finish()
       }
     },
     changeSize(i, newH, newW, newHPx, newWPx) {

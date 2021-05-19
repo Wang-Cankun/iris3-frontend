@@ -115,7 +115,6 @@
 <script>
 import * as echarts from 'echarts'
 import { createComponent } from 'echarts-for-vue'
-import Coords from 'static/json/regulon/feature_coord.json'
 
 import EchartsService from '~/services/EchartsService.js'
 import ApiService from '~/services/ApiService.js'
@@ -268,7 +267,13 @@ export default {
       )
     },
     async run() {
-      this.src = await Coords
+      this.$nuxt.$loading.start()
+      this.src = await ApiService.postCommand('deepmaps/api/queue/run-r/', {
+        type: 'gas',
+        gene: this.gene,
+      })
+      await ApiService.sleep(2000)
+      this.$nuxt.$loading.finish()
     },
   },
 }

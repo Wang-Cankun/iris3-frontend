@@ -19,6 +19,9 @@ const uploadClient = axios.create({
 })
 
 export default {
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  },
   uploadFiles(formData) {
     return uploadClient.post('/upload', formData, {
       headers: {

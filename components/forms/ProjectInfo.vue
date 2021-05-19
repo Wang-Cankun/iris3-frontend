@@ -3,7 +3,7 @@
     <v-card class="mx-auto">
       <v-expansion-panels v-model="panel">
         <v-expansion-panel>
-          <v-card-title class="primary white--text title-1">
+          <v-card-title class="grey lighten-3 font-weight-bold title-1">
             <v-expansion-panel-header>
               Project summary
             </v-expansion-panel-header>
