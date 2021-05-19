@@ -128,10 +128,7 @@ export default {
           color: 'error',
         })
       } else {
-        this.$notifier.showMessage({
-          content: 'Running GSEA...',
-          color: 'accent',
-        })
+        this.$nuxt.$loading.start()
         this.gseaResult = await ApiService.postCommand(
           'deepmaps/api/queue/gsea-table/',
           {
@@ -139,7 +136,8 @@ export default {
             database: this.gseaDatabase.value,
           }
         )
-        console.log(this.gseaResult)
+        await ApiService.sleep(2000)
+        this.$nuxt.$loading.finish()
       }
     },
     resizeEvent(i, newH, newW, newHPx, newWPx) {
