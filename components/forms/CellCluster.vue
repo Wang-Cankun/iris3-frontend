@@ -1091,10 +1091,6 @@ export default {
       this.$nuxt.$loading.finish()
     },
     async runCellCluster() {
-      this.$notifier.showMessage({
-        content: 'Running clustering...',
-        color: 'accent',
-      })
       this.$nuxt.$loading.start()
       if (this.type === 'multi_rna') {
         await setTimeout(() => {}, 20000)

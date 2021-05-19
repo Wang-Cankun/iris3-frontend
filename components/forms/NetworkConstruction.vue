@@ -159,16 +159,17 @@
                   :i="layout[7].i"
                   :genes="selectedRegulonGenes"
                 ></regulon-circos>
-                <differential-regulon
-                  :genes="selectedRegulonGenes"
-                  :title="layout[8].title"
-                  :x="layout[8].x"
-                  :y="layout[8].y"
-                  :w="layout[8].w"
-                  :h="layout[8].h"
-                  :i="layout[8].i"
-                ></differential-regulon>
                 <div v-if="false">
+                  <differential-regulon
+                    :genes="selectedRegulonGenes"
+                    :title="layout[8].title"
+                    :x="layout[8].x"
+                    :y="layout[8].y"
+                    :w="layout[8].w"
+                    :h="layout[8].h"
+                    :i="layout[8].i"
+                  ></differential-regulon>
+
                   <volcano-scatter
                     :title="layout[8].title"
                     :x="layout[8].x"
