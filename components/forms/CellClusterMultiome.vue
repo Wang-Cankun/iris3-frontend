@@ -1437,48 +1437,50 @@ export default {
 
     async runDeg() {
       this.deResult = []
-      this.$nuxt.$loading.start()
-      await this.$axios
-        .post('deepmaps/api/queue/deg/', {
-          ident1: this.ident1,
-          ident2: this.ident2,
-          min_pct: this.minPct,
-          min_lfc: this.minLfc,
-          assay: this.degAssay,
-          pvalue: this.degPvalue,
+      if (this.ident1 === this.ident2) {
+        this.$notifier.showMessage({
+          content: 'Please select two different clusters',
+          color: 'error',
         })
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.deResult = response.data.returnvalue[0]
-                  console.log(response.data.returnvalue[0])
-                  this.deg = _.map(this.deResult, 'gene')
-                  if (!this.deg.length) {
-                    this.$notifier.showMessage({
-                      content: 'DEG not found',
-                      color: 'error',
-                    })
-                  }
-
-                  this.$nuxt.$loading.finish()
-                  clearInterval(checkComplete)
-                }
-                if (++i === 100) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Error: ' + error,
-            color: 'error',
+      } else {
+        this.$nuxt.$loading.start()
+        await this.$axios
+          .post('deepmaps/api/queue/deg/', {
+            ident1: this.ident1,
+            ident2: this.ident2,
+            min_pct: this.minPct,
+            min_lfc: this.minLfc,
+            assay: this.degAssay,
+            pvalue: this.degPvalue,
           })
-        })
+          .then((response) => {
+            let i = 0
+            const checkComplete = setInterval(async () => {
+              await this.$axios
+                .get('deepmaps/api/queue/' + response.data.id)
+                .then((response) => {
+                  if (response.data.returnvalue !== null) {
+                    this.deResult = response.data.returnvalue[0]
+                    console.log(response.data.returnvalue[0])
+                    this.deg = _.map(this.deResult, 'gene')
+                    if (!this.deg.length) {
+                      this.$notifier.showMessage({
+                        content: 'DEG not found',
+                        color: 'error',
+                      })
+                    }
+
+                    this.$nuxt.$loading.finish()
+                    clearInterval(checkComplete)
+                  }
+                  if (++i === 100) {
+                    clearInterval(checkComplete)
+                  }
+                })
+            }, 1000)
+          })
+        this.$nuxt.$loading.finish()
+      }
     },
 
     async runGenePlot() {

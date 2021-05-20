@@ -116,7 +116,7 @@ export default {
 
   methods: {
     async run() {
-      if (this.ident1 && this.ident2) {
+      if (this.ident1 !== this.ident2) {
         this.$nuxt.$loading.start()
         this.result = await ApiService.postCommand(
           'deepmaps/api/queue/run-r/',
@@ -142,7 +142,7 @@ export default {
         this.$nuxt.$loading.finish()
       } else {
         this.$notifier.showMessage({
-          content: 'Select cell type',
+          content: 'Please select two different cell types',
           color: 'error',
         })
       }
