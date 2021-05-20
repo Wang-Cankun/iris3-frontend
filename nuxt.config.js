@@ -138,14 +138,11 @@ export default {
       light: true,
       themes: {
         light: {
-          primary: '#30588C', // 菖蒲色, Iris Ensata https://colors.japanesewithanime.com/japanese-colors/%E8%8F%96%E8%92%B2%E8%89%B2-shoubuiro
+          primary: '#1565C0', // 菖蒲色, Iris Ensata https://colors.japanesewithanime.com/japanese-colors/%E8%8F%96%E8%92%B2%E8%89%B2-shoubuiro
           secondary: '#752EFF', // https://waaffle.com/
           tertiary: '#BF3111',
           accent: '#5698c3', // 晴蓝
-          error: '#ec2b24', // 秋海棠红
           info: '#2775b6', // 景泰蓝
-          success: '#12a182', // 蓝绿
-          warning: '#fc6315', // 燕颔红
         },
       },
     },
