@@ -100,83 +100,82 @@
                 :selected.sync="selectedRegulon"
               >
               </regulon-table>
+              <differential-regulon
+                :genes="tfList"
+                :title="layout[2].title"
+                :x="layout[2].x"
+                :y="layout[2].y"
+                :w="layout[2].w"
+                :h="layout[2].h"
+                :i="layout[2].i"
+              ></differential-regulon>
               <div v-if="selectedRegulon.tf">
                 <cluster-scatter
-                  :key="layout[2].i"
-                  :x="layout[2].x"
-                  :y="layout[2].y"
-                  :w="layout[2].w"
-                  :h="layout[2].h"
-                  :i="layout[2].i"
-                  :src="clusterScatterData"
-                  :title="layout[2].title"
-                >
-                </cluster-scatter>
-                <regulon-activity-scatter
-                  :title="layout[3].title"
+                  :key="layout[3].i"
                   :x="layout[3].x"
                   :y="layout[3].y"
                   :w="layout[3].w"
                   :h="layout[3].h"
                   :i="layout[3].i"
-                  :src="rasData"
+                  :src="clusterScatterData"
+                  :title="layout[3].title"
                 >
-                </regulon-activity-scatter>
-                <regulon-gene-scatter
+                </cluster-scatter>
+                <regulon-activity-scatter
                   :title="layout[4].title"
                   :x="layout[4].x"
                   :y="layout[4].y"
                   :w="layout[4].w"
                   :h="layout[4].h"
                   :i="layout[4].i"
-                  :genes="selectedRegulonGenes"
+                  :src="rasData"
                 >
-                </regulon-gene-scatter>
-                <enrichment-table
-                  :genes="selectedRegulonGenes"
+                </regulon-activity-scatter>
+                <regulon-gene-scatter
                   :title="layout[5].title"
                   :x="layout[5].x"
                   :y="layout[5].y"
                   :w="layout[5].w"
                   :h="layout[5].h"
                   :i="layout[5].i"
-                ></enrichment-table>
-                <regulon-heatmap
+                  :genes="selectedRegulonGenes"
+                >
+                </regulon-gene-scatter>
+                <enrichment-table
+                  :genes="selectedRegulonGenes"
                   :title="layout[6].title"
                   :x="layout[6].x"
                   :y="layout[6].y"
                   :w="layout[6].w"
                   :h="layout[6].h"
                   :i="layout[6].i"
-                  :genes="selectedRegulonGenes"
-                ></regulon-heatmap>
-                <regulon-circos
+                ></enrichment-table>
+                <regulon-heatmap
                   :title="layout[7].title"
                   :x="layout[7].x"
                   :y="layout[7].y"
                   :w="layout[7].w"
                   :h="layout[7].h"
                   :i="layout[7].i"
+                  :src="riHeatmapData"
+                ></regulon-heatmap>
+                <regulon-circos
+                  :title="layout[8].title"
+                  :x="layout[8].x"
+                  :y="layout[8].y"
+                  :w="layout[8].w"
+                  :h="layout[8].h"
+                  :i="layout[8].i"
                   :genes="selectedRegulonGenes"
                 ></regulon-circos>
                 <div v-if="false">
-                  <differential-regulon
-                    :genes="selectedRegulonGenes"
-                    :title="layout[8].title"
-                    :x="layout[8].x"
-                    :y="layout[8].y"
-                    :w="layout[8].w"
-                    :h="layout[8].h"
-                    :i="layout[8].i"
-                  ></differential-regulon>
-
                   <volcano-scatter
-                    :title="layout[8].title"
-                    :x="layout[8].x"
-                    :y="layout[8].y"
-                    :w="layout[8].w"
-                    :h="layout[8].h"
-                    :i="layout[8].i"
+                    :title="layout[9].title"
+                    :x="layout[9].x"
+                    :y="layout[9].y"
+                    :w="layout[9].w"
+                    :h="layout[9].h"
+                    :i="layout[9].i"
                     :src="{ axis: [0, 1], legend: [0], dimension: 1 }"
                   >
                   </volcano-scatter>
@@ -249,7 +248,7 @@ export default {
         w: 2,
         h: 2,
         i: '2',
-        title: 'Clustering plot',
+        title: 'Differential regulons',
       },
       {
         x: 2,
@@ -257,7 +256,7 @@ export default {
         w: 2,
         h: 2,
         i: '3',
-        title: 'Regulon activity plot',
+        title: 'Clustering plot',
       },
       {
         x: 4,
@@ -265,7 +264,7 @@ export default {
         w: 2,
         h: 2,
         i: '4',
-        title: 'Gene expression plot',
+        title: 'Regulon activity plot',
       },
       {
         x: 0,
@@ -273,7 +272,7 @@ export default {
         w: 2,
         h: 2,
         i: '5',
-        title: 'Gene set enrichment analysis',
+        title: 'Gene expression plot',
       },
       {
         x: 2,
@@ -281,7 +280,7 @@ export default {
         w: 2,
         h: 2,
         i: '6',
-        title: 'Regulon heatmap',
+        title: 'Gene set enrichment analysis',
       },
       {
         x: 4,
@@ -289,7 +288,7 @@ export default {
         w: 2,
         h: 2,
         i: '7',
-        title: 'Regulon circos plot',
+        title: 'Regulon heatmap',
       },
       {
         x: 0,
@@ -297,6 +296,15 @@ export default {
         w: 2,
         h: 2,
         i: '8',
+        title: 'Regulon circos plot',
+      },
+
+      {
+        x: 2,
+        y: 6,
+        w: 2,
+        h: 2,
+        i: '9',
         title: 'Differential regulons',
       },
     ],
@@ -324,6 +332,7 @@ export default {
     ExampleEdges: [],
     RegulonList: [],
     rasData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
+    riHeatmapData: { column: [], row: [], data: [], legend: [0, 1] },
   }),
   computed: {
     selectedNodes() {
@@ -398,6 +407,15 @@ export default {
         type: 'ras',
         gene: this.selectedRegulon.tf,
       })
+
+      this.riHeatmapData = await ApiService.postCommand(
+        'deepmaps/api/queue/run-r/',
+        {
+          type: 'ri-heatmap',
+          tf: this.selectedRegulon.tf,
+          genes: this.selectedRegulonGenes,
+        }
+      )
 
       this.$nuxt.$loading.finish()
     },

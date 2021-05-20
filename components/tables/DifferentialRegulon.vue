@@ -69,23 +69,24 @@
             >Update</v-btn
           >
         </v-row>
-        <v-row justify="center" class="mx-2 mb-2 mt-0">
-          p-value: {{ drResult }}
-        </v-row>
         <div v-if="result.length">
           <v-data-table
             dense
+            :height="tableHeight"
             :headers="headers"
-            :items="result[0]"
-            item-key="name"
-            :items-per-page="5"
-            class="elevation-1"
-          ></v-data-table>
+            :items="result"
+            item-key="tf"
+            :items-per-page="10"
+            class="elevation-0"
+          >
+          </v-data-table>
         </div></div></grid-item
   ></v-card>
 </template>
 
 <script>
+import ApiService from '~/services/ApiService.js'
+
 export default {
   props: {
     genes: { type: Array, required: true },
@@ -100,15 +101,15 @@ export default {
     return {
       hover: false,
       headers: [
-        { text: 'Cell type', value: 'cell_type' },
+        { text: 'TF', value: 'tf' },
+        { text: 'logFC', value: 'logfc' },
         { text: 'p-value', value: 'pvalue' },
       ],
       result: [],
       ident1: '',
       ident2: '',
-      drResult: [],
       currentIdentLevels: [1, 2, 3, 4, 5, 6, 7],
-      tableHeight: 435,
+      tableHeight: 380,
       footerHeight: 155,
     }
   },
@@ -116,25 +117,35 @@ export default {
   methods: {
     async run() {
       if (this.ident1 && this.ident2) {
-        this.$notifier.showMessage({
-          content: 'Calculating differential regulons',
-          color: 'accent',
-        })
-        this.drResult = 0.1
-        // await ApiService.postCommand(
-        //   'deepmaps/api/queue/differential-regulon/',
-        //   {
-        //     ident1: this.ident1,
-        //     ident2: this.ident2,
-        //   }
-        // )
+        this.$nuxt.$loading.start()
+        this.result = await ApiService.postCommand(
+          'deepmaps/api/queue/run-r/',
+          {
+            type: 'dr',
+            tf: [
+              'CTCF',
+              'DEAF1',
+              'IKZF1',
+              'TP53',
+              'SREBF2',
+              'ESR1',
+              'ZNF740',
+              'ZBTB7A',
+              'SMAD3',
+              'AHR',
+            ],
+            ct1: this.ident1,
+            ct2: this.ident2,
+          }
+        )
+        await ApiService.sleep(2000)
+        this.$nuxt.$loading.finish()
       } else {
         this.$notifier.showMessage({
           content: 'Select cell type',
           color: 'error',
         })
       }
-      return await 1
     },
     changeSize(i, newH, newW, newHPx, newWPx) {
       this.tableHeight = newHPx - this.footerHeight

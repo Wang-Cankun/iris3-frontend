@@ -112,7 +112,6 @@ export default {
   data() {
     return {
       hover: false,
-      is3d: false,
       theme: 'light',
       themeList: ['light', 'dark'],
       pointSize: 4,
