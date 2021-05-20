@@ -347,8 +347,8 @@ export default {
           path: '/collaboration',
         },
         {
-          title: 'Github',
-          path: '/github',
+          title: 'Example figure',
+          path: '/figure',
         },
       ],
       aboutmenu: [
