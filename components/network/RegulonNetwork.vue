@@ -335,7 +335,7 @@ export default {
         },
         {
           selector: 'node.semitransp',
-          style: { opacity: '0.5' },
+          style: { opacity: '0' },
         },
         {
           selector: 'edge.highlight',
@@ -343,7 +343,7 @@ export default {
         },
         {
           selector: 'edge.semitransp',
-          style: { opacity: '0.2' },
+          style: { opacity: '0' },
         },
       ]
       return style

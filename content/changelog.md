@@ -7,12 +7,14 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+
 ## [0.6] - 05/18/2021
  
 ### Added
 
 - Complete workflow to calculate regulons
-
+- Add error message when selecting same clusters for differential analysis
+- 
 ### Changes
 
 - Updated regulon page layout
@@ -22,6 +24,7 @@ All notable changes to DeepMAPS will be documented in this page.
 ### Fixed
 
 - Loading texts
+- Only highlight selected regulons
 
 ## [0.5] - 05/13/2021
  
