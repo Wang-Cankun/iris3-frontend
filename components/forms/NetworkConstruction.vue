@@ -272,7 +272,7 @@ export default {
         w: 2,
         h: 2,
         i: '5',
-        title: 'Gene expression plot',
+        title: 'Regulon gene expression plot',
       },
       {
         x: 2,
