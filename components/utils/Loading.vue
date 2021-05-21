@@ -7,6 +7,9 @@
       style="color: #30588c; width: 80px; height: 80px"
       indeterminate
     ></v-progress-circular>
+    <div>
+      <v-btn @click="cancel">cancel</v-btn>
+    </div>
     <div v-if="uploadProgress" class="text-left body-2">
       <p>Upload progress: {{ uploadProgress }}%</p>
     </div>
@@ -50,6 +53,9 @@ export default {
     },
     fail(error) {
       this.error = error
+    },
+    cancel() {
+      this.finish()
     },
   },
 }
