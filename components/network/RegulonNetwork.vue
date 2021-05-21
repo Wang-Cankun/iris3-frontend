@@ -364,6 +364,10 @@ export default {
       this.changeLayout(this.currentLayout)
     },
 
+    nodes() {
+      this.cy.style(this.design)
+      this.changeLayout(this.currentLayout)
+    },
     selectedTfCytoscape() {
       this.$emit('update:selected', this.selectedTfCytoscape)
     },
