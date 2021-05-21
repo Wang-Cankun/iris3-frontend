@@ -3,7 +3,7 @@
     <v-container>
       <v-col cols="12">
         <v-card class="mx-auto">
-          <v-img class="white--text align-center" src="img/main-header.jpg">
+          <v-img class="white--text align-center" src="">
             <v-card-title class="justify-center">
               <h1 class="text-h1 black--text font-weight-bold text-no-wrap">
                 <strong>DeepMAPS</strong>
