@@ -103,7 +103,16 @@ export default {
     },
   },
   mounted() {
-    this.selected = this.all.length > 10 ? this.all.slice(0, 5) : this.all
+    const meanCentrality =
+      (this.centralityMinMax[0] + this.centralityMinMax[1]) * 0.5
+    if (meanCentrality < 0.5 && this.centralityMinMax[1] > 0.5) {
+      this.centralityThres = 0.5
+    } else {
+      this.centralityThres = meanCentrality
+    }
+
+    this.updateSelectedByCentrality()
+    // this.selected = this.all.length > 10 ? this.all.slice(0, 5) : this.all
   },
   methods: {
     iconSelect() {
@@ -130,10 +139,9 @@ export default {
       this.selected = this.all.slice(0, this.topNumber)
     },
     updateSelectedByCentrality() {
-      const selectedTF = this.regulonList
+      this.selected = this.regulonList
         .filter((item) => item.rss > this.centralityThres)
         .map((item) => item.tf)
-      this.selected = selectedTF
     },
   },
 }
