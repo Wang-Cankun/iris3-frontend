@@ -48,7 +48,7 @@
               v-model="ident1"
               class="ml-4"
               :items="identLevels1"
-              label="Group 1 (cell type)"
+              label="Group 1 (cell cluster)"
             ></v-autocomplete>
           </v-col>
           <v-col cols="6">
@@ -56,7 +56,7 @@
               v-model="ident2"
               class="ml-4"
               :items="identLevels2"
-              label="Group 2 (cell type)"
+              label="Group 2 (cell cluster)"
             ></v-autocomplete>
           </v-col>
         </v-row>
@@ -109,7 +109,7 @@ export default {
       ident1: '',
       ident2: '',
       identLevels1: [0, 1, 2, 3, 4, 5, 6, 7],
-      identLevels2: ['all other cell types', 0, 1, 2, 3, 4, 5, 6, 7],
+      identLevels2: [0, 1, 2, 3, 4, 5, 6, 7],
       tableHeight: 380,
       footerHeight: 155,
     }
@@ -143,7 +143,7 @@ export default {
         this.$nuxt.$loading.finish()
       } else {
         this.$notifier.showMessage({
-          content: 'Please select two different cell types',
+          content: 'Please select two different cell clusters',
           color: 'error',
         })
       }

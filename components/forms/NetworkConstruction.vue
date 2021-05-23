@@ -23,14 +23,14 @@
                     </v-row>
                     <div v-show="showNetwork">
                       <p class="title-h4">
-                        Select cell type
+                        Select cell cluster
                         <v-tooltip top>
                           <template v-slot:activator="{ on }">
                             <v-icon color="primary" dark v-on="on"
                               >mdi-help-circle-outline</v-icon
                             >
                           </template>
-                          <p>Select cell type to display</p>
+                          <p>todo</p>
                         </v-tooltip>
                       </p>
                       <v-select
@@ -239,7 +239,7 @@ export default {
         w: 2,
         h: 2,
         i: '2',
-        title: 'Differential regulons',
+        title: 'Differential regulon analysis',
       },
       {
         x: 2,
