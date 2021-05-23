@@ -56,7 +56,7 @@
           :height="tableHeight"
           :search="search"
           :headers="headers"
-          :items="items"
+          :items="exampleItems"
           :items-per-page="10"
           item-key="index"
           class="elevation-0"
@@ -98,17 +98,29 @@ export default {
         { text: 'Centrality', value: 'rss' },
         { text: 'Visualize', value: 'actions', sortable: false },
         { text: 'Number of genes', value: 'n' },
-        { text: 'RAS', value: 'ct' },
-        { text: 'DR: logFC', value: 'ct' },
-        { text: 'DR: p-value', value: 'ct' },
-        { text: 'VR', value: 'ct' },
-        { text: 'is CTSR', value: 'ct' },
+        { text: 'RAS', value: 'ras' },
+        { text: 'DR: logFC', value: 'drLogFC' },
+        { text: 'DR: p-value', value: 'drPvalue' },
+        { text: 'VR', value: 'vr' },
+        { text: 'is CTSR', value: 'isCtsr' },
       ],
       sortBy: 'rss',
       sortDesc: true,
     }
   },
-  created() {},
+  computed: {
+    exampleItems() {
+      return this.items
+        .map((i) => ({
+          ras: (Math.random() / 2).toFixed(3),
+          vr: (Math.random() * 3).toFixed(3),
+          drLogFC: (Math.random() * 2).toFixed(3),
+          drPvalue: (Math.random() / 3).toFixed(3),
+          ...i,
+        }))
+        .map((i) => ({ isCtsr: i.drPvalue < 0.05 ? 'yes' : 'no', ...i }))
+    },
+  },
   methods: {
     downloadTable() {
       this.$notifier.showMessage({

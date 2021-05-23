@@ -47,16 +47,16 @@
             <v-autocomplete
               v-model="ident1"
               class="ml-4"
-              :items="currentIdentLevels"
-              label="Select cell type"
+              :items="identLevels1"
+              label="Group 1 (cell type)"
             ></v-autocomplete>
           </v-col>
           <v-col cols="6">
             <v-autocomplete
               v-model="ident2"
               class="ml-4"
-              :items="currentIdentLevels"
-              label="Select cell type"
+              :items="identLevels2"
+              label="Group 2 (cell type)"
             ></v-autocomplete>
           </v-col>
         </v-row>
@@ -108,7 +108,8 @@ export default {
       result: [],
       ident1: '',
       ident2: '',
-      currentIdentLevels: [1, 2, 3, 4, 5, 6, 7],
+      identLevels1: [0, 1, 2, 3, 4, 5, 6, 7],
+      identLevels2: ['all other cell types', 0, 1, 2, 3, 4, 5, 6, 7],
       tableHeight: 380,
       footerHeight: 155,
     }
