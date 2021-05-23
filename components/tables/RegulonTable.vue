@@ -51,6 +51,8 @@
         ></v-text-field>
         <v-data-table
           dense
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
           :height="tableHeight"
           :search="search"
           :headers="headers"
@@ -58,65 +60,16 @@
           :items-per-page="10"
           item-key="index"
           class="elevation-0"
-          :expanded.sync="expanded"
-          show-expand
         >
           <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="visualizeRegulon(item)">
               mdi-chart-scatter-plot
             </v-icon>
           </template>
-          <template v-slot:expanded-item="{ item }">
-            <td :colspan="headers.length">
-              <v-virtual-scroll
-                height="425"
-                item-height="40"
-                :items="item.genes.split(',')"
-              >
-                <span> Target genes:</span>
-
-                <template v-slot:default="{ item }">
-                  <v-list-item :key="item">
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{ item }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-action>
-                      <v-btn
-                        depressed
-                        small
-                        :href="'https://www.uniprot.org/uniprot/?query=' + item"
-                        target="_blank"
-                      >
-                        UniProt
-                        <v-icon color="primary" right> mdi-open-in-new </v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-btn
-                        depressed
-                        small
-                        :href="
-                          'https://www.genecards.org/cgi-bin/carddisp.pl?gene=' +
-                          item
-                        "
-                        target="_blank"
-                      >
-                        GeneCards
-                        <v-icon color="primary" right> mdi-open-in-new </v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                  <v-divider />
-                </template>
-              </v-virtual-scroll>
-            </td>
-          </template>
         </v-data-table>
-      </div> </grid-item
-  ></v-card>
+      </div>
+    </grid-item></v-card
+  >
 </template>
 
 <script>
@@ -137,17 +90,22 @@ export default {
       footerHeight: 155,
       expanded: [],
       headers: [
-        { text: 'Cell type', value: 'ct' },
         {
           text: 'TF',
           align: 'start',
           value: 'tf',
         },
-        { text: 'Number of genes', value: 'n' },
         { text: 'Centrality', value: 'rss' },
         { text: 'Visualize', value: 'actions', sortable: false },
-        { text: 'Genes', value: 'data-table-expand' },
+        { text: 'Number of genes', value: 'n' },
+        { text: 'RAS', value: 'ct' },
+        { text: 'DR: logFC', value: 'ct' },
+        { text: 'DR: p-value', value: 'ct' },
+        { text: 'VR', value: 'ct' },
+        { text: 'is CTSR', value: 'ct' },
       ],
+      sortBy: 'rss',
+      sortDesc: true,
     }
   },
   created() {},

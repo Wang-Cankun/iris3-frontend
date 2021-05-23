@@ -33,29 +33,17 @@
                           <p>Select cell type to display</p>
                         </v-tooltip>
                       </p>
-                      Selected:
                       <v-select
                         v-model="selectedCt"
                         :items="ctList"
                         dense
                       ></v-select>
-                      <p class="title-h4">
-                        Select regulons
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>Select regulons to display</p>
-                        </v-tooltip>
-                      </p>
-                      Selected:
-                      <selection
-                        :all="tfList"
-                        :centrality="tfCentrality"
-                        :selected.sync="selectedTf"
-                      ></selection>
+                      <div v-if="selectedCt">
+                        <selection
+                          :regulon-list="selectedCtRegulonList"
+                          :selected.sync="selectedTf"
+                        ></selection>
+                      </div>
                     </div>
                   </v-col>
                 </v-card>
@@ -141,41 +129,41 @@
                   :genes="selectedRegulonGenes"
                 >
                 </regulon-gene-scatter>
+                <regulon-genes-table
+                  :genes="selectedRegulonGenes"
+                  :setting="layout[6]"
+                ></regulon-genes-table>
+
                 <enrichment-table
                   :genes="selectedRegulonGenes"
-                  :title="layout[6].title"
-                  :x="layout[6].x"
-                  :y="layout[6].y"
-                  :w="layout[6].w"
-                  :h="layout[6].h"
-                  :i="layout[6].i"
+                  :setting="layout[7]"
                 ></enrichment-table>
                 <regulon-heatmap
-                  :title="layout[7].title"
-                  :x="layout[7].x"
-                  :y="layout[7].y"
-                  :w="layout[7].w"
-                  :h="layout[7].h"
-                  :i="layout[7].i"
-                  :src="riHeatmapData"
-                ></regulon-heatmap>
-                <regulon-circos
                   :title="layout[8].title"
                   :x="layout[8].x"
                   :y="layout[8].y"
                   :w="layout[8].w"
                   :h="layout[8].h"
                   :i="layout[8].i"
+                  :src="riHeatmapData"
+                ></regulon-heatmap>
+                <regulon-circos
+                  :title="layout[9].title"
+                  :x="layout[9].x"
+                  :y="layout[9].y"
+                  :w="layout[9].w"
+                  :h="layout[9].h"
+                  :i="layout[9].i"
                   :genes="selectedRegulonGenes"
                 ></regulon-circos>
                 <div v-if="false">
                   <volcano-scatter
-                    :title="layout[9].title"
-                    :x="layout[9].x"
-                    :y="layout[9].y"
-                    :w="layout[9].w"
-                    :h="layout[9].h"
-                    :i="layout[9].i"
+                    :title="layout[10].title"
+                    :x="layout[10].x"
+                    :y="layout[10].y"
+                    :w="layout[10].w"
+                    :h="layout[10].h"
+                    :i="layout[10].i"
                     :src="{ axis: [0, 1], legend: [0], dimension: 1 }"
                   >
                   </volcano-scatter>
@@ -204,6 +192,8 @@ import VolcanoScatter from '~/components/figures/VolcanoScatter'
 
 import RegulonTable from '~/components/tables/RegulonTable'
 import RegulonEnrichmentTable from '~/components/tables/RegulonEnrichmentTable'
+import RegulonGenesTable from '~/components/tables/RegulonGenesTable'
+
 import DifferentialRegulon from '~/components/tables/DifferentialRegulon'
 
 import ApiService from '~/services/ApiService.js'
@@ -214,6 +204,7 @@ export default {
     selection,
     'regulon-table': RegulonTable,
     'enrichment-table': RegulonEnrichmentTable,
+    'regulon-genes-table': RegulonGenesTable,
     'regulon-heatmap': RegulonHeatmap,
     'cluster-scatter': ClusterScatter,
     'regulon-gene-scatter': RegulonGeneScatter,
@@ -280,7 +271,7 @@ export default {
         w: 2,
         h: 2,
         i: '6',
-        title: 'Gene set enrichment analysis',
+        title: 'Regulon genes',
       },
       {
         x: 4,
@@ -288,7 +279,7 @@ export default {
         w: 2,
         h: 2,
         i: '7',
-        title: 'Regulon heatmap',
+        title: 'Gene set enrichment analysis',
       },
       {
         x: 0,
@@ -296,15 +287,23 @@ export default {
         w: 2,
         h: 2,
         i: '8',
-        title: 'Regulon circos plot',
+        title: 'Regulon heatmap',
       },
-
       {
         x: 2,
         y: 6,
         w: 2,
         h: 2,
         i: '9',
+        title: 'Regulon circos plot',
+      },
+
+      {
+        x: 4,
+        y: 6,
+        w: 2,
+        h: 2,
+        i: '10',
         title: 'Differential regulons',
       },
     ],
@@ -322,7 +321,7 @@ export default {
     clusterScatterData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     // TF selection
     selectedTf: [],
-    selectedCt: 1,
+    selectedCt: '',
     sliderTf: 1,
     showNetwork: false,
     selectedTfCytoscape: '',
@@ -361,10 +360,8 @@ export default {
         (i) => i.tf
       )
     },
-    tfCentrality() {
-      return this.RegulonList.filter((i) => i.ct === this.selectedCt).map(
-        (i) => i.rss
-      )
+    selectedCtRegulonList() {
+      return this.RegulonList.filter((i) => i.ct === this.selectedCt)
     },
   },
   watch: {
