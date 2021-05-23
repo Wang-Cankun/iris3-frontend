@@ -139,7 +139,7 @@ export default {
         },
         series: [
           {
-            name: 'Intensity',
+            name: 'Regulon intensity z-score',
             type: 'heatmap',
             data,
             emphasis: {
