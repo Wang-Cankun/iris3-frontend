@@ -10,7 +10,7 @@
           >Cell clustering</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 3" step="4"
+        <v-stepper-step :complete="e1 > 3" step="3"
           >Network construction</v-stepper-step
         >
       </v-stepper-header>
