@@ -1,5 +1,16 @@
 <template>
   <div>
+    <p class="title-h4">
+      Select regulons
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-icon color="primary" dark v-on="on"
+            >mdi-help-circle-outline</v-icon
+          >
+        </template>
+        <p>Select regulons to display</p>
+      </v-tooltip>
+    </p>
     <v-select
       v-model="selected"
       :items="all"
@@ -30,12 +41,22 @@
         </v-list-item>
         <v-divider class="mt-2"></v-divider> </template
     ></v-select>
-    <div v-show="false">
+    <div v-show="true">
+      <p class="title-h4">
+        Centrality threshold to select regulon
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-icon color="primary" dark v-on="on"
+              >mdi-help-circle-outline</v-icon
+            >
+          </template>
+          <p>TODO</p>
+        </v-tooltip>
+      </p>
       <v-slider
         v-model="centralityThres"
-        label="Centrality threshold to select regulon"
-        max="1"
-        min="0"
+        :max="centralityMinMax[1]"
+        :min="centralityMinMax[0]"
         step="0.05"
         thumb-label="always"
         @change="updateSelectedByCentrality"
@@ -47,16 +68,26 @@
 <script>
 export default {
   props: {
-    all: { type: Array, required: true },
-    centrality: { type: Array, required: true },
+    regulonList: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
       selected: [],
-      centralityThres: 0.1,
+      centralityThres: 0.5,
     }
   },
   computed: {
+    centralityMinMax() {
+      const min = Math.min(...this.regulonList.map((i) => i.rss))
+      const max = Math.max(...this.regulonList.map((i) => i.rss))
+      return [min, max]
+    },
+    all() {
+      return this.regulonList.map((i) => i.tf)
+    },
     topNumber: {
       get() {
         return this.selected.length
@@ -99,7 +130,10 @@ export default {
       this.selected = this.all.slice(0, this.topNumber)
     },
     updateSelectedByCentrality() {
-      this.selected = this.all.slice(0, 5)
+      const selectedTF = this.regulonList
+        .filter((item) => item.rss > this.centralityThres)
+        .map((item) => item.tf)
+      this.selected = selectedTF
     },
   },
 }
