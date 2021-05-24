@@ -114,8 +114,8 @@ export default {
         .map((i) => ({
           ras: (Math.random() / 2).toFixed(3),
           vr: (Math.random() * 4).toFixed(3),
-          drLogFC: 1,
-          drPvalue: 1,
+          drLogFC: (Math.random() * 8).toFixed(3),
+          drPvalue: (Math.random() / 6).toFixed(3),
           ...i,
         }))
         .map((i) => ({ isCtsr: i.drPvalue < 0.05 ? 'yes' : 'no', ...i }))

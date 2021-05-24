@@ -44,20 +44,68 @@
       <div class="no-drag">
         <v-row>
           <v-col cols="6">
-            <v-autocomplete
+            <v-select
               v-model="ident1"
-              class="ml-4"
               :items="identLevels1"
-              label="Group 1 (cell cluster)"
-            ></v-autocomplete>
+              return-object
+              label="Group 1"
+              single-line
+              multiple
+              ><template v-slot:selection="{ item, index }">
+                <v-chip v-show="index === 0">
+                  <span>{{ item }}</span>
+                </v-chip>
+                <span v-show="index === 1" class="grey--text caption">
+                  (+{{ ident1.length - 1 }} others)
+                </span>
+              </template>
+              <template v-slot:prepend-item>
+                <v-list-item ripple @click="toggleIdent1">
+                  <v-list-item-action>
+                    <v-icon
+                      :color="identLevels2.length > 0 ? 'indigo darken-4' : ''"
+                    >
+                      {{ iconSelect(ident1, identLevels1) }}
+                    </v-icon>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title> Select All </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"></v-divider> </template
+            ></v-select>
           </v-col>
           <v-col cols="6">
-            <v-autocomplete
+            <v-select
               v-model="ident2"
-              class="ml-4"
               :items="identLevels2"
-              label="Group 2 (cell cluster)"
-            ></v-autocomplete>
+              return-object
+              label="Group 2"
+              single-line
+              multiple
+              ><template v-slot:selection="{ item, index }">
+                <v-chip v-show="index === 0">
+                  <span>{{ item }}</span>
+                </v-chip>
+                <span v-show="index === 1" class="grey--text caption">
+                  (+{{ ident2.length - 1 }} others)
+                </span>
+              </template>
+              <template v-slot:prepend-item>
+                <v-list-item ripple @click="toggleIdent2">
+                  <v-list-item-action>
+                    <v-icon
+                      :color="identLevels2.length > 0 ? 'indigo darken-4' : ''"
+                    >
+                      {{ iconSelect(ident2, identLevels2) }}
+                    </v-icon>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title> Select All </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"></v-divider> </template
+            ></v-select>
           </v-col>
         </v-row>
         <v-row justify="center" class="mx-2 mb-2 mt-0">
@@ -106,8 +154,8 @@ export default {
         { text: 'p-value', value: 'pvalue' },
       ],
       result: [],
-      ident1: '',
-      ident2: '',
+      ident1: [],
+      ident2: [],
       identLevels1: [0, 1, 2, 3, 4, 5, 6, 7],
       identLevels2: [0, 1, 2, 3, 4, 5, 6, 7],
       tableHeight: 380,
@@ -150,6 +198,35 @@ export default {
     },
     changeSize(i, newH, newW, newHPx, newWPx) {
       this.tableHeight = newHPx - this.footerHeight
+    },
+    iconSelect(selected, identLevels) {
+      if (this.isSelectAll(selected, identLevels)) return 'mdi-close-box'
+      if (this.isSelectSome(selected, identLevels)) return 'mdi-minus-box'
+      return 'mdi-checkbox-blank-outline'
+    },
+    isSelectAll(selected, identLevels) {
+      return selected.length === identLevels.length
+    },
+    isSelectSome(selected, identLevels) {
+      return selected.length > 0 && !this.isSelectAll(selected, identLevels)
+    },
+    toggleIdent1() {
+      this.$nextTick(() => {
+        if (this.ident1.length > 0) {
+          this.ident1 = []
+        } else {
+          this.ident1 = this.identLevels1
+        }
+      })
+    },
+    toggleIdent2() {
+      this.$nextTick(() => {
+        if (this.ident2.length > 0) {
+          this.ident2 = []
+        } else {
+          this.ident2 = this.identLevels2
+        }
+      })
     },
   },
 }
