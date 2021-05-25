@@ -73,21 +73,23 @@
           </v-list>
         </v-menu>
 
-        <v-menu open-on-hover offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" elevation="0" v-on="on"> About</v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              v-for="item in aboutmenu"
-              :key="item.title"
-              :to="item.path"
-              link
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <div v-show="false">
+          <v-menu open-on-hover offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" elevation="0" v-on="on"> About</v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="item in aboutmenu"
+                :key="item.title"
+                :to="item.path"
+                link
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </v-toolbar-items>
 
       <v-spacer></v-spacer>
@@ -160,26 +162,26 @@
 
     <v-footer app inset class="font-weight-light" absolute padless>
       <v-container fluid>
-        <v-row class="primary">
+        <v-row>
           <v-col cols="8" offset="2">
             <v-row>
               <v-col col="1">
-                <p class="font-weight-bold" style="color: white">EXPLORE</p>
+                <p class="font-weight-bold" style="">EXPLORE</p>
                 <p v-for="item in exploreMenu" :key="item.title">
                   <nuxt-link
                     :to="item.path"
-                    style="color: white; text-decoration: none; font-size: 12px"
+                    style="color: black; text-decoration: none; font-size: 12px"
                   >
                     {{ item.title }}</nuxt-link
                   >
                 </p>
               </v-col>
               <v-col col="1">
-                <p class="font-weight-bold" style="color: white">HELP</p>
+                <p class="font-weight-bold" style="">HELP</p>
                 <p v-for="item in helpmenu" :key="item.title">
                   <nuxt-link
                     :to="item.path"
-                    style="color: white; text-decoration: none; font-size: 12px"
+                    style="color: black; text-decoration: none; font-size: 12px"
                   >
                     {{ item.title }}</nuxt-link
                   >
@@ -187,48 +189,31 @@
                 <p><v-spacer></v-spacer></p>
               </v-col>
               <v-col col="1">
-                <p class="font-weight-bold" style="color: white">NEWS</p>
+                <p class="font-weight-bold" style="">NEWS</p>
                 <p v-for="item in newsmenu" :key="item.title">
                   <nuxt-link
                     :to="item.path"
-                    style="color: white; text-decoration: none; font-size: 12px"
+                    style="color: black; text-decoration: none; font-size: 12px"
                   >
                     {{ item.title }}</nuxt-link
                   >
                 </p>
               </v-col>
               <v-col col="1">
-                <p class="font-weight-bold" style="color: white">DEVELOPMENT</p>
+                <p class="font-weight-bold" style="">DEVELOPMENT</p>
                 <p v-for="item in developmenu" :key="item.title">
                   <nuxt-link
                     :to="item.path"
-                    style="color: white; text-decoration: none; font-size: 12px"
+                    style="color: black; text-decoration: none; font-size: 12px"
                   >
                     {{ item.title }}</nuxt-link
                   >
                 </p>
               </v-col>
+
               <v-col col="1">
-                <p class="font-weight-bold" style="color: white">ABOUT</p>
-                <p v-for="item in aboutmenu" :key="item.title">
-                  <nuxt-link
-                    :to="item.path"
-                    style="color: white; text-decoration: none; font-size: 12px"
-                  >
-                    {{ item.title }}</nuxt-link
-                  >
-                </p>
-              </v-col>
-              <v-col col="1">
-                <p class="font-weight-bold" style="color: white">SOCIAL</p>
-                <v-btn
-                  v-for="icon in icons"
-                  :key="icon"
-                  class="mx-4"
-                  icon
-                  dark
-                  left
-                >
+                <p class="font-weight-bold" style="">SOCIAL</p>
+                <v-btn v-for="icon in icons" :key="icon" class="mx-0" icon left>
                   <v-icon size="24px">
                     {{ icon }}
                   </v-icon>
@@ -237,11 +222,10 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-divider></v-divider>
         <v-row class="mt-2">
           <!-- Version and Data information -->
           <v-col class="lighten-2 py-4 text-center" cols="12">
-            deepmaps v(0.0.1) is developed by
+            deepmaps (v0.7) is developed by
             <a class="text-decoration-none" href="https://u.osu.edu/bmbl/"
               >BMBL</a
             >, it is free and open to all users. |
@@ -289,19 +273,19 @@ export default {
       searchJobId: '',
       exploreMenu: [
         {
-          title: 'Single scRNA-seq dataset',
-          path: '/upload?type=single-rna',
+          title: 'Single scRNA-seq',
+          path: '/upload/single-rna',
         },
         {
-          title: 'Multiple scRNA-seq datasets',
-          path: '/upload?type=multiple-rna',
+          title: 'Multiple scRNA-seq',
+          path: '/upload/multiple-rna',
         },
         {
-          title: 'Matched scRNA-seq and scATAC-Seq',
-          path: '/upload?type=multiome',
+          title: 'scRNA-seq and scATAC-Seq',
+          path: '/upload/multiome',
         },
         {
-          title: 'Public deepmaps projects',
+          title: 'Featured project',
           path: '/public',
         },
       ],
@@ -311,23 +295,11 @@ export default {
           path: '/tutorial',
         },
         {
-          title: 'Video',
-          path: '/video',
-        },
-        {
           title: 'FAQ',
           path: '/FAQ',
         },
-        {
-          title: 'User group',
-          path: '/usergroup',
-        },
       ],
       newsmenu: [
-        {
-          title: 'News',
-          path: '/news',
-        },
         {
           title: 'Changelog',
           path: '/changelog',
@@ -335,20 +307,8 @@ export default {
       ],
       developmenu: [
         {
-          title: 'Roadmap',
-          path: '/roadmap',
-        },
-        {
           title: 'Team',
           path: '/team',
-        },
-        {
-          title: 'Collaboration',
-          path: '/collaboration',
-        },
-        {
-          title: 'Example figure',
-          path: '/figure',
         },
       ],
       aboutmenu: [

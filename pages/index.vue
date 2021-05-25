@@ -140,20 +140,6 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-carousel cycle>
-            <v-carousel-item
-              v-for="(item, i) in items"
-              :key="i"
-              :src="item.src"
-              reverse-transition="fade-transition"
-              transition="fade-transition"
-            >
-            </v-carousel-item>
-          </v-carousel>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
           <v-card outlined>
             <v-card-title class="justify-center test-h2 font-weight-bold"
               >Cite us</v-card-title
@@ -168,7 +154,7 @@
 
     <!-- Visiting monitor -->
     <v-container>
-      <v-col cols="8" offset="2">
+      <v-col cols="2" offset="5">
         <client-only>
           <div class="viewer_options">
             <script
