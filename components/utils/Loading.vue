@@ -1,13 +1,17 @@
 <template lang="html">
   <div v-if="loading" class="loading-page">
-    <!--<h2>Calculating...</h2>-->
-    <v-progress-circular
-      width="5"
-      color="primary"
-      style="color: #30588c; width: 80px; height: 80px"
-      indeterminate
-    ></v-progress-circular>
-    <div>
+    <div class="my-12 py-12">
+      <v-progress-circular
+        width="5"
+        color="primary"
+        style="color: #30588c; width: 80px; height: 80px"
+        indeterminate
+      ></v-progress-circular>
+    </div>
+    <div class="loading-cancel">
+      <h2>Calculating {{ dotValue.slice(0, dot) }}</h2>
+    </div>
+    <div class="loading-cancel">
       <v-btn @click="cancel">cancel</v-btn>
     </div>
     <div v-if="uploadProgress" class="text-left body-2">
@@ -32,12 +36,22 @@ export default {
     continuous: true,
     progress: 0,
     error: '',
+    dot: 1,
+    dotValue: '.....',
   }),
   computed: {
     ...mapState({
       jobProgress: (state) => state.socket.jobProgress,
       uploadProgress: (state) => state.socket.uploadProgress,
     }),
+  },
+  mounted() {
+    window.setInterval(() => {
+      this.dot = this.dot + 1
+      if (this.dot > 5) {
+        this.dot = 0
+      }
+    }, 500)
   },
   methods: {
     start() {
@@ -75,5 +89,9 @@ export default {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   z-index: 1000;
+}
+
+.loading-cancel {
+  margin-top: 2em;
 }
 </style>
