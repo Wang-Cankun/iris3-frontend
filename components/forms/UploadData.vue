@@ -1,91 +1,77 @@
 <template>
   <v-col class="mb-2" cols="12">
     <v-form ref="form" v-model="valid" lazy-validation>
-      <!-- Title  -->
+      <v-tabs v-model="tab" dark grow background-color="primary">
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-tab @click="switchTabs('single-rna')" v-on="on"
+              >scRNA-Seq data
+            </v-tab>
+          </template>
+          <span>TODO</span>
+        </v-tooltip>
 
-      <v-col cols="12">
-        <v-row justify="space-between">
-          <p class="title">Project title</p>
-          <v-spacer></v-spacer>
-          <v-switch
-            v-model="isPrivateProject"
-            :label="isPrivateProject ? 'Private project' : 'Public project'"
-          ></v-switch>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-icon color="primary" dark v-on="on"
-                >mdi-help-circle-outline</v-icon
-              >
-            </template>
-            <p>Public project: anyone can access project through Job ID.</p>
-            <p>Private project: project is only avaiable with shared users.</p>
-          </v-tooltip>
-        </v-row>
-      </v-col>
-      <v-text-field
-        v-model="title"
-        :rules="rules"
-        counter="100"
-        label="Title:"
-        outlined
-        required
-      ></v-text-field>
-      <v-col cols="12">
-        <v-row>
-          <p class="title mt-4">Upload data</p>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-icon color="primary" dark v-on="on"
-                >mdi-help-circle-outline</v-icon
-              >
-            </template>
-            A gene expression file with genes as rows and cells as columns.
-            Users can provide normalized or non-normalized file (Read counts)
-            for the submission. Accept txt, csv, and tsv format for text gene
-            expression matrix, 10X hdf5 or gene-barcode matrices.
-          </v-tooltip>
-        </v-row>
-      </v-col>
-      <v-col cols="3" class="">
-        <v-row
-          ><v-select
-            v-model="speciesSelect"
-            :items="species"
-            label="Select species:"
-            :rules="fileRules"
-            required
-          ></v-select>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-icon color="primary" dark v-on="on"
-                >mdi-help-circle-outline</v-icon
-              >
-            </template>
-            Specify the species belonging to your gene expression matrix.
-          </v-tooltip></v-row
-        >
-      </v-col>
-      <v-tabs v-model="tab" grow background-color="white">
-        <v-tab @click="switchTabs()">scRNA-Seq data </v-tab>
-        <v-tab @click="switchTabs()">Multiple scRNA-Seq data </v-tab>
-        <v-tab @click="switchTabs()">10x Genomics single-cell Multiome </v-tab>
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-tab @click="switchTabs('multiple-rna')" v-on="on"
+              >Multiple scRNA-Seq data
+            </v-tab>
+          </template>
+          <span>TODO</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-tab @click="switchTabs('multiome')" v-on="on"
+              >single-cell RNA + ATAC seq data
+            </v-tab>
+          </template>
+          <span>TODO</span>
+        </v-tooltip>
       </v-tabs>
 
       <v-tabs-items v-model="tab">
+        <v-card-title class="mx-0 my-0 py-0 subtitle-1 font-weight-bold">
+          Data upload
+          <v-divider class="mx-0 my-0 py-0"></v-divider>
+        </v-card-title>
         <v-tab-item>
-          <v-file-input
-            v-model="expFile.singleRna[0]"
-            color="primary"
-            counter
-            chips
-            :rules="fileRules"
-            label="Support format: *.csv, *.txt, *.h5"
-            prepend-icon="mdi-paperclip"
-            outlined
-            required
-            class="mt-5"
-          ></v-file-input>
-          <v-col cols="3" class="ma-1 pa-1"
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="expFile.singleRna[0]"
+                counter
+                chips
+                :rules="fileRules"
+                label="Gene expression matrix"
+                prepend-icon="mdi-paperclip"
+                required
+                hint="Support format: *.csv, *.txt, *.h5"
+                persistent-hint
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="labelFile.singleRna"
+                counter
+                chips
+                label="Custom metadata (Optional)"
+                hint="Support format: *.csv, *.txt"
+                persistent-hint
+                prepend-icon="mdi-paperclip"
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-col cols="3" class="mx-0 my-2 pa-1"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
@@ -116,89 +102,55 @@
                     ></v-list-item-title
                   >
                 </v-list-item>
-                <v-list-item>
-                  <v-list-item-title>
-                    <a
-                      class="text-decoration-none"
-                      :href="singleExample[3].link"
-                    >
-                      {{ singleExample[3].item }}</a
-                    ></v-list-item-title
-                  >
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-title>
-                    <a
-                      class="text-decoration-none"
-                      :href="singleExample[4].link"
-                    >
-                      {{ singleExample[4].item }}</a
-                    ></v-list-item-title
-                  >
-                </v-list-item>
               </v-list>
             </v-menu>
           </v-col>
-          <v-col cols="12"
-            ><v-row>
-              <p class="subtitle mt-4">Optional: Custom metadata</p>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon color="primary" dark v-on="on"
-                    >mdi-help-circle-outline</v-icon
-                  >
-                </template>
-                <p>
-                  Provide cell labels for regulon identification (Cell label
-                  should be at least two factors).
-                </p>
-                <p>
-                  This file contains two columns: cell names and cell labels.
-                  Regulons will be predicted based on the provided cell labels.
-                </p>
-              </v-tooltip></v-row
-            ></v-col
-          >
-          <v-file-input
-            v-model="labelFile.singleRna"
-            color="primary"
-            counter
-            chips
-            label="Support format: *.csv, *.txt"
-            prepend-icon="mdi-paperclip"
-            outlined
-          ></v-file-input>
         </v-tab-item>
         <v-tab-item>
-          <p class="subtitle ma-0">Upload count matrix</p>
           <div v-for="(n, i) in multipleDatasetsLength" :key="n">
-            <v-file-input
-              v-model="expFile.multiRna[i]"
-              color="primary"
-              counter
-              chips
-              :rules="fileRules"
-              :label="'Upload dataset ' + n"
-              prepend-icon="mdi-paperclip"
-              outlined
-              required
-            ></v-file-input>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-file-input
+                  v-model="expFile.multiRna[i]"
+                  counter
+                  chips
+                  :rules="fileRules"
+                  :label="'Gene expression matrix ' + n"
+                  prepend-icon="mdi-paperclip"
+                  hint="Support format: *.csv, *.txt, *.h5"
+                  persistent-hint
+                  required
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
+                ></v-file-input>
+              </template>
+              <span>TODO</span>
+            </v-tooltip>
           </div>
-          <v-btn @click="addMultipleDataset">Add a row</v-btn>
-          <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
 
-          <p class="subtitle">Optional: custom metadata</p>
+          <div class="mt-4">
+            <v-btn @click="addMultipleDataset">Add a row</v-btn>
+            <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
+          </div>
 
-          <v-file-input
-            v-model="labelFile.multiRna"
-            color="primary"
-            counter
-            chips
-            label="Support format: *.csv, *.txt, *.h5"
-            prepend-icon="mdi-paperclip"
-            outlined
-          ></v-file-input>
-          <v-col cols="3" class="ma-1 pa-1"
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="labelFile.multiRna"
+                counter
+                chips
+                label="Custom metadata (optional)"
+                hint="Support format: *.csv, *.txt"
+                persistent-hint
+                prepend-icon="mdi-paperclip"
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-col cols="4" class="mx-0 my-2 pa-1"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
@@ -244,95 +196,96 @@
           </v-col>
         </v-tab-item>
         <v-tab-item>
-          <p class="subtitle ma-0">Feature barcode matrix</p>
-          <v-file-input
-            v-model="expFile.multiome[0]"
-            color="primary"
-            counter
-            chips
-            :rules="fileRules"
-            label="Support format: *.h5, *.hdf5"
-            prepend-icon="mdi-paperclip"
-            outlined
-            required
-          ></v-file-input>
-          <p class="subtitle ma-0">Optional: scATAC-seq fragments</p>
-          <v-file-input
-            v-model="expFile.multiome[1]"
-            color="primary"
-            counter
-            chips
-            :rules="fileRules"
-            label="Support format: *fragments.tsv.gz"
-            prepend-icon="mdi-paperclip"
-            outlined
-            required
-          ></v-file-input>
-          <p class="subtitle ma-0">Optional: scATAC-seq fragments index</p>
-          <v-file-input
-            v-model="expFile.multiome[2]"
-            color="primary"
-            counter
-            chips
-            :rules="fileRules"
-            label="Support format: *fragments.tsv.gz.tbi"
-            prepend-icon="mdi-paperclip"
-            outlined
-            required
-          ></v-file-input>
-          <v-col cols="12"
-            ><v-row>
-              <p class="subtitle mt-4">Optional: custom metadata</p>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon color="primary" dark v-on="on"
-                    >mdi-help-circle-outline</v-icon
-                  >
-                </template>
-                <p>
-                  Provide cell labels for regulon identification (Cell label
-                  should be at least two factors).
-                </p>
-                <p>
-                  This file contains two columns: cell names and cell labels.
-                  Regulons will be predicted based on the provided cell labels.
-                </p>
-              </v-tooltip></v-row
-            ></v-col
-          >
-          <v-file-input
-            v-model="labelFile.multiome"
-            color="primary"
-            counter
-            chips
-            label="Support format: *.csv, *.txt"
-            prepend-icon="mdi-paperclip"
-            outlined
-          ></v-file-input>
-          <v-col cols="12"
-            ><v-row>
-              <p class="subtitle mt-4">Upload scRNA data BAM file (Optional)</p>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon color="primary" dark v-on="on"
-                    >mdi-help-circle-outline</v-icon
-                  >
-                </template>
-                <p>Provide BAM files for RNA velocity.</p>
-                <p>BAM files are used to calculate RNA velocity.</p>
-              </v-tooltip></v-row
-            ></v-col
-          >
-          <v-file-input
-            v-model="bamFile"
-            color="primary"
-            counter
-            chips
-            label="Support format: .bam"
-            prepend-icon="mdi-paperclip"
-            outlined
-          ></v-file-input>
-          <v-col cols="3" class="ma-1 pa-1"
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="expFile.multiome[0]"
+                counter
+                chips
+                :rules="fileRules"
+                label="Feature barcode matrix"
+                hint="Support format: *.h5, *.hdf5 "
+                persistent-hint
+                prepend-icon="mdi-paperclip"
+                required
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="expFile.multiome[1]"
+                counter
+                chips
+                :rules="fileRules"
+                label="scATAC-seq fragments (optional)"
+                hint="Support format: *fragments.tsv.gz"
+                persistent-hint
+                prepend-icon="mdi-paperclip"
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="expFile.multiome[2]"
+                counter
+                chips
+                :rules="fileRules"
+                label="scATAC-seq fragments index (optional)"
+                hint="Support format: *fragments.tsv.gz.tbi"
+                persistent-hint
+                prepend-icon="mdi-paperclip"
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="labelFile.multiome"
+                counter
+                chips
+                label="Custom metadata (optional)"
+                hint="Support format: *.csv, *.txt"
+                persistent-hint
+                prepend-icon="mdi-paperclip"
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-file-input
+                v-model="bamFile"
+                counter
+                chips
+                label="RNA velocity matrix (optional)"
+                hint="Support format: *.csv, *.txt"
+                persistent-hint
+                prepend-icon="mdi-paperclip"
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-file-input>
+            </template>
+            <span>TODO</span>
+          </v-tooltip>
+
+          <v-col cols="3" class="mx-0 my-2 pa-1"
             ><v-menu close-on-click>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on"> Example </v-btn>
@@ -353,81 +306,99 @@
                     ></v-list-item-title
                   >
                 </v-list-item>
-                <v-list-item>
-                  <v-list-item-title>
-                    <a
-                      class="text-decoration-none"
-                      :href="multiomeExample[2].link"
-                    >
-                      {{ multiomeExample[2].item }}</a
-                    ></v-list-item-title
-                  >
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-title>
-                    <a
-                      class="text-decoration-none"
-                      :href="multiomeExample[3].link"
-                    >
-                      {{ multiomeExample[3].item }}</a
-                    ></v-list-item-title
-                  >
-                </v-list-item>
               </v-list>
             </v-menu>
           </v-col>
         </v-tab-item>
       </v-tabs-items>
 
-      <v-col cols="12"
-        ><v-row>
-          <p class="subtitle mt-4">Project description (Optional)</p>
+      <v-card-title class="mx-0 my-2 py-0 subtitle-1 font-weight-bold">
+        Project information
+        <v-divider class="mx-0 my-2 py-0"></v-divider>
+      </v-card-title>
+
+      <v-col cols="3">
+        <v-row>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-icon color="primary" dark v-on="on"
-                >mdi-help-circle-outline</v-icon
+              <v-switch
+                v-model="isPrivateProject"
+                :label="isPrivateProject ? 'Private project' : 'Public project'"
+                v-on="on"
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
               >
+              </v-switch>
             </template>
-            <p>Set descripting here</p>
-          </v-tooltip></v-row
-        ></v-col
+            <span>TODO</span>
+          </v-tooltip>
+        </v-row></v-col
       >
-      <v-textarea v-model="description" outlined label="Description:" clearable>
-      </v-textarea>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="title"
+            :rules="rules"
+            counter="100"
+            label="Project title"
+            required
+            clearable
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <span>TODO</span>
+      </v-tooltip>
+      <v-col cols="3">
+        <v-row>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-select
+                v-model="speciesSelect"
+                :items="species"
+                label="Species"
+                :rules="fileRules"
+                required
+                @mouseenter.native="on.mouseenter"
+                @mouseleave.native="on.mouseleave"
+              ></v-select>
+            </template>
+            <span
+              >Specify the species belonging to your gene expression
+              matrix.</span
+            >
+          </v-tooltip>
+        </v-row>
+      </v-col>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-textarea
+            v-model="description"
+            label="Project description (optional)"
+            clearable
+            outlined
+            v-on="on"
+          >
+          </v-textarea>
+        </template>
+        <span>TODO</span>
+      </v-tooltip>
+
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="email"
+            label="E-mail"
+            hint="Optional: You will be notified by email when the job is done."
+            persistent-hint
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <span>TODO</span>
+      </v-tooltip>
     </v-form>
 
-    <v-col cols="12"
-      ><v-row>
-        <p class="subtitle mt-4">Email (Optional)</p>
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-icon color="primary" dark v-on="on"
-              >mdi-help-circle-outline</v-icon
-            >
-          </template>
-          <p>
-            The running time usually takes a few hours, and can be more than 10
-            hours if there are more than 5000 cells in your data.
-          </p>
-          <p>
-            Hence, we strongly recommend you to leave your email, and you will
-            be notified by email when the job is done.
-          </p>
-        </v-tooltip></v-row
-      ></v-col
-    >
-
-    <v-text-field
-      v-model="email"
-      outlined
-      label="E-mail"
-      hint="Optional: You will be notified by email when the job is done."
-      persistent-hint
-    ></v-text-field>
-    <v-row justify="center">
-      <v-btn color="Primary" width="300" rounded @click="submit()"
-        >Create project</v-btn
-      >
+    <v-row justify="center" class="my-2">
+      <v-btn color="primary" width="300" @click="submit()">Start</v-btn>
     </v-row>
   </v-col>
 </template>
@@ -453,6 +424,9 @@ function dataURLtoFile(dataurl, filename) {
 
 export default {
   mixins: [validationMixin],
+  props: {
+    type: { type: String, required: true, default: 'signle-rna' },
+  },
 
   validations: {
     name: { required, maxLength: maxLength(10) },
@@ -467,8 +441,8 @@ export default {
 
   data: () => ({
     title: '',
-    isPrivateProject: true,
     tab: null,
+    isPrivateProject: true,
     jobid: '',
     valid: true,
     form: {},
@@ -560,6 +534,21 @@ export default {
       (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
     ],
   }),
+  mounted() {
+    switch (this.type) {
+      case 'single-rna':
+        this.tab = 0
+        break
+      case 'multiple-rna':
+        this.tab = 1
+        break
+      case 'multiome':
+        this.tab = 2
+        break
+      default:
+        this.tab = 0
+    }
+  },
   computed: {
     checkboxErrors() {
       const errors = []
@@ -589,21 +578,7 @@ export default {
       return errors
     },
   },
-  mounted() {
-    switch (this.$route.query.type) {
-      case 'single-rna':
-        this.tab = 0
-        break
-      case 'multiple-rna':
-        this.tab = 1
-        break
-      case 'multiome':
-        this.tab = 2
-        break
-      default:
-        this.tab = 0
-    }
-  },
+
   methods: {
     loadSingleRnaExample() {
       this.multipleDatasetsLength = 1
@@ -776,7 +751,7 @@ export default {
           } else if (this.tab === 0) {
             this.$router.push({ path: '/submit/single-rna/' + this.jobid })
           }
-        }, 3000)
+        }, 2000)
       }
     },
     addMultipleDataset() {
@@ -786,8 +761,8 @@ export default {
       if (this.multipleDatasetsLength <= 2) return
       this.multipleDatasetsLength--
     },
-    switchTabs() {
-      this.resetValidation()
+    switchTabs(uploadType) {
+      this.$router.push(`${uploadType}`)
     },
     resetExpFile() {
       this.resetValidation()
