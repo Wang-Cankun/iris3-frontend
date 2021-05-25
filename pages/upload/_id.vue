@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-col cols="6" offset="3">
-      <upload-data-form type="single-rna"></upload-data-form>
+      <upload-data-form :type="uploadType"></upload-data-form>
     </v-col>
   </div>
 </template>
@@ -11,10 +11,16 @@ export default {
   components: {
     'upload-data-form': UploadData,
   },
+
   data() {
     return {
       e1: 1,
     }
+  },
+  computed: {
+    uploadType() {
+      return this.$route.params.id
+    },
   },
 }
 </script>
