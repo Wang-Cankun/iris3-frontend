@@ -561,193 +561,11 @@
                   :title="layout[0].title"
                 >
                 </cluster-scatter>
-
-                <v-card class="ma-0"
-                  ><grid-item
-                    :x="layout[1].x"
-                    :y="layout[1].y"
-                    :w="layout[1].w"
-                    :h="layout[1].h"
-                    :i="layout[1].i"
-                    class="grid-item-border"
-                    drag-ignore-from=".no-drag"
-                    @resized="changeTableSize"
-                  >
-                    <v-card-title
-                      class="grey lighten-3 font-weight-bold caption px-2 py-1"
-                      @mouseover="degHover = true"
-                      @mouseleave="degHover = false"
-                      >Differential gene expression analysis<v-spacer
-                      ></v-spacer>
-                      <div>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon v-show="degHover === true" v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>TODO</p>
-                        </v-tooltip>
-                        <v-menu bottom left :close-on-content-click="false">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on">
-                              <v-icon v-show="degHover === true"
-                                >mdi-download-outline</v-icon
-                              >
-                            </v-btn>
-                          </template>
-
-                          <v-list>
-                            <v-list-item @click="1">
-                              <download-excel
-                                class="mr-4"
-                                :data="deResult"
-                                type="csv"
-                              >
-                                <v-list-item-title
-                                  >Download file (CSV)</v-list-item-title
-                                >
-                              </download-excel>
-                            </v-list-item>
-                          </v-list>
-                        </v-menu>
-                      </div></v-card-title
-                    >
-                    <div class="no-drag">
-                      <v-row
-                        ><v-col cols="6">
-                          <v-autocomplete
-                            v-model="ident1"
-                            class="ml-4"
-                            :items="currentIdentLevels"
-                            label="Ident1"
-                          ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="6">
-                          <v-autocomplete
-                            v-model="ident2"
-                            class="ml-4"
-                            :items="currentIdentLevels"
-                            label="Ident2"
-                          ></v-autocomplete> </v-col
-                      ></v-row>
-                      <v-row>
-                        <v-col cols="6" class="ma-0">
-                          <p class="ml-4 mb-0 body-1">
-                            Assay
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>Assay</p>
-                            </v-tooltip>
-                            <v-select
-                              v-model="degAssay"
-                              class="px-0"
-                              :items="allAssays"
-                              outlined
-                              dense
-                            ></v-select>
-                          </p>
-                        </v-col>
-                        <v-col cols="6" class="ma-0">
-                          <p class="ml-4 mb-0 body-1">
-                            P-value threshold
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>pvalue</p>
-                            </v-tooltip>
-                            <v-select
-                              v-model="degPvalue"
-                              class="px-0"
-                              :items="degPvalueList"
-                              outlined
-                              background-color="white"
-                              dense
-                            ></v-select>
-                          </p>
-                        </v-col>
-                        <v-col cols="6" class="ma-0">
-                          <p class="ml-4 mb-0 body-1">
-                            Min cell percent
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>
-                                Only test genes that are detected in a minimum
-                                fraction of min.pct cells in either of the two
-                                populations. Meant to speed up the function by
-                                not testing genes that are very infrequently
-                                expressed. Default is 0.2
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minPct"
-                              class="px-0"
-                              outlined
-                              type="number"
-                              step="0.1"
-                              background-color="white"
-                              dense
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                        <v-col cols="6" class="ma-0">
-                          <p class="ml-4 mb-0 body-1">
-                            LogFC threshold
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>
-                                Limit testing to genes which show, on average,
-                                at least X-fold difference (log-scale) between
-                                the two groups of cells. Default is 0.25
-                                Increasing logfc.threshold speeds up the
-                                function, but can miss weaker signals.
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minLfc"
-                              class="px-0"
-                              outlined
-                              type="number"
-                              step="0.1"
-                              background-color="white"
-                              dense
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center" class="mx-2 mb-2 mt-0">
-                        <v-btn
-                          class="mx-2 mb-2 mt-0"
-                          color="Primary"
-                          width="200"
-                          @click="runDeg()"
-                          >Update</v-btn
-                        >
-                      </v-row>
-                      <v-data-table
-                        dense
-                        :headers="headers"
-                        :items="deResult"
-                        item-key="name"
-                        :items-per-page="5"
-                        class="elevation-0"
-                      ></v-data-table></div></grid-item
-                ></v-card>
+                <deg-table
+                  :setting="layout[1]"
+                  :genes="genes"
+                  :idents="currentIdentLevels"
+                ></deg-table>
                 <feature-scatter
                   :title="layout[2].title"
                   :x="layout[2].x"
@@ -757,22 +575,27 @@
                   :i="layout[2].i"
                   :genes="genes"
                 ></feature-scatter>
+                <feature-violin
+                  :setting="layout[3]"
+                  :genes="genes"
+                  :idents="idents"
+                ></feature-violin>
                 <enrichment-table
-                  :genes="deResult"
-                  :x="layout[3].x"
-                  :y="layout[3].y"
-                  :w="layout[3].w"
-                  :h="layout[3].h"
-                  :i="layout[3].i"
+                  :genes="[]"
+                  :x="layout[4].x"
+                  :y="layout[4].y"
+                  :w="layout[4].w"
+                  :h="layout[4].h"
+                  :i="layout[4].i"
                 ></enrichment-table>
                 <div v-if="jobid === 'example'">
                   <coverage-plot
                     :genes="genes"
-                    :x="layout[4].x"
-                    :y="layout[4].y"
-                    :w="layout[4].w"
-                    :h="layout[4].h"
-                    :i="layout[4].i"
+                    :x="layout[5].x"
+                    :y="layout[5].y"
+                    :w="layout[5].w"
+                    :h="layout[5].h"
+                    :i="layout[5].i"
                   ></coverage-plot>
                 </div>
               </grid-layout>
@@ -784,11 +607,13 @@
   </v-col>
 </template>
 <script>
-import _ from 'lodash'
 import FeatureScatter from '~/components/figures/FeatureScatter'
 import ClusterScatter from '~/components/figures/ClusterScatter'
-import EnrichmentTable from '~/components/tables/EnrichmentTable'
 import CoveragePlot from '~/components/figures/CoveragePlot'
+import FeatureViolinStatic from '~/components/figures/FeatureViolinStatic'
+import EnrichmentTable from '~/components/tables/EnrichmentTable'
+
+import DegTable from '~/components/tables/DegTable'
 
 import ApiService from '~/services/ApiService.js'
 
@@ -797,7 +622,9 @@ export default {
     'cluster-scatter': ClusterScatter,
     'enrichment-table': EnrichmentTable,
     'coverage-plot': CoveragePlot,
+    'feature-violin': FeatureViolinStatic,
     'feature-scatter': FeatureScatter,
+    'deg-table': DegTable,
   },
   props: {
     type: { type: String, required: true, default: 'single_rna' },
@@ -828,7 +655,7 @@ export default {
         w: 3,
         h: 2,
         i: '2',
-        title: 'Plotting genes',
+        title: 'Gene scatter plot',
       },
       {
         x: 3,
@@ -836,13 +663,21 @@ export default {
         w: 3,
         h: 2,
         i: '3',
+        title: 'Gene violin  plot',
       },
       {
         x: 0,
         y: 4,
-        w: 2,
+        w: 3,
         h: 2,
         i: '4',
+      },
+      {
+        x: 3,
+        y: 4,
+        w: 2,
+        h: 2,
+        i: '5',
       },
     ],
     degList: [
@@ -899,7 +734,7 @@ export default {
     setExistingCategory: '',
     setExistingCategoryItems: [],
     gene: 'Gad1',
-    genes: '',
+    genes: [],
     currentIdent: '',
     currentIdentMerge: [],
     currentIdentLevels: [],
@@ -942,17 +777,7 @@ export default {
     // Renameing
     oldClusterName: '',
     newClusterName: '',
-    // DEG
-    ident1: 1,
-    ident2: 2,
-    minPct: 0.2,
-    minLfc: 0.4,
-    deResult: [],
-    deg: [],
-    degAssay: 'RNA',
-    degPvalue: 0.05,
-    degPvalueList: [0.01, 0.05, 0.1],
-    tableHeight: 455,
+
     // Gene plots
     plotGeneSymbol: '',
     plotGeneAssay: '',
@@ -962,6 +787,18 @@ export default {
       x: 700,
       y: 700,
     },
+    tmpGenes: [
+      'CTCF',
+      'DEAF1',
+      'IKZF1',
+      'TP53',
+      'SREBF2',
+      'ESR1',
+      'ZNF740',
+      'ZBTB7A',
+      'SMAD3',
+      'AHR',
+    ],
   }),
   computed: {
     jobid() {
@@ -1433,54 +1270,6 @@ export default {
         }
       )
       return 1
-    },
-
-    async runDeg() {
-      this.deResult = []
-      if (this.ident1 === this.ident2) {
-        this.$notifier.showMessage({
-          content: 'Please select two different clusters',
-          color: 'error',
-        })
-      } else {
-        this.$nuxt.$loading.start()
-        await this.$axios
-          .post('deepmaps/api/queue/deg/', {
-            ident1: this.ident1,
-            ident2: this.ident2,
-            min_pct: this.minPct,
-            min_lfc: this.minLfc,
-            assay: this.degAssay,
-            pvalue: this.degPvalue,
-          })
-          .then((response) => {
-            let i = 0
-            const checkComplete = setInterval(async () => {
-              await this.$axios
-                .get('deepmaps/api/queue/' + response.data.id)
-                .then((response) => {
-                  if (response.data.returnvalue !== null) {
-                    this.deResult = response.data.returnvalue[0]
-                    console.log(response.data.returnvalue[0])
-                    this.deg = _.map(this.deResult, 'gene')
-                    if (!this.deg.length) {
-                      this.$notifier.showMessage({
-                        content: 'DEG not found',
-                        color: 'error',
-                      })
-                    }
-
-                    this.$nuxt.$loading.finish()
-                    clearInterval(checkComplete)
-                  }
-                  if (++i === 100) {
-                    clearInterval(checkComplete)
-                  }
-                })
-            }, 1000)
-          })
-        this.$nuxt.$loading.finish()
-      }
     },
 
     async runGenePlot() {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-stepper v-model="e1" alt-labels>
+    <v-stepper v-model="e1" non-linear>
       <v-stepper-header>
         <v-stepper-step :complete="e1 > 1" step="1"
           >Quality control</v-stepper-step
@@ -20,7 +20,7 @@
           <v-row>
             <v-col class="mb-2" cols="12">
               <v-tabs v-model="qcTab" color="primary" slider-color="purple">
-                <v-tab title font-weight-bold text-center>scRNA-seq-1 </v-tab>
+                <v-tab title font-weight-bold text-center>scRNA-seq data</v-tab>
               </v-tabs>
               <v-tabs-items v-model="qcTab">
                 <v-tab-item

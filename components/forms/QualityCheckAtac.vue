@@ -34,7 +34,7 @@
                       {{ qcResult.raw_percent_zero[0] }}
                     </p>
                     <p class="subtitle-1 font-weight-bold text-center">
-                      Current data statistics:
+                      Current data statistics
                     </p>
                     <p class="text--secondary">
                       Cell number: {{ qcResult.filter_n_cells[0] }}
@@ -51,7 +51,7 @@
                       {{ qcResult.filter_percent_zero[0] }}
                     </p>
                   </v-card-text>
-                  <v-row justify="center">
+                  <!--<v-row justify="center">
                     <div class="mb-6">
                       <v-menu close-on-click>
                         <template v-slot:activator="{ on, attrs }">
@@ -85,7 +85,7 @@
                         </v-list>
                       </v-menu>
                     </div>
-                  </v-row>
+                  </v-row>-->
                 </v-card>
 
                 <v-card class="mt-6" outlined color="grey lighten-3">
@@ -93,7 +93,7 @@
                     Preprocessing
                   </p>
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">Min cell per peaks</p>
+                    ><p class="my-1 title-h4">Min cell per peaks</p>
                     <v-text-field
                       v-model="cellFilter"
                       class="mr-2 pr-2"
@@ -103,7 +103,7 @@
                   ></v-row>
 
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">Min peaks per cell</p>
+                    ><p class="my-1 title-h4">Min peaks per cell</p>
                     <v-text-field
                       v-model="geneFilter"
                       class="mr-2 pr-2"
@@ -113,7 +113,7 @@
                   ></v-row>
 
                   <v-row class="ml-4"
-                    ><p class="my-1title-h4">Mitochondrial filter</p>
+                    ><p class="my-1 title-h4">Mitochondrial filter</p>
                     <v-text-field
                       v-model="mitoFilter"
                       class="mr-2 pr-2"
@@ -356,46 +356,46 @@
               :title="layout[5].title"
             ></barplot>
             <barplot
+              :key="layout[6].i"
+              :x="layout[6].x"
+              :y="layout[6].y"
+              :w="layout[6].w"
+              :h="layout[6].h"
+              :i="layout[6].i"
+              :src="qcHist1"
+              :title="layout[6].title"
+            ></barplot>
+            <barplot
+              :key="layout[7].i"
+              :x="layout[7].x"
+              :y="layout[7].y"
+              :w="layout[7].w"
+              :h="layout[7].h"
+              :i="layout[7].i"
+              :src="qcHist2"
+              :title="layout[7].title"
+            ></barplot>
+            <barplot
+              :key="layout[8].i"
+              :x="layout[8].x"
+              :y="layout[8].y"
+              :w="layout[8].w"
+              :h="layout[8].h"
+              :i="layout[8].i"
+              :src="qcHist3"
+              :title="layout[8].title"
+            ></barplot>
+            <resize-image
               :key="layout[9].i"
               :x="layout[9].x"
               :y="layout[9].y"
               :w="layout[9].w"
               :h="layout[9].h"
               :i="layout[9].i"
-              :src="qcHist1"
-              :title="layout[9].title"
-            ></barplot>
-            <barplot
-              :key="layout[10].i"
-              :x="layout[10].x"
-              :y="layout[10].y"
-              :w="layout[10].w"
-              :h="layout[10].h"
-              :i="layout[10].i"
-              :src="qcHist2"
-              :title="layout[10].title"
-            ></barplot>
-            <barplot
-              :key="layout[11].i"
-              :x="layout[11].x"
-              :y="layout[11].y"
-              :w="layout[11].w"
-              :h="layout[11].h"
-              :i="layout[11].i"
-              :src="qcHist3"
-              :title="layout[11].title"
-            ></barplot>
-            <resize-image
-              :key="layout[12].i"
-              :x="layout[12].x"
-              :y="layout[12].y"
-              :w="layout[12].w"
-              :h="layout[12].h"
-              :i="layout[12].i"
               :src="varGenesScatter"
               :imagew="420"
               :imageh="260"
-              :title="layout[12].title"
+              :title="layout[9].title"
             >
             </resize-image>
           </grid-layout>
@@ -429,45 +429,45 @@ export default {
         {
           x: 0,
           y: 0,
-          w: 1,
+          w: 2,
           h: 1,
           i: '0',
           title: 'Number of total read counts per cell',
         },
         {
-          x: 1,
+          x: 2,
           y: 0,
-          w: 1,
+          w: 2,
           h: 1,
           i: '1',
           title: 'Number of expressed peaks per cell',
         },
         {
-          x: 2,
+          x: 4,
           y: 0,
-          w: 1,
+          w: 2,
           h: 1,
           i: '2',
           title: 'Number of ATAC peak fragments per cell',
         },
         {
-          x: 3,
-          y: 0,
-          w: 1,
+          x: 0,
+          y: 1,
+          w: 2,
           h: 1,
           i: '3',
           title: 'Blacklist ratio',
         },
         {
-          x: 4,
-          y: 0,
-          w: 1,
+          x: 2,
+          y: 1,
+          w: 2,
           h: 1,
           i: '4',
           title: 'Percent of reads in peaks',
         },
         {
-          x: 0,
+          x: 4,
           y: 1,
           w: 2,
           h: 1,
@@ -476,34 +476,10 @@ export default {
         },
         {
           x: 0,
-          y: 2,
-          w: 2,
-          h: 2,
-          i: '6',
-          title: 'Metadata: cell_type',
-        },
-        {
-          x: 2,
-          y: 2,
-          w: 2,
-          h: 1,
-          i: '7',
-          title: 'Metadata: Sex',
-        },
-        {
-          x: 4,
-          y: 2,
-          w: 2,
-          h: 1,
-          i: '8',
-          title: 'Metadata: Sample',
-        },
-        {
-          x: 0,
           y: 1,
           w: 2,
           h: 1,
-          i: '9',
+          i: '6',
           title: 'Number of peaks in each cell',
         },
         {
@@ -511,7 +487,7 @@ export default {
           y: 1,
           w: 2,
           h: 1,
-          i: '10',
+          i: '7',
           title: 'Number of total reads in each cell',
         },
         {
@@ -519,16 +495,16 @@ export default {
           y: 2,
           w: 2,
           h: 1,
-          i: '11',
-          title: 'Highly variable features',
+          i: '8',
+          title: 'Number of ATAC fragments',
         },
         {
-          x: 2,
-          y: 2,
+          x: 0,
+          y: 3,
           w: 2,
           h: 1,
-          i: '12',
-          title: 'Number of ATAC fragments',
+          i: '9',
+          title: 'Highly variable features',
         },
       ],
       tab: null,
@@ -575,6 +551,11 @@ export default {
       selectionPayload: [],
       allIdents: [],
       selectedCells: [],
+    }
+  },
+  mounted() {
+    if (this.jobid === 'example') {
+      this.runPreProcess()
     }
   },
   computed: {
@@ -649,10 +630,6 @@ export default {
     async runPreProcess() {
       this.metadata = []
       this.$nuxt.$loading.start()
-      this.$notifier.showMessage({
-        content: `Running ATAC data preprocessing. Estimate: 2 mins`,
-        color: 'accent',
-      })
       this.qcResult = await ApiService.postCommand(
         'deepmaps/api/queue/load-multiome/',
         {

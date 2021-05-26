@@ -5,7 +5,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-tab @click="switchTabs('single-rna')" v-on="on"
-              >scRNA-Seq data
+              >Single scRNA-Seq
             </v-tab>
           </template>
           <span>TODO</span>
@@ -14,7 +14,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-tab @click="switchTabs('multiple-rna')" v-on="on"
-              >Multiple scRNA-Seq data
+              >Multiple scRNA-Seq
             </v-tab>
           </template>
           <span>TODO</span>
@@ -22,7 +22,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-tab @click="switchTabs('multiome')" v-on="on"
-              >single-cell RNA + ATAC seq data
+              >scRNA-Seq and scATAC-seq
             </v-tab>
           </template>
           <span>TODO</span>
@@ -30,7 +30,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
-        <v-card-title class="mx-0 my-0 py-0 subtitle-1 font-weight-bold">
+        <v-card-title class="mx-0 my-4 py-0 subtitle-1 font-weight-bold">
           Data upload
           <v-divider class="mx-0 my-0 py-0"></v-divider>
         </v-card-title>
@@ -60,7 +60,7 @@
                 v-model="labelFile.singleRna"
                 counter
                 chips
-                label="Custom metadata (Optional)"
+                label="Metadata (Optional)"
                 hint="Support format: *.csv, *.txt"
                 persistent-hint
                 prepend-icon="mdi-paperclip"
@@ -139,7 +139,7 @@
                 v-model="labelFile.multiRna"
                 counter
                 chips
-                label="Custom metadata (optional)"
+                label="Metadata (optional)"
                 hint="Support format: *.csv, *.txt"
                 persistent-hint
                 prepend-icon="mdi-paperclip"
@@ -257,7 +257,7 @@
                 v-model="labelFile.multiome"
                 counter
                 chips
-                label="Custom metadata (optional)"
+                label="Metadata (optional)"
                 hint="Support format: *.csv, *.txt"
                 persistent-hint
                 prepend-icon="mdi-paperclip"
@@ -466,7 +466,7 @@ export default {
         link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_expression.csv',
       },
       {
-        item: 'Download cell label file (Zeisel et al, 2015)',
+        item: 'Download metadata file (Zeisel et al, 2015)',
         link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Zeisel_index_label.csv',
       },
       {
@@ -475,7 +475,7 @@ export default {
           'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_expression.csv',
       },
       {
-        item: 'Download cell label file (Yan et al, 2013)',
+        item: 'Download metadata file (Yan et al, 2013)',
         link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_label.csv',
       },
     ],
@@ -494,7 +494,7 @@ export default {
           'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_sample2_expr.csv',
       },
       {
-        item: 'Download cell label file: Human IFNB',
+        item: 'Download metadata file: Human IFNB',
         link: 'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_label.csv',
       },
     ],
@@ -592,7 +592,7 @@ export default {
       )
       this.labelFile.singleRna = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'Zeisel cell label'
+        'Zeisel metadata'
       )
 
       this.$notifier.showMessage({
@@ -615,7 +615,7 @@ export default {
       )
       this.labelFile.multiRna = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'IFNB PBMCs cell label'
+        'IFNB PBMCs metadata'
       )
       this.title = 'Human IFNB-Stimulated and Control PBMCs, 2800 cells'
       this.$notifier.showMessage({
@@ -643,7 +643,7 @@ export default {
       )
       this.labelFile.multiome = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC cell label'
+        'PBMC metadata'
       )
       this.bamFile = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',

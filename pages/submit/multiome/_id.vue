@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-stepper v-model="e1" alt-labels>
+    <v-stepper v-model="e1" non-linear>
       <v-stepper-header>
         <v-stepper-step :complete="e1 > 1" step="1"
           >Quality control</v-stepper-step
@@ -10,7 +10,7 @@
           >Cell clustering</v-stepper-step
         >
         <v-divider></v-divider>
-        <v-stepper-step :complete="e1 > 3" step="3"
+        <v-stepper-step :complete="e1 > 3" step="3" text-center
           >Network construction</v-stepper-step
         >
       </v-stepper-header>

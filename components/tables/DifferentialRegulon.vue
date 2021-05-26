@@ -49,7 +49,6 @@
               :items="identLevels1"
               return-object
               label="Group 1"
-              single-line
               multiple
               ><template v-slot:selection="{ item, index }">
                 <v-chip v-show="index === 0">
@@ -81,7 +80,6 @@
               :items="identLevels2"
               return-object
               label="Group 2"
-              single-line
               multiple
               ><template v-slot:selection="{ item, index }">
                 <v-chip v-show="index === 0">

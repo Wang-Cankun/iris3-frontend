@@ -281,7 +281,7 @@ export default {
           path: '/upload/multiple-rna',
         },
         {
-          title: 'scRNA-seq and scATAC-Seq',
+          title: 'scRNA-seq and scATAC-seq',
           path: '/upload/multiome',
         },
         {

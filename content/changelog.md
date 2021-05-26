@@ -8,6 +8,21 @@ description: 'DeepMAPS Changes'
 All notable changes to DeepMAPS will be documented in this page.
 
 
+## [0.7] - 05/24/2021
+ 
+### Added
+
+- Re-designed upload page
+- Re-designed settings section in the calculation page
+
+### Changes
+
+- Removed example homepage items and pages
+
+### Fixed
+
+- The update page URL not changing while clicking
+
 ## [0.6] - 05/18/2021
  
 ### Added

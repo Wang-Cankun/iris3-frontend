@@ -8,6 +8,7 @@
       :i="i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
+      @resized="changeSize"
     >
       <v-card-title
         class="grey lighten-3 font-weight-bold caption px-2 py-1"
@@ -51,11 +52,13 @@
         ></v-text-field>
         <v-data-table
           dense
+          :height="tableHeight"
           :search="search"
           :headers="headers"
           :items="src"
-          :items-per-page="3"
+          :items-per-page="15"
           item-key="index"
+          class="elevation-0"
         >
         </v-data-table>
       </div> </grid-item
@@ -83,16 +86,18 @@ export default {
           value: 'gene',
           align: 'start',
         },
-        { text: 'Min', value: 'min', align: 'start' },
-        { text: 'Max', value: 'max', align: 'start' },
-        { text: 'Mean', value: 'mean', align: 'start' },
-        { text: 'Standard deviation', value: 'std', align: 'start' },
         {
           text: 'Residual variance',
           value: 'residual_variance',
           align: 'start',
         },
+        { text: 'Standard deviation', value: 'std', align: 'start' },
+        { text: 'Mean', value: 'mean', align: 'start' },
+        { text: 'Max', value: 'max', align: 'start' },
+        { text: 'Min', value: 'min', align: 'start' },
       ],
+      tableHeight: 380,
+      footerHeight: 155,
     }
   },
 
@@ -107,19 +112,8 @@ export default {
     downloadCSV() {
       return 1
     },
-    resizeEvent(i, newH, newW, newHPx, newWPx) {
-      console.log(
-        'RESIZE i=' +
-          i +
-          ', H=' +
-          newH +
-          ', W=' +
-          newW +
-          ', H(px)=' +
-          newHPx +
-          ', W(px)=' +
-          newWPx
-      )
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.tableHeight = newHPx - this.footerHeight
     },
   },
 }
