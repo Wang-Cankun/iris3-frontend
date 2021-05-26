@@ -762,7 +762,7 @@ export default {
       this.multipleDatasetsLength--
     },
     switchTabs(uploadType) {
-      this.$router.push(`${uploadType}`)
+      this.$router.push(`/upload/${uploadType}`)
     },
     resetExpFile() {
       this.resetValidation()
