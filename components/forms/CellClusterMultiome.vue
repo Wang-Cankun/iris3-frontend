@@ -2,37 +2,43 @@
   <v-col class="mb-2" cols="12">
     <v-card outlined>
       <v-row>
-        <v-col cols="3">
+        <v-col class="my-2" cols="3">
           <v-expansion-panels v-model="panel" multiple>
             <v-expansion-panel>
               <v-expansion-panel-header>
                 Integrative clustering
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="py-3" outlined color="grey lighten-3">
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Integrative clustering
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-icon color="primary" dark v-on="on"
-                          >mdi-help-circle-outline</v-icon
-                        >
-                      </template>
-                      <p>Data integration:</p>
-                      <p>Default: Velocity weighted method</p>
-                    </v-tooltip>
-                  </p>
+                <v-card class="py-3" outlined>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <p
+                        class="subtitle-1 font-weight-bold text-center"
+                        v-on="on"
+                      >
+                        Integrative clustering
+                      </p>
+                    </template>
+                    <span> TODO</span>
+                  </v-tooltip>
                   <v-row class="ml-4 mb-0 py-0">
-                    <v-col class="py-0" cols="11"
-                      ><v-select
-                        v-model="integrationSelect"
-                        :items="integrationMethods"
-                        label=""
-                      ></v-select></v-col
-                  ></v-row>
-                  <v-divider></v-divider>
+                    <v-col class="py-0" cols="11">
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-select
+                            v-model="integrationSelect"
+                            :items="integrationMethods"
+                            label="Method"
+                            @mouseenter.native="on.mouseenter"
+                            @mouseleave.native="on.mouseleave"
+                          ></v-select>
+                        </template>
+                        <span> TODO</span>
+                      </v-tooltip>
+                    </v-col></v-row
+                  >
                   <div v-if="integrationSelect === 'Seurat-WNN'">
-                    <v-card class="py-3" outlined color="grey lighten-3">
+                    <v-card class="py-3" outlined>
                       <p class="subtitle-1 font-weight-bold text-center">
                         Cell clustering
                       </p>
@@ -152,7 +158,7 @@
                       color="Primary"
                       width="150"
                       @click="runCellCluster()"
-                      >Run</v-btn
+                      >Calculate</v-btn
                     >
                   </v-row>
                 </v-card>
@@ -212,7 +218,7 @@
                 Active metadata
               </v-expansion-panel-header>
               <v-expansion-panel-content
-                ><v-card class="py-3" outlined color="grey lighten-3">
+                ><v-card class="py-3" outlined>
                   <!--<p class="subtitle-1 font-weight-bold text-center">
                     Active assay
                   </p>
@@ -290,7 +296,7 @@
                 Custom cell labeling
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="py-3" outlined color="grey lighten-3">
+                <v-card class="py-3" outlined>
                   <p class="subtitle-1 font-weight-bold text-center">
                     Custom cell labeling
                   </p>
@@ -427,7 +433,7 @@
                 Cell selection
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="py-3" outlined color="grey lighten-3">
+                <v-card class="py-3" outlined>
                   <p class="subtitle-1 font-weight-bold text-center">
                     Cell selection
                   </p>
@@ -581,7 +587,6 @@
                   :idents="idents"
                 ></feature-violin>
                 <enrichment-table
-                  :genes="[]"
                   :x="layout[4].x"
                   :y="layout[4].y"
                   :w="layout[4].w"
@@ -680,48 +685,17 @@ export default {
         i: '5',
       },
     ],
-    degList: [
-      {
-        gene: 'gene1',
-        avg_log2FC: 2,
-        p_val_adj: 0.01,
-        carbs: 24,
-        protein: 4.0,
-        iron: '1%',
-      },
-    ],
-    headers: [
-      {
-        text: 'Gene',
-        align: 'start',
-        sortable: false,
-        value: 'gene',
-      },
-      { text: 'LogFC', value: 'avg_log2FC' },
-      { text: 'Adj.p.value', value: 'p_val_adj' },
-    ],
-    enrichHeaders: [
-      { text: 'Index', value: 'index' },
-      { text: 'Name', value: 'name' },
-      { text: 'Adjusted p-value', value: 'adjPvalue' },
-      { text: 'Odds ratio', value: 'odd' },
-      { text: 'Combined score', value: 'score' },
-      { text: '', value: 'data-table-expand' },
-    ],
-    expandedKegg: [],
     title: '',
     panel: [0],
     nPCs: '20',
     resolution: '0.5',
     neighbor: '20',
     timeElapsed: 0,
-    qcResult: null,
     umapCluster: '',
-    umapGene: '',
     violinGene: '',
     featureGene: '',
     dotPlot: '',
-    clusterResult: '',
+    clusterResult: '1',
     annotateResult: '',
     newCellType: [],
     addGeneName: '',
@@ -742,17 +716,12 @@ export default {
     allEmbeddings: ['pca', 'umap.rna', 'umap.atac', 'HGT'],
     currentAssay: '',
     allAssays: ['RNA', 'SCT', 'ATAC', 'MAESTRO', 'GAS'],
-    currentAtlas: '',
     reductionSelect: 'PCA',
     reductionMethods: ['PCA'],
     integrationSelect: 'Velocity weighted method',
     integrationMethods: ['Velocity weighted method', 'Seurat-WNN'],
     clusteringSelect: 'Louvain',
     clusteringMethods: ['Louvain', 'K-means'],
-    atlas: [
-      'Mouse brain atlas, 160k cells (Zeisel et.al., 2018)',
-      'to-be-added',
-    ],
     idents: [],
     addTransferMetadataDialog: false,
     addMetadataDialog: false,

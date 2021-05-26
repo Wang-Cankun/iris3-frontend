@@ -27,20 +27,18 @@
       >
 
       <v-row class="ma-4">
-        <v-col cols="12"
-          ><v-select
-            v-model="type"
-            :items="types"
-            label="Input type"
-            class="my-0"
-            item-text="name"
-            item-value="value"
-            @change="clearForm()"
-          ></v-select
-        ></v-col>
-
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-col cols="12">
+            <v-select
+              v-model="type"
+              :items="types"
+              label="Input type"
+              class="my-0"
+              item-text="name"
+              item-value="value"
+              dense
+              @change="clearForm()"
+            ></v-select>
             <div
               v-if="type === 'region'"
               class="d-flex flex align-start justify-space-around"
@@ -100,19 +98,19 @@
                 dense
               ></v-text-field>
             </div>
+            <v-row justify="center" class="mx-2 mb-2 mt-0">
+              <v-btn
+                class="mx-2 mb-2 mt-0"
+                color="Primary"
+                width="120"
+                @click="runCoveragePlotStatic()"
+                >Run</v-btn
+              >
+            </v-row>
           </v-col>
         </v-form>
       </v-row>
 
-      <v-row justify="center" class="mx-2 mb-2 mt-0">
-        <v-btn
-          class="mx-2 mb-2 mt-0"
-          color="Primary"
-          width="200"
-          @click="runCoveragePlotStatic()"
-          >Run</v-btn
-        >
-      </v-row>
       <div v-if="src">
         <v-img
           contain
@@ -204,7 +202,7 @@ export default {
       this.windowSize.y = newHPx
     },
     clearForm() {
-      this.$refs.form.reset()
+      // this.$refs.form.reset()
     },
     downloadPNG() {
       const link = document.createElement('a')

@@ -3,55 +3,45 @@
     <v-card outlined>
       <v-row>
         <v-col cols="3">
-          <v-expansion-panels v-model="panel" multiple>
-            <v-expansion-panel>
-              <v-expansion-panel-header
-                >Quality control</v-expansion-panel-header
-              >
-              <v-expansion-panel-content>
-                <v-card
-                  v-if="qcResult !== null"
-                  outlined
-                  color="grey lighten-3"
-                >
-                  <v-card-text>
-                    <p class="subtitle-1 font-weight-bold text-center">
-                      Original data statistics
-                    </p>
+          <v-card v-if="qcResult !== null" outlined class="pa-2">
+            <v-card-text>
+              <p class="subtitle-1 font-weight-bold text-center">
+                Original data statistics
+              </p>
 
-                    <p class="text--secondary">
-                      Cell number: {{ qcResult.raw_n_cells[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Gene number: {{ qcResult.raw_n_genes[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Average expression level:
-                      {{ qcResult.raw_mean_expr[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Zero expression percentage:
-                      {{ qcResult.raw_percent_zero[0] }}
-                    </p>
-                    <p class="subtitle-1 font-weight-bold text-center">
-                      Current data statistics
-                    </p>
-                    <p class="text--secondary">
-                      Cell number: {{ qcResult.filter_n_cells[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Gene number: {{ qcResult.filter_n_genes[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Average expression level:
-                      {{ qcResult.filter_mean_expr[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Zero expression percentage:
-                      {{ qcResult.filter_percent_zero[0] }}
-                    </p>
-                  </v-card-text>
-                  <!--<v-row justify="center">
+              <p class="text--secondary">
+                Cell number: {{ qcResult.raw_n_cells[0] }}
+              </p>
+              <p class="text--secondary">
+                Gene number: {{ qcResult.raw_n_genes[0] }}
+              </p>
+              <p class="text--secondary">
+                Average expression level:
+                {{ qcResult.raw_mean_expr[0] }}
+              </p>
+              <p class="text--secondary">
+                Zero expression percentage:
+                {{ qcResult.raw_percent_zero[0] }}
+              </p>
+              <p class="subtitle-1 font-weight-bold text-center">
+                Current data statistics
+              </p>
+              <p class="text--secondary">
+                Cell number: {{ qcResult.filter_n_cells[0] }}
+              </p>
+              <p class="text--secondary">
+                Gene number: {{ qcResult.filter_n_genes[0] }}
+              </p>
+              <p class="text--secondary">
+                Average expression level:
+                {{ qcResult.filter_mean_expr[0] }}
+              </p>
+              <p class="text--secondary">
+                Zero expression percentage:
+                {{ qcResult.filter_percent_zero[0] }}
+              </p>
+            </v-card-text>
+            <!--<v-row justify="center">
                     <div class="mb-6">
                       <v-menu close-on-click>
                         <template v-slot:activator="{ on, attrs }">
@@ -86,199 +76,82 @@
                       </v-menu>
                     </div>
                   </v-row>-->
-                </v-card>
+          </v-card>
 
-                <v-card class="mt-6" outlined color="grey lighten-3">
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Preprocessing
-                  </p>
-                  <v-row class="ml-4"
-                    ><p class="my-1 title-h4">Min cell per peaks</p>
+          <v-card class="mt-4 pa-4" outlined>
+            <p class="subtitle-1 font-weight-bold text-center">Preprocessing</p>
+            <v-row>
+              <v-col cols="6"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="cellFilter"
                       class="mr-2 pr-2"
-                      outlined
-                      background-color="white"
-                    ></v-text-field
-                  ></v-row>
+                      dense
+                      label="Minimal cells per peaks"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <span>Minimal cells per peaks</span>
+                </v-tooltip></v-col
+              >
 
-                  <v-row class="ml-4"
-                    ><p class="my-1 title-h4">Min peaks per cell</p>
-                    <v-text-field
-                      v-model="geneFilter"
-                      class="mr-2 pr-2"
-                      outlined
-                      background-color="white"
-                    ></v-text-field
-                  ></v-row>
-
-                  <v-row class="ml-4"
-                    ><p class="my-1 title-h4">Mitochondrial filter</p>
-                    <v-text-field
-                      v-model="mitoFilter"
-                      class="mr-2 pr-2"
-                      outlined
-                      background-color="white"
-                    ></v-text-field
-                  ></v-row>
-
-                  <v-row class="ml-4"
-                    ><p class="my-1 title-h4">Max black region ratio</p>
+              <v-col cols="6"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="nVariableFeatures"
                       class="mr-2 pr-2"
-                      outlined
-                      background-color="white"
-                    ></v-text-field
-                  ></v-row>
-
-                  <v-row class="ml-4 mb-0 py-0"
-                    ><p class="my-1 title-h4">Normalization</p>
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-icon color="primary" dark v-on="on"
-                          >mdi-help-circle-outline</v-icon
-                        >
-                      </template>
-                      <p>Data Normalization methods:</p>
-                      <p>MAESTRO:...</p>
-                    </v-tooltip></v-row
-                  >
-                  <v-col class="ml-4 py-0" cols="11"
-                    ><v-select
-                      v-model="normalizeSelect"
-                      :items="normalizeMethods"
-                      label=""
-                    ></v-select
-                  ></v-col>
-
-                  <v-row justify="center">
-                    <v-btn
-                      color="Primary"
-                      width="150"
-                      rounded
-                      class="mb-4 pa-2"
-                      @click="runPreProcess()"
-                      >Update</v-btn
-                    >
-                  </v-row>
-                </v-card></v-expansion-panel-content
+                      dense
+                      label="Maximal black region ratio"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <span> Maximal black region ratio</span>
+                </v-tooltip></v-col
               >
-            </v-expansion-panel>
-            <!--<v-expansion-panel>
-              <v-expansion-panel-header>
-                Cell selection
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="grey lighten-3">
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Cell selection
-                  </p>
+              <v-col cols="6"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="minPeaks"
+                      class="mr-2 pr-2"
+                      dense
+                      label="Minimal peaks per cell"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <span> Minimal peaks per cell</span>
+                </v-tooltip></v-col
+              >
+              <v-col cols="6"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="maxPeaks"
+                      class="mr-2 pr-2"
+                      dense
+                      label="Minimal peaks per cell"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <span> Minimal peaks per cell</span>
+                </v-tooltip></v-col
+              >
+            </v-row>
 
-                  <v-row class="mx-2 my-2 py-2">
-                    <div class="d-flex flex">
-                      <v-text-field
-                        v-model="selectionGeneName"
-                        label="Gene"
-                        placeholder="Name"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field
-                      ><v-select
-                        v-model="selectionGeneDirection"
-                        cols="3"
-                        :items="selectionGeneDirectionItems"
-                        label="Direction"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-text-field
-                        v-model="selectionGeneThres"
-                        label="Thres"
-                        placeholder="Number"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field>
-                    </div>
-                    <v-btn color="Primary" @click="addGeneSelection()"
-                      >Add gene filter</v-btn
-                    >
-                    <div class="d-flex flex mt-2">
-                      <v-select
-                        v-model="selectionCategoryName"
-                        cols="3"
-                        :items="idents"
-                        label="Category"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-select
-                        v-model="selectionCategoryLevel"
-                        cols="3"
-                        :items="selectionCategoryLevels"
-                        label="Cluster"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        multiple
-                        background-color="white"
-                      ></v-select>
-                    </div>
-                    <v-btn color="Primary" @click="addClusterSelection()"
-                      >Add cluster filter</v-btn
-                    >
-
-                    <v-col class="py-0" cols="12">
-                      <p class="my-1">Selections applied:</p>
-                      <ul>
-                        <li
-                          v-for="(item, index) in selectionPayload"
-                          :key="index"
-                        >
-                          <div v-if="item.type === 'gene'">
-                            {{ item.name }} {{ item.direction }}
-                            {{ item.thres }}
-                          </div>
-                          <div v-if="item.type === 'cluster'">
-                            {{ item.direction }} {{ item.category[0] }}:
-                            {{ item.level }}
-                          </div>
-                        </li>
-                      </ul></v-col
-                    >
-                  </v-row>
-
-                  <v-row class="mx-2 my-2 py-2">
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Accent"
-                      @click="subsetCells()"
-                      >Subset cells</v-btn
-                    >
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Accent"
-                      @click="restoreCells()"
-                      >Restore cells</v-btn
-                    >
-                  </v-row>
-                </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>-->
-          </v-expansion-panels>
+            <v-row justify="center">
+              <v-btn
+                color="Primary"
+                width="120"
+                class="mb-4 pa-2"
+                @click="runPreProcess()"
+                >Update</v-btn
+              >
+            </v-row>
+          </v-card>
         </v-col>
-        <v-col v-if="qcComplete !== false" cols="9"
-          ><p v-if="timeElapsed != ''">
-            Execute time: {{ timeElapsed }} seconds
-          </p>
+        <v-col v-if="qcComplete !== false" cols="9">
           <grid-layout
             :layout.sync="layout"
             :col-num="6"
@@ -512,6 +385,8 @@ export default {
       title: '',
       cellFilter: '3',
       geneFilter: '200',
+      minPeaks: 50,
+      maxPeaks: 1000,
       mitoFilter: '10',
       normalization: 'MAESTRO',
       nVariableFeatures: '0.25',
@@ -554,7 +429,7 @@ export default {
     }
   },
   mounted() {
-    if (this.jobid === 'example') {
+    if (this.jobid === 'example1') {
       this.runPreProcess()
     }
   },

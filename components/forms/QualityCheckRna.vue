@@ -3,51 +3,50 @@
     <v-card elevation="0">
       <v-row>
         <v-col cols="3">
-          <v-expansion-panels v-model="panel" multiple>
-            <v-expansion-panel>
-              <v-expansion-panel-header
-                >Quality control
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-card v-if="qcResult !== null" color="" elevation="0">
-                  <v-card-text>
-                    <p class="subtitle-1 font-weight-bold text-center">
-                      Original data statistics
-                    </p>
+          <v-card
+            v-if="qcResult !== null"
+            class="mt-2 pa-2"
+            outlined
+            elevation="0"
+          >
+            <v-card-text>
+              <p class="subtitle-1 font-weight-bold text-center">
+                Original data statistics
+              </p>
 
-                    <p class="text--secondary">
-                      Cell number: {{ qcResult.raw_n_cells[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Gene number: {{ qcResult.raw_n_genes[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Average expression level:
-                      {{ qcResult.raw_mean_expr[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Zero expression percentage:
-                      {{ qcResult.raw_percent_zero[0] }}
-                    </p>
-                    <p class="subtitle-1 font-weight-bold text-center">
-                      Current data statistics
-                    </p>
-                    <p class="text--secondary">
-                      Cell number: {{ qcResult.filter_n_cells[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Gene number: {{ qcResult.filter_n_genes[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Average expression level:
-                      {{ qcResult.filter_mean_expr[0] }}
-                    </p>
-                    <p class="text--secondary">
-                      Zero expression percentage:
-                      {{ qcResult.filter_percent_zero[0] }}
-                    </p>
-                  </v-card-text>
-                  <!--<v-row justify="center">
+              <p class="text--secondary">
+                Cell number: {{ qcResult.raw_n_cells[0] }}
+              </p>
+              <p class="text--secondary">
+                Gene number: {{ qcResult.raw_n_genes[0] }}
+              </p>
+              <p class="text--secondary">
+                Average expression level:
+                {{ qcResult.raw_mean_expr[0] }}
+              </p>
+              <p class="text--secondary">
+                Zero expression percentage:
+                {{ qcResult.raw_percent_zero[0] }}
+              </p>
+              <p class="subtitle-1 font-weight-bold text-center">
+                Current data statistics
+              </p>
+              <p class="text--secondary">
+                Cell number: {{ qcResult.filter_n_cells[0] }}
+              </p>
+              <p class="text--secondary">
+                Gene number: {{ qcResult.filter_n_genes[0] }}
+              </p>
+              <p class="text--secondary">
+                Average expression level:
+                {{ qcResult.filter_mean_expr[0] }}
+              </p>
+              <p class="text--secondary">
+                Zero expression percentage:
+                {{ qcResult.filter_percent_zero[0] }}
+              </p>
+            </v-card-text>
+            <!--<v-row justify="center">
                     <div class="mb-6">
                       <v-menu close-on-click>
                         <template v-slot:activator="{ on, attrs }">
@@ -82,135 +81,121 @@
                       </v-menu>
                     </div>
                   </v-row>-->
-                </v-card>
+          </v-card>
 
-                <v-card class="mt-6" color="" elevation="0">
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Preprocessing
-                  </p>
-                  <v-row>
-                    <v-col cols="4"
-                      ><v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="cellFilter"
-                            class="mr-2 pr-2"
-                            dense
-                            label="Cell filter"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <span
-                          >Cells with zero values in less than # cells are
-                          removed</span
-                        >
-                      </v-tooltip></v-col
-                    >
-                    <v-col cols="4"
-                      ><v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="geneFilter"
-                            class="mr-2 pr-2"
-                            dense
-                            label="Gene filter"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <span>
-                          Cells with zero values in less than # genes are
-                          removed</span
-                        >
-                      </v-tooltip></v-col
-                    >
-                    <v-col cols="4"
-                      ><v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="mitoFilter"
-                            class="mr-2 pr-2"
-                            dense
-                            label="Gene filter"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <span>
-                          Cells with more than # percent mitochondrial counts
-                          are removed</span
-                        >
-                      </v-tooltip></v-col
-                    >
-                    <v-col cols="12"
-                      ><v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-select
-                            v-model="normalizeSelect"
-                            :items="normalizeMethods"
-                            label="Normalization method"
-                            @mouseenter.native="on.mouseenter"
-                            @mouseleave.native="on.mouseleave"
-                          ></v-select>
-                        </template>
-                        <p>Data Normalization method:</p>
-                        <p>
-                          LogNormalize: Seurat's default method which Normalizes
-                          the gene expression measurements for each cell by the
-                          total expression, multiplies this by a scale factor
-                          (10,000 by default), and log-transforms the result.
-                        </p>
-                      </v-tooltip></v-col
-                    >
-                  </v-row>
-
-                  <v-checkbox v-model="removeRibosome" class="my-0 py-0">
-                    <template v-slot:label>
-                      <div>
-                        Remove ribosome genes
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          Remove ribosome genes#
-                        </v-tooltip>
-                      </div>
-                    </template>
-                  </v-checkbox>
-                  <v-checkbox v-model="removeSpikein" class="my-0 py-0">
-                    <template v-slot:label>
-                      <div>
-                        Remove spike-in genes
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          Remove spike-in genes
-                        </v-tooltip>
-                      </div>
-                    </template>
-                  </v-checkbox>
-                  <v-row justify="center">
-                    <v-btn
-                      color="Primary"
-                      width="150"
-                      rounded
-                      class="mb-4 pa-2"
-                      @click="runPreProcess()"
-                      >Update</v-btn
-                    >
-                  </v-row>
-                </v-card></v-expansion-panel-content
+          <v-card class="mt-4 pa-4" outlined>
+            <p class="subtitle-1 font-weight-bold text-center">Preprocessing</p>
+            <v-row>
+              <v-col cols="4"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="cellFilter"
+                      class="mr-2 pr-2"
+                      dense
+                      label="Cell filter"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <span
+                    >Cells with zero values in less than # cells are
+                    removed</span
+                  >
+                </v-tooltip></v-col
               >
-            </v-expansion-panel>
-          </v-expansion-panels>
+              <v-col cols="4"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="geneFilter"
+                      class="mr-2 pr-2"
+                      dense
+                      label="Gene filter"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <span>
+                    Cells with zero values in less than # genes are
+                    removed</span
+                  >
+                </v-tooltip></v-col
+              >
+              <v-col cols="4"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="mitoFilter"
+                      class="mr-2 pr-2"
+                      dense
+                      label="Gene filter"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <span>
+                    Cells with more than # percent mitochondrial counts are
+                    removed</span
+                  >
+                </v-tooltip></v-col
+              >
+              <v-col cols="12"
+                ><v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-select
+                      v-model="normalizeSelect"
+                      :items="normalizeMethods"
+                      label="Normalization method"
+                      @mouseenter.native="on.mouseenter"
+                      @mouseleave.native="on.mouseleave"
+                    ></v-select>
+                  </template>
+                  <p>Data Normalization method:</p>
+                  <p>
+                    LogNormalize: Seurat's default method which Normalizes the
+                    gene expression measurements for each cell by the total
+                    expression, multiplies this by a scale factor (10,000 by
+                    default), and log-transforms the result.
+                  </p>
+                </v-tooltip></v-col
+              >
+            </v-row>
+
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-checkbox
+                  v-model="removeRibosome"
+                  class="my-0 py-0"
+                  :label="`Remove ribosomal genes`"
+                  v-on="on"
+                >
+                </v-checkbox>
+              </template>
+              <p>TODO</p>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-checkbox
+                  v-model="removeSpikein"
+                  class="my-0 py-0"
+                  :label="`Remove spike-in genes`"
+                  v-on="on"
+                >
+                </v-checkbox>
+              </template>
+              <p>TODO</p>
+            </v-tooltip>
+
+            <v-row justify="center">
+              <v-btn
+                color="Primary"
+                width="120"
+                class="mb-2"
+                @click="runPreProcess()"
+                >Update</v-btn
+              >
+            </v-row>
+          </v-card>
         </v-col>
-        <v-col v-if="qcComplete !== false" cols="9"
-          ><p v-if="timeElapsed != ''">
-            Execute time: {{ timeElapsed }} seconds
-          </p>
+        <v-col v-if="qcComplete !== false" cols="9">
           <grid-layout
             :layout.sync="layout"
             :col-num="6"
