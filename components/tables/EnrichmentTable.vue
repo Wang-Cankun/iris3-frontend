@@ -78,11 +78,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import ApiService from '~/services/ApiService.js'
 
 export default {
   props: {
-    genes: { type: Array, required: true },
     w: { type: Number, required: true, default: 2 },
     h: { type: Number, required: true, default: 2 },
     x: { type: Number, required: true, default: 0 },
@@ -113,7 +114,11 @@ export default {
       ],
     }
   },
-
+  computed: {
+    ...mapState({
+      genes: (state) => state.calc.deg,
+    }),
+  },
   methods: {
     downloadTable() {
       this.$notifier.showMessage({

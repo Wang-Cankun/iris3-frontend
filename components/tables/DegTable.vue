@@ -261,6 +261,10 @@ export default {
           }
         )
         await ApiService.sleep(2000)
+        this.$store.dispatch(
+          'calc/updateDeg',
+          this.deResult.map((item) => item.gene)
+        )
         this.$nuxt.$loading.finish()
       } else {
         this.$notifier.showMessage({
