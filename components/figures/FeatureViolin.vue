@@ -93,17 +93,16 @@
               class="ml-4"
               :items="genes"
               label="Gene"
+              dense
             ></v-autocomplete>
+            <v-btn
+              class="mx-2 mb-2 mt-0"
+              color="Primary"
+              small
+              @click="Calculate()"
+              >Plot</v-btn
+            >
           </v-col>
-        </v-row>
-        <v-row justify="center" class="mx-2 mb-2 mt-0">
-          <v-btn
-            class="mx-2 mb-2 mt-0"
-            color="Primary"
-            width="200"
-            @click="run()"
-            >Plot</v-btn
-          >
         </v-row>
       </div>
       <ECharts ref="chart" :option="option2d" class="no-drag" /></grid-item

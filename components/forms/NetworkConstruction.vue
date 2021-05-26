@@ -3,55 +3,46 @@
     <v-card outlined>
       <v-row>
         <v-col cols="3">
-          <v-expansion-panels v-model="panel" multiple>
-            <v-expansion-panel>
-              <v-expansion-panel-header>
-                Gene Regulatory Network
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-card class="mt-6" outlined>
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Gene Regulatory Network
-                  </p>
+          <v-card outlined class="mt-2">
+            <p class="subtitle-1 font-weight-bold text-center">
+              Gene Regulatory Network
+            </p>
 
-                  <v-col>
-                    <v-row justify="center">
-                      <v-btn
-                        class="mx-2 my-4"
-                        color="Primary"
-                        width="150"
-                        @click="runNetwork()"
-                        >Calculate</v-btn
-                      >
-                    </v-row>
-                    <div v-show="showNetwork">
-                      <v-divider />
+            <v-col>
+              <v-row justify="center">
+                <v-btn
+                  class="mx-2 my-4"
+                  color="Primary"
+                  width="150"
+                  @click="runNetwork()"
+                  >Calculate</v-btn
+                >
+              </v-row>
+              <div v-show="showNetwork">
+                <v-divider />
 
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-select
-                            v-model="selectedCt"
-                            :items="ctList"
-                            label="Select cell cluster"
-                            @mouseenter.native="on.mouseenter"
-                            @mouseleave.native="on.mouseleave"
-                          ></v-select>
-                        </template>
-                        <p>TODO</p>
-                      </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-select
+                      v-model="selectedCt"
+                      :items="ctList"
+                      label="Select cell cluster"
+                      @mouseenter.native="on.mouseenter"
+                      @mouseleave.native="on.mouseleave"
+                    ></v-select>
+                  </template>
+                  <p>TODO</p>
+                </v-tooltip>
 
-                      <div v-if="selectedCt">
-                        <selection
-                          :regulon-list="selectedCtRegulonList"
-                          :selected.sync="selectedTf"
-                        ></selection>
-                      </div>
-                    </div>
-                  </v-col>
-                </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+                <div v-if="selectedCt">
+                  <selection
+                    :regulon-list="selectedCtRegulonList"
+                    :selected.sync="selectedTf"
+                  ></selection>
+                </div>
+              </div>
+            </v-col>
+          </v-card>
         </v-col>
         <v-col cols="9">
           <div v-show="showNetwork">

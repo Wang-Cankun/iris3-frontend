@@ -40,15 +40,15 @@
         </div>
       </v-card-title>
       <div class="no-drag">
-        <v-row class="mx-4">
-          <v-col cols="4"
+        <v-row class="mx-4 mt-2">
+          <v-col cols="3"
             ><v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-autocomplete
                   v-model="gene"
-                  class="mr-2 pr-2"
                   :items="genes"
                   label="Gene"
+                  dense
                   @mouseenter.native="on.mouseenter"
                   @mouseleave.native="on.mouseleave"
                 ></v-autocomplete>
@@ -56,14 +56,14 @@
               <span>TODO</span>
             </v-tooltip></v-col
           >
-          <v-col cols="4"
+          <v-col cols="3"
             ><v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="violinSplit"
-                  class="mr-2 pr-2"
                   :items="idents"
                   label="Split by"
+                  dense
                   @mouseenter.native="on.mouseenter"
                   @mouseleave.native="on.mouseleave"
                 ></v-select>
@@ -71,14 +71,14 @@
               <span>TODO</span>
             </v-tooltip></v-col
           >
-          <v-col cols="4"
+          <v-col cols="3"
             ><v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="violinGroup"
-                  class="mr-2 pr-2"
                   :items="idents"
                   label="Group by"
+                  dense
                   @mouseenter.native="on.mouseenter"
                   @mouseleave.native="on.mouseleave"
                 ></v-select>
@@ -86,16 +86,11 @@
               <span>TODO</span>
             </v-tooltip></v-col
           >
-        </v-row>
-        <v-row justify="center" class="mx-2 mb-2 mt-0">
-          <v-btn
-            class="mx-2 mb-2 mt-0"
-            color="Primary"
-            width="200"
-            @click="runGeneViolin()"
-            >Plot</v-btn
+          <v-col cols="3">
+            <v-btn small @click="runGeneViolin()" v-on="on">Plot</v-btn></v-col
           >
         </v-row>
+
         <div v-show="geneViolin">
           <v-img
             contain

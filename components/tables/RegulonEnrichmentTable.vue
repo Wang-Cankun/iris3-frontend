@@ -42,27 +42,29 @@
         </div></v-card-title
       >
       <div class="no-drag">
-        <v-row>
-          <v-col cols="8">
-            <v-autocomplete
-              v-model="selectedDatabase"
-              class="ml-4"
-              :items="allDatabases"
-              label="Select database"
-              return-object
-              item-text="name"
-              item-value="value"
-            >
-            </v-autocomplete>
+        <v-row class="mt-2">
+          <v-col cols="6">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-autocomplete
+                  v-model="selectedDatabase"
+                  class="ml-4"
+                  dense
+                  :items="allDatabases"
+                  label="Database"
+                  return-object
+                  item-text="name"
+                  item-value="value"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
+                >
+                </v-autocomplete>
+              </template>
+              <span>TODO</span>
+            </v-tooltip>
           </v-col>
           <v-col cols="4"
-            ><v-btn
-              class="mx-2 mb-2 mt-3"
-              width="120"
-              color="Primary"
-              @click="runGSEA()"
-              >Run</v-btn
-            ></v-col
+            ><v-btn small @click="run()">Calculate</v-btn></v-col
           ></v-row
         >
         <div v-if="enrichResult.length">
@@ -105,7 +107,7 @@ export default {
     return {
       hover: false,
       tableHeight: 435,
-      footerHeight: 155,
+      footerHeight: 180,
       headers: [
         { text: 'Term', value: 'Term' },
         { text: 'Overlap', value: 'Overlap' },
@@ -126,7 +128,7 @@ export default {
   },
 
   methods: {
-    async runGSEA() {
+    async run() {
       if (!this.genes.length) {
         this.$notifier.showMessage({
           content: 'Please select regulon',

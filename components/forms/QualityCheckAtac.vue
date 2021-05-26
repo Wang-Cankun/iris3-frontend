@@ -258,19 +258,6 @@
               :src="qcHist3"
               :title="layout[8].title"
             ></barplot>
-            <resize-image
-              :key="layout[9].i"
-              :x="layout[9].x"
-              :y="layout[9].y"
-              :w="layout[9].w"
-              :h="layout[9].h"
-              :i="layout[9].i"
-              :src="varGenesScatter"
-              :imagew="420"
-              :imageh="260"
-              :title="layout[9].title"
-            >
-            </resize-image>
           </grid-layout>
         </v-col>
         <v-col cols="7"></v-col>
@@ -279,7 +266,6 @@
   </v-col>
 </template>
 <script>
-import ResizeImage from '~/components/figures/ResizeImage'
 import Boxplot from '~/components/figures/Boxplot'
 import Barplot from '~/components/figures/Barplot'
 
@@ -287,7 +273,6 @@ import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
-    'resize-image': ResizeImage,
     boxplot: Boxplot,
     barplot: Barplot,
   },
@@ -370,14 +355,6 @@ export default {
           h: 1,
           i: '8',
           title: 'Number of ATAC fragments',
-        },
-        {
-          x: 0,
-          y: 3,
-          w: 2,
-          h: 1,
-          i: '9',
-          title: 'Highly variable features',
         },
       ],
       tab: null,

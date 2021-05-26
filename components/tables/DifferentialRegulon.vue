@@ -42,15 +42,16 @@
         </div></v-card-title
       >
       <div class="no-drag">
-        <v-row>
-          <v-col cols="6" class="my-0">
+        <v-row class="pa-2">
+          <v-col cols="5">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="ident1"
                   :items="identLevels1"
                   return-object
-                  label="Cell clusters group 1"
+                  dense
+                  label="Clusters group 1"
                   multiple
                   @mouseenter.native="on.mouseenter"
                   @mouseleave.native="on.mouseleave"
@@ -81,14 +82,15 @@
               <span>TODO</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="6" class="my-0">
+          <v-col cols="5">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="ident2"
                   :items="identLevels2"
                   return-object
-                  label="Cell clusters group 2"
+                  dense
+                  label="Clusters group 2"
                   multiple
                   @mouseenter.native="on.mouseenter"
                   @mouseleave.native="on.mouseleave"
@@ -119,16 +121,9 @@
               <span>TODO</span>
             </v-tooltip>
           </v-col>
+          <v-col cols="2"><v-btn small @click="run()">Calculate</v-btn></v-col>
         </v-row>
-        <v-row justify="center" class="mx-2 mb-2 mt-0">
-          <v-btn
-            class="mx-2 mb-2 mt-0"
-            color="Primary"
-            width="200"
-            @click="run()"
-            >Update</v-btn
-          >
-        </v-row>
+
         <div v-if="result.length">
           <v-data-table
             dense
@@ -171,7 +166,7 @@ export default {
       identLevels1: [0, 1, 2, 3, 4, 5, 6, 7],
       identLevels2: [0, 1, 2, 3, 4, 5, 6, 7],
       tableHeight: 380,
-      footerHeight: 155,
+      footerHeight: 180,
     }
   },
 

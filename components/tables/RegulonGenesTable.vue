@@ -44,7 +44,7 @@
       <div class="no-drag">
         <div v-if="result.length">
           <v-card elevation="0">
-            <p class="ml-4 mt-2">Number of genes: {{ genes.length }}</p>
+            <p class="ml-4 my-2">Number of genes: {{ genes.length }}</p>
             <v-virtual-scroll
               :height="tableHeight"
               item-height="40"
@@ -106,7 +106,7 @@ export default {
     return {
       hover: false,
       tableHeight: 485,
-      footerHeight: 20,
+      footerHeight: 150,
       headers: [{ text: 'Gene', value: 'data' }],
     }
   },

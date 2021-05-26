@@ -293,37 +293,24 @@
               :src="qcHist3"
               :title="layout[7].title"
             ></barplot>
-            <resize-image
+            <gene-correlation-scatter
               :key="layout[8].i"
               :x="layout[8].x"
               :y="layout[8].y"
               :w="layout[8].w"
               :h="layout[8].h"
               :i="layout[8].i"
-              :src="varGenesScatter"
-              :imagew="450"
-              :imageh="220"
-              :title="layout[8].title"
-            >
-            </resize-image>
-            <gene-correlation-scatter
-              :key="layout[9].i"
-              :x="layout[9].x"
-              :y="layout[9].y"
-              :w="layout[9].w"
-              :h="layout[9].h"
-              :i="layout[9].i"
               :genes="genes"
             ></gene-correlation-scatter>
 
             <div>
               <div v-for="(item, pieIdx) in metaList" :key="pieIdx">
                 <pie-chart
-                  :x="layout[pieIdx + 10].x"
-                  :y="layout[pieIdx + 10].y"
-                  :w="layout[pieIdx + 10].w"
-                  :h="layout[pieIdx + 10].h"
-                  :i="layout[pieIdx + 10].i"
+                  :x="layout[pieIdx + 9].x"
+                  :y="layout[pieIdx + 9].y"
+                  :w="layout[pieIdx + 9].w"
+                  :h="layout[pieIdx + 9].h"
+                  :i="layout[pieIdx + 9].i"
                   :values="item.val"
                   :name="item.name"
                   :title="'Metadata: ' + item.title[0]"
@@ -337,7 +324,6 @@
   </v-col>
 </template>
 <script>
-import ResizeImage from '~/components/figures/ResizeImage'
 import VarGenesTable from '~/components/tables/VarGenesTable'
 import PieChart from '~/components/figures/PieChart'
 import Boxplot from '~/components/figures/Boxplot'
@@ -351,7 +337,6 @@ export const sleep = (ms) => {
 
 export default {
   components: {
-    'resize-image': ResizeImage,
     'var-genes-table': VarGenesTable,
     'pie-chart': PieChart,
     boxplot: Boxplot,
@@ -437,7 +422,7 @@ export default {
           w: 2,
           h: 2,
           i: '8',
-          title: 'Highly variable genes',
+          title: 'Gene-gene correlation',
         },
 
         {
@@ -446,7 +431,6 @@ export default {
           w: 2,
           h: 2,
           i: '9',
-          title: 'Gene-gene correlation',
         },
         {
           x: 4,
@@ -454,7 +438,6 @@ export default {
           w: 2,
           h: 2,
           i: '10',
-          title: 'Metadata: 1',
         },
         {
           x: 0,
@@ -462,15 +445,6 @@ export default {
           w: 2,
           h: 2,
           i: '11',
-          title: 'Metadata: 2',
-        },
-        {
-          x: 2,
-          y: 5,
-          w: 2,
-          h: 2,
-          i: '12',
-          title: 'Metadata: 3',
         },
       ],
       nPie: 1,

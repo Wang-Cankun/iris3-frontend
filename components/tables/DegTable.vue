@@ -42,7 +42,7 @@
         </div></v-card-title
       >
       <div class="no-drag">
-        <v-row class="mx-4">
+        <v-row class="mx-4 mt-2">
           <v-col cols="6" class="my-0">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
@@ -51,6 +51,7 @@
                   :items="idents"
                   return-object
                   label="Group 1"
+                  dense
                   multiple
                   @mouseenter.native="on.mouseenter"
                   @mouseleave.native="on.mouseleave"
@@ -88,6 +89,7 @@
                   v-model="ident2"
                   :items="idents"
                   return-object
+                  dense
                   label="Group 2"
                   multiple
                   @mouseenter.native="on.mouseenter"
@@ -119,12 +121,13 @@
               <span>TODO</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="4" class="my-0 py-0"
+          <v-col cols="3" class="my-0 py-0"
             ><v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="degPvalue"
                   class="px-0"
+                  dense
                   :items="degPvalueList"
                   label="p-value threshold"
                   @mouseenter.native="on.mouseenter"
@@ -134,13 +137,14 @@
               <span>TODO</span>
             </v-tooltip></v-col
           >
-          <v-col cols="4" class="my-0 py-0"
+          <v-col cols="3" class="my-0 py-0"
             ><v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="minPct"
                   class="px-0"
                   type="number"
+                  dense
                   step="0.1"
                   label="min cell percentage"
                   v-on="on"
@@ -157,13 +161,14 @@
               <p>Default: 0.1</p>
             </v-tooltip></v-col
           >
-          <v-col cols="4" class="my-0 py-0"
+          <v-col cols="3" class="my-0 py-0"
             ><v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="minLfc"
                   class="px-0"
                   type="number"
+                  dense
                   step="0.1"
                   label="logFC threshold"
                   v-on="on"
@@ -178,21 +183,22 @@
                 weaker signals.
               </p>
               <p>Default: 0.25</p>
-            </v-tooltip></v-col
-          >
+            </v-tooltip>
+          </v-col>
+          <v-col cols="3" class="my-0 py-0"
+            ><v-btn small class="mx-2 mb-2 mt-0" v-on="on" @click="run()"
+              >Calculate</v-btn
+            >
+          </v-col>
         </v-row>
 
-        <v-row justify="center" class="mx-2 mb-2 mt-0">
-          <v-btn class="mx-2 mb-2 mt-0" color="Primary" @click="run()"
-            >Calculate</v-btn
-          >
-        </v-row>
         <div v-if="deResult.length">
           <v-data-table
             dense
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
             :height="tableHeight"
+            :max-height="maxHeight"
             :headers="headers"
             :items="deResult"
             item-key="tf"
@@ -237,10 +243,11 @@ export default {
       degAssay: 'RNA',
       degPvalue: 0.05,
       degPvalueList: [0.01, 0.05, 0.1],
-      tableHeight: 300,
-      footerHeight: 205,
+      tableHeight: 340,
+      footerHeight: 240,
       sortBy: 'avg_log2FC',
       sortDesc: true,
+      maxHeight: 300,
     }
   },
 
@@ -274,6 +281,7 @@ export default {
       }
     },
     changeSize(i, newH, newW, newHPx, newWPx) {
+      this.maxHeight = newWPx - this.footerHeight
       this.tableHeight = newHPx - this.footerHeight
     },
     iconSelect(selected, identLevels) {

@@ -60,7 +60,6 @@
                 v-model="chr"
                 class="px-1"
                 :items="Chromosome"
-                outlined
                 dense
                 label="Chromosome"
                 :rules="[(v) => !!v || 'Item is required']"
@@ -70,7 +69,6 @@
                 v-model="chrStart"
                 :rules="rangeRules"
                 class="px-1"
-                outlined
                 label="start"
                 type="number"
                 required
@@ -81,13 +79,15 @@
                 v-model="chrEnd"
                 :rules="[endRules]"
                 class="px-1"
-                outlined
                 label="end"
                 type="number"
                 required
                 background-color="white"
                 dense
               ></v-text-field>
+              <v-btn small color="Primary" @click="runCoveragePlotStatic()"
+                >Calculate</v-btn
+              >
             </div>
             <div v-if="type === 'gene'" class="d-flex flex">
               <v-autocomplete
@@ -95,14 +95,12 @@
                 class="ml-4"
                 :items="genes"
                 dense
-                outlined
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Gene"
               ></v-autocomplete>
               <v-text-field
                 v-model="flanking"
                 class="px-1"
-                outlined
                 label="Flanking range"
                 type="number"
                 :rules="flankingRules"
@@ -110,16 +108,10 @@
                 background-color="white"
                 dense
               ></v-text-field>
-            </div>
-            <v-row justify="center" class="mx-2 mb-2 mt-0">
-              <v-btn
-                class="mx-2 mb-2 mt-0"
-                color="Primary"
-                width="120"
-                @click="runCoveragePlotStatic()"
-                >Run</v-btn
+              <v-btn small color="Primary" @click="runCoveragePlotStatic()"
+                >Calculate</v-btn
               >
-            </v-row>
+            </div>
           </v-col>
         </v-form>
       </v-row>

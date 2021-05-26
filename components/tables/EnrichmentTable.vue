@@ -8,6 +8,7 @@
       :i="i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
+      @resized="changeSize"
     >
       <v-card-title
         class="grey lighten-3 font-weight-bold caption px-2 py-1"
@@ -41,27 +42,29 @@
         </div></v-card-title
       >
       <div class="no-drag">
-        <v-row>
-          <v-col cols="8">
-            <v-autocomplete
-              v-model="gseaDatabase"
-              class="ml-4"
-              :items="allGseaDatabases"
-              label="MSigDB database"
-              return-object
-              item-text="name"
-              item-value="value"
-            >
-            </v-autocomplete>
+        <v-row class="mt-2">
+          <v-col cols="6">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-autocomplete
+                  v-model="gseaDatabase"
+                  class="ml-4"
+                  dense
+                  :items="allGseaDatabases"
+                  label="MSigDB database"
+                  return-object
+                  item-text="name"
+                  item-value="value"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
+                >
+                </v-autocomplete>
+              </template>
+              <span>TODO</span>
+            </v-tooltip>
           </v-col>
           <v-col cols="4"
-            ><v-btn
-              class="mx-2 mb-2 mt-3"
-              width="120"
-              color="Primary"
-              @click="runGSEA()"
-              >Run</v-btn
-            ></v-col
+            ><v-btn small @click="runGSEA()">Run</v-btn></v-col
           ></v-row
         >
         <div v-if="gseaResult.length">
@@ -70,8 +73,12 @@
             :headers="gseaHeaders"
             :items="gseaResult[0]"
             item-key="name"
-            :items-per-page="5"
-            class="elevation-1"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
+            :height="tableHeight"
+            :max-height="maxHeight"
+            :items-per-page="10"
+            class="elevation-0"
           ></v-data-table>
         </div></div></grid-item
   ></v-card>
@@ -112,6 +119,11 @@ export default {
         { name: 'Oncogenic signature gene sets (C6)', value: 'C6' },
         { name: 'Immunologic signature gene sets (C7)', value: 'C7' },
       ],
+      tableHeight: 380,
+      footerHeight: 200,
+      sortBy: 'NES',
+      sortDesc: true,
+      maxHeight: 300,
     }
   },
   computed: {
@@ -145,19 +157,9 @@ export default {
         this.$nuxt.$loading.finish()
       }
     },
-    resizeEvent(i, newH, newW, newHPx, newWPx) {
-      console.log(
-        'RESIZE i=' +
-          i +
-          ', H=' +
-          newH +
-          ', W=' +
-          newW +
-          ', H(px)=' +
-          newHPx +
-          ', W(px)=' +
-          newWPx
-      )
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.maxHeight = newWPx - this.footerHeight
+      this.tableHeight = newHPx - this.footerHeight
     },
   },
 }

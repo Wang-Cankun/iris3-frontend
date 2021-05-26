@@ -25,11 +25,11 @@
                   <v-col> Submitted jobs </v-col>
                   <v-col> Data source </v-col>
                 </v-row>
-                <v-row class="text-center deep-orange--text">
+                <v-row class="text-center primary--text">
+                  <v-col> 20+ </v-col>
                   <v-col> 3 </v-col>
-                  <v-col> 5 </v-col>
-                  <v-col> 15 </v-col>
-                  <v-col> 7 </v-col>
+                  <v-col> 10 </v-col>
+                  <v-col> 3 </v-col>
                 </v-row>
               </v-col>
             </v-row>

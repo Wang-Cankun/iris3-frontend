@@ -86,24 +86,17 @@
         </div>
       </v-card-title>
       <div class="no-drag">
-        <v-row>
-          <v-col cols="7">
+        <v-row class="mt-2">
+          <v-col cols="4">
             <v-autocomplete
               v-model="gene"
               class="ml-4"
               :items="genes"
+              dense
               label="Gene"
             ></v-autocomplete>
           </v-col>
-          <v-col cols="4">
-            <v-btn
-              class="mx-2 mb-2 mt-3"
-              color="Primary"
-              width="120"
-              @click="run()"
-              >Plot</v-btn
-            >
-          </v-col>
+          <v-col cols="4"><v-btn small @click="run()">Plot</v-btn> </v-col>
         </v-row>
 
         <div v-if="src.axis[0] !== 0"></div>
