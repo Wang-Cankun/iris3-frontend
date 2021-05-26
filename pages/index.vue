@@ -35,14 +35,14 @@
             </v-row>
 
             <!-- Create your own project and explore -->
-            <v-row class="mt-10">
+            <v-row class="mt-6 py-6">
               <v-col offset="2">
-                <v-btn to="/upload" color="primary" elevation="24" x-large
+                <v-btn to="/upload" color="primary" elevation="2" x-large
                   >Create your own project</v-btn
                 >
               </v-col>
               <v-col class="justify-center">
-                <v-btn to="/public" outlined elevation="24" x-large
+                <v-btn to="/public" outlined elevation="2" x-large
                   >Explore our projects</v-btn
                 >
               </v-col>
@@ -54,7 +54,7 @@
 
     <!-- Search job ID section -->
     <v-container>
-      <v-col cols="12">
+      <v-col cols="8" offset="2">
         <v-row>
           <v-col cols="10">
             <v-text-field
