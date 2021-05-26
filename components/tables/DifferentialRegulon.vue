@@ -43,7 +43,7 @@
       >
       <div class="no-drag">
         <v-row class="pa-2">
-          <v-col cols="5">
+          <v-col cols="4">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-select
@@ -82,7 +82,7 @@
               <span>TODO</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="5">
+          <v-col cols="4">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-select
@@ -121,7 +121,7 @@
               <span>TODO</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="2"><v-btn small @click="run()">Calculate</v-btn></v-col>
+          <v-col cols="4"><v-btn small @click="run()">Calculate</v-btn></v-col>
         </v-row>
 
         <div v-if="result.length">
