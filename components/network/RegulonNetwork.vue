@@ -142,7 +142,7 @@
         </div>
       </v-card-title>
       <div id="holder" class="no-drag">
-        <v-btn @click="resetPosition">RESET</v-btn>
+        <v-btn @click="resetPosition">RESET LAYOUT</v-btn>
         <cytoscape
           ref="cy"
           :config="networkConfig"

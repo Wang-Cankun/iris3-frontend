@@ -5,10 +5,14 @@
         <v-col cols="3">
           <v-expansion-panels v-model="panel" multiple>
             <v-expansion-panel>
-              <v-expansion-panel-header> Network </v-expansion-panel-header>
+              <v-expansion-panel-header>
+                Gene Regulatory Network
+              </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined color="grey lighten-3">
-                  <p class="subtitle-1 font-weight-bold text-center">Network</p>
+                <v-card class="mt-6" outlined>
+                  <p class="subtitle-1 font-weight-bold text-center">
+                    Gene Regulatory Network
+                  </p>
 
                   <v-col>
                     <v-row justify="center">
@@ -16,28 +20,26 @@
                         class="mx-2 my-4"
                         color="Primary"
                         width="150"
-                        dense
                         @click="runNetwork()"
-                        >Run</v-btn
+                        >Calculate</v-btn
                       >
                     </v-row>
                     <div v-show="showNetwork">
-                      <p class="title-h4">
-                        Select cell cluster
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon color="primary" dark v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>todo</p>
-                        </v-tooltip>
-                      </p>
-                      <v-select
-                        v-model="selectedCt"
-                        :items="ctList"
-                        dense
-                      ></v-select>
+                      <v-divider />
+
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-select
+                            v-model="selectedCt"
+                            :items="ctList"
+                            label="Select cell cluster"
+                            @mouseenter.native="on.mouseenter"
+                            @mouseleave.native="on.mouseleave"
+                          ></v-select>
+                        </template>
+                        <p>TODO</p>
+                      </v-tooltip>
+
                       <div v-if="selectedCt">
                         <selection
                           :regulon-list="selectedCtRegulonList"
@@ -129,45 +131,52 @@
                   :genes="selectedRegulonGenes"
                 >
                 </regulon-gene-scatter>
+                <feature-violin
+                  :setting="layout[6]"
+                  :genes="selectedRegulonGenes"
+                  :idents="idents"
+                ></feature-violin>
                 <regulon-genes-table
                   :genes="selectedRegulonGenes"
-                  :setting="layout[6]"
+                  :setting="layout[7]"
                 ></regulon-genes-table>
 
                 <enrichment-table
                   :genes="selectedRegulonGenes"
-                  :setting="layout[7]"
+                  :setting="layout[8]"
                 ></enrichment-table>
                 <regulon-heatmap
-                  :title="layout[8].title"
-                  :x="layout[8].x"
-                  :y="layout[8].y"
-                  :w="layout[8].w"
-                  :h="layout[8].h"
-                  :i="layout[8].i"
-                  :src="riHeatmapData"
-                ></regulon-heatmap>
-                <regulon-circos
                   :title="layout[9].title"
                   :x="layout[9].x"
                   :y="layout[9].y"
                   :w="layout[9].w"
                   :h="layout[9].h"
                   :i="layout[9].i"
-                  :genes="selectedRegulonGenes"
-                ></regulon-circos>
+                  :src="riHeatmapData"
+                ></regulon-heatmap>
+                <!--
                 <div v-if="false">
-                  <volcano-scatter
+                  <regulon-circos
                     :title="layout[10].title"
                     :x="layout[10].x"
                     :y="layout[10].y"
                     :w="layout[10].w"
                     :h="layout[10].h"
                     :i="layout[10].i"
+                    :genes="selectedRegulonGenes"
+                  ></regulon-circos>
+
+                  <volcano-scatter
+                    :title="layout[11].title"
+                    :x="layout[11].x"
+                    :y="layout[11].y"
+                    :w="layout[11].w"
+                    :h="layout[11].h"
+                    :i="layout[11].i"
                     :src="{ axis: [0, 1], legend: [0], dimension: 1 }"
                   >
                   </volcano-scatter>
-                </div>
+                </div>-->
               </div>
             </grid-layout>
           </div>
@@ -181,14 +190,14 @@
 // import ExampleNodes from 'static/json/regulon/example_cyto_nodes.json'
 // import ExampleEdges from 'static/json/regulon/example_cyto_edges.json'
 import RegulonNetwork from '~/components/network/RegulonNetwork'
-import selection from '~/components/utils/Selection'
+import RegulonSelection from '~/components/network/RegulonSelection'
 
 import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
 import ClusterScatter from '~/components/figures/ClusterScatter'
 import RegulonGeneScatter from '~/components/figures/RegulonGeneScatter'
 import RegulonActivityScatter from '~/components/figures/RegulonActivityScatter'
-import RegulonCircos from '~/components/figures/RegulonCircos'
-import VolcanoScatter from '~/components/figures/VolcanoScatter'
+
+import FeatureViolinStatic from '~/components/figures/FeatureViolinStatic'
 
 import RegulonTable from '~/components/tables/RegulonTable'
 import RegulonEnrichmentTable from '~/components/tables/RegulonEnrichmentTable'
@@ -201,16 +210,15 @@ import ApiService from '~/services/ApiService.js'
 export default {
   components: {
     network: RegulonNetwork,
-    selection,
+    selection: RegulonSelection,
     'regulon-table': RegulonTable,
     'enrichment-table': RegulonEnrichmentTable,
     'regulon-genes-table': RegulonGenesTable,
     'regulon-heatmap': RegulonHeatmap,
     'cluster-scatter': ClusterScatter,
     'regulon-gene-scatter': RegulonGeneScatter,
+    'feature-violin': FeatureViolinStatic,
     'regulon-activity-scatter': RegulonActivityScatter,
-    'regulon-circos': RegulonCircos,
-    'volcano-scatter': VolcanoScatter,
     'differential-regulon': DifferentialRegulon,
   },
   props: {},
@@ -263,7 +271,7 @@ export default {
         w: 2,
         h: 2,
         i: '5',
-        title: 'Regulon gene expression plot',
+        title: 'Regulon genes scatter plot',
       },
       {
         x: 2,
@@ -271,7 +279,7 @@ export default {
         w: 2,
         h: 2,
         i: '6',
-        title: 'Regulon genes',
+        title: 'Regulon genes violin plot',
       },
       {
         x: 4,
@@ -279,7 +287,7 @@ export default {
         w: 2,
         h: 2,
         i: '7',
-        title: 'Gene set enrichment analysis',
+        title: 'Regulon genes',
       },
       {
         x: 0,
@@ -287,7 +295,7 @@ export default {
         w: 2,
         h: 2,
         i: '8',
-        title: 'Regulon heatmap',
+        title: 'Gene set enrichment analysis',
       },
       {
         x: 2,
@@ -295,26 +303,7 @@ export default {
         w: 2,
         h: 2,
         i: '9',
-        title: 'Regulon circos plot',
-      },
-
-      {
-        x: 4,
-        y: 6,
-        w: 2,
-        h: 2,
-        i: '10',
-        title: 'Differential regulons',
-      },
-    ],
-    degList: [
-      {
-        gene: 'gene1',
-        avg_log2FC: 2,
-        p_val_adj: 0.01,
-        carbs: 24,
-        protein: 4.0,
-        iron: '1%',
+        title: 'Regulon heatmap',
       },
     ],
     // UMAP
@@ -330,6 +319,7 @@ export default {
     ExampleNodes: [],
     ExampleEdges: [],
     RegulonList: [],
+    idents: ['hgt_cluster', 'sex', 'sample'],
     rasData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     riHeatmapData: { column: [], row: [], data: [], legend: [0, 1] },
   }),

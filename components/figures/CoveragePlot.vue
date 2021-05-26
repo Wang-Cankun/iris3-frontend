@@ -9,21 +9,34 @@
       class="grid-item-border"
       @resized="changeSize"
     >
-      <v-card-title class="grey lighten-3 font-weight-bold caption px-2 py-1"
-        >Coverage plot{{ type }} <v-spacer></v-spacer>
-        <v-menu bottom left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-download-outline</v-icon>
-            </v-btn>
-          </template>
+      <v-card-title
+        class="grey lighten-3 font-weight-bold caption px-2 py-1"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
+        >Coverage plot<v-spacer></v-spacer>
+        <div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon v-show="hover === true" v-on="on"
+                >mdi-help-circle-outline</v-icon
+              >
+            </template>
+            <p>TODO</p>
+          </v-tooltip>
+          <v-menu bottom left :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon v-show="hover === true">mdi-download-outline</v-icon>
+              </v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item @click="downloadPNG">
-              <v-list-item-title>Download PNG</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu></v-card-title
+            <v-list>
+              <v-list-item @click="downloadPNG(src)">
+                <v-list-item-title>Download PNG</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div></v-card-title
       >
 
       <v-row class="ma-4">
@@ -175,6 +188,7 @@ export default {
         x: 400,
         y: 400,
       },
+      hover: false,
       type: 'gene',
       gene: NaN,
       chr: '',
@@ -205,11 +219,18 @@ export default {
       // this.$refs.form.reset()
     },
     downloadPNG() {
-      const link = document.createElement('a')
-      link.href = this.src
-      link.setAttribute('download', 'Image_png.png')
-      document.body.appendChild(link)
-      link.click()
+      if (!this.src) {
+        this.$notifier.showMessage({
+          content: 'Please generate the figure first',
+          color: 'error',
+        })
+      } else {
+        const link = document.createElement('a')
+        link.href = this.src
+        link.setAttribute('download', 'coverage_plot.png')
+        document.body.appendChild(link)
+        link.click()
+      }
     },
     async runCoveragePlotStatic() {
       if (!this.$refs.form.validate()) {

@@ -64,7 +64,8 @@
                   class="mr-2 pr-2"
                   :items="idents"
                   label="Split by"
-                  v-on="on"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
                 ></v-select>
               </template>
               <span>TODO</span>
@@ -78,7 +79,8 @@
                   class="mr-2 pr-2"
                   :items="idents"
                   label="Group by"
-                  v-on="on"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
                 ></v-select>
               </template>
               <span>TODO</span>
@@ -129,7 +131,7 @@ export default {
       violinSplit: 'sex',
       violinGroup: 'hgt_cluster',
       windowSize: {
-        x: 720,
+        x: 520,
         y: 550,
       },
     }
@@ -143,11 +145,18 @@ export default {
     },
 
     downloadPNG(src) {
-      const link = document.createElement('a')
-      link.href = src
-      link.setAttribute('download', 'Image_png.png')
-      document.body.appendChild(link)
-      link.click()
+      if (!src) {
+        this.$notifier.showMessage({
+          content: 'Please generate the figure first',
+          color: 'error',
+        })
+      } else {
+        const link = document.createElement('a')
+        link.href = src
+        link.setAttribute('download', 'coverage_plot.png')
+        document.body.appendChild(link)
+        link.click()
+      }
     },
     downloadPDF() {
       return 1

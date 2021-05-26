@@ -695,7 +695,7 @@ export default {
     violinGene: '',
     featureGene: '',
     dotPlot: '',
-    clusterResult: '1',
+    clusterResult: '',
     annotateResult: '',
     newCellType: [],
     addGeneName: '',
