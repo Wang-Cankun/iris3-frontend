@@ -15,10 +15,10 @@
               </p>
 
               <p class="text--secondary">
-                Cell number: {{ qcResult.raw_n_cells[0] }}
+                Cells: {{ qcResult.raw_n_cells[0] }}
               </p>
               <p class="text--secondary">
-                Gene number: {{ qcResult.raw_n_genes[0] }}
+                Genes: {{ qcResult.raw_n_genes[0] }}
               </p>
               <p class="text--secondary">
                 Average expression level:
@@ -32,10 +32,10 @@
                 Current data statistics
               </p>
               <p class="text--secondary">
-                Cell number: {{ qcResult.filter_n_cells[0] }}
+                Cells: {{ qcResult.filter_n_cells[0] }}
               </p>
               <p class="text--secondary">
-                Gene number: {{ qcResult.filter_n_genes[0] }}
+                Genes: {{ qcResult.filter_n_genes[0] }}
               </p>
               <p class="text--secondary">
                 Average expression level:
@@ -165,7 +165,8 @@
                   v-model="removeRibosome"
                   class="my-0 py-0"
                   :label="`Remove ribosomal genes`"
-                  v-on="on"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
                 >
                 </v-checkbox>
               </template>
@@ -177,7 +178,8 @@
                   v-model="removeSpikein"
                   class="my-0 py-0"
                   :label="`Remove spike-in genes`"
-                  v-on="on"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
                 >
                 </v-checkbox>
               </template>

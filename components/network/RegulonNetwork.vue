@@ -166,6 +166,7 @@
 import cola from 'cytoscape-cola'
 import euler from 'cytoscape-euler'
 import spread from 'cytoscape-spread'
+import ApiService from '~/services/ApiService.js'
 
 export default {
   components: {
@@ -361,12 +362,15 @@ export default {
 
     show() {
       this.cy.style(this.design)
-      this.changeLayout(this.currentLayout)
+      this.resetPosition()
+      this.resetPosition()
     },
 
-    nodes() {
-      this.cy.style(this.design)
-      this.changeLayout(this.currentLayout)
+    async nodes() {
+      // this.cy.style(this.design)
+      console.log('change nodes')
+      await ApiService.sleep(618)
+      this.resetPosition()
     },
     selectedTfCytoscape() {
       this.$emit('update:selected', this.selectedTfCytoscape)
@@ -374,16 +378,12 @@ export default {
   },
   methods: {
     preConfig(cytoscape) {
-      console.log('calling pre-config')
       // cytoscape: this is the cytoscape constructor
       cytoscape.use(cola)
       cytoscape.use(euler)
       cytoscape.use(spread)
     },
-    afterCreated(cy) {
-      // cy: this is the cytoscape instance
-      console.log('after config')
-    },
+    afterCreated(cy) {},
     resetHighlightNode(e) {
       if (this.selectedTfCytoscape) {
         const sel = this.cy.getElementById(this.selectedTfCytoscape)
@@ -397,41 +397,27 @@ export default {
     },
     highlightNode(e, id) {
       const sel = e.target
-      this.selectedTfCytoscape = id
-      this.cy
-        .elements()
-        .difference(sel.outgoers().union(sel.incomers()))
-        .not(sel)
-        .addClass('semitransp')
-      sel
-        .addClass('highlight')
-        .outgoers()
-        .union(sel.incomers())
-        .addClass('highlight')
+      if (sel.group() === 'nodes') {
+        this.selectedTfCytoscape = id
+        this.cy
+          .elements()
+          .difference(sel.outgoers().union(sel.incomers()))
+          .not(sel)
+          .addClass('semitransp')
+        sel
+          .addClass('highlight')
+          .outgoers()
+          .union(sel.incomers())
+          .addClass('highlight')
+      }
     },
-    updateNode(event) {
-      console.log('right click node', event)
-    },
+    updateNode(event) {},
     changeLayout(type) {
       const layout = this.cy.layout({
         name: type,
       })
 
       layout.run()
-    },
-    resizeEvent(i, newH, newW, newHPx, newWPx) {
-      console.log(
-        'RESIZE i=' +
-          i +
-          ', H=' +
-          newH +
-          ', W=' +
-          newW +
-          ', H(px)=' +
-          newHPx +
-          ', W(px)=' +
-          newWPx
-      )
     },
     downloadJPG() {
       const link = document.createElement('a')

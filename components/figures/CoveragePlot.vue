@@ -266,20 +266,6 @@ export default {
       }
       return true
     },
-    resizeEvent(i, newH, newW, newHPx, newWPx) {
-      console.log(
-        'RESIZE i=' +
-          i +
-          ', H=' +
-          newH +
-          ', W=' +
-          newW +
-          ', H(px)=' +
-          newHPx +
-          ', W(px)=' +
-          newWPx
-      )
-    },
   },
 }
 </script>

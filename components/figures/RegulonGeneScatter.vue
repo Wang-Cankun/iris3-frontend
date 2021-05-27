@@ -150,90 +150,93 @@ export default {
   computed: {
     option2d() {
       const data = this.src.embedding
-
-      return {
-        hover: true,
-        dataZoom: [
-          {
-            id: 'dataZoomX',
-            type: 'slider',
-            xAxisIndex: [0],
-            filterMode: 'filter',
+      if (!data) {
+        return {}
+      } else {
+        return {
+          hover: true,
+          dataZoom: [
+            {
+              id: 'dataZoomX',
+              type: 'slider',
+              xAxisIndex: [0],
+              filterMode: 'filter',
+            },
+            {
+              id: 'dataZoomY',
+              type: 'slider',
+              yAxisIndex: [0],
+              filterMode: 'empty',
+              left: 10,
+            },
+          ],
+          visualMap: {
+            min: this.src.legend[0],
+            max: this.src.legend[1],
+            dimension: 4,
+            orient: 'vertical',
+            right: 10,
+            top: 'center',
+            text: ['HIGH', 'LOW'],
+            calculable: true,
+            inRange: {
+              color: [this.lowColor, this.highColor],
+            },
           },
-          {
-            id: 'dataZoomY',
-            type: 'slider',
-            yAxisIndex: [0],
-            filterMode: 'empty',
-            left: 10,
+          tooltip: {
+            position: 'top',
+            backgroundColor: ['rgba(255,255,255,0.7)'],
+            formatter(obj) {
+              const value = obj.value
+              return (
+                '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+                ' ' +
+                value[4] +
+                '</div><div>' +
+                value[0] +
+                '</div><div>' +
+                '<br>'
+              )
+            },
           },
-        ],
-        visualMap: {
-          min: this.src.legend[0],
-          max: this.src.legend[1],
-          dimension: 4,
-          orient: 'vertical',
-          right: 10,
-          top: 'center',
-          text: ['HIGH', 'LOW'],
-          calculable: true,
-          inRange: {
-            color: [this.lowColor, this.highColor],
+          grid: {
+            left: 60,
+            right: 120,
+            bottom: 60,
+            containLabel: true,
           },
-        },
-        tooltip: {
-          position: 'top',
-          backgroundColor: ['rgba(255,255,255,0.7)'],
-          formatter(obj) {
-            const value = obj.value
-            return (
-              '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-              ' ' +
-              value[4] +
-              '</div><div>' +
-              value[0] +
-              '</div><div>' +
-              '<br>'
-            )
-          },
-        },
-        grid: {
-          left: 60,
-          right: 120,
-          bottom: 60,
-          containLabel: true,
-        },
-        xAxis: {
-          show: false,
-          name: this.src.axis[0],
-          type: 'value',
-          nameGap: 16,
-          nameTextStyle: {
-            fontSize: 12,
-          },
-          splitLine: {
+          xAxis: {
             show: false,
+            name: this.src.axis[0],
+            type: 'value',
+            nameGap: 16,
+            nameTextStyle: {
+              fontSize: 12,
+            },
+            splitLine: {
+              show: false,
+            },
           },
-        },
-        yAxis: {
-          show: false,
-          name: this.src.axis[1],
-          type: 'value',
-          nameGap: 16,
-          nameTextStyle: {
-            fontSize: 12,
-          },
-          splitLine: {
+          yAxis: {
             show: false,
+            name: this.src.axis[1],
+            type: 'value',
+            nameGap: 16,
+            nameTextStyle: {
+              fontSize: 12,
+            },
+            splitLine: {
+              show: false,
+            },
           },
-        },
-        series: {
-          name: 'featureplot',
-          data,
-          type: 'scatter',
-          encode: { x: 1, y: 2 },
-          symbolSize: this.pointSize,
-        },
+          series: {
+            name: 'featureplot',
+            data,
+            type: 'scatter',
+            encode: { x: 1, y: 2 },
+            symbolSize: this.pointSize,
+          },
+        }
       }
     },
   },

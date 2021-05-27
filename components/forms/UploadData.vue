@@ -499,11 +499,11 @@ export default {
       },
     ],
     multiomeExample: [
-      { item: 'Load example (10X Human PBMC 10k cells)' },
+      { item: 'Load example (10X Human PBMC granulocyte 3k cells)' },
       {
-        item: 'Download data: Human Brain 3k cell',
+        item: 'Download data: PBMC granulocyte sorted 3k cells',
         link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/human_brain_3k_filtered_feature_bc_matrix.h5',
+          'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_granulocyte_sorted_3k_filtered_feature_bc_matrix.h5',
       },
       {
         item: 'Download data: Human PBMC unsorted 3k cell',
@@ -511,9 +511,9 @@ export default {
           'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_unsorted_3k_filtered_feature_bc_matrix.h5',
       },
       {
-        item: 'Download data: Human PBMC granulocyte sorted 3k cell',
+        item: 'Download data: Human brain 3k cell',
         link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_granulocyte_sorted_3k_filtered_feature_bc_matrix.h5',
+          'https://bmbl.bmi.osumc.edu/iris3/storage/human_brain_3k_filtered_feature_bc_matrix.h5',
       },
     ],
     email: '',
@@ -631,27 +631,27 @@ export default {
       this.jobid = 'example'
       this.expFile.multiome[0] = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC scRNA-seq data'
+        'PBMC scRNA-seq and scATAC-seq data'
       )
       this.expFile.multiome[1] = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC scATAC-seq data'
+        'PBMC scATAC-seq fragments'
       )
       this.expFile.multiome[2] = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC scATAC-seq data'
+        'PBMC scATAC-seq fragments index'
       )
       this.labelFile.multiome = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC metadata'
+        'PBMC example metadata'
       )
       this.bamFile = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC scRNA-seq BAM file'
+        'PBMC velocity matrix'
       )
-      this.title = 'Human Multiome PBMCs 10k cells'
+      this.title = '10X Human PBMC granulocyte 3k cells'
       this.$notifier.showMessage({
-        content: 'Example dataset loaded: Human PBMCs 10k cells',
+        content: 'Example dataset loaded: 10X Human PBMC granulocyte 3k cells',
         color: 'success',
       })
     },
