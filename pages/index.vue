@@ -142,7 +142,7 @@
             <script
               id="clustrmaps"
               type="text/javascript"
-              src="//cdn.clustrmaps.com/map_v2.js?cl=1565c0&w=300&t=tt&d=7cEjZiu9nU3uQEuIYI-jPj0xlNdl5NmLz2LoA8XY02A&co=ffffff&cmo=e73131&cmn=18c818&ct=fffdfd"
+              src="//cdn.clustrmaps.com/map_v2.js?cl=2d78ad&w=a&t=tt&d=y6edmNGXh1CPbChW0tW9Ahz11iiWoeE4HDc-yFfav5Y&co=ffffff&cmo=3acc3a&cmn=ff5353&ct=1565C0"
             ></script>
           </div>
         </client-only>
