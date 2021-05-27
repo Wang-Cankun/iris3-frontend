@@ -34,6 +34,7 @@
     "nuxt-dropzone": "^1.0.4",
     "nuxt-socket-io": "1.1.13",
     "nuxt-start": "^2.14.1",
+    "particles.vue": "^2.10.0",
     "vue-cytoscape": "^1.0.8",
     "vue-grid-layout": "^2.3.11",
     "vue-json-excel": "^0.3.0",

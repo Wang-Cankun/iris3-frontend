@@ -3,6 +3,7 @@
     <v-container>
       <v-col cols="12">
         <v-card class="mx-auto" elevation="0">
+          <Particles id="tsparticles" :options="options"> </Particles>
           <v-img class="white--text align-center">
             <v-card-title class="justify-center">
               <h1 class="text-h1 black--text font-weight-bold text-no-wrap">
@@ -153,6 +154,7 @@
 </template>
 
 <script>
+import config from '~/static/config/particle_config.js'
 export default {
   data() {
     return {
@@ -177,7 +179,11 @@ export default {
         'Ma, A., et al. (2020). IRIS3: integrated cell-type-specific regulon inference server from single-cell RNA-Seq, Nucleic Acids Research, gkaa394',
     }
   },
-  computed: {},
+  computed: {
+    options() {
+      return config
+    },
+  },
   methods: {
     showSnackbar(msg, col) {
       this.$notifier.showMessage({ content: msg, color: col })
