@@ -61,7 +61,7 @@
               v-model="searchJobId"
               outlined
               clearable
-              label="Search Your Job ID"
+              label="Search your job ID"
               type="search"
               prepend-inner-icon="mdi-magnify"
             />
@@ -142,7 +142,7 @@
             <script
               id="clustrmaps"
               type="text/javascript"
-              src="//cdn.clustrmaps.com/map_v2.js?d=y6edmNGXh1CPbChW0tW9Ahz11iiWoeE4HDc-yFfav5Y&cl=ffffff&w=a"
+              src="//cdn.clustrmaps.com/map_v2.js?cl=fefcfc&w=300&t=tt&d=7cEjZiu9nU3uQEuIYI-jPj0xlNdl5NmLz2LoA8XY02A&co=1565c0&cmo=e73131&cmn=18c818&ct=fffdfd"
             ></script>
           </div>
         </client-only>
@@ -186,10 +186,10 @@ export default {
       title: 'DeepMAPS',
       meta: [
         {
-          hid: 'description',
-          name: 'description',
+          hid: 'DeepMAPS',
+          name: 'DeepMAPS',
           content:
-            'Integrated Cell-type-specific Regulon Inference Server from Single-cell RNA-Seq',
+            'Deep learning based Multi-omics Analysis Portal for Single cells',
         },
       ],
     }
