@@ -20,7 +20,7 @@
             <v-row class="mt-2">
               <v-col cols="8" offset="2">
                 <v-row class="text-center black--text font-weight-medium">
-                  <v-col> Function </v-col>
+                  <v-col> Functions </v-col>
                   <v-col> Created Projects </v-col>
                   <v-col> Submitted jobs </v-col>
                   <v-col> Data source </v-col>
@@ -76,16 +76,10 @@
               <v-card-title class="justify-center">scRNA-Seq</v-card-title>
               <v-col>
                 <v-row justify="center" class="mb-1">
-                  <v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/submit/single-rna/example"
-                    >Example</v-btn
-                  >
+                  <v-btn to="/submit/single-rna/example">Example</v-btn>
                 </v-row>
                 <v-row justify="center" class="mb-1"
-                  ><v-btn width="150" plain>Learn more</v-btn>
+                  ><v-btn plain>Learn more</v-btn>
                 </v-row>
               </v-col>
             </v-card>
@@ -97,16 +91,10 @@
               >
               <v-col>
                 <v-row justify="center" class="mb-1">
-                  <v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/submit/multiple-rna/example"
-                    >Example</v-btn
-                  >
+                  <v-btn to="/submit/multiple-rna/example">Example</v-btn>
                 </v-row>
                 <v-row justify="center" class="mb-1"
-                  ><v-btn width="150" plain>Learn more</v-btn>
+                  ><v-btn plain>Learn more</v-btn>
                 </v-row>
               </v-col>
             </v-card>
@@ -118,16 +106,10 @@
               >
               <v-col>
                 <v-row justify="center" class="mb-1">
-                  <v-btn
-                    color="primary"
-                    width="150"
-                    rounded
-                    to="/submit/multiome/example"
-                    >Example</v-btn
-                  >
+                  <v-btn to="/submit/multiome/example">Example</v-btn>
                 </v-row>
                 <v-row justify="center" class="mb-1"
-                  ><v-btn width="150" plain>Learn more</v-btn>
+                  ><v-btn plain>Learn more</v-btn>
                 </v-row>
               </v-col>
             </v-card>

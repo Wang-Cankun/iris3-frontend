@@ -20,8 +20,8 @@
                   </template>
                   <span> TODO</span>
                 </v-tooltip>
-                <v-row class="ml-4 mb-0 py-0">
-                  <v-col class="py-0" cols="11">
+                <v-row class="mb-0 py-0">
+                  <v-col class="py-0" cols="12">
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
                         <v-select
@@ -35,22 +35,8 @@
                       <span> TODO</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="6"
-                    ><v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-select
-                          v-model="hgtParamSelect"
-                          :items="hgtParamList"
-                          label="Method"
-                          @mouseenter.native="on.mouseenter"
-                          @mouseleave.native="on.mouseleave"
-                        ></v-select>
-                      </template>
-                      <span>TODO</span>
-                    </v-tooltip></v-col
-                  >
 
-                  <v-col cols="6"
+                  <v-col cols="12"
                     ><v-tooltip top>
                       <template v-slot:activator="{ on }">
                         <v-text-field
@@ -69,10 +55,7 @@
                 >
 
                 <div v-if="integrationSelect === 'Seurat-WNN'">
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Parameters
-                  </p>
-                  <v-row class="mx-4">
+                  <v-row>
                     <v-col cols="6"
                       ><v-tooltip top>
                         <template v-slot:activator="{ on }">
@@ -109,8 +92,8 @@
                     >
                   </v-row>
                 </div>
-                <v-row justify="center">
-                  <v-btn class="mx-2 my-4" @click="runCellCluster()"
+                <v-row class="ma-0" justify="center">
+                  <v-btn class="my-2" @click="runCellCluster()"
                     >Calculate</v-btn
                   >
                 </v-row>
@@ -118,7 +101,7 @@
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header>
-                Active metadata
+                Cell category
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <p class="subtitle-1 font-weight-bold text-center">
@@ -126,40 +109,34 @@
                 </p>
                 <v-select
                   v-model="currentIdent"
-                  class="ml-4"
                   :items="idents"
                   label="Select category"
                   @change="setActiveIdents(currentIdent)"
                 ></v-select>
-                <v-divider />
                 <p class="subtitle-1 font-weight-bold text-center">
                   Rename clusters
                 </p>
-                <v-row class="mx-2 my-2 py-2">
-                  <v-col cols="12"
-                    ><v-select
-                      v-model="oldClusterName"
-                      class="px-1"
-                      label="Old cluster name"
-                      :items="currentIdentLevels"
-                      hide-details="auto"
-                      background-color="white"
-                      dense
-                    ></v-select
-                  ></v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="newClusterName"
-                      label="New cluster name"
-                      placeholder="Number"
-                      class="px-1"
-                      dense
-                      background-color="white"
-                    ></v-text-field
-                  ></v-col>
-                  <v-col cols="4" class="mt-0"
-                    ><v-btn @click="renameCluster()">Rename</v-btn></v-col
-                  ></v-row
+
+                <v-col class="px-0" cols="12"
+                  ><v-select
+                    v-model="oldClusterName"
+                    label="Old cluster name"
+                    :items="currentIdentLevels"
+                    hide-details="auto"
+                    background-color="white"
+                    dense
+                  ></v-select
+                ></v-col>
+                <v-col class="px-0" cols="12">
+                  <v-text-field
+                    v-model="newClusterName"
+                    label="New cluster name"
+                    dense
+                    background-color="white"
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="4" class="mt-0"
+                  ><v-btn @click="renameCluster()">Rename</v-btn></v-col
                 >
               </v-expansion-panel-content>
             </v-expansion-panel>

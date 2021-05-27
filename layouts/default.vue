@@ -213,11 +213,16 @@
 
               <v-col col="1">
                 <p class="font-weight-bold" style="">SOCIAL</p>
-                <v-btn v-for="icon in icons" :key="icon" class="mx-0" icon left>
-                  <v-icon size="24px">
-                    {{ icon }}
-                  </v-icon>
-                </v-btn>
+                <div v-for="icon in icons" :key="icon.name" icon left>
+                  <v-btn text>
+                    <a
+                      class="text-decoration-none"
+                      :href="icon.url"
+                      :target="icon.url"
+                      ><v-icon size="24px">{{ icon.name }}</v-icon></a
+                    >
+                  </v-btn>
+                </div>
               </v-col>
             </v-row>
           </v-col>
@@ -225,7 +230,7 @@
         <v-row class="mt-2">
           <!-- Version and Data information -->
           <v-col class="lighten-2 py-4 text-center" cols="12">
-            deepmaps (v0.7) is developed by
+            DeepMAPS (v0.7) is developed by
             <a class="text-decoration-none" href="https://u.osu.edu/bmbl/"
               >BMBL</a
             >, it is free and open to all users. |
@@ -325,7 +330,20 @@ export default {
           path: '/acknowledgement',
         },
       ],
-      icons: ['mdi-github', 'mdi-youtube', 'mdi-twitter'],
+      icons: [
+        {
+          name: 'mdi-github',
+          url: 'https://github.com/OSU-BMBL',
+        },
+        {
+          name: 'mdi-youtube',
+          url: 'https://www.youtube.com/channel/UCgk6f-MU7sJ-_XqWEtDWBfg',
+        },
+        {
+          name: 'mdi-twitter',
+          url: 'https://twitter.com/QinMaBMBL',
+        },
+      ],
       title: 'DeepMAPS',
     }
   },
