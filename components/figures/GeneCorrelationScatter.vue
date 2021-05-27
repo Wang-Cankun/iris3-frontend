@@ -40,33 +40,30 @@
         </div>
       </v-card-title>
       <div class="no-drag">
-        <v-row
-          ><v-col cols="6">
+        <v-row class="mt-2"
+          ><v-col cols="4">
             <v-autocomplete
               v-model="geneCor1"
               class="ml-4"
               :items="genes"
+              dense
               label="Gene 1"
             ></v-autocomplete>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="4">
             <v-autocomplete
               v-model="geneCor2"
               class="ml-4"
               :items="genes"
+              dense
               label="Gene 2"
             ></v-autocomplete>
           </v-col>
+          <v-col cols="4">
+            <v-btn small @click="runGeneCorPlot()">Plot</v-btn>
+          </v-col>
         </v-row>
-        <v-row justify="center" class="mx-2 mb-2 mt-0">
-          <v-btn
-            class="mx-2 mb-2 mt-0"
-            color="Primary"
-            width="200"
-            @click="runGeneCorPlot()"
-            >Plot</v-btn
-          >
-        </v-row>
+        <v-row justify="center" class="mx-2 mb-2 mt-0"> </v-row>
         <div v-show="geneCorPlot">
           <v-img
             contain
@@ -124,6 +121,7 @@ export default {
       return 1
     },
     async runGeneCorPlot() {
+      this.$nuxt.$loading.start()
       this.geneCorPlot = await ApiService.postCommand(
         'deepmaps/api/queue/gene-correlation-plot/',
         {
@@ -131,6 +129,7 @@ export default {
           gene2: this.geneCor2,
         }
       )
+      this.$nuxt.$loading.finish()
     },
   },
 }

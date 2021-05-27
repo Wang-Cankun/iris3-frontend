@@ -243,7 +243,7 @@ export default {
       degAssay: 'RNA',
       degPvalue: 0.05,
       degPvalueList: [0.01, 0.05, 0.1],
-      tableHeight: 340,
+      tableHeight: 350,
       footerHeight: 240,
       sortBy: 'avg_log2FC',
       sortDesc: true,

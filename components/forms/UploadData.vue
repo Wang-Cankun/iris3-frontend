@@ -641,10 +641,10 @@ export default {
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
         'PBMC scATAC-seq fragments index'
       )
-      this.labelFile.multiome = dataURLtoFile(
-        'data:text/plain;base64,aGVsbG8gd29ybGQ=',
-        'PBMC example metadata'
-      )
+      // this.labelFile.multiome = dataURLtoFile(
+      //   'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+      //   'PBMC example metadata'
+      // )
       this.bamFile = dataURLtoFile(
         'data:text/plain;base64,aGVsbG8gd29ybGQ=',
         'PBMC velocity matrix'

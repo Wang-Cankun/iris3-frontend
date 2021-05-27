@@ -92,7 +92,6 @@
             <div v-if="type === 'gene'" class="d-flex flex">
               <v-autocomplete
                 v-model="gene"
-                class="ml-4"
                 :items="genes"
                 dense
                 :rules="[(v) => !!v || 'Item is required']"
@@ -119,9 +118,9 @@
       <div v-if="src">
         <v-img
           contain
-          :height="windowSize.y - 350"
+          :height="windowSize.y - 200"
           :max-width="windowSize.x + 'px'"
-          :max-height="windowSize.y - 350"
+          :max-height="windowSize.y - 200"
           :src="src"
         ></v-img>
       </div> </grid-item
@@ -177,8 +176,8 @@ export default {
         'chrY',
       ],
       windowSize: {
-        x: 400,
-        y: 400,
+        x: 600,
+        y: 600,
       },
       hover: false,
       type: 'gene',
@@ -239,6 +238,7 @@ export default {
           color: 'error',
         })
       } else {
+        this.$nuxt.$loading.start()
         this.src = await ApiService.postCommand(
           'deepmaps/api/queue/coverage-plot/',
           {
@@ -252,6 +252,7 @@ export default {
             is_peak: false,
           }
         )
+        this.$nuxt.$loading.finish()
       }
     },
     endRules(v) {

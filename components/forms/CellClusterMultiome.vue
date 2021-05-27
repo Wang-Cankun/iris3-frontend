@@ -35,23 +35,25 @@
                       <span> TODO</span>
                     </v-tooltip>
                   </v-col>
-
-                  <v-col cols="12"
-                    ><v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="resolution"
-                          label="Clustering resolution"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <span
-                        >Resolution for clustering in Seurat (form 0-1). Larger
-                        number will generate more clusters and smaller number
-                        will generate less clusters. Default: 0.5.</span
-                      >
-                    </v-tooltip></v-col
-                  ></v-row
+                  <div v-if="integrationSelect === 'Velocity weighted method'">
+                    <v-col cols="12"
+                      ><v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="resolution"
+                            label="Clustering resolution"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <span
+                          >Resolution for clustering in Seurat (form 0-1).
+                          Larger number will generate more clusters and smaller
+                          number will generate less clusters. Default:
+                          0.5.</span
+                        >
+                      </v-tooltip></v-col
+                    >
+                  </div></v-row
                 >
 
                 <div v-if="integrationSelect === 'Seurat-WNN'">
@@ -657,6 +659,7 @@ export default {
         content: `Set cell category to ${this.currentIdent}`,
         color: 'accent',
       })
+      this.$nuxt.$loading.start()
       this.currentIdentLevels = await ApiService.postCommand(
         'deepmaps/api/queue/set-idents/',
         { name: this.currentIdent }
@@ -679,6 +682,7 @@ export default {
           categoryName: this.currentIdent,
         }
       )
+      this.$nuxt.$loading.finish()
     },
 
     async setActiveEmbedding(currentEmbedding) {
@@ -735,7 +739,7 @@ export default {
       this.clusterResult = await ApiService.postCommand(
         'deepmaps/api/queue/cluster-multiome/',
         {
-          method: 'HGT',
+          method: this.integrationSelect,
           nPCs: this.nPCs,
           resolution: this.resolution,
           neighbor: this.neighbor,
@@ -886,41 +890,20 @@ export default {
         newLevelName: this.addLabelName,
         filterPayload: this.filterPayload,
       }
-      console.log(payload)
-      await this.$axios
-        .post('deepmaps/api/queue/select-cells/', payload)
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.filterPayload = []
-                  this.selectedCells = response.data.returnvalue
+      this.$nuxt.$loading.start()
 
-                  clearInterval(checkComplete)
-                }
-                if (++i === 100) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Error: ' + error,
-            color: 'error',
-          })
-        })
-
+      this.selectedCells = await ApiService.postCommand(
+        'deepmaps/api/queue/select-cells/',
+        payload
+      )
+      this.filterPayload = []
       this.clusterScatterData = await ApiService.postCommand(
         'deepmaps/api/queue/embedding-coords/',
         {
           categoryName: this.currentIdent,
         }
       )
-      return 1
+      this.$nuxt.$loading.finish()
     },
 
     addGeneSelection() {

@@ -96,7 +96,7 @@ export default {
         { text: 'Max', value: 'max', align: 'start' },
         { text: 'Min', value: 'min', align: 'start' },
       ],
-      tableHeight: 380,
+      tableHeight: 450,
       footerHeight: 155,
     }
   },
