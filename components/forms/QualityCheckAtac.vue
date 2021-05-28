@@ -123,11 +123,11 @@
                       v-model="maxPeaks"
                       class="mr-2 pr-2"
                       dense
-                      label="Minimal peaks per cell"
+                      label="Maximal peaks per cell"
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <span> Minimal peaks per cell</span>
+                  <span> Maximal peaks per cell</span>
                 </v-tooltip></v-col
               >
             </v-row>
