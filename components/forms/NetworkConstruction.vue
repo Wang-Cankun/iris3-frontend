@@ -21,18 +21,13 @@
               </v-row>
               <div v-show="ctList.length" class="mt-2 pt-2">
                 <v-divider />
-                <v-tooltip top max-width="500px">
-                  <template v-slot:activator="{ on }">
-                    <v-select
-                      v-model="selectedCt"
-                      :items="ctList"
-                      label="Select cell cluster"
-                      @mouseenter.native="on.mouseenter"
-                      @mouseleave.native="on.mouseleave"
-                    ></v-select>
-                  </template>
-                  <p>TODO</p>
-                </v-tooltip>
+                <v-select
+                  v-model="selectedCt"
+                  :items="ctList"
+                  label="1. Select cell cluster"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
+                ></v-select>
 
                 <div v-if="selectedCt.length">
                   <selection

@@ -6,7 +6,7 @@
       :items="all"
       item-text="value"
       item-value="value"
-      label="Selected regulons"
+      label="2. Select regulons"
       return-object
       multiple
       @mouseenter.native="on.mouseenter"
