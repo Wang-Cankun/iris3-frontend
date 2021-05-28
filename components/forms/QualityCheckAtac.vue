@@ -16,7 +16,7 @@
                 Peaks: {{ qcResult.raw_n_genes[0] }}
               </p>
               <p class="text--secondary">
-                Zero expression percentage:
+                Zero value percentage:
                 {{ qcResult.raw_percent_zero[0] }}
               </p>
               <p class="subtitle-1 font-weight-bold text-center">
@@ -29,7 +29,7 @@
                 Peaks: {{ qcResult.filter_n_genes[0] }}
               </p>
               <p class="text--secondary">
-                Zero expression percentage:
+                Zero value percentage:
                 {{ qcResult.filter_percent_zero[0] }}
               </p>
             </v-card-text>

@@ -12,9 +12,9 @@ All notable changes to DeepMAPS will be documented in this page.
  
 ### Added
 
-- Re-designed upload page
-- Re-designed settings section in the calculation page
-- Re-designed custom cell selection section. Now it will display error message.
+- Redesigned upload page
+- Redesigned settings section in the calculation page
+- Redesigned custom cell selection section. Now it will display error message.
 - Added loading progess for most of the analyses
 - Hide pages and section if calculation is not complete or not started
 
