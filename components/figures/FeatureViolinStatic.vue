@@ -87,7 +87,7 @@
             </v-tooltip></v-col
           >
           <v-col cols="3">
-            <v-btn small @click="runGeneViolin()" v-on="on">Plot</v-btn></v-col
+            <v-btn small @click="runGeneViolin()">Plot</v-btn></v-col
           >
         </v-row>
 

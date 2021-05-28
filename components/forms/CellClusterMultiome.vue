@@ -352,7 +352,7 @@
           </v-expansion-panels>
         </v-col>
         <v-col cols="9">
-          <div v-if="clusterResult !== ''">
+          <div v-if="clusterScatterData.axis[0] !== 0">
             <div>
               <grid-layout
                 :layout.sync="layout"
@@ -766,6 +766,7 @@ export default {
         }
       )
       this.$nuxt.$loading.finish()
+      this.$store.dispatch('calc/updateFlag', true)
       this.setExistingCategoryItems = await ApiService.postCommand(
         'deepmaps/api/queue/select-category/'
       ).available_category
@@ -780,14 +781,12 @@ export default {
         this.violinSplitItems.push('NULL')
       })
       let tmp = await ApiService.postCommand('deepmaps/api/queue/assays/')
-      console.log(tmp)
       this.allAssays = tmp.all_assays
       this.currentAssay = tmp.all_assays[tmp.assay_idx[0]]
 
       tmp = await ApiService.postCommand('deepmaps/api/queue/embeddings/')
       this.allEmbeddings = tmp.all_embeddings
       this.currentEmbedding = tmp.all_embeddings[tmp.embedding_idx[0]]
-      console.log(tmp)
     },
 
     async setCategory(name) {

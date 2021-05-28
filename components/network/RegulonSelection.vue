@@ -51,8 +51,8 @@
             :max="centralityMinMax[1]"
             :min="centralityMinMax[0]"
             step="0.05"
-            thumb-label="always"
-            :label="`Filter regulons by centrality`"
+            thumb-label
+            label="Filter regulons by centrality"
             @change="updateSelectedByCentrality"
             @mouseenter.native="on.mouseenter"
             @mouseleave.native="on.mouseleave"
@@ -75,14 +75,29 @@ export default {
   data() {
     return {
       selected: [],
-      centralityThres: 0.5,
+      centralityThres: 0.2,
     }
   },
   computed: {
     centralityMinMax() {
-      const min = Math.min(...this.regulonList.map((i) => i.rss))
-      const max = Math.max(...this.regulonList.map((i) => i.rss))
+      let min = Math.min(...this.regulonList.map((i) => i.centrality))
+      let max = Math.max(...this.regulonList.map((i) => i.centrality))
+      if (min === -Infinity) {
+        min = 0
+      }
+      if (max === Infinity) {
+        max = 1
+      }
+
       return [min, max]
+    },
+    meanCentrality() {
+      const mean = (this.centralityMinMax[0] + this.centralityMinMax[1]) * 0.5
+      if (mean < 0.5 && this.centralityMinMax[1] > 0.5) {
+        return 0.5
+      } else {
+        return mean
+      }
     },
     all() {
       return this.regulonList.map((i) => i.tf)
@@ -102,14 +117,6 @@ export default {
     },
   },
   mounted() {
-    const meanCentrality =
-      (this.centralityMinMax[0] + this.centralityMinMax[1]) * 0.5
-    if (meanCentrality < 0.5 && this.centralityMinMax[1] > 0.5) {
-      this.centralityThres = 0.5
-    } else {
-      this.centralityThres = meanCentrality
-    }
-
     this.updateSelectedByCentrality()
     // this.selected = this.all.length > 10 ? this.all.slice(0, 5) : this.all
   },
@@ -139,7 +146,7 @@ export default {
     },
     updateSelectedByCentrality() {
       this.selected = this.regulonList
-        .filter((item) => item.rss > this.centralityThres)
+        .filter((item) => item.centrality > this.centralityThres)
         .map((item) => item.tf)
     },
   },

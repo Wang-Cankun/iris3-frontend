@@ -405,11 +405,6 @@ export default {
       selectedCells: [],
     }
   },
-  mounted() {
-    if (this.jobid === 'example1') {
-      this.runPreProcess()
-    }
-  },
   computed: {
     filterCategoryLevels() {
       return this.allIdents
@@ -423,6 +418,11 @@ export default {
         .map((item) => item.levels)
         .flat()
     },
+  },
+  mounted() {
+    if (this.jobid === 'example1') {
+      this.runPreProcess()
+    }
   },
   methods: {
     addGeneSelection() {

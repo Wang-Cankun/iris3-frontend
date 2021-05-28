@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 <template>
   <v-col class="mb-2" cols="12">
     <v-card outlined>
@@ -18,9 +19,12 @@
                   >Calculate</v-btn
                 >
               </v-row>
-              <div v-show="showNetwork">
+              <div v-show="ctList.length" class="mt-2 pt-2">
                 <v-divider />
-
+                <p>
+                  Cell category for network construction:
+                  {{ allIdents.map((i) => i.ident).flat()[0] }}
+                </p>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-select
@@ -34,7 +38,7 @@
                   <p>TODO</p>
                 </v-tooltip>
 
-                <div v-if="selectedCt">
+                <div v-if="selectedCt.length">
                   <selection
                     :regulon-list="selectedCtRegulonList"
                     :selected.sync="selectedTf"
@@ -125,7 +129,7 @@
                 <feature-violin
                   :setting="layout[6]"
                   :genes="selectedRegulonGenes"
-                  :idents="idents"
+                  :idents="ctList"
                 ></feature-violin>
                 <regulon-genes-table
                   :genes="selectedRegulonGenes"
@@ -310,6 +314,7 @@ export default {
     ExampleNodes: [],
     ExampleEdges: [],
     RegulonList: [],
+    allIdents: [],
     idents: ['hgt_cluster', 'None'],
     rasData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     riHeatmapData: { column: [], row: [], data: [], legend: [0, 1] },
@@ -328,21 +333,23 @@ export default {
     },
 
     regulonTable() {
-      return this.RegulonList.filter((i) => i.ct === this.selectedCt)
+      return this.RegulonList.filter((i) => i.ct === +this.selectedCt)
     },
 
     ctList() {
-      return this.RegulonList.map((item) => item.ct)
-        .filter((v, i, a) => a.indexOf(v) === i)
-        .sort()
+      if (this.allIdents) {
+        return this.allIdents.map((i) => i.levels).flat()
+      } else {
+        return []
+      }
     },
     tfList() {
-      return this.RegulonList.filter((i) => i.ct === this.selectedCt).map(
+      return this.RegulonList.filter((i) => i.ct === +this.selectedCt).map(
         (i) => i.tf
       )
     },
     selectedCtRegulonList() {
-      return this.RegulonList.filter((i) => i.ct === this.selectedCt)
+      return this.RegulonList.filter((i) => i.ct === +this.selectedCt)
     },
   },
   watch: {
@@ -351,17 +358,14 @@ export default {
       this.selectedRegulonGenes = this.selectedRegulon.genes.split(',')
       this.updateSelectedRegulon()
     },
-  },
-  mounted() {
-    this.showNetwork = false
-  },
-  methods: {
-    async runNetwork() {
+    async selectedCt() {
       this.$nuxt.$loading.start()
+      this.regulonData = []
       this.regulonData = await ApiService.postCommand(
         'deepmaps/api/queue/run-r/',
         {
           type: 'regulon',
+          cluster: this.selectedCt,
         }
       )
       await ApiService.sleep(2000)
@@ -369,6 +373,19 @@ export default {
       this.ExampleNodes = this.regulonData.nodes
       this.ExampleEdges = this.regulonData.edges
       this.showNetwork = true
+      this.$nuxt.$loading.finish()
+    },
+  },
+  mounted() {
+    this.showNetwork = false
+  },
+  methods: {
+    async runNetwork() {
+      this.$nuxt.$loading.start()
+      await ApiService.sleep(100)
+      this.allIdents = await this.$axios
+        .post('deepmaps/api/queue/idents/')
+        .then((response) => response.data)
       this.$nuxt.$loading.finish()
     },
     async updateSelectedRegulon() {

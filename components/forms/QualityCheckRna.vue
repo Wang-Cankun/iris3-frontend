@@ -127,7 +127,7 @@
                       v-model="mitoFilter"
                       class="mr-2 pr-2"
                       dense
-                      label="Gene filter"
+                      label="Mitocondrial genes filter"
                       v-on="on"
                     ></v-text-field>
                   </template>
@@ -502,7 +502,7 @@ export default {
   },
   mounted() {
     if (this.jobid === 'example') {
-      // this.runPreProcess()
+      this.runPreProcess()
     }
   },
   computed: {
@@ -589,6 +589,7 @@ export default {
 
     async runPreProcess() {
       this.metadata = []
+      this.$store.dispatch('calc/updateFlag', true)
       this.$nuxt.$loading.start()
       if (this.idx === 0 && this.type === 'single_rna') {
         this.qcResult = await ApiService.postCommand(

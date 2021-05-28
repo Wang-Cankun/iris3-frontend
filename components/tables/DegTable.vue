@@ -267,7 +267,7 @@ export default {
             pvalue: this.degPvalue,
           }
         )
-        await ApiService.sleep(2000)
+        await ApiService.sleep(1000)
         this.$store.dispatch(
           'calc/updateDeg',
           this.deResult.map((item) => item.gene)

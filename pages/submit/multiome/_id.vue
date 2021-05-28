@@ -40,7 +40,7 @@
               ></v-tabs-items>
             </v-col>
           </v-row>
-          <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
+          <v-btn color="primary" @click="changePage(2)"> Continue </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
           <v-row
@@ -49,21 +49,24 @@
               :jobid="jobid"
             ></cell-cluster-form
           ></v-row>
-          <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
-          <v-btn text @click="e1 = 1">Previous</v-btn>
+          <v-btn color="primary" @click="changePage(3)"> Continue </v-btn>
+          <v-btn text @click="changePage(1)">Previous</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3"
           ><v-row><network-form></network-form></v-row>
-          <v-btn text @click="e1 = 2">Previous</v-btn>
+          <v-btn text @click="changePage(2)">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 import QualityCheckRna from '@/components/forms/QualityCheckRna.vue'
 import QualityCheckAtac from '@/components/forms/QualityCheckAtac.vue'
 import CellCluster from '@/components/forms/CellClusterMultiome.vue'
+
 import NetworkConstruction from '~/components/forms/NetworkConstruction.vue'
 import ProjectInfo from '~/components/forms/ProjectInfo'
 
@@ -83,8 +86,30 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      flag: (state) => state.calc.flag,
+    }),
     jobid() {
       return this.$route.params.id
+    },
+  },
+  watch: {
+    e1() {
+      console.log(this.e1)
+    },
+  },
+  methods: {
+    changePage(page) {
+      if (this.flag === true) {
+        console.log(page)
+        this.e1 = page
+        this.$store.dispatch('calc/updateFlag', true)
+      } else {
+        this.$notifier.showMessage({
+          content: 'Please calculate first',
+          color: 'error',
+        })
+      }
     },
   },
 }

@@ -95,7 +95,7 @@ export default {
           align: 'start',
           value: 'tf',
         },
-        { text: 'Centrality', value: 'rss' },
+        { text: 'Centrality', value: 'centrality' },
         { text: 'Visualize', value: 'actions', sortable: false },
         { text: 'Number of genes', value: 'n' },
         { text: 'RAS', value: 'ras' },
@@ -104,7 +104,7 @@ export default {
         { text: 'VR', value: 'vr' },
         { text: 'is CTSR', value: 'isCtsr' },
       ],
-      sortBy: 'rss',
+      sortBy: 'centrality',
       sortDesc: true,
     }
   },
@@ -114,8 +114,8 @@ export default {
         .map((i) => ({
           ras: (Math.random() / 2).toFixed(3),
           vr: (Math.random() * 4).toFixed(3),
-          drLogFC: (Math.random() * 8).toFixed(3),
-          drPvalue: (Math.random() / 6).toFixed(3),
+          drLogFC: (Math.random() * 2.1541).toFixed(3),
+          drPvalue: (Math.random() / 5.124).toFixed(3),
           ...i,
         }))
         .map((i) => ({ isCtsr: i.drPvalue < 0.05 ? 'yes' : 'no', ...i }))
