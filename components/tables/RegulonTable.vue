@@ -112,10 +112,7 @@ export default {
     exampleItems() {
       return this.items
         .map((i) => ({
-          ras: (Math.random() / 2).toFixed(3),
-          vr: (Math.random() * 4).toFixed(3),
-          drLogFC: (Math.random() * 2.1541).toFixed(3),
-          drPvalue: (Math.random() / 5.124).toFixed(3),
+          ras: ((i.centrality / 7 + 0.12567) * 1.54452).toFixed(3),
           ...i,
         }))
         .map((i) => ({ isCtsr: i.drPvalue < 0.05 ? 'yes' : 'no', ...i }))
