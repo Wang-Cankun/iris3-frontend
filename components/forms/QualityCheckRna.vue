@@ -504,7 +504,7 @@ export default {
 
     async runPreProcess() {
       this.metadata = []
-      this.$store.dispatch('calc/updateFlag', true)
+
       this.$nuxt.$loading.start()
       if (this.idx === 0 && this.type === 'single_rna') {
         this.qcResult = await ApiService.postCommand(
@@ -582,6 +582,7 @@ export default {
       await this.$axios.post('deepmaps/api/queue/genes/').then((response) => {
         this.genes = response.data
       })
+      this.$store.dispatch('calc/updateFlag', 'RNA')
       this.$nuxt.$loading.finish()
       this.qcComplete = true
     },

@@ -101,12 +101,13 @@ export default {
   methods: {
     beforePage(page) {},
     afterPage(page) {
-      if (this.flag === true) {
+      const uniqueFlag = new Set(this.flag).size
+      if (uniqueFlag === 2) {
         this.e1 = page
-        this.$store.dispatch('calc/updateFlag', false)
+        this.$store.dispatch('calc/resetFlag')
       } else {
         this.$notifier.showMessage({
-          content: 'Please calculate first',
+          content: 'Please calculate on the RNA and ATAC data tab',
           color: 'error',
         })
       }

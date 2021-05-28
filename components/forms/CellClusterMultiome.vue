@@ -243,11 +243,7 @@
                     ></v-text-field
                   ></v-col>
 
-                  <v-col cols="4"
-                    ><v-btn small @click="setCategory(addCategoryName)"
-                      >SET</v-btn
-                    ></v-col
-                  >
+                  <v-col cols="4"></v-col>
 
                   <v-col cols="7"
                     ><v-text-field

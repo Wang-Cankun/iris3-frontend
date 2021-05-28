@@ -1,4 +1,4 @@
-/* eslint-disable eqeqeq */
+/* eslint-disable eqeqeq */ /* eslint-disable eqeqeq */
 <template>
   <v-col class="mb-2" cols="12">
     <v-card outlined>
@@ -92,7 +92,7 @@
                 <feature-violin
                   :setting="layout[6]"
                   :genes="selectedRegulonGenes"
-                  :idents="ctList"
+                  :idents="identList"
                 ></feature-violin>
                 <regulon-genes-table
                   :genes="selectedRegulonGenes"
@@ -291,23 +291,33 @@ export default {
     },
 
     regulonTable() {
-      return this.RegulonList.filter((i) => i.ct === +this.selectedCt)
+      // eslint-disable-next-line eqeqeq
+      return this.RegulonList.filter((i) => i.ct == this.selectedCt)
     },
 
     ctList() {
-      if (this.allIdents) {
-        return this.allIdents.map((i) => i.levels).flat()
+      if (this.allIdents.length) {
+        return this.allIdents.map((i) => i.levels)[0]
+      } else {
+        return []
+      }
+    },
+    identList() {
+      if (this.allIdents.length) {
+        return this.allIdents.map((i) => i.ident)
       } else {
         return []
       }
     },
     tfList() {
-      return this.RegulonList.filter((i) => i.ct === +this.selectedCt).map(
+      // eslint-disable-next-line eqeqeq
+      return this.RegulonList.filter((i) => i.ct == this.selectedCt).map(
         (i) => i.tf
       )
     },
     selectedCtRegulonList() {
-      return this.RegulonList.filter((i) => i.ct === +this.selectedCt)
+      // eslint-disable-next-line eqeqeq
+      return this.RegulonList.filter((i) => i.ct == this.selectedCt)
     },
   },
   watch: {
@@ -326,7 +336,7 @@ export default {
           cluster: this.selectedCt,
         }
       )
-      await ApiService.sleep(2000)
+      await ApiService.sleep(1000)
       this.RegulonList = this.regulonData.regulons
       this.ExampleNodes = this.regulonData.nodes
       this.ExampleEdges = this.regulonData.edges
@@ -340,7 +350,7 @@ export default {
   methods: {
     async runNetwork() {
       this.$nuxt.$loading.start()
-      await ApiService.sleep(15000)
+      await ApiService.sleep(7000)
       this.allIdents = await this.$axios
         .post('deepmaps/api/queue/idents/')
         .then((response) => response.data)

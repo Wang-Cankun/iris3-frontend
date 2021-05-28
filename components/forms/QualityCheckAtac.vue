@@ -421,7 +421,7 @@ export default {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
       })
-
+      this.$store.dispatch('calc/updateFlag', 'ATAC')
       this.qcComplete = true
       this.$nuxt.$loading.finish()
     },

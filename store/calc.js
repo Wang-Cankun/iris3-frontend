@@ -1,5 +1,5 @@
 export const state = () => ({
-  flag: false,
+  flag: [],
   deg: [],
 })
 
@@ -7,8 +7,11 @@ export const mutations = {
   SET_DEG(state, deg) {
     state.deg = deg
   },
-  SET_FLAG(state, flag) {
-    state.flag = flag
+  SET_FLAG(state, item) {
+    state.flag.push(item)
+  },
+  RESET_FLAG(state) {
+    state.flag = []
   },
 }
 
@@ -18,5 +21,8 @@ export const actions = {
   },
   updateFlag({ commit }, flag) {
     commit('SET_FLAG', flag)
+  },
+  resetFlag({ commit }) {
+    commit('RESET_FLAG')
   },
 }
