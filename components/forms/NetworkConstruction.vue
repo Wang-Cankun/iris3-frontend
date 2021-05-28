@@ -310,7 +310,7 @@ export default {
     ExampleNodes: [],
     ExampleEdges: [],
     RegulonList: [],
-    idents: ['hgt_cluster', 'sex', 'sample'],
+    idents: ['hgt_cluster', 'None'],
     rasData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     riHeatmapData: { column: [], row: [], data: [], legend: [0, 1] },
   }),

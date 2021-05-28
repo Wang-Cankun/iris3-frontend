@@ -123,8 +123,8 @@ export default {
       hover: false,
       gene: '',
       geneViolin: '',
-      violinSplit: 'sex',
-      violinGroup: 'hgt_cluster',
+      violinSplit: '',
+      violinGroup: '',
       windowSize: {
         x: 520,
         y: 550,
