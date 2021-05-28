@@ -22,7 +22,7 @@
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>TODO</p>
+            <p>Differential gene expression analysis table: to be updated</p>
           </v-tooltip>
           <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
@@ -79,7 +79,10 @@
                     <v-divider class="mt-2"></v-divider> </template
                 ></v-select>
               </template>
-              <span>TODO</span>
+              <span
+                >Select one or more clusters for differential gene expression
+                analysis</span
+              >
             </v-tooltip>
           </v-col>
           <v-col cols="6" class="my-0">
@@ -118,7 +121,10 @@
                     <v-divider class="mt-2"></v-divider> </template
                 ></v-select>
               </template>
-              <span>TODO</span>
+              <span
+                >Select one or more clusters for differential gene expression
+                analysis</span
+              >
             </v-tooltip>
           </v-col>
           <v-col cols="3" class="my-0 py-0"
@@ -134,7 +140,7 @@
                   @mouseleave.native="on.mouseleave"
                 ></v-select>
               </template>
-              <span>TODO</span>
+              <span>The false discovery rate (FDR) adjusted p-value</span>
             </v-tooltip></v-col
           >
           <v-col cols="3" class="my-0 py-0"

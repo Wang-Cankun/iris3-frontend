@@ -21,7 +21,7 @@
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>TODO</p>
+            <p>Barplot: to be updated</p>
           </v-tooltip>
           <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">

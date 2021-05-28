@@ -22,7 +22,7 @@
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>TODO</p>
+            <p>Enrichment analysis for regulon genes</p>
           </v-tooltip>
           <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
@@ -60,7 +60,15 @@
                 >
                 </v-autocomplete>
               </template>
-              <span>TODO</span>
+              <p>
+                KEGG: a collection of databases dealing with genomes, biological
+                pathways, diseases, drugs, and chemical substances
+              </p>
+              <p>
+                Gene Ontology (GO): a major bioinformatics initiative to unify
+                the representation of gene and gene product attributes across
+                all species
+              </p>
             </v-tooltip>
           </v-col>
           <v-col cols="4"

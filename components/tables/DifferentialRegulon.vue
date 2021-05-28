@@ -79,7 +79,10 @@
                     <v-divider class="mt-2"></v-divider> </template
                 ></v-select>
               </template>
-              <span>TODO</span>
+              <span
+                >Select one or more clusters for differential regulon
+                analysis</span
+              >
             </v-tooltip>
           </v-col>
           <v-col cols="4">
@@ -118,7 +121,10 @@
                     <v-divider class="mt-2"></v-divider> </template
                 ></v-select>
               </template>
-              <span>TODO</span>
+              <span
+                >Select one or more clusters for differential regulon
+                analysis</span
+              >
             </v-tooltip>
           </v-col>
           <v-col cols="4"><v-btn small @click="run()">Calculate</v-btn></v-col>

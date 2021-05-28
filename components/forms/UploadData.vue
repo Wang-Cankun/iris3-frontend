@@ -58,13 +58,13 @@
               ></v-file-input>
             </template>
             <p>
-              Gene expression matrix. Usually a count matrix. The values in this
-              matrix represent the number of molecules for each feature (i.e.
-              gene; row) that are detected in each cell (column).
+              Gene expression matrix. The values in this matrix represent the
+              number of molecules for each feature (i.e. gene; row) that are
+              detected in each cell (column)
             </p>
             <p>
               Support format: A single txt, tsv or csv formatted gene expression
-              matrix. hdf5 feature barcode matrix.
+              matrix. hdf5 feature barcode matrix
             </p>
           </v-tooltip>
 
@@ -86,7 +86,7 @@
               a two-column matrix with the first column as the cell names
               exactly matching the gene expression file, and the second column
               as ground-truth cell clusters. The cluster indicator could either
-              be terms (e.g. 2_cell_stage, 4_cell_stage) or numbers (e.g. 1,2).
+              be terms (e.g. 2_cell_stage, 4_cell_stage) or numbers (e.g. 1,2)
             </p>
           </v-tooltip>
 
@@ -143,7 +143,15 @@
                   @mouseleave.native="on.mouseleave"
                 ></v-file-input>
               </template>
-              <span>TODO</span>
+              <p>
+                Gene expression matrix. The values in this matrix represent the
+                number of molecules for each feature (i.e. gene; row) that are
+                detected in each cell (column)
+              </p>
+              <p>
+                Support format: A single txt, tsv or csv formatted gene
+                expression matrix. hdf5 feature barcode matrix
+              </p>
             </v-tooltip>
           </div>
 
@@ -166,7 +174,12 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <p>
+              a two-column matrix with the first column as the cell names
+              exactly matching the gene expression file, and the second column
+              as ground-truth cell clusters. The cluster indicator could either
+              be terms (e.g. 2_cell_stage, 4_cell_stage) or numbers (e.g. 1,2)
+            </p>
           </v-tooltip>
 
           <v-col cols="4" class="mx-0 my-2 pa-1"
@@ -231,7 +244,10 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <p>
+              The count matrix from 10x multiome protocol are stored in HDF5
+              format
+            </p>
           </v-tooltip>
 
           <v-tooltip top max-width="500px">
@@ -249,7 +265,13 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <p>
+              The fragment fragment file is obtained by adjusting the BAM
+              alignment interval of the sequenced read-pair. It contains one
+              line per unique fragment, with tab-separated description fields.
+              The 10x CellRanger automatically generates the fragment file in
+              the outs/ folder
+            </p>
           </v-tooltip>
 
           <v-tooltip top max-width="500px">
@@ -267,7 +289,15 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <p>
+              The fragments.tsv.gz.tbi serves as the tabix index of the fragment
+              intervals facilitating random access to records from an arbitrary
+              genomic interval
+            </p>
+            <p>
+              The fragments file would be used for quality control and
+              visualization in DeepMAPS
+            </p>
           </v-tooltip>
 
           <v-tooltip top max-width="500px">
@@ -284,7 +314,12 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <p>
+              a two-column matrix with the first column as the cell names
+              exactly matching the gene expression file, and the second column
+              as ground-truth cell clusters. The cluster indicator could either
+              be terms (e.g. 2_cell_stage, 4_cell_stage) or numbers (e.g. 1,2)
+            </p>
           </v-tooltip>
 
           <v-tooltip top max-width="500px">
@@ -301,7 +336,10 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <span
+              >The RNA velocity matrix generated from velocyto package. The
+              velocity matrix would be used during the integration process</span
+            >
           </v-tooltip>
 
           <v-col cols="3" class="mx-0 my-2 pa-1"
@@ -349,24 +387,18 @@
               >
               </v-switch>
             </template>
-            <span>TODO</span>
+            <span>Whether to allow the analysis results open to public</span>
           </v-tooltip>
         </v-row></v-col
       >
-      <v-tooltip top max-width="500px">
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="title"
-            :rules="rules"
-            counter="100"
-            label="Project title"
-            required
-            clearable
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <span>TODO</span>
-      </v-tooltip>
+      <v-text-field
+        v-model="title"
+        :rules="rules"
+        counter="100"
+        label="Project title"
+        required
+        clearable
+      ></v-text-field>
       <v-col cols="3">
         <v-row>
           <v-tooltip top max-width="500px">
@@ -381,39 +413,25 @@
                 @mouseleave.native="on.mouseleave"
               ></v-select>
             </template>
-            <span
-              >Specify the species belonging to your gene expression
-              matrix.</span
-            >
+            <span>Specify the species belonging to your dataset.</span>
           </v-tooltip>
         </v-row>
       </v-col>
-      <v-tooltip top max-width="500px">
-        <template v-slot:activator="{ on }">
-          <v-textarea
-            v-model="description"
-            label="Project description (optional)"
-            clearable
-            outlined
-            v-on="on"
-          >
-          </v-textarea>
-        </template>
-        <span>TODO</span>
-      </v-tooltip>
+      <v-textarea
+        v-model="description"
+        label="Project description (optional)"
+        clearable
+        outlined
+      >
+      </v-textarea>
 
-      <v-tooltip top max-width="500px">
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="email"
-            label="E-mail"
-            hint="Optional: You will be notified by email when the job is done."
-            persistent-hint
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <span>TODO</span>
-      </v-tooltip>
+      <v-text-field
+        v-model="email"
+        label="E-mail"
+        hint="Optional: You will be notified by email when the job is done."
+        persistent-hint
+        v-on="on"
+      ></v-text-field>
     </v-form>
 
     <v-row justify="center" class="my-2">

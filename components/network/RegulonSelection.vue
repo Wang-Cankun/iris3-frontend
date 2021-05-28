@@ -1,65 +1,50 @@
 <template>
   <div>
-    <v-tooltip top max-width="500px">
-      <template v-slot:activator="{ on }">
-        <p v-on="on">Show network based on selected regulons:</p>
+    <p>Show network based on selected regulons:</p>
+    <v-select
+      v-model="selected"
+      :items="all"
+      item-text="value"
+      item-value="value"
+      label="Selected regulons"
+      return-object
+      multiple
+      @mouseenter.native="on.mouseenter"
+      @mouseleave.native="on.mouseleave"
+      ><template v-slot:selection="{ item, index }">
+        <v-chip v-show="index === 0">
+          <span>{{ item }}</span>
+        </v-chip>
+        <span v-show="index === 1" class="grey--text caption">
+          (+{{ selected.length - 1 }} others)
+        </span>
       </template>
-      <p>TODO</p>
-    </v-tooltip>
-    <v-tooltip top max-width="500px">
-      <template v-slot:activator="{ on }">
-        <v-select
-          v-model="selected"
-          :items="all"
-          item-text="value"
-          item-value="value"
-          label="Selected regulons"
-          return-object
-          multiple
-          @mouseenter.native="on.mouseenter"
-          @mouseleave.native="on.mouseleave"
-          ><template v-slot:selection="{ item, index }">
-            <v-chip v-show="index === 0">
-              <span>{{ item }}</span>
-            </v-chip>
-            <span v-show="index === 1" class="grey--text caption">
-              (+{{ selected.length - 1 }} others)
-            </span>
-          </template>
-          <template v-slot:prepend-item>
-            <v-list-item ripple @click="toggleSelect">
-              <v-list-item-action>
-                <v-icon :color="all.length > 0 ? 'indigo darken-4' : ''">
-                  {{ iconSelect() }}
-                </v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title> Select All </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider class="mt-2"></v-divider> </template
-        ></v-select>
-      </template>
-      <p>TODO</p>
-    </v-tooltip>
+      <template v-slot:prepend-item>
+        <v-list-item ripple @click="toggleSelect">
+          <v-list-item-action>
+            <v-icon :color="all.length > 0 ? 'indigo darken-4' : ''">
+              {{ iconSelect() }}
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title> Select All </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider class="mt-2"></v-divider> </template
+    ></v-select>
 
     <div v-show="true">
-      <v-tooltip top max-width="500px">
-        <template v-slot:activator="{ on }">
-          <v-slider
-            v-model="centralityThres"
-            :max="centralityMinMax[1]"
-            :min="centralityMinMax[0]"
-            step="0.05"
-            thumb-label
-            label="Filter regulons by centrality"
-            @change="updateSelectedByCentrality"
-            @mouseenter.native="on.mouseenter"
-            @mouseleave.native="on.mouseleave"
-          ></v-slider>
-        </template>
-        <p>TODO</p>
-      </v-tooltip>
+      <v-slider
+        v-model="centralityThres"
+        :max="centralityMinMax[1]"
+        :min="centralityMinMax[0]"
+        step="0.05"
+        thumb-label
+        label="Filter regulons by centrality"
+        @change="updateSelectedByCentrality"
+        @mouseenter.native="on.mouseenter"
+        @mouseleave.native="on.mouseleave"
+      ></v-slider>
     </div>
   </div>
 </template>

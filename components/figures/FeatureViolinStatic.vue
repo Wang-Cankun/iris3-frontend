@@ -83,7 +83,7 @@
                   @mouseleave.native="on.mouseleave"
                 ></v-select>
               </template>
-              <span>TODO</span>
+              <span>Violin plot: to be updated</span>
             </v-tooltip></v-col
           >
           <v-col cols="3">

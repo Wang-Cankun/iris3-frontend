@@ -148,12 +148,16 @@
                       @mouseleave.native="on.mouseleave"
                     ></v-select>
                   </template>
-                  <p>Data Normalization method:</p>
+
                   <p>
                     LogNormalize: Seurat's default method which Normalizes the
                     gene expression measurements for each cell by the total
                     expression, multiplies this by a scale factor (10,000 by
                     default), and log-transforms the result.
+                  </p>
+                  <p>
+                    sctransform: The regularized negative binomial regression to
+                    normalize UMI counts.
                   </p>
                 </v-tooltip></v-col
               >
@@ -170,7 +174,9 @@
                 >
                 </v-checkbox>
               </template>
-              <p>TODO</p>
+              <p>
+                Whether to remove ribosomal genes in the downstream analysis.
+              </p>
             </v-tooltip>
             <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
@@ -183,7 +189,10 @@
                 >
                 </v-checkbox>
               </template>
-              <p>TODO</p>
+              <p>
+                Whether to remove ERCC spike-in genes in the downstream
+                analysis.
+              </p>
             </v-tooltip>
 
             <v-row justify="center">

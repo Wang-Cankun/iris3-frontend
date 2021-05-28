@@ -22,7 +22,9 @@
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>TODO</p>
+            <p>
+              Plot expression values and correlation coefficient of two genes
+            </p>
           </v-tooltip>
           <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">

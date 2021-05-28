@@ -24,7 +24,14 @@
                           @mouseleave.native="on.mouseleave"
                         ></v-select>
                       </template>
-                      <span> TODO</span>
+                      <p>
+                        Velocity weighted method: the in-house integration
+                        method powered by deep learning and RNA velocity
+                      </p>
+                      <p>
+                        Seurat-WNN: The weighted nearest neighbor method in
+                        Seurat v4
+                      </p>
                     </v-tooltip>
                   </v-col>
                   <div v-if="integrationSelect === 'Velocity weighted method'">
@@ -37,12 +44,11 @@
                             v-on="on"
                           ></v-text-field>
                         </template>
-                        <span
-                          >Resolution for clustering in Seurat (form 0-1).
-                          Larger number will generate more clusters and smaller
-                          number will generate less clusters. Default:
-                          0.5.</span
-                        >
+                        <p>
+                          Resolution for clustering (form 0-1). Larger number
+                          will generate more clusters and smaller number will
+                          generate less clusters. Default: 0.5.
+                        </p>
                       </v-tooltip></v-col
                     >
                   </div></v-row

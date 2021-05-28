@@ -22,7 +22,7 @@
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>TODO</p>
+            <p>Gene set enrichment analysis: to be updated</p>
           </v-tooltip>
           <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
@@ -60,7 +60,10 @@
                 >
                 </v-autocomplete>
               </template>
-              <span>TODO</span>
+              <span
+                >Molecular Signatures Database (MSigDB) is a collection of
+                annotated gene sets for use with GSEA software</span
+              >
             </v-tooltip>
           </v-col>
           <v-col cols="4"

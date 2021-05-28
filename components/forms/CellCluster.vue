@@ -24,7 +24,14 @@
                           @mouseleave.native="on.mouseleave"
                         ></v-select>
                       </template>
-                      <span> TODO</span>
+                      <p>
+                        Seurat: data integration based on canonical correlation
+                        analysis (CCA) analysis
+                      </p>
+                      <p>
+                        Harmony: Fast, sensitive, and accurate integration of
+                        single cell data
+                      </p>
                     </v-tooltip>
                   </v-col>
                 </v-row>
