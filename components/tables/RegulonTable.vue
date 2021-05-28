@@ -115,7 +115,10 @@ export default {
           ras: ((i.centrality / 7 + 0.12567) * 1.54452).toFixed(3),
           ...i,
         }))
-        .map((i) => ({ isCtsr: i.drPvalue < 0.05 ? 'yes' : 'no', ...i }))
+        .map((i) => ({
+          isCtsr: parseFloat(i.p_val_adj) < 0.05 ? 'yes' : 'no',
+          ...i,
+        }))
     },
   },
   methods: {
