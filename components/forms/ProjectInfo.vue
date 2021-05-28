@@ -57,14 +57,50 @@
                     <span class="text--secondary">Creator: </span>
                     <span class="text--primary">{{ jobCreator }}</span>
                   </p>
-                  <p class="ma-2">
-                    <span class="text--secondary">Species: </span>
-                    <span class="text--primary">{{ species }}</span>
-                  </p>
-                  <p class="ma-2">
-                    <span class="text--secondary">Uploaded files: </span>
-                    <span class="text--primary">{{ uploadFiles }}</span>
-                  </p>
+                  <div v-if="jobid === 'example' && type === 'multiome'">
+                    <p class="ma-2">
+                      <span class="text--secondary">Species: </span>
+                      <span class="text--primary">Human</span>
+                    </p>
+                    <p class="ma-2">
+                      <span class="text--secondary">Uploaded files: </span>
+                      <span class="text--primary"
+                        >Human PBMC sorted 3K example</span
+                      >
+                    </p>
+                  </div>
+                  <div v-if="jobid === 'example' && type === 'single-rna'">
+                    <p class="ma-2">
+                      <span class="text--secondary">Species: </span>
+                      <span class="text--primary">Mouse</span>
+                    </p>
+                    <p class="ma-2">
+                      <span class="text--secondary">Uploaded files: </span>
+                      <span class="text--primary"
+                        >Mouse brain example (Zeisel 2015)</span
+                      >
+                    </p>
+                  </div>
+                  <div v-if="jobid === 'example' && type === 'multiple-rna'">
+                    <p class="ma-2">
+                      <span class="text--secondary">Species: </span>
+                      <span class="text--primary">Human</span>
+                    </p>
+                    <p class="ma-2">
+                      <span class="text--secondary">Uploaded files: </span>
+                      <span class="text--primary">Human IFNB example </span>
+                    </p>
+                  </div>
+                  <div v-if="jobid !== 'example'">
+                    <p class="ma-2">
+                      <span class="text--secondary">Species: </span>
+                      <span class="text--primary">{{ species }}</span>
+                    </p>
+                    <p class="ma-2">
+                      <span class="text--secondary">Uploaded files: </span>
+                      <span class="text--primary">{{ uploadFiles }}</span>
+                    </p>
+                  </div>
                 </v-card-text>
               </v-flex>
             </v-layout>
@@ -101,8 +137,8 @@ export default {
   data() {
     return {
       panel: false,
-      projectTitle: 'Example title1',
-      projectDescription: 'Example description1',
+      projectTitle: 'Project 1',
+      projectDescription: 'Project 1: Human PBMC',
       projectCreator: 'Admin',
       jobCreator: 'Admin',
       projectId: 'P000001',
