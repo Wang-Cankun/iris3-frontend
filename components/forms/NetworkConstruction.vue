@@ -25,8 +25,6 @@
                   v-model="selectedCt"
                   :items="ctList"
                   label="1. Select cell cluster"
-                  @mouseenter.native="on.mouseenter"
-                  @mouseleave.native="on.mouseleave"
                 ></v-select>
 
                 <div v-if="selectedCt.length">

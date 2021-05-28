@@ -9,8 +9,6 @@
       label="2. Select regulons"
       return-object
       multiple
-      @mouseenter.native="on.mouseenter"
-      @mouseleave.native="on.mouseleave"
       ><template v-slot:selection="{ item, index }">
         <v-chip v-show="index === 0">
           <span>{{ item }}</span>
@@ -42,8 +40,6 @@
         thumb-label
         label="Filter regulons by centrality"
         @change="updateSelectedByCentrality"
-        @mouseenter.native="on.mouseenter"
-        @mouseleave.native="on.mouseleave"
       ></v-slider>
     </div>
   </div>
