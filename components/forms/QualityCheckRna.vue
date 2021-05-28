@@ -192,7 +192,7 @@
                 width="120"
                 class="mb-2"
                 @click="runPreProcess()"
-                >Update</v-btn
+                >Calculate</v-btn
               >
             </v-row>
           </v-card>

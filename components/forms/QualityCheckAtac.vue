@@ -146,7 +146,7 @@
                 width="120"
                 class="mb-4 pa-2"
                 @click="runPreProcess()"
-                >Update</v-btn
+                >Calculate</v-btn
               >
             </v-row>
           </v-card>
@@ -420,7 +420,7 @@ export default {
     },
   },
   mounted() {
-    if (this.jobid === 'example1') {
+    if (this.jobid === 'example') {
       this.runPreProcess()
     }
   },
