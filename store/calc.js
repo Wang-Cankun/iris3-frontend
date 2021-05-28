@@ -1,5 +1,5 @@
 export const state = () => ({
-  flag: true,
+  flag: false,
   deg: [],
 })
 

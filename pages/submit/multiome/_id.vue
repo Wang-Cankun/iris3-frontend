@@ -40,7 +40,7 @@
               ></v-tabs-items>
             </v-col>
           </v-row>
-          <v-btn color="primary" @click="changePage(2)"> Continue </v-btn>
+          <v-btn color="primary" @click="afterPage(2)"> Continue </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
           <v-row
@@ -49,12 +49,12 @@
               :jobid="jobid"
             ></cell-cluster-form
           ></v-row>
-          <v-btn color="primary" @click="changePage(3)"> Continue </v-btn>
-          <v-btn text @click="changePage(1)">Previous</v-btn>
+          <v-btn color="primary" @click="afterPage(3)"> Continue </v-btn>
+          <v-btn text @click="e1 = 1">Previous</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3"
           ><v-row><network-form></network-form></v-row>
-          <v-btn text @click="changePage(2)">Previous</v-btn>
+          <v-btn text @click="e1 = 2">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -99,11 +99,11 @@ export default {
     },
   },
   methods: {
-    changePage(page) {
+    beforePage(page) {},
+    afterPage(page) {
       if (this.flag === true) {
-        console.log(page)
         this.e1 = page
-        this.$store.dispatch('calc/updateFlag', true)
+        this.$store.dispatch('calc/updateFlag', false)
       } else {
         this.$notifier.showMessage({
           content: 'Please calculate first',

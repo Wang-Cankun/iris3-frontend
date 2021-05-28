@@ -368,7 +368,6 @@ export default {
 
     async nodes() {
       // this.cy.style(this.design)
-      console.log('change nodes')
       await ApiService.sleep(618)
       this.resetPosition()
     },

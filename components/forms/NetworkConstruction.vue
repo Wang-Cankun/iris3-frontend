@@ -382,7 +382,7 @@ export default {
   methods: {
     async runNetwork() {
       this.$nuxt.$loading.start()
-      await ApiService.sleep(100)
+      await ApiService.sleep(15000)
       this.allIdents = await this.$axios
         .post('deepmaps/api/queue/idents/')
         .then((response) => response.data)
