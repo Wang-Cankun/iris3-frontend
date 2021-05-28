@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-tooltip top>
+    <v-tooltip top max-width="500px">
       <template v-slot:activator="{ on }">
         <p v-on="on">Show network based on selected regulons:</p>
       </template>
       <p>TODO</p>
     </v-tooltip>
-    <v-tooltip top>
+    <v-tooltip top max-width="500px">
       <template v-slot:activator="{ on }">
         <v-select
           v-model="selected"
@@ -44,7 +44,7 @@
     </v-tooltip>
 
     <div v-show="true">
-      <v-tooltip top>
+      <v-tooltip top max-width="500px">
         <template v-slot:activator="{ on }">
           <v-slider
             v-model="centralityThres"

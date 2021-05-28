@@ -2,24 +2,24 @@
   <v-col class="mb-2" cols="12">
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-tabs v-model="tab" dark grow background-color="primary">
-        <v-tooltip top>
+        <v-tooltip top max-width="500px">
           <template v-slot:activator="{ on }">
             <v-tab @click="switchTabs('single-rna')" v-on="on"
               >Single scRNA-Seq
             </v-tab>
           </template>
-          <span>TODO</span>
+          <span>Analyze one scRNA-seq dataset</span>
         </v-tooltip>
 
-        <v-tooltip top>
+        <v-tooltip top max-width="500px">
           <template v-slot:activator="{ on }">
             <v-tab @click="switchTabs('multiple-rna')" v-on="on"
               >Multiple scRNA-Seq
             </v-tab>
           </template>
-          <span>TODO</span>
+          <span>Joint analysis of two or more single-cell datasets</span>
         </v-tooltip>
-        <v-tooltip top>
+        <v-tooltip top max-width="500px">
           <template v-slot:activator="{ on }">
             <v-tab @click="switchTabs('multiome')" v-on="on"
               >scRNA-Seq and scATAC-seq
@@ -41,7 +41,7 @@
           <v-divider class="mx-0 my-0 py-0"></v-divider>
         </v-card-title>
         <v-tab-item>
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="expFile.singleRna[0]"
@@ -57,10 +57,18 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <p>
+              Gene expression matrix. Usually a count matrix. The values in this
+              matrix represent the number of molecules for each feature (i.e.
+              gene; row) that are detected in each cell (column).
+            </p>
+            <p>
+              Support format: A single txt, tsv or csv formatted gene expression
+              matrix. hdf5 feature barcode matrix.
+            </p>
           </v-tooltip>
 
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="labelFile.singleRna"
@@ -74,7 +82,12 @@
                 @mouseleave.native="on.mouseleave"
               ></v-file-input>
             </template>
-            <span>TODO</span>
+            <p>
+              a two-column matrix with the first column as the cell names
+              exactly matching the gene expression file, and the second column
+              as ground-truth cell clusters. The cluster indicator could either
+              be terms (e.g. 2_cell_stage, 4_cell_stage) or numbers (e.g. 1,2).
+            </p>
           </v-tooltip>
 
           <v-col cols="3" class="mx-0 my-2 pa-1"
@@ -114,7 +127,7 @@
         </v-tab-item>
         <v-tab-item>
           <div v-for="(n, i) in multipleDatasetsLength" :key="n">
-            <v-tooltip top>
+            <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-file-input
                   v-model="expFile.multiRna[i]"
@@ -139,7 +152,7 @@
             <v-btn @click="removeMultipleDataset">Remove a row</v-btn>
           </div>
 
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="labelFile.multiRna"
@@ -202,7 +215,7 @@
           </v-col>
         </v-tab-item>
         <v-tab-item>
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="expFile.multiome[0]"
@@ -221,7 +234,7 @@
             <span>TODO</span>
           </v-tooltip>
 
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="expFile.multiome[1]"
@@ -239,7 +252,7 @@
             <span>TODO</span>
           </v-tooltip>
 
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="expFile.multiome[2]"
@@ -257,7 +270,7 @@
             <span>TODO</span>
           </v-tooltip>
 
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="labelFile.multiome"
@@ -274,7 +287,7 @@
             <span>TODO</span>
           </v-tooltip>
 
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input
                 v-model="bamFile"
@@ -325,7 +338,7 @@
 
       <v-col cols="3">
         <v-row>
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-switch
                 v-model="isPrivateProject"
@@ -340,7 +353,7 @@
           </v-tooltip>
         </v-row></v-col
       >
-      <v-tooltip top>
+      <v-tooltip top max-width="500px">
         <template v-slot:activator="{ on }">
           <v-text-field
             v-model="title"
@@ -356,7 +369,7 @@
       </v-tooltip>
       <v-col cols="3">
         <v-row>
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-select
                 v-model="speciesSelect"
@@ -375,7 +388,7 @@
           </v-tooltip>
         </v-row>
       </v-col>
-      <v-tooltip top>
+      <v-tooltip top max-width="500px">
         <template v-slot:activator="{ on }">
           <v-textarea
             v-model="description"
@@ -389,7 +402,7 @@
         <span>TODO</span>
       </v-tooltip>
 
-      <v-tooltip top>
+      <v-tooltip top max-width="500px">
         <template v-slot:activator="{ on }">
           <v-text-field
             v-model="email"

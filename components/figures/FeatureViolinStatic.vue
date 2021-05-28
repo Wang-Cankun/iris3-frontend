@@ -16,7 +16,7 @@
         @mouseleave="hover = false"
         >{{ setting.title }}<v-spacer></v-spacer>
         <div>
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-icon v-show="hover === true" v-on="on"
                 >mdi-help-circle-outline</v-icon
@@ -42,7 +42,7 @@
       <div class="no-drag">
         <v-row class="mx-4 mt-2">
           <v-col cols="3"
-            ><v-tooltip top>
+            ><v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-autocomplete
                   v-model="gene"
@@ -57,7 +57,7 @@
             </v-tooltip></v-col
           >
           <v-col cols="3"
-            ><v-tooltip top>
+            ><v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="violinSplit"
@@ -72,7 +72,7 @@
             </v-tooltip></v-col
           >
           <v-col cols="3"
-            ><v-tooltip top>
+            ><v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="violinGroup"

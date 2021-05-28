@@ -14,7 +14,7 @@
                 </p>
                 <v-row class="mb-0 py-0">
                   <v-col class="py-0" cols="12">
-                    <v-tooltip top>
+                    <v-tooltip top max-width="500px">
                       <template v-slot:activator="{ on }">
                         <v-select
                           v-model="integrationSelect"
@@ -29,7 +29,7 @@
                   </v-col>
                   <div v-if="integrationSelect === 'Velocity weighted method'">
                     <v-col cols="12"
-                      ><v-tooltip top>
+                      ><v-tooltip top max-width="500px">
                         <template v-slot:activator="{ on }">
                           <v-text-field
                             v-model="resolution"
@@ -51,7 +51,7 @@
                 <div v-if="integrationSelect === 'Seurat-WNN'">
                   <v-row>
                     <v-col cols="6"
-                      ><v-tooltip top>
+                      ><v-tooltip top max-width="500px">
                         <template v-slot:activator="{ on }">
                           <v-text-field
                             v-model="nPCs"
@@ -68,7 +68,7 @@
                     >
 
                     <v-col cols="6"
-                      ><v-tooltip top>
+                      ><v-tooltip top max-width="500px">
                         <template v-slot:activator="{ on }">
                           <v-text-field
                             v-model="resolution"

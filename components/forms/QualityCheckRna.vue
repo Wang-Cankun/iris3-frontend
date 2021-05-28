@@ -87,7 +87,7 @@
             <p class="subtitle-1 font-weight-bold text-center">Preprocessing</p>
             <v-row>
               <v-col cols="4"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="cellFilter"
@@ -104,7 +104,7 @@
                 </v-tooltip></v-col
               >
               <v-col cols="4"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="geneFilter"
@@ -121,7 +121,7 @@
                 </v-tooltip></v-col
               >
               <v-col cols="4"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="mitoFilter"
@@ -138,7 +138,7 @@
                 </v-tooltip></v-col
               >
               <v-col cols="12"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-select
                       v-model="normalizeSelect"
@@ -159,7 +159,7 @@
               >
             </v-row>
 
-            <v-tooltip top>
+            <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-checkbox
                   v-model="removeRibosome"
@@ -172,7 +172,7 @@
               </template>
               <p>TODO</p>
             </v-tooltip>
-            <v-tooltip top>
+            <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-checkbox
                   v-model="removeSpikein"

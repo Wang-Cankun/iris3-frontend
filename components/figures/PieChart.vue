@@ -15,7 +15,7 @@
         @mouseleave="hover = false"
         >{{ title }} <v-spacer></v-spacer>
         <div>
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-icon v-show="hover === true" v-on="on"
                 >mdi-help-circle-outline</v-icon

@@ -74,7 +74,7 @@
             <p class="subtitle-1 font-weight-bold text-center">Preprocessing</p>
             <v-row>
               <v-col cols="6"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="cellFilter"
@@ -89,7 +89,7 @@
               >
 
               <v-col cols="6"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="nVariableFeatures"
@@ -103,7 +103,7 @@
                 </v-tooltip></v-col
               >
               <v-col cols="6"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="minPeaks"
@@ -117,7 +117,7 @@
                 </v-tooltip></v-col
               >
               <v-col cols="6"
-                ><v-tooltip top>
+                ><v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="maxPeaks"

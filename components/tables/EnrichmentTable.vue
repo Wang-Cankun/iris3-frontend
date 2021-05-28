@@ -16,7 +16,7 @@
         @mouseleave="hover = false"
         >Gene set enrichment analysis <v-spacer></v-spacer>
         <div>
-          <v-tooltip top>
+          <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-icon v-show="hover === true" v-on="on"
                 >mdi-help-circle-outline</v-icon
@@ -44,7 +44,7 @@
       <div class="no-drag">
         <v-row class="mt-2">
           <v-col cols="6">
-            <v-tooltip top>
+            <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-autocomplete
                   v-model="gseaDatabase"

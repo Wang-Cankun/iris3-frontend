@@ -21,7 +21,7 @@
               </v-row>
               <div v-show="ctList.length" class="mt-2 pt-2">
                 <v-divider />
-                <v-tooltip top>
+                <v-tooltip top max-width="500px">
                   <template v-slot:activator="{ on }">
                     <v-select
                       v-model="selectedCt"
