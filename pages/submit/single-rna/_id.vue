@@ -42,11 +42,11 @@
             ></cell-cluster-form
           ></v-row>
           <v-btn color="primary" @click="afterPage(3)"> Continue </v-btn>
-          <v-btn text @click="e1 = 1">Previous</v-btn>
+          <v-btn text @click="beforePage(1)">Previous</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
           <v-row><network-form :jobid="jobid"></network-form></v-row>
-          <v-btn text @click="e1 = 2">Previous</v-btn>
+          <v-btn text @click="beforePage(2)">Previous</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -78,6 +78,11 @@ export default {
     },
   },
   methods: {
+    beforePage(page) {
+      this.e1 = page
+      this.$store.dispatch('calc/updateFlag', 1)
+      this.$store.dispatch('calc/updateFlag', 2)
+    },
     afterPage(page) {
       const uniqueFlag = new Set(this.flag).size
       console.log(page)
