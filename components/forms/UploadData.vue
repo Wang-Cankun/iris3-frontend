@@ -25,7 +25,13 @@
               >scRNA-Seq and scATAC-seq
             </v-tab>
           </template>
-          <span>TODO</span>
+          <p>
+            Joint single-cell RNA and ATAC analysis from 10x Genomics protocol
+          </p>
+          <p>
+            The 10x single-cell multiome data measuring both DNA accessibility
+            and gene expression in the same cells
+          </p>
         </v-tooltip>
       </v-tabs>
 

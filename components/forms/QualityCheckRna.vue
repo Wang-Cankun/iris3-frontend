@@ -209,110 +209,25 @@
             :margin="[10, 10]"
             :use-css-transforms="true"
           >
-            <boxplot
-              :key="layout[0].i"
-              :x="layout[0].x"
-              :y="layout[0].y"
-              :w="layout[0].w"
-              :h="layout[0].h"
-              :i="layout[0].i"
-              :src="qcBox1"
-              :title="layout[0].title"
-            >
-            </boxplot>
-            <boxplot
-              :key="layout[1].i"
-              :x="layout[1].x"
-              :y="layout[1].y"
-              :w="layout[1].w"
-              :h="layout[1].h"
-              :i="layout[1].i"
-              :src="qcBox2"
-              :title="layout[1].title"
-            >
-            </boxplot>
-            <boxplot
-              :key="layout[2].i"
-              :x="layout[2].x"
-              :y="layout[2].y"
-              :w="layout[2].w"
-              :h="layout[2].h"
-              :i="layout[2].i"
-              :src="qcBox3"
-              :title="layout[2].title"
-            >
-            </boxplot>
-            <boxplot
-              :key="layout[3].i"
-              :x="layout[3].x"
-              :y="layout[3].y"
-              :w="layout[3].w"
-              :h="layout[3].h"
-              :i="layout[3].i"
-              :src="qcBox4"
-              :title="layout[3].title"
-            >
-            </boxplot>
+            <boxplot :setting="layout[0]" :src="qcBox1"> </boxplot>
+            <boxplot :setting="layout[1]" :src="qcBox2"> </boxplot>
+            <boxplot :setting="layout[2]" :src="qcBox3"> </boxplot>
+            <boxplot :setting="layout[3]" :src="qcBox4"> </boxplot>
 
-            <var-genes-table
-              :key="layout[4].i"
-              :x="layout[4].x"
-              :y="layout[4].y"
-              :w="layout[4].w"
-              :h="layout[4].h"
-              :i="layout[4].i"
-              :src="varGenesList"
-              :title="layout[4].title"
-            >
+            <var-genes-table :setting="layout[4]" :src="varGenesList">
             </var-genes-table>
-            <barplot
-              :key="layout[5].i"
-              :x="layout[5].x"
-              :y="layout[5].y"
-              :w="layout[5].w"
-              :h="layout[5].h"
-              :i="layout[5].i"
-              :src="qcHist1"
-              :title="layout[5].title"
-            ></barplot>
-            <barplot
-              :key="layout[6].i"
-              :x="layout[6].x"
-              :y="layout[6].y"
-              :w="layout[6].w"
-              :h="layout[6].h"
-              :i="layout[6].i"
-              :src="qcHist2"
-              :title="layout[6].title"
-            ></barplot>
-            <barplot
-              :key="layout[7].i"
-              :x="layout[7].x"
-              :y="layout[7].y"
-              :w="layout[7].w"
-              :h="layout[7].h"
-              :i="layout[7].i"
-              :src="qcHist3"
-              :title="layout[7].title"
-            ></barplot>
+            <barplot :setting="layout[5]" :src="qcHist1"></barplot>
+            <barplot :setting="layout[6]" :src="qcHist2"></barplot>
+            <barplot :setting="layout[7]" :src="qcHist3"></barplot>
             <gene-correlation-scatter
-              :key="layout[8].i"
-              :x="layout[8].x"
-              :y="layout[8].y"
-              :w="layout[8].w"
-              :h="layout[8].h"
-              :i="layout[8].i"
+              :setting="layout[8]"
               :genes="genes"
             ></gene-correlation-scatter>
 
             <div>
               <div v-for="(item, pieIdx) in metaList" :key="pieIdx">
                 <pie-chart
-                  :x="layout[pieIdx + 9].x"
-                  :y="layout[pieIdx + 9].y"
-                  :w="layout[pieIdx + 9].w"
-                  :h="layout[pieIdx + 9].h"
-                  :i="layout[pieIdx + 9].i"
+                  :setting="layout[pieIdx + 9]"
                   :values="item.val"
                   :name="item.name"
                   :title="'Metadata: ' + item.title[0]"
@@ -500,11 +415,6 @@ export default {
       genes: '',
     }
   },
-  mounted() {
-    if (this.jobid === 'example') {
-      this.runPreProcess()
-    }
-  },
   computed: {
     filterCategoryLevels() {
       return this.allIdents
@@ -518,6 +428,11 @@ export default {
         .map((item) => item.levels)
         .flat()
     },
+  },
+  mounted() {
+    if (this.jobid === 'example') {
+      this.runPreProcess()
+    }
   },
   methods: {
     addItem() {
@@ -607,9 +522,9 @@ export default {
         )
       } else if (this.type === 'multi_rna') {
         if (this.$route.params.id === 'example') {
-          await sleep(8000)
+          await sleep(6000)
         } else {
-          await sleep(30000)
+          await sleep(12000)
         }
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load-multi-rna/',

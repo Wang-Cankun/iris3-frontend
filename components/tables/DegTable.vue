@@ -186,7 +186,7 @@
             </v-tooltip>
           </v-col>
           <v-col cols="3" class="my-0 py-0"
-            ><v-btn small class="mx-2 mb-2 mt-0" v-on="on" @click="run()"
+            ><v-btn small class="mx-2 mb-2 mt-0" @click="run()"
               >Calculate</v-btn
             >
           </v-col>
@@ -215,7 +215,6 @@ import ApiService from '~/services/ApiService.js'
 
 export default {
   props: {
-    genes: { type: Array, required: true },
     idents: { type: Array, required: true },
     setting: {
       type: Object,

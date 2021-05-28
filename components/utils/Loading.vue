@@ -78,7 +78,7 @@ export default {
 <style>
 .loading-page {
   position: fixed;
-  top: 75px;
+  top: 71px;
   left: 0;
   width: 100%;
   height: 100%;

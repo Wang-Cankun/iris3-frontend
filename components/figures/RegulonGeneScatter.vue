@@ -1,11 +1,11 @@
 <template>
   <v-card class="ma-0"
     ><grid-item
-      :w="w"
-      :h="h"
-      :x="x"
-      :y="y"
-      :i="i"
+      :w="setting.w"
+      :h="setting.h"
+      :x="setting.x"
+      :y="setting.y"
+      :i="setting.i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
     >
@@ -13,7 +13,7 @@
         class="grey lighten-3 font-weight-bold caption px-2 py-1"
         @mouseover="hover = true"
         @mouseleave="hover = false"
-        >{{ title }}
+        >{{ setting.title }}
         <v-spacer></v-spacer>
         <div>
           <v-tooltip top>
@@ -117,19 +117,12 @@ export default {
     ECharts: createComponent({ echarts }),
   },
   props: {
-    // src: { type: String, required: true },
-    title: { type: String, required: true },
     genes: { type: Array, required: true },
-    // src: {
-    //   type: Object,
-    //   required: true,
-    //   default: () => ({ axis: [0, 1], legend: [0, 1], dimension: 1 }),
-    // },
-    w: { type: Number, required: true, default: 2 },
-    h: { type: Number, required: true, default: 2 },
-    x: { type: Number, required: true, default: 0 },
-    y: { type: Number, required: true, default: 0 },
-    i: { type: String, required: true, default: '0' },
+    setting: {
+      type: Object,
+      required: true,
+      default: () => ({ title: '', h: 2, x: 0, y: 0, i: '0' }),
+    },
   },
   data() {
     return {

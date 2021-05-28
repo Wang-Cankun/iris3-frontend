@@ -1,11 +1,11 @@
 <template>
   <v-card class="ma-0"
     ><grid-item
-      :w="w"
-      :h="h"
-      :x="x"
-      :y="y"
-      :i="i"
+      :w="setting.w"
+      :h="setting.h"
+      :x="setting.x"
+      :y="setting.y"
+      :i="setting.i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
     >
@@ -13,7 +13,7 @@
         class="grey lighten-3 font-weight-bold caption px-2 py-1"
         @mouseover="hover = true"
         @mouseleave="hover = false"
-        >{{ title }}
+        >{{ setting.title }}
         <v-spacer></v-spacer>
         <div>
           <v-tooltip top>

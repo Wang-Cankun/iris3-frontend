@@ -1,7 +1,7 @@
 <template>
   <v-col class="mb-2" cols="12">
     <v-card outlined>
-      <v-row>
+      <v-row class="my-2">
         <v-col cols="3">
           <v-expansion-panels v-model="panel" multiple>
             <v-expansion-panel v-if="type === 'multi_rna'">
@@ -9,39 +9,35 @@
                 Data integration
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined>
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Data integration
-                  </p>
-                  <v-row class="ml-4 mb-0 py-0"
-                    ><p class="my-1">Integration method</p>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Data integration
+                </p>
+                <v-row class="mb-0 py-0">
+                  <v-col class="py-0" cols="12">
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
-                        <v-icon color="primary" dark v-on="on"
-                          >mdi-help-circle-outline</v-icon
-                        >
+                        <v-select
+                          v-model="integrationSelect"
+                          :items="integrationMethods"
+                          label="Integration tool"
+                          @mouseenter.native="on.mouseenter"
+                          @mouseleave.native="on.mouseleave"
+                        ></v-select>
                       </template>
-                      <p>Integration method method:</p>
-                      <p>Which integration method to use?</p>
+                      <span> TODO</span>
                     </v-tooltip>
-                    <v-col class="py-0" cols="11"
-                      ><v-select
-                        v-model="integrationSelect"
-                        :items="integrationMethods"
-                        label=""
-                      ></v-select></v-col
-                  ></v-row>
+                  </v-col>
+                </v-row>
 
-                  <v-row justify="center">
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Primary"
-                      width="150"
-                      @click="runIntegration()"
-                      >Run integration</v-btn
-                    >
-                  </v-row>
-                </v-card>
+                <v-row justify="center">
+                  <v-btn
+                    class="mx-2 my-4"
+                    color="Primary"
+                    width="150"
+                    @click="runIntegration()"
+                    >Run integration</v-btn
+                  >
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
@@ -49,274 +45,164 @@
                 Cell clustering
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined>
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Cell clustering
-                  </p>
-                  <v-row class="ml-4 mb-0 py-0"
-                    ><p class="my-1">Dimension reduction</p>
-                    <v-tooltip top>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Cell clustering
+                </p>
+                <v-row>
+                  <v-col cols="6"
+                    ><v-tooltip top>
                       <template v-slot:activator="{ on }">
-                        <v-icon color="primary" dark v-on="on"
-                          >mdi-help-circle-outline</v-icon
-                        >
+                        <v-text-field
+                          v-model="nPCs"
+                          label="Number of PCs"
+                          v-on="on"
+                        ></v-text-field>
                       </template>
-                      <p>Dimension reduction methods:</p>
-                      <p>
-                        Which dimension reduction technique to use? Default: PCA
-                      </p>
-                    </v-tooltip>
-                    <v-col class="py-0" cols="11"
-                      ><v-select
-                        v-model="reductionSelect"
-                        :items="reductionMethods"
-                        label=""
-                      ></v-select></v-col
-                  ></v-row>
-                  <div v-if="reductionSelect === 'PCA'">
-                    <p class="ml-4 title-h4">
-                      Number of components
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-icon color="primary" dark v-on="on"
-                            >mdi-help-circle-outline</v-icon
-                          >
-                        </template>
-                        <p>
-                          Determine the ‘dimensionality’ of the dataset, the top
-                          components represent a robust compression of the
-                          dataset. Default: 20.
-                        </p>
-                      </v-tooltip>
-                    </p>
-                    <v-text-field
-                      v-model="nPCs"
-                      class="px-6"
-                      outlined
-                      background-color="white"
-                    ></v-text-field>
-                    <p class="ml-4 title-h4">
-                      Resolution
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-icon color="primary" dark v-on="on"
-                            >mdi-help-circle-outline</v-icon
-                          >
-                        </template>
-                        <p>
-                          Resolution for clustering in Seurat (form 0-1). Larger
-                          number will generate more clusters and smaller number
-                          will generate less clusters. Default: 0.5.
-                        </p>
-                      </v-tooltip>
-                    </p>
-                    <v-text-field
-                      v-model="resolution"
-                      class="px-6"
-                      outlined
-                      background-color="white"
-                    ></v-text-field>
-                    <p class="ml-4 title-h4">
-                      Number of neighbors
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-icon color="primary" dark v-on="on"
-                            >mdi-help-circle-outline</v-icon
-                          >
-                        </template>
-                        <p>
-                          Defines k for the k-nearest neighbor algorithm.
-                          Default: 20.
-                        </p>
-                      </v-tooltip>
-                    </p>
-                    <v-text-field
-                      v-model="neighbor"
-                      class="px-6"
-                      outlined
-                      background-color="white"
-                    ></v-text-field>
-                  </div>
-                  <v-row justify="center">
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Primary"
-                      width="150"
-                      @click="runCellCluster()"
-                      >Cluster</v-btn
-                    >
-                  </v-row>
-                  <!--
-                  <v-divider></v-divider>
-                  <div v-if="idents !== []">
-                    <p class="subtitle-1 font-weight-bold text-center">
-                      Merge clusters
-                    </p>
-                    <v-autocomplete
-                      v-model="currentIdentMerge"
-                      class="ml-4"
-                      :items="currentIdentLevels"
-                      label="Select clusters"
-                      multiple
-                    ></v-autocomplete>
-                    <v-row justify="center">
-                      <v-btn
-                        class="mx-2 my-4"
-                        color="Primary"
-                        width="150"
-                        @click="mergeIdents()"
-                        >MERGE</v-btn
+                      <span
+                        >Determine the ‘dimensionality’ of the dataset, the top
+                        components represent a robust compression of the
+                        dataset. Default: 20.</span
                       >
-                    </v-row>
-                   
-                        <p class="subtitle-1 font-weight-bold text-center">
-                          Re-cluster
-                        </p>
-                        <v-autocomplete
-                          v-model="currentIdentMerge"
-                          class="ml-4"
-                          :items="currentIdentLevels"
-                          label="Select identity"
-                          multiple
-                        ></v-autocomplete>
-                        <v-row justify="center">
-                          <v-btn
-                            class="mx-2 my-4"
-                            color="Primary"
-                            width="150"
-                            @click="mergeIdents()"
-                            >RE-cluster</v-btn
-                          >
-                        </v-row>
-                  </div>-->
-                </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header>
-                Active cell category
-              </v-expansion-panel-header>
-              <v-expansion-panel-content
-                ><v-card class="py-3" outlined>
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Active cell category
-                  </p>
-                  <v-select
-                    v-model="currentIdent"
-                    class="ml-4"
-                    :items="idents"
-                    label="Select category"
-                    @change="setActiveIdents(currentIdent)"
-                  ></v-select>
-                  <v-divider></v-divider>
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Rename clusters
-                  </p>
-                  <v-row class="mx-2 my-2 py-2">
-                    <v-col cols="12"
-                      ><v-select
-                        v-model="oldClusterName"
-                        class="px-1"
-                        label="Old cluster name"
-                        :items="currentIdentLevels"
-                        outlined
-                        hide-details="auto"
-                        background-color="white"
-                        dense
-                      ></v-select
-                    ></v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="newClusterName"
-                        label="New cluster name"
-                        placeholder="Number"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field
-                    ></v-col>
-                    <v-col cols="4"
-                      ><v-btn @click="renameCluster()">Rename</v-btn></v-col
-                    ></v-row
+                    </v-tooltip></v-col
                   >
-                </v-card>
+
+                  <v-col cols="6"
+                    ><v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="resolution"
+                          label="Clustering resolution"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <span
+                        >Resolution for clustering in Seurat (form 0-1). Larger
+                        number will generate more clusters and smaller number
+                        will generate less clusters. Default: 0.5.</span
+                      >
+                    </v-tooltip></v-col
+                  >
+                </v-row>
+                <v-row class="ma-0" justify="center">
+                  <v-btn class="my-2" @click="runCellCluster()"
+                    >Calculate</v-btn
+                  >
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-expansion-panel>
+            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
+              <v-expansion-panel-header>
+                Cell category
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Active cell category
+                </p>
+                <v-select
+                  v-model="currentIdent"
+                  :items="idents"
+                  label="Select category"
+                  @change="setActiveIdents(currentIdent)"
+                ></v-select>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Rename clusters
+                </p>
+
+                <v-col class="px-0" cols="12"
+                  ><v-select
+                    v-model="oldClusterName"
+                    label="Old cluster name"
+                    :items="currentIdentLevels"
+                    hide-details="auto"
+                    background-color="white"
+                    dense
+                  ></v-select
+                ></v-col>
+                <v-col class="px-0" cols="12">
+                  <v-text-field
+                    v-model="newClusterName"
+                    label="New cluster name"
+                    dense
+                    background-color="white"
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="4" class="mt-0"
+                  ><v-btn @click="renameCluster()">Rename</v-btn></v-col
+                >
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
               <v-expansion-panel-header>
                 Custom cell labeling
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined>
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Custom cell labeling
-                  </p>
-
-                  <v-row class="mx-2 my-2 py-2">
-                    <p class="my-1 subtitle-2">Step 1: Create cell filters</p>
-                    <div class="d-flex flex">
-                      <v-select
-                        v-model="filterCategoryName"
-                        :items="idents"
-                        label="Category"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-select
-                        v-model="filterCategoryLevel"
-                        :items="filterCategoryLevels"
-                        label="Cluster"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        multiple
-                        background-color="white"
-                      ></v-select>
-                    </div>
-                    <v-btn color="Primary" @click="addClusterFilter()"
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Custom cell labeling
+                </p>
+                <p class="mt-2 subtitle-2">Step 1: Create cell filters</p>
+                <v-row class="py-2">
+                  <v-col cols="6">
+                    <v-select
+                      v-model="filterCategoryName"
+                      :items="idents"
+                      label="Category"
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-select
+                      v-model="filterCategoryLevel"
+                      :items="filterCategoryLevels"
+                      label="Cluster"
+                      dense
+                      multiple
+                      background-color="white"
+                    ></v-select>
+                    <v-spacer></v-spacer>
+                    <v-btn small @click="addClusterFilter()"
                       >Add cluster filter</v-btn
                     >
-
-                    <div class="d-flex flex mt-4">
-                      <v-autocomplete
-                        v-model="addGeneName"
-                        class="px-1"
-                        :items="genes"
-                        outlined
-                        dense
-                        label="Gene"
-                        background-color="white"
-                      ></v-autocomplete>
-                      <v-select
-                        v-model="addGeneDirection"
-                        :items="addGeneDirectionItems"
-                        label="Direction"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-text-field
-                        v-model="addGeneThres"
-                        label="Thres"
-                        placeholder="Number"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field>
-                    </div>
-                    <v-btn color="Primary" @click="addGeneFilter()"
+                  </v-col>
+                  <v-divider vertical />
+                  <v-col cols="5">
+                    <v-autocomplete
+                      v-model="addGeneName"
+                      label="Gene"
+                      :items="genes"
+                      placeholder="Name"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                    ></v-autocomplete
+                    ><v-select
+                      v-model="addGeneDirection"
+                      :items="addGeneDirectionItems"
+                      label="Direction"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-text-field
+                      v-model="addGeneThres"
+                      label="Threshold"
+                      placeholder="Number"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                    ></v-text-field>
+                    <v-btn small @click="addGeneFilter()"
                       >Add gene filter</v-btn
                     >
+                  </v-col>
 
-                    <v-col class="py-0" cols="12">
-                      <p class="my-1">Filters applied:</p>
-                      <ul>
-                        <li v-for="(item, index) in filterPayload" :key="index">
+                  <v-col class="py-2" cols="12">
+                    <v-list dense>
+                      <v-list-item-title>Filters applied:</v-list-item-title>
+                      <v-list-item
+                        v-for="(item, index) in filterPayload"
+                        :key="index"
+                        class="my-0 py-0"
+                      >
+                        <v-list-item-content class="my-0 py-0">
                           <div v-if="item.type === 'gene'">
                             {{ item.name }} {{ item.direction }}
                             {{ item.thres }}
@@ -325,169 +211,151 @@
                             {{ item.direction }} {{ item.category[0] }}:
                             {{ item.level }}
                           </div>
-                        </li>
-                      </ul></v-col
-                    >
-                  </v-row>
-                  <v-divider></v-divider>
+                        </v-list-item-content>
+                        <v-list-item-action class="my-0 py-0">
+                          <v-btn icon @click="removeCurrentFilter(index)">
+                            <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <v-list-item-action>
+                        <v-btn small @click="removeAllFilter()">
+                          Remove all
+                        </v-btn>
+                      </v-list-item-action>
+                    </v-list>
+                  </v-col>
+                </v-row>
+                <v-divider></v-divider>
+                <p class="mt-2 subtitle-2">Step 2: Assign cells to new label</p>
+                <v-row class="py-2">
+                  <v-col cols="7"
+                    ><v-text-field
+                      v-model="addCategoryName"
+                      label="1. Set new category"
+                      placeholder="Type new categoty name"
+                      hide-details="auto"
+                      background-color="white"
+                      dense
+                    ></v-text-field
+                  ></v-col>
 
-                  <v-row class="mx-2 my-2 py-2">
-                    <p class="my-1 subtitle-2">
-                      Step 2: Assign cells to new label
-                    </p>
-
-                    <v-col cols="12"
-                      ><v-text-field
-                        v-model="addCategoryName"
-                        label="Set new category"
-                        placeholder="Type categoty name"
-                        outlined
-                        hide-details="auto"
-                        background-color="white"
-                        dense
-                      ></v-text-field
-                    ></v-col>
-
-                    <v-col cols="4"
-                      ><v-btn @click="setCategory(addCategoryName)"
-                        >SET</v-btn
-                      ></v-col
-                    >
-
-                    <v-col cols="12"
-                      ><v-text-field
-                        v-model="addLabelName"
-                        label="Add new label"
-                        placeholder="Type label name"
-                        outlined
-                        hide-details="auto"
-                        background-color="white"
-                        dense
-                      ></v-text-field
-                    ></v-col>
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Accent"
-                      @click="assignCells()"
+                  <v-col cols="7"
+                    ><v-text-field
+                      v-model="addLabelName"
+                      label="2. Add new label"
+                      placeholder="Type label name"
+                      hide-details="auto"
+                      background-color="white"
+                      dense
+                    ></v-text-field
+                  ></v-col>
+                  <v-col cols="4"
+                    ><v-btn small @click="assignCells()"
                       >Assign cells</v-btn
-                    >
-                  </v-row>
-                </v-card>
+                    ></v-col
+                  >
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-expansion-panel>
+            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
               <v-expansion-panel-header>
                 Cell selection
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card class="mt-6" outlined>
-                  <p class="subtitle-1 font-weight-bold text-center">
-                    Cell selection
-                  </p>
-
-                  <v-row class="mx-2 my-2 py-2">
-                    <div class="d-flex flex">
-                      <v-select
-                        v-model="selectionCategoryName"
-                        cols="3"
-                        :items="idents"
-                        label="Category"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-select
-                        v-model="selectionCategoryLevel"
-                        cols="3"
-                        :items="selectionCategoryLevels"
-                        label="Cluster"
-                        class="px-1 col-2"
-                        outlined
-                        dense
-                        multiple
-                        background-color="white"
-                      ></v-select>
-                    </div>
-                    <v-btn color="Primary" @click="addClusterSelection()"
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Cell selection
+                </p>
+                <v-row class="py-2">
+                  <v-col cols="6">
+                    <v-select
+                      v-model="selectionCategoryName"
+                      :items="idents"
+                      label="Category"
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-select
+                      v-model="selectionCategoryLevel"
+                      :items="selectionCategoryLevels"
+                      label="Cluster"
+                      dense
+                      multiple
+                      background-color="white"
+                    ></v-select>
+                    <v-spacer></v-spacer>
+                    <v-btn small @click="addClusterSelection()"
                       >Add cluster filter</v-btn
                     >
-
-                    <div class="d-flex flex mt-4">
-                      <v-autocomplete
-                        v-model="selectionGeneName"
-                        class="px-1"
-                        :items="genes"
-                        outlined
-                        dense
-                        label="Gene"
-                        background-color="white"
-                      ></v-autocomplete
-                      ><v-select
-                        v-model="selectionGeneDirection"
-                        cols="3"
-                        :items="selectionGeneDirectionItems"
-                        label="Direction"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-select>
-                      <v-text-field
-                        v-model="selectionGeneThres"
-                        label="Thres"
-                        placeholder="Number"
-                        class="px-1"
-                        outlined
-                        dense
-                        background-color="white"
-                      ></v-text-field>
-                    </div>
-                    <v-btn color="Primary" @click="addGeneSelection()"
+                  </v-col>
+                  <v-divider vertical />
+                  <v-col cols="5">
+                    <v-autocomplete
+                      v-model="selectionGeneName"
+                      label="Gene"
+                      :items="genes"
+                      placeholder="Name"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                    ></v-autocomplete
+                    ><v-select
+                      v-model="selectionGeneDirection"
+                      :items="selectionGeneDirectionItems"
+                      label="Direction"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                    ></v-select>
+                    <v-text-field
+                      v-model="selectionGeneThres"
+                      label="Threshold"
+                      placeholder="Number"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                    ></v-text-field>
+                    <v-btn small @click="addGeneSelection()"
                       >Add gene filter</v-btn
                     >
+                  </v-col>
 
-                    <v-col class="py-0" cols="12">
-                      <p class="my-1">Selections applied:</p>
-                      <ul>
-                        <li
-                          v-for="(item, index) in selectionPayload"
-                          :key="index"
-                        >
-                          <div v-if="item.type === 'gene'">
-                            {{ item.name }} {{ item.direction }}
-                            {{ item.thres }}
-                          </div>
-                          <div v-if="item.type === 'cluster'">
-                            {{ item.direction }} {{ item.category[0] }}:
-                            {{ item.level }}
-                          </div>
-                        </li>
-                      </ul></v-col
-                    >
-                  </v-row>
-
-                  <v-row class="mx-2 my-2 py-2">
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Accent"
-                      @click="subsetCells()"
-                      >Subset cells</v-btn
-                    >
-                    <v-btn
-                      class="mx-2 my-4"
-                      color="Accent"
-                      @click="restoreCells()"
+                  <v-col class="py-2" cols="12">
+                    <p class="my-2">Selections applied:</p>
+                    <ul>
+                      <li
+                        v-for="(item, index) in selectionPayload"
+                        :key="index"
+                      >
+                        <div v-if="item.type === 'gene'">
+                          {{ item.name }} {{ item.direction }}
+                          {{ item.thres }}
+                        </div>
+                        <div v-if="item.type === 'cluster'">
+                          {{ item.direction }} {{ item.category[0] }}:
+                          {{ item.level }}
+                        </div>
+                      </li>
+                    </ul></v-col
+                  >
+                </v-row>
+                <v-divider></v-divider>
+                <v-row class="mx-2 my-2 py-2">
+                  <v-btn class="mx-2 my-4" @click="subsetCells()"
+                    >Subset cells</v-btn
+                  >
+                  <div v-show="showResetBtn">
+                    <v-btn class="mx-2 my-4" @click="restoreCells()"
                       >Reset</v-btn
                     >
-                  </v-row>
-                </v-card>
+                  </div>
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-col>
         <v-col cols="9">
-          <div v-if="clusterResult !== ''">
+          <div v-if="clusterScatterData.axis[0] !== 0">
             <div>
               <grid-layout
                 :layout.sync="layout"
@@ -501,236 +369,26 @@
                 :use-css-transforms="true"
               >
                 <cluster-scatter
-                  :key="layout[0].i"
-                  :x="layout[0].x"
-                  :y="layout[0].y"
-                  :w="layout[0].w"
-                  :h="layout[0].h"
-                  :i="layout[0].i"
+                  :setting="layout[0]"
                   :imagew="600"
                   :imageh="550"
                   :src="clusterScatterData"
-                  :title="layout[0].title"
                 >
                 </cluster-scatter>
-                <!--
-                    <scatter
-                      :key="layout[0].i"
-                      :x="layout[0].x"
-                      :y="layout[0].y"
-                      :w="layout[0].w"
-                      :h="layout[0].h"
-                      :i="layout[0].i"
-                      :imagew="700"
-                      :imageh="550"
-                      :src="umapCluster"
-                      :values="clusterResult.umap_pts"
-                      :title="layout[0].title"
-                    >
-                    </scatter>
--->
-                <v-card class="ma-0"
-                  ><grid-item
-                    :x="layout[1].x"
-                    :y="layout[1].y"
-                    :w="layout[1].w"
-                    :h="layout[1].h"
-                    :i="layout[1].i"
-                    class="grid-item-border"
-                    drag-ignore-from=".no-drag"
-                    @resized="changeTableSize"
-                  >
-                    <v-card-title
-                      class="grey lighten-3 font-weight-bold caption px-2 py-1"
-                      @mouseover="degHover = true"
-                      @mouseleave="degHover = false"
-                      >Differential gene expression analysis<v-spacer
-                      ></v-spacer>
-                      <div>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon v-show="degHover === true" v-on="on"
-                              >mdi-help-circle-outline</v-icon
-                            >
-                          </template>
-                          <p>TODO</p>
-                        </v-tooltip>
-                        <v-menu bottom left :close-on-content-click="false">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on">
-                              <v-icon v-show="degHover === true"
-                                >mdi-download-outline</v-icon
-                              >
-                            </v-btn>
-                          </template>
-
-                          <v-list>
-                            <v-list-item @click="1">
-                              <download-excel
-                                class="mr-4"
-                                :data="deResult"
-                                type="csv"
-                              >
-                                <v-list-item-title
-                                  >Download file (CSV)</v-list-item-title
-                                >
-                              </download-excel>
-                            </v-list-item>
-                          </v-list>
-                        </v-menu>
-                      </div></v-card-title
-                    >
-                    <div class="no-drag">
-                      <v-row>
-                        <v-col cols="6">
-                          <v-autocomplete
-                            v-model="ident1"
-                            class="ml-4"
-                            :items="currentIdentLevels"
-                            label="Group 1"
-                          ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="6">
-                          <v-autocomplete
-                            v-model="ident2"
-                            class="ml-4"
-                            :items="currentIdentLevels"
-                            label="Group 2"
-                          ></v-autocomplete>
-                        </v-col>
-                        <!--<v-col cols="6" class="ma-0">
-                        <p class="ml-4 mb-0 title-h4">
-                          Assay
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on }">
-                              <v-icon color="primary" dark v-on="on"
-                                >mdi-help-circle-outline</v-icon
-                              >
-                            </template>
-                            <p>Assay</p>
-                          </v-tooltip>
-                          <v-select
-                            v-model="degAssay"
-                            class="px-0"
-                            :items="allAssays"
-                            outlined
-                            dense
-                          ></v-select>
-                        </p>
-                      </v-col>
-                      -->
-                      </v-row>
-                      <v-row>
-                        <v-col cols="4" class="ma-0">
-                          <p class="ml-4 mb-0 body-1">
-                            P-value cutoff
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>pvalue</p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="degPvalue"
-                              class="px-0"
-                              outlined
-                              type="number"
-                              step="0.01"
-                              background-color="white"
-                              dense
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                        <v-col cols="4">
-                          <p class="ml-4 mb-0 body-1">
-                            Min cell percent
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>
-                                Only test genes that are detected in a minimum
-                                fraction of min.pct cells in either of the two
-                                populations. Meant to speed up the function by
-                                not testing genes that are very infrequently
-                                expressed. Default is 0.2
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minPct"
-                              class="px-0"
-                              outlined
-                              dense
-                              background-color="white"
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                        <v-col cols="4" class="ma-0">
-                          <p class="ml-4 mb-0 body-1">
-                            LogFC threshold
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on }">
-                                <v-icon color="primary" dark v-on="on"
-                                  >mdi-help-circle-outline</v-icon
-                                >
-                              </template>
-                              <p>
-                                Limit testing to genes which show, on average,
-                                at least X-fold difference (log-scale) between
-                                the two groups of cells. Default is 0.25
-                                Increasing logfc.threshold speeds up the
-                                function, but can miss weaker signals.
-                              </p>
-                            </v-tooltip>
-                            <v-text-field
-                              v-model="minLfc"
-                              class="px-0"
-                              outlined
-                              dense
-                              background-color="white"
-                            ></v-text-field>
-                          </p>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center" class="mx-2 mb-2 mt-0">
-                        <v-btn
-                          class="mx-2 mb-2 mt-0"
-                          color="Primary"
-                          width="200"
-                          @click="runDeg()"
-                          >Update</v-btn
-                        >
-                      </v-row>
-                      <v-data-table
-                        dense
-                        :headers="headers"
-                        :items="deResult"
-                        item-key="name"
-                        :items-per-page="5"
-                        class="elevation-1"
-                      ></v-data-table></div></grid-item
-                ></v-card>
+                <deg-table
+                  :setting="layout[1]"
+                  :idents="currentIdentLevels"
+                ></deg-table>
                 <feature-scatter
-                  :title="layout[2].title"
-                  :x="layout[2].x"
-                  :y="layout[2].y"
-                  :w="layout[2].w"
-                  :h="layout[2].h"
-                  :i="layout[2].i"
+                  :setting="layout[2]"
                   :genes="genes"
                 ></feature-scatter>
-                <enrichment-table
-                  :genes="deResult"
-                  :x="layout[3].x"
-                  :y="layout[3].y"
-                  :w="layout[3].w"
-                  :h="layout[3].h"
-                  :i="layout[3].i"
-                ></enrichment-table>
+                <feature-violin
+                  :setting="layout[3]"
+                  :genes="genes"
+                  :idents="idents"
+                ></feature-violin>
+                <enrichment-table :setting="layout[4]"></enrichment-table>
               </grid-layout>
             </div>
           </div>
@@ -740,20 +398,21 @@
   </v-col>
 </template>
 <script>
-import _ from 'lodash'
 import FeatureScatter from '@/components/figures/FeatureScatter'
+import FeatureViolinStatic from '~/components/figures/FeatureViolinStatic'
+
 import ClusterScatter from '~/components/figures/ClusterScatter'
 import EnrichmentTable from '~/components/tables/EnrichmentTable'
-
+import DegTable from '~/components/tables/DegTable'
 import ApiService from '~/services/ApiService.js'
-export const sleep = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
+
 export default {
   components: {
     'cluster-scatter': ClusterScatter,
     'enrichment-table': EnrichmentTable,
     'feature-scatter': FeatureScatter,
+    'feature-violin': FeatureViolinStatic,
+    'deg-table': DegTable,
   },
   props: {
     type: { type: String, required: true, default: 'single_rna' },
@@ -781,18 +440,25 @@ export default {
       {
         x: 0,
         y: 2,
-        w: 4,
+        w: 3,
         h: 2,
         i: '2',
-        title: 'Feature plot',
+        title: 'Gene scatter plot',
       },
       {
-        x: 4,
+        x: 3,
         y: 2,
-        w: 2,
+        w: 3,
         h: 2,
         i: '3',
-        title: 'Cell type annotation',
+        title: 'Gene violin plot',
+      },
+      {
+        x: 0,
+        y: 4,
+        w: 3,
+        h: 2,
+        i: '4',
       },
     ],
     degList: [
@@ -831,7 +497,6 @@ export default {
     neighbor: '20',
     timeElapsed: 0,
     qcResult: null,
-    umapCluster: '',
     clusterScatterData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     umapGene: '',
     violinGene: '',
@@ -893,6 +558,8 @@ export default {
     selectionCategoryName: '',
     selectionCategoryLevel: '',
     selectionPayload: [],
+    showResetBtn: false,
+    isSubset: false,
     allIdents: [],
     selectedCells: [],
     umapStatic: '',
@@ -996,6 +663,7 @@ export default {
         this.violinSplitItems.push('NULL')
       })
       await this.setActiveIdents(this.currentIdent)
+
       this.clusterScatterData = await ApiService.postCommand(
         'deepmaps/api/queue/embedding-coords/',
         {
@@ -1005,66 +673,12 @@ export default {
     },
 
     async setActiveIdents(currentIdent) {
+      this.$nuxt.$loading.start()
       this.currentIdentMerge = []
-      await this.$axios
-        .post('deepmaps/api/queue/set-idents/', {
-          name: currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.currentIdentLevels = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: `Set cell category to ${currentIdent}`,
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Get idents error!',
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('deepmaps/api/queue/umap-cluster/')
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapStatic = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated UMAP plot',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+      this.currentIdentLevels = await ApiService.postCommand(
+        'deepmaps/api/queue/set-idents/',
+        { name: this.currentIdent }
+      )
 
       await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
@@ -1079,13 +693,14 @@ export default {
           categoryName: this.currentIdent,
         }
       )
+      this.$nuxt.$loading.finish()
     },
     async runIntegration() {
       this.$nuxt.$loading.start()
       if (this.$route.params.id === 'example') {
-        await sleep(8000)
+        await ApiService.sleep(6000)
       } else {
-        await sleep(30000)
+        await ApiService.sleep(12000)
       }
       this.panel = [1]
       this.$nuxt.$loading.finish()
@@ -1093,7 +708,7 @@ export default {
     async runCellCluster() {
       this.$nuxt.$loading.start()
       if (this.type === 'multi_rna') {
-        await setTimeout(() => {}, 20000)
+        await ApiService.sleep(2000)
       }
       await this.$axios
         .post('deepmaps/api/queue/cluster/', {
@@ -1115,109 +730,20 @@ export default {
           }, 2000)
         })
         .catch((error) => {
-          console.log({ error })
           this.$notifier.showMessage({
-            content: 'Clustering error!',
+            content: `Error: ${error}`,
             color: 'error',
           })
         })
 
-      await this.$axios
-        .post('deepmaps/api/queue/set-idents/', {
-          name: this.currentIdent,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.currentIdentLevels = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Set new idents',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Get idents error!',
-            color: 'error',
-          })
-        })
-
-      await this.$axios
-        .post('deepmaps/api/queue/umap-cluster/')
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.umapCluster = response.data.returnvalue
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated UMAP plot',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
-
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
-        }
+      this.currentIdentLevels = await ApiService.postCommand(
+        'deepmaps/api/queue/set-idents/',
+        { name: this.currentIdent }
       )
 
-      await this.$axios
-        .post('deepmaps/api/queue/select-category/')
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.setExistingCategoryItems =
-                    response.data.returnvalue.available_category
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated cell category',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 500)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+      this.setExistingCategoryItems = await ApiService.postCommand(
+        'deepmaps/api/queue/select-category/'
+      ).available_category
 
       await this.$axios.post('deepmaps/api/queue/genes/').then((response) => {
         this.genes = response.data
@@ -1228,10 +754,17 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
       this.$nuxt.$loading.finish()
     },
 
     async renameCluster() {
+      this.$nuxt.$loading.start()
       this.currentIdentLevels.new_levels = await ApiService.postCommand(
         'deepmaps/api/queue/rename-idents/',
         {
@@ -1261,6 +794,7 @@ export default {
           categoryName: this.currentIdent,
         }
       )
+      this.$nuxt.$loading.finish()
     },
     async setCategory(name) {
       await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
@@ -1269,44 +803,18 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
-      await this.$axios
-        .post('deepmaps/api/queue/select-category/', {
+      const setCategoryResult = await ApiService.postCommand(
+        'deepmaps/api/queue/select-category/',
+        {
           categoryName: name,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.currentIdent = response.data.returnvalue.active_category
-                  this.setExistingCategory =
-                    response.data.returnvalue.active_category[0]
-                  this.activeCategory =
-                    response.data.returnvalue.active_category[0]
-                  this.activeCategoryLevels =
-                    response.data.returnvalue.active_category_levels
-                  this.setExistingCategoryItems =
-                    response.data.returnvalue.available_category
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Changed cell category',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 500)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot Cell UMAP error!',
-            color: 'error',
-          })
-        })
+        }
+      )
+
+      this.currentIdent = setCategoryResult.active_category
+      this.setExistingCategory = setCategoryResult.active_category[0]
+      this.activeCategory = setCategoryResult.active_category[0]
+      this.activeCategoryLevels = setCategoryResult.active_category_levels
+      this.setExistingCategoryItems = setCategoryResult.available_category
     },
 
     addGeneFilter() {
@@ -1364,46 +872,42 @@ export default {
     },
 
     async assignCells() {
-      const payload = {
-        newLevelName: this.addLabelName,
-        filterPayload: this.filterPayload,
-      }
-      console.log(payload)
-      await this.$axios
-        .post('deepmaps/api/queue/select-cells/', payload)
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.filterPayload = []
-                  this.selectedCells = response.data.returnvalue
-
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
+      if (!this.addCategoryName) {
+        this.$notifier.showMessage({
+          content: 'Please set new category',
+          color: 'error',
         })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Calculate QC metrics error: ' + error,
-            color: 'error',
-          })
+      } else if (!this.filterPayload.length) {
+        this.$notifier.showMessage({
+          content: 'Please add filters in step 1',
+          color: 'error',
         })
-
-      await this.setActiveIdents(this.currentIdent)
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
+      } else if (!this.addLabelName) {
+        this.$notifier.showMessage({
+          content: 'Please add a new label',
+          color: 'error',
+        })
+      } else {
+        this.$nuxt.$loading.start()
+        await this.setCategory(this.addCategoryName)
+        const payload = {
+          newLevelName: this.addLabelName,
+          filterPayload: this.filterPayload,
         }
-      )
-      return 1
+        this.selectedCells = await ApiService.postCommand(
+          'deepmaps/api/queue/select-cells/',
+          payload
+        )
+        this.filterPayload = []
+        await this.setActiveIdents(this.currentIdent)
+        this.clusterScatterData = await ApiService.postCommand(
+          'deepmaps/api/queue/embedding-coords/',
+          {
+            categoryName: this.currentIdent,
+          }
+        )
+        this.$nuxt.$loading.finish()
+      }
     },
 
     addGeneSelection() {
@@ -1461,228 +965,57 @@ export default {
     },
 
     async subsetCells() {
-      console.log({
-        selectionPayload: this.selectionPayload,
-      })
-      await this.$axios
-        .post('deepmaps/api/queue/subset-cells/', {
-          selectionPayload: this.selectionPayload,
-        })
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.selectionPayload = []
-                  this.subCells = response.data.returnvalue
-
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Subsets error: ' + error,
-            color: 'error',
-          })
-        })
-
-      await this.setActiveIdents(this.currentIdent)
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
-        }
-      )
-      return 1
-    },
-
-    async restoreCells() {
-      await this.$axios
-        .post('deepmaps/api/queue/set-obj/', {
-          type: 'full',
-        })
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  clearInterval(checkComplete)
-                }
-                if (++i === 10) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Subsets error: ' + error,
-            color: 'error',
-          })
-        })
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
-        }
-      )
-      return 1
-    },
-
-    async runDeg() {
-      this.deResult = []
-      if (this.ident1 === this.ident2) {
+      if (!this.selectionPayload.length) {
         this.$notifier.showMessage({
-          content: 'Please select two different clusters',
+          content: 'Please add cell selection filters',
           color: 'error',
         })
       } else {
         this.$nuxt.$loading.start()
-        await this.$axios
-          .post('deepmaps/api/queue/deg/', {
-            ident1: this.ident1,
-            ident2: this.ident2,
-            min_pct: this.minPct,
-            min_lfc: this.minLfc,
-            assay: 'RNA',
-            pvalue: this.degPvalue,
-          })
-          .then((response) => {
-            let i = 0
-            const checkComplete = setInterval(async () => {
-              await this.$axios
-                .get('deepmaps/api/queue/' + response.data.id)
-                .then((response) => {
-                  if (response.data.returnvalue !== null) {
-                    this.deResult = response.data.returnvalue[0]
-                    if (!response.data.returnvalue[0]) {
-                      this.$notifier.showMessage({
-                        content: 'DEG not found',
-                        color: 'error',
-                      })
-                    }
-                    this.deg = _.map(this.deResult, 'gene')
+        this.subCells = await ApiService.postCommand(
+          'deepmaps/api/queue/subset-cells/',
+          {
+            selectionPayload: this.selectionPayload,
+          }
+        )
 
-                    clearInterval(checkComplete)
-                  }
-                  if (++i === 10) {
-                    clearInterval(checkComplete)
-                  }
-                })
-            }, 1000)
-          })
+        this.selectionPayload = []
+        await this.setActiveIdents(this.currentIdent)
+        this.clusterScatterData = await ApiService.postCommand(
+          'deepmaps/api/queue/embedding-coords/',
+          {
+            categoryName: this.currentIdent,
+          }
+        )
+        this.showResetBtn = true
+        this.isSubset = true
         this.$nuxt.$loading.finish()
       }
     },
 
-    async runGenePlot() {
-      this.$notifier.showMessage({
-        content: `Plotting ${this.gene} gene...`,
-        color: 'accent',
-      })
-      await this.$axios
-        .post('deepmaps/api/queue/violin-gene/', {
-          gene: this.gene,
-          split: this.violinSplit,
-          group: this.violinGroup,
+    async restoreCells() {
+      if (this.isSubset) {
+        this.$nuxt.$loading.start()
+        await ApiService.postCommand('deepmaps/api/queue/set-obj/', {
+          type: 'full',
         })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.violinGene = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
+        this.clusterScatterData = await ApiService.postCommand(
+          'deepmaps/api/queue/embedding-coords/',
+          {
+            categoryName: this.currentIdent,
+          }
+        )
+        this.isSubset = false
+        this.$nuxt.$loading.finish()
+      } else {
+        this.$notifier.showMessage({
+          content: `Reset function only works on subset data`,
+          color: 'error',
         })
-      this.featureScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/feature-coords/',
-        {
-          gene: this.gene,
-          assay: 'RNA',
-        }
-      )
+      }
     },
-    async showDotPlot() {
-      await this.$axios
-        .post('deepmaps/api/queue/dot-plot/', {
-          top: 3,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.dotPlot = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot genes error!',
-            color: 'error',
-          })
-        })
-    },
-    async annotateCellType() {
-      await this.$axios
-        .post('deepmaps/api/queue/dot-plot/', {
-          top: 3,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.dotPlot = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot genes error!',
-            color: 'error',
-          })
-        })
-      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
-        this.allIdents = response.data
-        this.idents = response.data.map((item) => item.ident)
-        this.violinSplitItems = response.data
-        this.violinSplitItems.push('NULL')
-      })
-    },
-    runQubic() {
-      this.$notifier.showMessage({
-        content: 'Start CTSR identification!',
-        color: 'accent',
-      })
-    },
-    openMetadataDiaglog() {
-      this.addMetadataDialog = true
-    },
-    openAddTransferMetadataDialog() {
-      this.addTransferMetadataDialog = true
-    },
-    downloadPDF() {
-      console.log('donlowad PDF ... ')
-    },
+
+    downloadPDF() {},
     async addMetadata() {
       this.$notifier.showMessage({
         content: `Applying cell type...`,
@@ -1705,9 +1038,8 @@ export default {
           }, 3000)
         })
         .catch((error) => {
-          console.log({ error })
           this.$notifier.showMessage({
-            content: 'Annotate error!',
+            content: `Error: ${error}`,
             color: 'error',
           })
         })
@@ -1740,9 +1072,8 @@ export default {
           }, 3000)
         })
         .catch((error) => {
-          console.log({ error })
           this.$notifier.showMessage({
-            content: 'Annotate error!',
+            content: `Error: ${error}`,
             color: 'error',
           })
         })
@@ -1763,6 +1094,18 @@ export default {
     },
     changeTableSize(i, newH, newW, newHPx, newWPx) {
       this.tableHeight = newHPx - 155
+    },
+    removeCurrentFilter(index) {
+      this.filterPayload.splice(index, 1)
+    },
+    removeAllFilter() {
+      this.filterPayload = []
+    },
+    removeCurrentSelection(index) {
+      this.selectionPayload.splice(index, 1)
+    },
+    removeAllSelection() {
+      this.selectionPayload = []
     },
   },
 }

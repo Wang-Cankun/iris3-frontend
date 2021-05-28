@@ -93,19 +93,19 @@
       </v-toolbar-items>
 
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="searchJobId"
-        solo-inverted
-        flat
-        clearable
-        hide-details
-        label="Search Job ID"
-        type="search"
-        prepend-inner-icon="mdi-magnify"
-        class="shrink"
-      />
 
-      <v-toolbar-items class="hidden-xs-only mx-5">
+      <v-toolbar-items v-show="false" class="hidden-xs-only mx-5">
+        <v-text-field
+          v-model="searchJobId"
+          solo-inverted
+          flat
+          clearable
+          hide-details
+          label="Search Job ID"
+          type="search"
+          prepend-inner-icon="mdi-magnify"
+          class="shrink"
+        />
         <v-btn
           v-if="searchJobId"
           color="primary"
@@ -114,6 +114,7 @@
         >
           Search</v-btn
         >
+
         <template v-if="isAuthenticated">
           <v-btn to="/profile" text>
             <v-icon left dark>mdi-face</v-icon>

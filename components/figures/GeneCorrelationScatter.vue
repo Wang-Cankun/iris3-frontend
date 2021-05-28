@@ -1,11 +1,11 @@
 <template>
   <v-card class="ma-0"
     ><grid-item
-      :w="w"
-      :h="h"
-      :x="x"
-      :y="y"
-      :i="i"
+      :w="setting.w"
+      :h="setting.h"
+      :x="setting.x"
+      :y="setting.y"
+      :i="setting.i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
       @resized="changeSize"
@@ -84,11 +84,11 @@ import ApiService from '~/services/ApiService.js'
 export default {
   props: {
     genes: { type: Array, required: true },
-    w: { type: Number, required: true, default: 2 },
-    h: { type: Number, required: true, default: 2 },
-    x: { type: Number, required: true, default: 0 },
-    y: { type: Number, required: true, default: 0 },
-    i: { type: String, required: true, default: '0' },
+    setting: {
+      type: Object,
+      required: true,
+      default: () => ({ title: '', h: 2, x: 0, y: 0, i: '0' }),
+    },
   },
   data() {
     return {

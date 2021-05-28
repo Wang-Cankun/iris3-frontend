@@ -2,24 +2,16 @@
   <v-col class="mb-2" cols="12">
     <v-card outlined>
       <v-row>
-        <v-col class="my-2" cols="3">
+        <v-col class="my-4" cols="3">
           <v-expansion-panels v-model="panel" multiple>
             <v-expansion-panel>
               <v-expansion-panel-header>
                 Integrative clustering
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <p
-                      class="subtitle-1 font-weight-bold text-center"
-                      v-on="on"
-                    >
-                      Integrative clustering
-                    </p>
-                  </template>
-                  <span> TODO</span>
-                </v-tooltip>
+                <p class="subtitle-1 font-weight-bold text-center">
+                  Integrative clustering
+                </p>
                 <v-row class="mb-0 py-0">
                   <v-col class="py-0" cols="12">
                     <v-tooltip top>
@@ -101,7 +93,7 @@
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-expansion-panel>
+            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
               <v-expansion-panel-header>
                 Cell category
               </v-expansion-panel-header>
@@ -142,7 +134,7 @@
                 >
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-expansion-panel>
+            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
               <v-expansion-panel-header>
                 Custom cell labeling
               </v-expansion-panel-header>
@@ -205,21 +197,37 @@
                     >
                   </v-col>
 
-                  <v-col class="py-0" cols="12">
-                    <p class="my-1">Filters applied:</p>
-                    <ul>
-                      <li v-for="(item, index) in filterPayload" :key="index">
-                        <div v-if="item.type === 'gene'">
-                          {{ item.name }} {{ item.direction }}
-                          {{ item.thres }}
-                        </div>
-                        <div v-if="item.type === 'cluster'">
-                          {{ item.direction }} {{ item.category[0] }}:
-                          {{ item.level }}
-                        </div>
-                      </li>
-                    </ul></v-col
-                  >
+                  <v-col class="py-2" cols="12">
+                    <v-list dense>
+                      <v-list-item-title>Filters applied:</v-list-item-title>
+                      <v-list-item
+                        v-for="(item, index) in filterPayload"
+                        :key="index"
+                        class="my-0 py-0"
+                      >
+                        <v-list-item-content class="my-0 py-0">
+                          <div v-if="item.type === 'gene'">
+                            {{ item.name }} {{ item.direction }}
+                            {{ item.thres }}
+                          </div>
+                          <div v-if="item.type === 'cluster'">
+                            {{ item.direction }} {{ item.category[0] }}:
+                            {{ item.level }}
+                          </div>
+                        </v-list-item-content>
+                        <v-list-item-action class="my-0 py-0">
+                          <v-btn icon @click="removeCurrentFilter(index)">
+                            <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <v-list-item-action>
+                        <v-btn small @click="removeAllFilter()">
+                          Remove all
+                        </v-btn>
+                      </v-list-item-action>
+                    </v-list>
+                  </v-col>
                 </v-row>
                 <v-divider></v-divider>
                 <p class="mt-2 subtitle-2">Step 2: Assign cells to new label</p>
@@ -259,7 +267,7 @@
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-expansion-panel>
+            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
               <v-expansion-panel-header>
                 Cell selection
               </v-expansion-panel-header>
@@ -320,25 +328,37 @@
                       >Add gene filter</v-btn
                     >
                   </v-col>
-
-                  <v-col class="py-0" cols="12">
-                    <p class="my-1">Selections applied:</p>
-                    <ul>
-                      <li
+                  <v-col class="py-2" cols="12">
+                    <v-list dense>
+                      <v-list-item-title>Selections applied:</v-list-item-title>
+                      <v-list-item
                         v-for="(item, index) in selectionPayload"
                         :key="index"
+                        class="my-0 py-0"
                       >
-                        <div v-if="item.type === 'gene'">
-                          {{ item.name }} {{ item.direction }}
-                          {{ item.thres }}
-                        </div>
-                        <div v-if="item.type === 'cluster'">
-                          {{ item.direction }} {{ item.category[0] }}:
-                          {{ item.level }}
-                        </div>
-                      </li>
-                    </ul></v-col
-                  >
+                        <v-list-item-content class="my-0 py-0">
+                          <div v-if="item.type === 'gene'">
+                            {{ item.name }} {{ item.direction }}
+                            {{ item.thres }}
+                          </div>
+                          <div v-if="item.type === 'cluster'">
+                            {{ item.direction }} {{ item.category[0] }}:
+                            {{ item.level }}
+                          </div>
+                        </v-list-item-content>
+                        <v-list-item-action class="my-0 py-0">
+                          <v-btn icon @click="removeCurrentSelection(index)">
+                            <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <v-list-item-action>
+                        <v-btn small @click="removeAllSelection()">
+                          Remove all
+                        </v-btn>
+                      </v-list-item-action>
+                    </v-list>
+                  </v-col>
                 </v-row>
                 <v-divider></v-divider>
                 <v-row class="mx-2 my-2 py-2">
@@ -366,30 +386,18 @@
                 :use-css-transforms="true"
               >
                 <cluster-scatter
-                  :key="layout[0].i"
-                  :x="layout[0].x"
-                  :y="layout[0].y"
-                  :w="layout[0].w"
-                  :h="layout[0].h"
-                  :i="layout[0].i"
+                  :setting="layout[0]"
                   :imagew="600"
                   :imageh="550"
                   :src="clusterScatterData"
-                  :title="layout[0].title"
                 >
                 </cluster-scatter>
                 <deg-table
                   :setting="layout[1]"
-                  :genes="genes"
                   :idents="currentIdentLevels"
                 ></deg-table>
                 <feature-scatter
-                  :title="layout[2].title"
-                  :x="layout[2].x"
-                  :y="layout[2].y"
-                  :w="layout[2].w"
-                  :h="layout[2].h"
-                  :i="layout[2].i"
+                  :setting="layout[2]"
                   :genes="genes"
                 ></feature-scatter>
                 <feature-violin
@@ -397,21 +405,11 @@
                   :genes="genes"
                   :idents="idents"
                 ></feature-violin>
-                <enrichment-table
-                  :x="layout[4].x"
-                  :y="layout[4].y"
-                  :w="layout[4].w"
-                  :h="layout[4].h"
-                  :i="layout[4].i"
-                ></enrichment-table>
+                <enrichment-table :setting="layout[4]"></enrichment-table>
                 <div v-if="jobid === 'example'">
                   <coverage-plot
                     :genes="genes"
-                    :x="layout[5].x"
-                    :y="layout[5].y"
-                    :w="layout[5].w"
-                    :h="layout[5].h"
-                    :i="layout[5].i"
+                    :setting="layout[5]"
                   ></coverage-plot>
                 </div>
               </grid-layout>
@@ -479,7 +477,7 @@ export default {
         w: 3,
         h: 2,
         i: '3',
-        title: 'Gene violin  plot',
+        title: 'Gene violin plot',
       },
       {
         x: 0,
@@ -502,7 +500,6 @@ export default {
     resolution: '0.5',
     neighbor: '20',
     timeElapsed: 0,
-    umapCluster: '',
     violinGene: '',
     featureGene: '',
     dotPlot: '',
@@ -611,9 +608,7 @@ export default {
       this.windowSize.x = newWPx
       this.windowSize.y = newHPx
     },
-    runIntegration() {
-      return 1
-    },
+
     async mergeIdents() {
       await this.$axios
         .post('deepmaps/api/queue/merge-idents/', {
@@ -665,10 +660,6 @@ export default {
         { name: this.currentIdent }
       )
 
-      this.umapCluster = await ApiService.postCommand(
-        'deepmaps/api/queue/umap-cluster/'
-      )
-
       await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
         this.allIdents = response.data
         this.idents = response.data.map((item) => item.ident)
@@ -686,10 +677,8 @@ export default {
     },
 
     async setActiveEmbedding(currentEmbedding) {
-      this.$notifier.showMessage({
-        content: `Set cell embedding to ${currentEmbedding}`,
-        color: 'accent',
-      })
+      this.$nuxt.$loading.start()
+
       const result = await ApiService.postCommand(
         'deepmaps/api/queue/set-embedding/',
         {
@@ -711,8 +700,10 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+      this.$nuxt.$loading.finish()
     },
     async setActiveAssay(currentAssay) {
+      this.$nuxt.$loading.start()
       this.$notifier.showMessage({
         content: `Set data assay to ${currentAssay}`,
         color: 'accent',
@@ -732,6 +723,7 @@ export default {
           categoryName: this.currentIdent,
         }
       )
+      this.$nuxt.$loading.finish()
     },
     async runCellCluster() {
       this.$nuxt.$loading.start()
@@ -755,18 +747,6 @@ export default {
         }
       )
 
-      this.umapCluster = await ApiService.postCommand(
-        'deepmaps/api/queue/umap-cluster/'
-      )
-
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
-        }
-      )
-      this.$nuxt.$loading.finish()
-      this.$store.dispatch('calc/updateFlag', true)
       this.setExistingCategoryItems = await ApiService.postCommand(
         'deepmaps/api/queue/select-category/'
       ).available_category
@@ -787,6 +767,15 @@ export default {
       tmp = await ApiService.postCommand('deepmaps/api/queue/embeddings/')
       this.allEmbeddings = tmp.all_embeddings
       this.currentEmbedding = tmp.all_embeddings[tmp.embedding_idx[0]]
+
+      this.clusterScatterData = await ApiService.postCommand(
+        'deepmaps/api/queue/embedding-coords/',
+        {
+          categoryName: this.currentIdent,
+        }
+      )
+      this.$nuxt.$loading.finish()
+      this.$store.dispatch('calc/updateFlag', true)
     },
 
     async setCategory(name) {
@@ -797,37 +786,18 @@ export default {
         this.violinSplitItems.push('NULL')
       })
 
-      await this.$axios
-        .post('deepmaps/api/queue/select-category/', {
+      const setCategoryResult = await ApiService.postCommand(
+        'deepmaps/api/queue/select-category/',
+        {
           categoryName: name,
-        })
-        .then((response) => {
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.currentIdent = response.data.returnvalue.active_category
-                  this.setExistingCategory =
-                    response.data.returnvalue.active_category[0]
-                  this.activeCategory =
-                    response.data.returnvalue.active_category[0]
-                  this.activeCategoryLevels =
-                    response.data.returnvalue.active_category_levels
-                  this.setExistingCategoryItems =
-                    response.data.returnvalue.available_category
-                  this.timeElapsed =
-                    (response.data.finishedOn - response.data.processedOn) /
-                    1000
-                  clearInterval(checkComplete)
-                  this.$notifier.showMessage({
-                    content: 'Updated cell category',
-                    color: 'success',
-                  })
-                }
-              })
-          }, 1000)
-        })
+        }
+      )
+
+      this.currentIdent = setCategoryResult.active_category
+      this.setExistingCategory = setCategoryResult.active_category[0]
+      this.activeCategory = setCategoryResult.active_category[0]
+      this.activeCategoryLevels = setCategoryResult.active_category_levels
+      this.setExistingCategoryItems = setCategoryResult.available_category
     },
 
     addGeneFilter() {
@@ -885,24 +855,42 @@ export default {
     },
 
     async assignCells() {
-      const payload = {
-        newLevelName: this.addLabelName,
-        filterPayload: this.filterPayload,
-      }
-      this.$nuxt.$loading.start()
-
-      this.selectedCells = await ApiService.postCommand(
-        'deepmaps/api/queue/select-cells/',
-        payload
-      )
-      this.filterPayload = []
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
+      if (!this.addCategoryName) {
+        this.$notifier.showMessage({
+          content: 'Please set new category',
+          color: 'error',
+        })
+      } else if (!this.filterPayload.length) {
+        this.$notifier.showMessage({
+          content: 'Please add filters in step 1',
+          color: 'error',
+        })
+      } else if (!this.addLabelName) {
+        this.$notifier.showMessage({
+          content: 'Please add a new label',
+          color: 'error',
+        })
+      } else {
+        this.$nuxt.$loading.start()
+        await this.setCategory(this.addCategoryName)
+        const payload = {
+          newLevelName: this.addLabelName,
+          filterPayload: this.filterPayload,
         }
-      )
-      this.$nuxt.$loading.finish()
+        this.selectedCells = await ApiService.postCommand(
+          'deepmaps/api/queue/select-cells/',
+          payload
+        )
+        this.filterPayload = []
+        await this.setActiveIdents(this.currentIdent)
+        this.clusterScatterData = await ApiService.postCommand(
+          'deepmaps/api/queue/embedding-coords/',
+          {
+            categoryName: this.currentIdent,
+          }
+        )
+        this.$nuxt.$loading.finish()
+      }
     },
 
     addGeneSelection() {
@@ -960,178 +948,58 @@ export default {
     },
 
     async subsetCells() {
-      console.log({
-        selectionPayload: this.selectionPayload,
-      })
-      await this.$axios
-        .post('deepmaps/api/queue/subset-cells/', {
-          selectionPayload: this.selectionPayload,
+      if (!this.selectionPayload.length) {
+        this.$notifier.showMessage({
+          content: 'Please add cell selection filters',
+          color: 'error',
         })
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  this.selectionPayload = []
-                  this.subCells = response.data.returnvalue
+      } else {
+        this.$nuxt.$loading.start()
+        this.subCells = await ApiService.postCommand(
+          'deepmaps/api/queue/subset-cells/',
+          {
+            selectionPayload: this.selectionPayload,
+          }
+        )
 
-                  clearInterval(checkComplete)
-                }
-                if (++i === 100) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
-        })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Subsets error: ' + error,
-            color: 'error',
-          })
-        })
-
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
-        }
-      )
-      return 1
+        this.selectionPayload = []
+        await this.setActiveIdents(this.currentIdent)
+        this.clusterScatterData = await ApiService.postCommand(
+          'deepmaps/api/queue/embedding-coords/',
+          {
+            categoryName: this.currentIdent,
+          }
+        )
+        this.showResetBtn = true
+        this.isSubset = true
+        this.$nuxt.$loading.finish()
+      }
     },
 
     async restoreCells() {
-      await this.$axios
-        .post('deepmaps/api/queue/set-obj/', {
+      if (this.isSubset) {
+        this.$nuxt.$loading.start()
+        await ApiService.postCommand('deepmaps/api/queue/set-obj/', {
           type: 'full',
         })
-        .then((response) => {
-          let i = 0
-          const checkComplete = setInterval(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                if (response.data.returnvalue !== null) {
-                  clearInterval(checkComplete)
-                }
-                if (++i === 100) {
-                  clearInterval(checkComplete)
-                }
-              })
-          }, 1000)
+        this.clusterScatterData = await ApiService.postCommand(
+          'deepmaps/api/queue/embedding-coords/',
+          {
+            categoryName: this.currentIdent,
+          }
+        )
+        this.isSubset = false
+        this.$nuxt.$loading.finish()
+      } else {
+        this.$notifier.showMessage({
+          content: `Reset function only works on subset data`,
+          color: 'error',
         })
-        .catch((error) => {
-          this.$notifier.showMessage({
-            content: 'Subsets error: ' + error,
-            color: 'error',
-          })
-        })
-
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/embedding-coords/',
-        {
-          categoryName: this.currentIdent,
-        }
-      )
-      return 1
+      }
     },
 
-    async runGenePlot() {
-      this.$notifier.showMessage({
-        content: `Plotting ${this.gene} gene...`,
-        color: 'accent',
-      })
-      await this.$axios
-        .post('deepmaps/api/queue/violin-gene/', {
-          gene: this.plotGeneSymbol,
-          split: this.violinSplit,
-          group: this.violinGroup,
-          assay: this.plotGeneAssay,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.violinGene = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
-      await this.$axios
-        .post('deepmaps/api/queue/feature-gene/', {
-          gene: this.plotGeneSymbol,
-          assay: this.plotGeneAssay,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.featureGene = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
-    },
-    async showDotPlot() {
-      await this.$axios
-        .post('deepmaps/api/queue/dot-plot/', {
-          top: 3,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.dotPlot = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot genes error!',
-            color: 'error',
-          })
-        })
-    },
-    async annotateCellType() {
-      await this.$axios
-        .post('deepmaps/api/queue/dot-plot/', {
-          top: 3,
-        })
-        .then((response) => {
-          setTimeout(async () => {
-            await this.$axios
-              .get('deepmaps/api/queue/' + response.data.id)
-              .then((response) => {
-                this.dotPlot = response.data.returnvalue
-                this.timeElapsed =
-                  (response.data.finishedOn - response.data.processedOn) / 1000
-              })
-          }, 3000)
-        })
-        .catch((error) => {
-          console.log({ error })
-          this.$notifier.showMessage({
-            content: 'Plot genes error!',
-            color: 'error',
-          })
-        })
-      await this.$axios.post('deepmaps/api/queue/idents/').then((response) => {
-        this.allIdents = response.data
-        this.idents = response.data.map((item) => item.ident)
-        this.violinSplitItems = response.data
-        this.violinSplitItems.push('NULL')
-      })
-    },
     async renameCluster() {
+      this.$nuxt.$loading.start()
       this.currentIdentLevels.new_levels = await ApiService.postCommand(
         'deepmaps/api/queue/rename-idents/',
         {
@@ -1160,6 +1028,7 @@ export default {
         this.violinSplitItems = response.data
         this.violinSplitItems.push('NULL')
       })
+      this.$nuxt.$loading.finish()
     },
     openMetadataDiaglog() {
       this.addMetadataDialog = true
@@ -1167,9 +1036,7 @@ export default {
     openAddTransferMetadataDialog() {
       this.addTransferMetadataDialog = true
     },
-    downloadPDF() {
-      console.log('donlowad PDF ... ')
-    },
+    downloadPDF() {},
     async addMetadata() {
       this.$notifier.showMessage({
         content: `Applying cell type...`,
@@ -1192,9 +1059,8 @@ export default {
           }, 3000)
         })
         .catch((error) => {
-          console.log({ error })
           this.$notifier.showMessage({
-            content: 'Annotate error!',
+            content: `Error: ${error}`,
             color: 'error',
           })
         })
@@ -1227,9 +1093,8 @@ export default {
           }, 3000)
         })
         .catch((error) => {
-          console.log({ error })
           this.$notifier.showMessage({
-            content: 'Annotate error!',
+            content: `Error: ${error}`,
             color: 'error',
           })
         })
@@ -1250,6 +1115,18 @@ export default {
     },
     changeTableSize(i, newH, newW, newHPx, newWPx) {
       this.tableHeight = newHPx - 155
+    },
+    removeCurrentFilter(index) {
+      this.filterPayload.splice(index, 1)
+    },
+    removeAllFilter() {
+      this.filterPayload = []
+    },
+    removeCurrentSelection(index) {
+      this.selectionPayload.splice(index, 1)
+    },
+    removeAllSelection() {
+      this.selectionPayload = []
     },
   },
 }

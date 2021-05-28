@@ -87,15 +87,15 @@
             </v-tooltip></v-col
           >
           <v-col cols="3">
-            <v-btn small @click="runGeneViolin()">Plot</v-btn></v-col
-          >
+            <v-btn small @click="runGeneViolin()">Plot</v-btn>
+          </v-col>
         </v-row>
 
         <div v-show="geneViolin">
           <v-img
             contain
             :width="windowSize.x - 30"
-            :height="windowSize.y - 180"
+            :height="windowSize.y - 150"
             :max-width="windowSize.x + 'px'"
             :max-height="windowSize.y + 'px'"
             :src="geneViolin"

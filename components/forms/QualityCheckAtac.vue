@@ -163,101 +163,15 @@
             :margin="[10, 10]"
             :use-css-transforms="true"
           >
-            <boxplot
-              :key="layout[0].i"
-              :x="layout[0].x"
-              :y="layout[0].y"
-              :w="layout[0].w"
-              :h="layout[0].h"
-              :i="layout[0].i"
-              :src="qcBox1"
-              :title="layout[0].title"
-            >
-            </boxplot>
-            <boxplot
-              :key="layout[1].i"
-              :x="layout[1].x"
-              :y="layout[1].y"
-              :w="layout[1].w"
-              :h="layout[1].h"
-              :i="layout[1].i"
-              :src="qcBox2"
-              :title="layout[1].title"
-            >
-            </boxplot>
-            <boxplot
-              :key="layout[2].i"
-              :x="layout[2].x"
-              :y="layout[2].y"
-              :w="layout[2].w"
-              :h="layout[2].h"
-              :i="layout[2].i"
-              :src="qcBox3"
-              :title="layout[2].title"
-            >
-            </boxplot>
-            <boxplot
-              :key="layout[3].i"
-              :x="layout[3].x"
-              :y="layout[3].y"
-              :w="layout[3].w"
-              :h="layout[3].h"
-              :i="layout[3].i"
-              :src="qcBox4"
-              :title="layout[3].title"
-            >
-            </boxplot>
-            <boxplot
-              :key="layout[4].i"
-              :x="layout[4].x"
-              :y="layout[4].y"
-              :w="layout[4].w"
-              :h="layout[4].h"
-              :i="layout[4].i"
-              :src="qcBox5"
-              :title="layout[4].title"
-            >
-            </boxplot>
-            <barplot
-              :key="layout[5].i"
-              :x="layout[5].x"
-              :y="layout[5].y"
-              :w="layout[5].w"
-              :h="layout[5].h"
-              :i="layout[5].i"
-              :src="qcHist4"
-              :title="layout[5].title"
-            ></barplot>
-            <barplot
-              :key="layout[6].i"
-              :x="layout[6].x"
-              :y="layout[6].y"
-              :w="layout[6].w"
-              :h="layout[6].h"
-              :i="layout[6].i"
-              :src="qcHist1"
-              :title="layout[6].title"
-            ></barplot>
-            <barplot
-              :key="layout[7].i"
-              :x="layout[7].x"
-              :y="layout[7].y"
-              :w="layout[7].w"
-              :h="layout[7].h"
-              :i="layout[7].i"
-              :src="qcHist2"
-              :title="layout[7].title"
-            ></barplot>
-            <barplot
-              :key="layout[8].i"
-              :x="layout[8].x"
-              :y="layout[8].y"
-              :w="layout[8].w"
-              :h="layout[8].h"
-              :i="layout[8].i"
-              :src="qcHist3"
-              :title="layout[8].title"
-            ></barplot>
+            <boxplot :setting="layout[0]" :src="qcBox1"> </boxplot>
+            <boxplot :setting="layout[1]" :src="qcBox2"> </boxplot>
+            <boxplot :setting="layout[2]" :src="qcBox3"> </boxplot>
+            <boxplot :setting="layout[3]" :src="qcBox4"> </boxplot>
+            <boxplot :setting="layout[4]" :src="qcBox5"> </boxplot>
+            <barplot :setting="layout[5]" :src="qcHist4"></barplot>
+            <barplot :setting="layout[6]" :src="qcHist1"></barplot>
+            <barplot :setting="layout[7]" :src="qcHist2"></barplot>
+            <barplot :setting="layout[8]" :src="qcHist3"></barplot>
           </grid-layout>
         </v-col>
         <v-col cols="7"></v-col>

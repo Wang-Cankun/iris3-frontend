@@ -21,10 +21,6 @@
               </v-row>
               <div v-show="ctList.length" class="mt-2 pt-2">
                 <v-divider />
-                <p>
-                  Cell category for network construction:
-                  {{ allIdents.map((i) => i.ident).flat()[0] }}
-                </p>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-select
@@ -62,12 +58,7 @@
               :use-css-transforms="true"
             >
               <network
-                :title="layout[0].title"
-                :x="layout[0].x"
-                :y="layout[0].y"
-                :w="layout[0].w"
-                :h="layout[0].h"
-                :i="layout[0].i"
+                :setting="layout[0]"
                 :nodes="graphNodes"
                 :edges="graphEdges"
                 :show="showNetwork"
@@ -75,54 +66,26 @@
               >
               </network>
               <regulon-table
-                :title="layout[1].title"
-                :x="layout[1].x"
-                :y="layout[1].y"
-                :w="layout[1].w"
-                :h="layout[1].h"
-                :i="layout[1].i"
+                :setting="layout[1]"
                 :items="regulonTable"
                 :selected.sync="selectedRegulon"
               >
               </regulon-table>
               <differential-regulon
                 :genes="tfList"
-                :title="layout[2].title"
-                :x="layout[2].x"
-                :y="layout[2].y"
-                :w="layout[2].w"
-                :h="layout[2].h"
-                :i="layout[2].i"
+                :setting="layout[2]"
               ></differential-regulon>
               <div v-if="selectedRegulon.tf">
                 <cluster-scatter
                   :key="layout[3].i"
-                  :x="layout[3].x"
-                  :y="layout[3].y"
-                  :w="layout[3].w"
-                  :h="layout[3].h"
-                  :i="layout[3].i"
                   :src="clusterScatterData"
-                  :title="layout[3].title"
+                  :setting="layout[3]"
                 >
                 </cluster-scatter>
-                <regulon-activity-scatter
-                  :title="layout[4].title"
-                  :x="layout[4].x"
-                  :y="layout[4].y"
-                  :w="layout[4].w"
-                  :h="layout[4].h"
-                  :i="layout[4].i"
-                  :src="rasData"
-                >
+                <regulon-activity-scatter :setting="layout[4]" :src="rasData">
                 </regulon-activity-scatter>
                 <regulon-gene-scatter
-                  :title="layout[5].title"
-                  :x="layout[5].x"
-                  :y="layout[5].y"
-                  :w="layout[5].w"
-                  :h="layout[5].h"
-                  :i="layout[5].i"
+                  :setting="layout[5]"
                   :genes="selectedRegulonGenes"
                 >
                 </regulon-gene-scatter>
@@ -141,18 +104,13 @@
                   :setting="layout[8]"
                 ></enrichment-table>
                 <regulon-heatmap
-                  :title="layout[9].title"
-                  :x="layout[9].x"
-                  :y="layout[9].y"
-                  :w="layout[9].w"
-                  :h="layout[9].h"
-                  :i="layout[9].i"
+                  :setting="layout[9]"
                   :src="riHeatmapData"
                 ></regulon-heatmap>
                 <!--
                 <div v-if="false">
                   <regulon-circos
-                    :title="layout[10].title"
+                    :setting="layout[10]"
                     :x="layout[10].x"
                     :y="layout[10].y"
                     :w="layout[10].w"
@@ -162,7 +120,7 @@
                   ></regulon-circos>
 
                   <volcano-scatter
-                    :title="layout[11].title"
+                    :setting="layout[11]"
                     :x="layout[11].x"
                     :y="layout[11].y"
                     :w="layout[11].w"
