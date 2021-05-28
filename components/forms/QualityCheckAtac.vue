@@ -10,14 +10,10 @@
               </p>
 
               <p class="text--secondary">
-                Cell number: {{ qcResult.raw_n_cells[0] }}
+                Cells: {{ qcResult.raw_n_cells[0] }}
               </p>
               <p class="text--secondary">
-                Gene number: {{ qcResult.raw_n_genes[0] }}
-              </p>
-              <p class="text--secondary">
-                Average expression level:
-                {{ qcResult.raw_mean_expr[0] }}
+                Peaks: {{ qcResult.raw_n_genes[0] }}
               </p>
               <p class="text--secondary">
                 Zero expression percentage:
@@ -27,14 +23,10 @@
                 Current data statistics
               </p>
               <p class="text--secondary">
-                Cell number: {{ qcResult.filter_n_cells[0] }}
+                Cells: {{ qcResult.filter_n_cells[0] }}
               </p>
               <p class="text--secondary">
-                Gene number: {{ qcResult.filter_n_genes[0] }}
-              </p>
-              <p class="text--secondary">
-                Average expression level:
-                {{ qcResult.filter_mean_expr[0] }}
+                Peaks: {{ qcResult.filter_n_genes[0] }}
               </p>
               <p class="text--secondary">
                 Zero expression percentage:
@@ -294,7 +286,6 @@ export default {
       qcHist1: [],
       qcHist2: [],
       qcHist3: [],
-      varGenesScatter: '',
       metadata: [],
       // Cell selection
       addTransferMetadataDialog: false,
@@ -401,7 +392,7 @@ export default {
         {
           idx: this.idx,
           jobid: this.jobid,
-          filename: 'ifnb_2800',
+          mode: 'ATAC',
           type: 'multiome',
           min_cells: this.cellFilter,
           min_genes: this.geneFilter,
@@ -431,9 +422,6 @@ export default {
         this.idents = response.data.map((item) => item.ident)
       })
 
-      this.varGenesScatter = await ApiService.postCommand(
-        'deepmaps/api/queue/var-genes-plot/'
-      )
       this.qcComplete = true
       this.$nuxt.$loading.finish()
     },

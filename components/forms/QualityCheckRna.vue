@@ -513,6 +513,7 @@ export default {
             idx: this.idx,
             jobid: this.jobid,
             type: 'singleRna',
+            mode: 'RNA',
             min_cells: this.cellFilter,
             min_genes: this.geneFilter,
             nVariableFeatures: this.nVariableFeatures,
