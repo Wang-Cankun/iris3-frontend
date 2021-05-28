@@ -771,7 +771,8 @@ export default {
         }
       )
       this.$nuxt.$loading.finish()
-      this.$store.dispatch('calc/updateFlag', true)
+      this.$store.dispatch('calc/updateFlag', 1)
+      this.$store.dispatch('calc/updateFlag', 2)
     },
 
     async setCategory(name) {

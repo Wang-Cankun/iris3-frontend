@@ -93,21 +93,22 @@ export default {
       return this.$route.params.id
     },
   },
-  watch: {
-    e1() {
-      console.log(this.e1)
-    },
-  },
   methods: {
     beforePage(page) {},
     afterPage(page) {
+      console.log(page)
       const uniqueFlag = new Set(this.flag).size
-      if (uniqueFlag === 2) {
+      if (uniqueFlag >= 2) {
         this.e1 = page
         this.$store.dispatch('calc/resetFlag')
-      } else {
+      } else if (page === 2) {
         this.$notifier.showMessage({
-          content: 'Please calculate on the RNA and ATAC data tab',
+          content: 'Please calculate on both RNA and ATAC dataset tab',
+          color: 'error',
+        })
+      } else if (page === 3) {
+        this.$notifier.showMessage({
+          content: 'Please run cell clustering',
           color: 'error',
         })
       }

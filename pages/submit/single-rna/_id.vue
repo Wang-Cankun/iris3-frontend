@@ -32,7 +32,7 @@
               ></v-tabs-items>
             </v-col>
           </v-row>
-          <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
+          <v-btn color="primary" @click="afterPage(2)"> Continue </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
           <v-row
@@ -41,7 +41,7 @@
               :jobid="jobid"
             ></cell-cluster-form
           ></v-row>
-          <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
+          <v-btn color="primary" @click="afterPage(3)"> Continue </v-btn>
           <v-btn text @click="e1 = 1">Previous</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
@@ -75,6 +75,26 @@ export default {
   computed: {
     jobid() {
       return this.$route.params.id
+    },
+  },
+  methods: {
+    afterPage(page) {
+      const uniqueFlag = new Set(this.flag).size
+      console.log(page)
+      if (uniqueFlag >= 1) {
+        this.e1 = page
+        this.$store.dispatch('calc/resetFlag')
+      } else if (page === 2) {
+        this.$notifier.showMessage({
+          content: 'Please run quality control',
+          color: 'error',
+        })
+      } else if (page === 3) {
+        this.$notifier.showMessage({
+          content: 'Please run cell clustering',
+          color: 'error',
+        })
+      }
     },
   },
 }

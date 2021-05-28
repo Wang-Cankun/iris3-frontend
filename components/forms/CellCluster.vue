@@ -760,6 +760,8 @@ export default {
           categoryName: this.currentIdent,
         }
       )
+      this.$store.dispatch('calc/updateFlag', 1)
+      this.$store.dispatch('calc/updateFlag', 2)
       this.$nuxt.$loading.finish()
     },
 
