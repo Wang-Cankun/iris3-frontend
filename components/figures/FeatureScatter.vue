@@ -145,6 +145,12 @@ export default {
       if (!data) {
         return {}
       } else {
+        const vals = data.map((i) => i[4])
+
+        let newHighColor = this.highColor
+        if (Math.max(parseFloat(vals)) < 0.1) {
+          newHighColor = 'grey'
+        }
         return {
           hover: true,
           dataZoom: [
@@ -172,7 +178,7 @@ export default {
             text: ['HIGH', 'LOW'],
             calculable: true,
             inRange: {
-              color: [this.lowColor, this.highColor],
+              color: [this.lowColor, newHighColor],
             },
           },
           tooltip: {

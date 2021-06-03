@@ -177,7 +177,15 @@ export default {
         'Ma, A., et al. (2020). IRIS3: integrated cell-type-specific regulon inference server from single-cell RNA-Seq, Nucleic Acids Research, gkaa394',
     }
   },
-  computed: {},
+  computed: {
+    bannerMessage() {
+      const ver = this.$store.getters.appVersion
+      return `DeepMAPS v${ver} is currently under development. Please let us know if there are any bugs, issues, or suggestions via qin.ma@osumc.edu.`
+    },
+  },
+  mounted() {
+    this.$notifier.showAlert({ content: this.bannerMessage, color: 'accent' })
+  },
   methods: {
     showSnackbar(msg, col) {
       this.$notifier.showMessage({ content: msg, color: col })

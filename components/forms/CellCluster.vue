@@ -225,7 +225,7 @@
                           </v-btn>
                         </v-list-item-action>
                       </v-list-item>
-                      <v-list-item-action>
+                      <v-list-item-action v-if="filterPayload.length">
                         <v-btn small @click="removeAllFilter()">
                           Remove all
                         </v-btn>

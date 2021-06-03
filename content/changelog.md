@@ -8,27 +8,42 @@ description: 'DeepMAPS Changes'
 All notable changes to DeepMAPS will be documented in this page.
 
 
-## [0.7] - 05/27/2021
+## [0.8] - 06/23/2021
  
+### Added
+
+- Homepage banner indicating DeepMAPS is under development
+- deepmaps.net as fixed DeepMAPS URL
+
+### Changes
+
+- Redesigned custom cell selection section. Now it will display error message
+- Show scatter plot color to grey if gene expression value is 0
+
+### Fixed
+
+- Job status not updated in single RNA page
+- Only show remove all filters if there are any
+- Fixed typos and minor layout bugs
+
+## [0.7] - 05/27/2021
 ### Added
 
 - Redesigned upload page
 - Redesigned settings section in the calculation page
-- Redesigned custom cell selection section. Now it will display error message.
 - Added loading progess for most of the analyses
 - Hide pages and section if calculation is not complete or not started
 
-  
 ### Changes
 
 - Removed example homepage items and pages
 - Changed calculating logics on the cytoscape network. Now it will load when users click on each cell type
 - Re-factored functions and improved loading performance
 - Updated Human PBMC 3k dataset as the example
+
 ### Fixed
 
 - The update page URL not changing while clicking
-- Fixed various typos and minor layout bugs
 
 ## [0.6] - 05/18/2021
  

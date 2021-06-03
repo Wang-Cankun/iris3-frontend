@@ -534,7 +534,7 @@ export default {
         if (this.$route.params.id === 'example') {
           await sleep(6000)
         } else {
-          await sleep(12000)
+          await sleep(9000)
         }
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load-multi-rna/',

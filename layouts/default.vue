@@ -231,7 +231,7 @@
         <v-row class="mt-2">
           <!-- Version and Data information -->
           <v-col class="lighten-2 py-4 text-center" cols="12">
-            DeepMAPS (v0.7) is developed by
+            DeepMAPS (v{{ $store.getters.appVersion }}) is developed by
             <a class="text-decoration-none" href="https://u.osu.edu/bmbl/"
               >BMBL</a
             >, it is free and open to all users. |

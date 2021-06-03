@@ -1,4 +1,7 @@
+import packageConfig from '~/package.json'
+
 export const state = () => ({
+  version: packageConfig.version || '0.1',
   profile: [],
   snack: '',
   token: '',
@@ -43,5 +46,8 @@ export const getters = {
 
   loggedInUser(state) {
     return state.auth.user
+  },
+  appVersion: (state) => {
+    return state.version
   },
 }

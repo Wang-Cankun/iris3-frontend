@@ -61,6 +61,8 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 import QualityCheck from '@/components/forms/QualityCheckRna.vue'
 import CellCluster from '@/components/forms/CellCluster.vue'
 import NetworkConstruction from '~/components/forms/NetworkConstruction.vue'
@@ -81,6 +83,10 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      flag: (state) => state.calc.flag,
+    }),
+
     jobid() {
       return this.$route.params.id
     },
