@@ -146,9 +146,8 @@ export default {
       if (!data) {
         return {}
       } else {
-        const vals = data.map((i) => i[4])
         let newHighColor = this.highColor
-        if (Math.max(parseFloat(vals)) < 0.1) {
+        if (parseFloat(this.src.legend[1]) < 0.1) {
           newHighColor = 'grey'
         }
         return {
