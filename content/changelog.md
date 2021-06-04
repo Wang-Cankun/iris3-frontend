@@ -8,7 +8,7 @@ description: 'DeepMAPS Changes'
 All notable changes to DeepMAPS will be documented in this page.
 
 
-## [0.8.0] - 06/23/2021
+## [0.8.0] - 06/03/2021
  
 ### Added
 
