@@ -53,7 +53,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-components
    */
   router: {
-    base: '/deepmaps',
+    base: process.env.BASE_URL,
     linkActiveClass: 'active-link',
   },
   /*
