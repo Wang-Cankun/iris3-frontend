@@ -8,7 +8,7 @@ description: 'DeepMAPS Changes'
 All notable changes to DeepMAPS will be documented in this page.
 
 
-## [0.8] - 06/23/2021
+## [0.8.0] - 06/23/2021
  
 ### Added
 
@@ -26,7 +26,7 @@ All notable changes to DeepMAPS will be documented in this page.
 - Only show remove all filters if there are any
 - Fixed typos and minor layout bugs
 
-## [0.7] - 05/27/2021
+## [0.7.0] - 05/27/2021
 ### Added
 
 - Redesigned upload page
@@ -45,7 +45,7 @@ All notable changes to DeepMAPS will be documented in this page.
 
 - The update page URL not changing while clicking
 
-## [0.6] - 05/18/2021
+## [0.6.0] - 05/18/2021
  
 ### Added
 
@@ -63,7 +63,7 @@ All notable changes to DeepMAPS will be documented in this page.
 - Loading texts
 - Only highlight selected regulons
 
-## [0.5] - 05/13/2021
+## [0.5.0] - 05/13/2021
  
 ### Added
 
@@ -83,7 +83,7 @@ All notable changes to DeepMAPS will be documented in this page.
 - Data table to auto adjust card height
 
 
-## [0.4] - 05/06/2021
+## [0.4.0] - 05/06/2021
  
 ### Added
 
@@ -104,7 +104,7 @@ All notable changes to DeepMAPS will be documented in this page.
 - Example data naming error
 - Set default clustering method to HGT
 
-## [0.3] - 04/29/2021
+## [0.3.0] - 04/29/2021
 
 ### Added
 
@@ -124,7 +124,7 @@ All notable changes to DeepMAPS will be documented in this page.
 - Renamed gene regulatory network title
 - Minor typos and layout changes
 
-## [0.2] - 04/15/2021
+## [0.2.0] - 04/15/2021
 
 ### Added
 
@@ -143,7 +143,7 @@ All notable changes to DeepMAPS will be documented in this page.
 - Static plot to adjust based on grid item resize event
 - Gene-gene correlation function not working
 
-## [0.1] - 04/01/2021
+## [0.1.0] - 04/01/2021
 
 DeepMAPS is online at [https://bmbls.bmi.osumc.edu/deepmaps/](https://bmbls.bmi.osumc.edu/deepmaps/)
 
