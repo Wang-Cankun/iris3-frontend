@@ -58,40 +58,40 @@
                 :selected.sync="selectedTfCytoscape"
               >
               </network>
-              <regulon-table
+              <differential-regulon
+                :genes="tfList"
                 :setting="layout[1]"
+              ></differential-regulon>
+              <regulon-table
+                :setting="layout[2]"
                 :items="regulonTable"
                 :selected.sync="selectedRegulon"
               >
               </regulon-table>
-              <differential-regulon
-                :genes="tfList"
-                :setting="layout[2]"
-              ></differential-regulon>
+
               <div v-if="selectedRegulon.tf">
-                <cluster-scatter
-                  :key="layout[3].i"
-                  :src="clusterScatterData"
+                <regulon-genes-table
+                  :genes="selectedRegulonGenes"
                   :setting="layout[3]"
+                ></regulon-genes-table>
+                <cluster-scatter
+                  :key="layout[4].i"
+                  :src="clusterScatterData"
+                  :setting="layout[4]"
                 >
                 </cluster-scatter>
-                <regulon-activity-scatter :setting="layout[4]" :src="rasData">
+                <regulon-activity-scatter :setting="layout[5]" :src="rasData">
                 </regulon-activity-scatter>
                 <regulon-gene-scatter
-                  :setting="layout[5]"
+                  :setting="layout[6]"
                   :genes="selectedRegulonGenes"
                 >
                 </regulon-gene-scatter>
                 <feature-violin
-                  :setting="layout[6]"
+                  :setting="layout[7]"
                   :genes="selectedRegulonGenes"
                   :idents="identList"
                 ></feature-violin>
-                <regulon-genes-table
-                  :genes="selectedRegulonGenes"
-                  :setting="layout[7]"
-                ></regulon-genes-table>
-
                 <enrichment-table
                   :genes="selectedRegulonGenes"
                   :setting="layout[8]"
@@ -185,58 +185,58 @@ export default {
         w: 2,
         h: 2,
         i: '1',
-        title: 'Regulon table',
+        title: 'Differential regulon analysis',
       },
       {
         x: 0,
         y: 2,
-        w: 2,
+        w: 4,
         h: 2,
         i: '2',
-        title: 'Differential regulon analysis',
+        title: 'Regulon table',
       },
       {
-        x: 2,
+        x: 4,
         y: 2,
         w: 2,
         h: 2,
         i: '3',
-        title: 'Clustering plot',
-      },
-      {
-        x: 4,
-        y: 2,
-        w: 2,
-        h: 2,
-        i: '4',
-        title: 'Regulon activity plot',
+        title: 'Regulon genes',
       },
       {
         x: 0,
         y: 4,
         w: 2,
         h: 2,
-        i: '5',
-        title: 'Regulon genes scatter plot',
+        i: '4',
+        title: 'Clustering plot',
       },
       {
         x: 2,
         y: 4,
         w: 2,
         h: 2,
-        i: '6',
-        title: 'Regulon genes violin plot',
+        i: '5',
+        title: 'Regulon activity plot',
       },
       {
         x: 4,
         y: 4,
         w: 2,
         h: 2,
-        i: '7',
-        title: 'Regulon genes',
+        i: '6',
+        title: 'Regulon genes scatter plot',
       },
       {
         x: 0,
+        y: 6,
+        w: 2,
+        h: 2,
+        i: '7',
+        title: 'Regulon genes violin plot',
+      },
+      {
+        x: 2,
         y: 6,
         w: 2,
         h: 2,
@@ -244,7 +244,7 @@ export default {
         title: 'Gene set enrichment analysis',
       },
       {
-        x: 2,
+        x: 4,
         y: 6,
         w: 2,
         h: 2,
@@ -316,7 +316,9 @@ export default {
   watch: {
     selectedRegulon() {
       this.selectedTfCytoscape = this.selectedRegulon.tf
-      this.selectedRegulonGenes = this.selectedRegulon.genes.split(',')
+      if (this.selectedRegulon.genes.length) {
+        this.selectedRegulonGenes = this.selectedRegulon.genes.split(',')
+      }
       this.updateSelectedRegulon()
     },
     async selectedCt() {
@@ -350,30 +352,35 @@ export default {
       this.$nuxt.$loading.finish()
     },
     async updateSelectedRegulon() {
-      this.$nuxt.$loading.start()
-      await ApiService.sleep(2000)
-      this.clusterScatterData = await ApiService.postCommand(
-        'deepmaps/api/queue/run-r/',
-        {
-          type: 'regulon-clusters',
-        }
-      )
+      if (this.selectedRegulon.tf.length) {
+        this.$nuxt.$loading.start()
+        await ApiService.sleep(1000)
+        this.clusterScatterData = await ApiService.postCommand(
+          'deepmaps/api/queue/run-r/',
+          {
+            type: 'regulon-clusters',
+          }
+        )
 
-      this.rasData = await ApiService.postCommand('deepmaps/api/queue/run-r/', {
-        type: 'ras',
-        gene: this.selectedRegulon.tf,
-      })
+        this.rasData = await ApiService.postCommand(
+          'deepmaps/api/queue/run-r/',
+          {
+            type: 'ras',
+            gene: this.selectedRegulon.tf,
+          }
+        )
 
-      this.riHeatmapData = await ApiService.postCommand(
-        'deepmaps/api/queue/run-r/',
-        {
-          type: 'ri-heatmap',
-          tf: this.selectedRegulon.tf,
-          genes: this.selectedRegulonGenes,
-        }
-      )
+        this.riHeatmapData = await ApiService.postCommand(
+          'deepmaps/api/queue/run-r/',
+          {
+            type: 'ri-heatmap',
+            tf: this.selectedRegulon.tf,
+            genes: this.selectedRegulonGenes,
+          }
+        )
 
-      this.$nuxt.$loading.finish()
+        this.$nuxt.$loading.finish()
+      }
     },
   },
 }

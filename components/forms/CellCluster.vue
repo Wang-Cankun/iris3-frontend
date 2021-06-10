@@ -99,18 +99,25 @@
             </v-expansion-panel>
             <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
               <v-expansion-panel-header>
-                Cell category
+                Cell identity
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <p class="subtitle-1 font-weight-bold text-center">
-                  Active cell category
+                  Set active cell identity
                 </p>
                 <v-select
                   v-model="currentIdent"
                   :items="idents"
-                  label="Select category"
+                  label="Select identity"
                   @change="setActiveIdents(currentIdent)"
                 ></v-select>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
+              <v-expansion-panel-header>
+                Cell labeling
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
                 <p class="subtitle-1 font-weight-bold text-center">
                   Rename clusters
                 </p>
@@ -125,7 +132,7 @@
                     dense
                   ></v-select
                 ></v-col>
-                <v-col class="px-0" cols="12">
+                <v-col class="px-0 py-0" cols="12">
                   <v-text-field
                     v-model="newClusterName"
                     label="New cluster name"
@@ -133,16 +140,10 @@
                     background-color="white"
                   ></v-text-field
                 ></v-col>
-                <v-col cols="4" class="mt-0"
-                  ><v-btn @click="renameCluster()">Rename</v-btn></v-col
+                <v-col cols="4" class="mt-0 mx-0 px-0"
+                  ><v-btn small @click="renameCluster()">Rename</v-btn></v-col
                 >
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel v-if="clusterScatterData.axis[0] !== 0">
-              <v-expansion-panel-header>
-                Custom cell labeling
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
+                <v-divider />
                 <p class="subtitle-1 font-weight-bold text-center">
                   Custom cell labeling
                 </p>
@@ -396,6 +397,10 @@
                   :idents="idents"
                 ></feature-violin>
                 <enrichment-table :setting="layout[4]"></enrichment-table>
+                <cell-chat
+                  :setting="layout[5]"
+                  :active-ident="currentIdent"
+                ></cell-chat>
               </grid-layout>
             </div>
           </div>
@@ -405,6 +410,8 @@
   </v-col>
 </template>
 <script>
+import CellChatPlot from '@/components/figures/CellChatPlot'
+
 import FeatureScatter from '@/components/figures/FeatureScatter'
 import FeatureViolinStatic from '~/components/figures/FeatureViolinStatic'
 
@@ -420,6 +427,7 @@ export default {
     'feature-scatter': FeatureScatter,
     'feature-violin': FeatureViolinStatic,
     'deg-table': DegTable,
+    'cell-chat': CellChatPlot,
   },
   props: {
     type: { type: String, required: true, default: 'single_rna' },

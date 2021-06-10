@@ -60,11 +60,24 @@
           :items-per-page="10"
           item-key="index"
           class="elevation-0"
+          :item-class="itemRowBackground"
         >
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="visualizeRegulon(item)">
-              mdi-chart-scatter-plot
-            </v-icon>
+            <template v-if="item.tf === currentShowingTf">
+              <v-btn
+                small
+                color="primary"
+                class="mr-2"
+                @click="showRegulonDetail({ tf: '', genes: [] })"
+              >
+                Hide
+              </v-btn>
+            </template>
+            <template v-else>
+              <v-btn small class="mr-2" @click="showRegulonDetail(item)">
+                Show
+              </v-btn>
+            </template>
           </template>
         </v-data-table>
       </div>
@@ -96,16 +109,17 @@ export default {
           value: 'tf',
         },
         { text: 'Centrality', value: 'centrality' },
-        { text: 'Visualize', value: 'actions', sortable: false },
         { text: 'Number of genes', value: 'n' },
         { text: 'RAS', value: 'ras' },
         { text: 'DR: logFC', value: 'avg_log2FC' },
         { text: 'DR: p-value', value: 'p_val_adj' },
         { text: 'VS', value: 'VS' },
         { text: 'is CTSR', value: 'isCtsr' },
+        { text: 'Details', value: 'actions', sortable: false },
       ],
       sortBy: 'centrality',
       sortDesc: true,
+      currentShowingTf: '',
     }
   },
   computed: {
@@ -135,14 +149,24 @@ export default {
         console.error(e)
       }
     },
-    visualizeRegulon(item) {
+    showRegulonDetail(item) {
+      this.currentShowingTf = item.tf
       this.$emit('update:selected', item)
     },
     changeSize(i, newH, newW, newHPx, newWPx) {
       this.tableHeight = newHPx - this.footerHeight
     },
+    itemRowBackground(item) {
+      if (item.tf === this.currentShowingTf) {
+        return 'style-1'
+      }
+    },
   },
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.style-1 {
+  background-color: #eeeeee;
+}
+</style>

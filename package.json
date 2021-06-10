@@ -1,13 +1,13 @@
 {
   "name": "deepmaps-frontend",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "private": true,
   "license": "MIT",
   "scripts": {
     "dev": "nuxt --hostname 0.0.0.0 --port 9004",
     "build": "nuxt build",
     "start": "nuxt-start -p 9004 -H 0.0.0.0",
-    "start-test": "nuxt-start -p 9006 -H 0.0.0.0",
+    "start-test": "nuxt-start -p 9005 -H 0.0.0.0",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "npm run lint:js"

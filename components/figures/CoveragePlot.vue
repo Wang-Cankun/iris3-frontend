@@ -7,6 +7,7 @@
       :y="setting.y"
       :i="setting.i"
       class="grid-item-border"
+      drag-ignore-from=".no-drag"
       @resized="changeSize"
     >
       <v-card-title
@@ -39,7 +40,7 @@
         </div></v-card-title
       >
 
-      <v-row class="ma-4">
+      <v-row class="ma-4 no-drag">
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-col cols="12">
             <v-select

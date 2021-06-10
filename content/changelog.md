@@ -7,6 +7,22 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+## [0.9.0] - 06/10/2021
+ 
+### Added
+
+- cell-cell communication analysis using CellChat
+- 
+
+### Changes
+
+- layout improvements in the regulon page
+- imporove UI actions about regulon details and its tables
+- Renamed cell category to cell identity to refer the metadata about cells
+
+### Fixed
+
+- 123
 
 ## [0.8.0] - 06/03/2021
  

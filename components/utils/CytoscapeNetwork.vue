@@ -14,7 +14,6 @@
                 <v-icon>mdi-download-outline</v-icon>
               </v-btn>
             </template>
-
             <v-list>
               <v-list-item @click="downloadPNG">
                 <v-list-item-title>Download PNG</v-list-item-title>
