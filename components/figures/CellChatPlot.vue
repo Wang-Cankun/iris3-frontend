@@ -404,7 +404,7 @@ export default {
       return this.cellchatResult.enrichedLR
     },
     identLevels() {
-      return this.cellchatResult.idents.slice(0, 8)
+      return this.cellchatResult.idents
     },
   },
   methods: {
