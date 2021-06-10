@@ -301,14 +301,16 @@
                     >
                   </v-tooltip>
                 </v-col>
-                <v-select
-                  v-model="selectedPathway"
-                  class="px-1"
-                  :items="pathwayList"
-                  dense
-                  label="Pathways"
-                  :rules="[(v) => !!v || 'Item is required']"
-                ></v-select>
+                <v-col cols="3">
+                  <v-select
+                    v-model="selectedPathway"
+                    class="px-1"
+                    :items="pathwayList"
+                    dense
+                    label="Pathways"
+                    :rules="[(v) => !!v || 'Item is required']"
+                  ></v-select>
+                </v-col>
                 <v-col cols="3">
                   <v-btn small @click="plotCellchatSome()">plot</v-btn></v-col
                 >
@@ -323,7 +325,7 @@
           contain
           :height="windowSize.y - 70"
           :max-width="windowSize.x + 'px'"
-          :max-height="windowSize.y - 180"
+          :max-height="windowSize.y - 200"
           :src="cellchatFigure"
         ></v-img>
       </div> </grid-item

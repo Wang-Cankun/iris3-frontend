@@ -475,6 +475,13 @@ export default {
         h: 2,
         i: '4',
       },
+      {
+        x: 3,
+        y: 4,
+        w: 3,
+        h: 2,
+        i: '5',
+      },
     ],
     degList: [
       {
