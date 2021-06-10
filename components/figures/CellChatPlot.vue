@@ -35,6 +35,29 @@
               <v-list-item @click="downloadPNG(cellchatFigure)">
                 <v-list-item-title>Download PNG</v-list-item-title>
               </v-list-item>
+              <v-list-item @click="downloadCSV">
+                <download-excel
+                  class="mr-4"
+                  :data="cellchatResult.net"
+                  type="csv"
+                >
+                  <v-list-item-title
+                    >Download Ligand-receptor network table
+                    (CSV)</v-list-item-title
+                  >
+                </download-excel>
+              </v-list-item>
+              <v-list-item @click="downloadCSV">
+                <download-excel
+                  class="mr-4"
+                  :data="cellchatResult.netp"
+                  type="csv"
+                >
+                  <v-list-item-title
+                    >Download pathway table (CSV)</v-list-item-title
+                  >
+                </download-excel>
+              </v-list-item>
             </v-list>
           </v-menu>
         </div></v-card-title
@@ -123,10 +146,7 @@
                           <v-divider class="mt-2"></v-divider> </template
                       ></v-select>
                     </template>
-                    <span
-                      >Select one or more clusters for differential regulon
-                      analysis</span
-                    >
+                    <span>Select one or more clusters </span>
                   </v-tooltip>
                 </v-col>
                 <v-col cols="4">
@@ -169,10 +189,7 @@
                           <v-divider class="mt-2"></v-divider> </template
                       ></v-select>
                     </template>
-                    <span
-                      >Select one or more clusters for differential regulon
-                      analysis</span
-                    >
+                    <span>Select one or more clusters </span>
                   </v-tooltip>
                 </v-col>
                 <v-col cols="4">
@@ -249,10 +266,7 @@
                           <v-divider class="mt-2"></v-divider> </template
                       ></v-select>
                     </template>
-                    <span
-                      >Select one or more clusters for differential regulon
-                      analysis</span
-                    >
+                    <span>Select one or more clusters </span>
                   </v-tooltip>
                 </v-col>
                 <v-col cols="3">
@@ -295,10 +309,7 @@
                           <v-divider class="mt-2"></v-divider> </template
                       ></v-select>
                     </template>
-                    <span
-                      >Select one or more clusters for differential regulon
-                      analysis</span
-                    >
+                    <span>Select one or more clusters </span>
                   </v-tooltip>
                 </v-col>
                 <v-col cols="3">
@@ -547,6 +558,9 @@ export default {
         return 'Range should be greater than 0'
       }
       return true
+    },
+    downloadCSV() {
+      return 1
     },
     iconSelect(selected, identLevels) {
       if (this.isSelectAll(selected, identLevels)) return 'mdi-close-box'
