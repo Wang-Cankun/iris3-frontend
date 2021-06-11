@@ -12,7 +12,7 @@ All notable changes to DeepMAPS will be documented in this page.
 ### Added
 
 - cell-cell communication analysis using CellChat
-- 
+
 
 ### Changes
 
@@ -22,7 +22,7 @@ All notable changes to DeepMAPS will be documented in this page.
 
 ### Fixed
 
-- 123
+- Minor bugs and typo fix
 
 ## [0.8.0] - 06/03/2021
  
