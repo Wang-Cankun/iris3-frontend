@@ -4,7 +4,7 @@
       <v-card>
         <v-card-title>Sign up</v-card-title>
         <v-divider class="my-2 py-2"></v-divider>
-        <v-card-text>
+        <v-card-text class="my-0 py-0">
           <v-form
             ref="form"
             v-model="valid"
@@ -52,8 +52,6 @@
                   name="firstName"
                   label="First Name"
                   type="string"
-                  :rules="nameRules"
-                  required
                 ></v-text-field>
                 <v-text-field
                   id="lastName"
@@ -61,8 +59,6 @@
                   name="lastName"
                   label="Last Name"
                   type="string"
-                  :rules="nameRules"
-                  required
                 ></v-text-field>
                 <v-text-field
                   id="institution"
@@ -70,8 +66,6 @@
                   name="institution"
                   label="Institution"
                   type="string"
-                  :rules="nameRules"
-                  required
                 ></v-text-field>
                 <v-checkbox v-model="newsletter">
                   <template v-slot:label>
@@ -97,7 +91,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn class="mx-2" color="primary" dark @click="login()">
+          <v-btn class="mx-2 mb-2" color="primary" dark @click="register()">
             sign up </v-btn
           ><v-btn color="grey darken-1" text @click="close()"> cancel </v-btn>
           <v-spacer></v-spacer>
@@ -149,10 +143,46 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    dialog(val) {
+      !val && this.$emit('close')
+    },
+  },
   methods: {
-    login() {
-      this.$emit('close')
-      return 1
+    async register() {
+      if (!this.$refs.form.validate()) return
+      try {
+        await this.$axios.post('deepmaps/api/auth/register', {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          institution: this.institution,
+          newsletter: this.newsletter,
+          job: [],
+        })
+
+        await this.$auth.loginWith('local', {
+          data: {
+            username: this.email,
+            password: this.password,
+          },
+        })
+        this.$emit('close')
+        this.$notifier.showMessage({
+          content: 'Sign up success!',
+          color: 'success',
+        })
+        this.$router.push('/')
+      } catch (e) {
+        this.statusCode = e.response.data.statusCode
+        this.error = e.response.data.message
+        this.$notifier.showMessage({
+          content: 'Error: ' + this.error,
+          color: 'error',
+        })
+      }
     },
     close() {
       this.$emit('close')

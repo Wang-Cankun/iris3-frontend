@@ -63,14 +63,14 @@
         </div></v-card-title
       >
 
-      <v-row class="ma-2 no-drag">
-        <v-form ref="form" v-model="valid" lazy-validation>
+      <v-row class="ma-2 no-drag my-0 py-0">
+        <v-form ref="form" v-model="valid" lazy-validation class="my-0 py-0">
           <v-col v-if="!isCellchatComplete" cols="12">
             <div class="d-flex flex">
               <v-text-field
                 v-model="minCells"
                 class="px-1"
-                label="Minimal cells in each cell groups"
+                label="Minimal cells in each groups"
                 type="number"
                 :rules="numberRules"
                 required
@@ -331,12 +331,12 @@
         </v-form>
       </v-row>
 
-      <div v-if="cellchatFigure" class="no-drag">
+      <div v-show="cellchatFigure" class="no-drag">
         <v-img
           contain
           :height="windowSize.y - 70"
           :max-width="windowSize.x + 'px'"
-          :max-height="windowSize.y - 200"
+          :max-height="windowSize.y - 150"
           :src="cellchatFigure"
         ></v-img>
       </div> </grid-item
@@ -379,8 +379,8 @@ export default {
       ],
       networkType: 'netp',
       windowSize: {
-        x: 620,
-        y: 560,
+        x: 730,
+        y: 850,
       },
       hover: false,
       type: 'all_network',

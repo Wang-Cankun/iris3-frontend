@@ -7,6 +7,13 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+## [0.10.0] - 06/17/2021
+ 
+### Added
+
+- User register/login module
+- Public and private project section for permission control
+
 ## [0.9.0] - 06/10/2021
  
 ### Added

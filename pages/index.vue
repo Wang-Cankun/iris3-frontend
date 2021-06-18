@@ -5,19 +5,18 @@
         <v-card class="mx-auto" elevation="0">
           <v-img class="white--text align-center">
             <v-card-title class="justify-center">
-              <h1 class="text-h1 black--text font-weight-bold text-no-wrap">
+              <h1 class="text-h1 black--text text-no-wrap">
                 <strong>DeepMAPS</strong>
               </h1>
             </v-card-title>
 
             <v-card-title class="justify-center">
-              <div class="typewriter black--text font-italic">
+              <div class="typewriter black--text">
                 Deep learning based Multi-omics Analysis Portal for Single cells
               </div>
             </v-card-title>
 
-            <!-- Data monitor section -->
-            <v-row class="mt-2">
+            <!-- Data monitor section<v-row class="mt-2">
               <v-col cols="8" offset="2">
                 <v-row class="text-center black--text font-weight-medium">
                   <v-col> Functions </v-col>
@@ -32,18 +31,18 @@
                   <v-col> 3 </v-col>
                 </v-row>
               </v-col>
-            </v-row>
+            </v-row> -->
 
             <!-- Create your own project and explore -->
             <div class="mt-6 py-6">
               <div class="d-flex justify-space-around">
                 <v-spacer></v-spacer>
                 <v-btn to="/upload" color="primary" elevation="2" x-large
-                  >Create your own project</v-btn
+                  >New project</v-btn
                 >
                 <v-spacer></v-spacer>
-                <v-btn to="/public" outlined elevation="2" x-large
-                  >Explore our projects</v-btn
+                <v-btn to="/projects" outlined elevation="2" x-large
+                  >Browse projects</v-btn
                 >
                 <v-spacer></v-spacer>
               </div>
@@ -53,76 +52,10 @@
       </v-col>
     </v-container>
 
-    <!-- Search job ID section -->
-    <v-container>
-      <v-col cols="8" offset="2">
-        <v-row>
-          <v-col cols="10">
-            <v-text-field
-              v-model="searchJobId"
-              outlined
-              clearable
-              label="Search your job ID"
-              type="search"
-              prepend-inner-icon="mdi-magnify"
-            />
-          </v-col>
-          <v-col cols="2">
-            <v-btn x-large block color="primary">Search</v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col md="12" lg="4">
-            <v-card>
-              <v-card-title class="justify-center">scRNA-seq</v-card-title>
-              <v-col>
-                <v-row justify="center" class="mb-1">
-                  <v-btn to="/submit/single-rna/example">Example</v-btn>
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn plain>Learn more</v-btn>
-                </v-row>
-              </v-col>
-            </v-card>
-          </v-col>
-          <v-col md="12" lg="4">
-            <v-card>
-              <v-card-title class="justify-center"
-                >Multiple scRNA-seq</v-card-title
-              >
-              <v-col>
-                <v-row justify="center" class="mb-1">
-                  <v-btn to="/submit/multiple-rna/example">Example</v-btn>
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn plain>Learn more</v-btn>
-                </v-row>
-              </v-col>
-            </v-card>
-          </v-col>
-          <v-col md="12" lg="4">
-            <v-card>
-              <v-card-title class="justify-center"
-                >scRNA-seq & scATAc-seq</v-card-title
-              >
-              <v-col>
-                <v-row justify="center" class="mb-1">
-                  <v-btn to="/submit/multiome/example">Example</v-btn>
-                </v-row>
-                <v-row justify="center" class="mb-1"
-                  ><v-btn plain>Learn more</v-btn>
-                </v-row>
-              </v-col>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-container>
-
-    <!-- image display window and sign in -->
+    <!-- Visiting monitor -->
     <v-container>
       <v-row>
-        <v-col cols="8" offset="2">
+        <v-col cols="6" offset="3">
           <v-card elevation="0">
             <v-card-title class="justify-center test-h2 font-weight-bold"
               >Cite us</v-card-title
@@ -133,10 +66,6 @@
           </v-card>
         </v-col>
       </v-row>
-    </v-container>
-
-    <!-- Visiting monitor -->
-    <v-container>
       <v-col cols="2" offset="5">
         <client-only>
           <div class="viewer_options">

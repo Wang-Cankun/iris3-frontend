@@ -478,6 +478,7 @@ export default {
 
   data: () => ({
     title: '',
+    on: false,
     tab: null,
     isPrivateProject: true,
     jobid: '',
@@ -585,6 +586,7 @@ export default {
       default:
         this.tab = 0
     }
+    this.email = this.$store.getters.loggedInUser
   },
   computed: {
     checkboxErrors() {
@@ -736,6 +738,8 @@ export default {
       formData.append('status', 'created')
       formData.append('species', this.speciesSelect)
       formData.append('description', this.description)
+      formData.append('private', this.isPrivateProject)
+
       this.expFile.singleRna.forEach((file, index) => {
         formData.append('singleRna', file)
         formData.append('index', index)
@@ -750,9 +754,11 @@ export default {
       formData.append('labelFile-singleRna', this.labelFile.singleRna)
       formData.append('labelFile-multiRna', this.labelFile.multiRna)
       formData.append('labelFile-multiome', this.labelFile.multiome)
+      formData.append('creator', this.$store.getters.loggedInUser || 'guest')
+      formData.append('tags', this.speciesSelect)
 
       formData.append('status', 'upload')
-
+      console.log(formData)
       const uploadRes = await this.$axios.post(
         'deepmaps/api/file/upload/',
         formData,

@@ -11,7 +11,7 @@
 
           <v-expansion-panel-content>
             <v-layout row wrap>
-              <v-flex xs12 md12 lg5
+              <!--<v-flex xs12 md12 lg5
                 ><v-card-title class="ma-2 py-0 subtitle-1 font-weight-bold"
                   >Project information<v-divider class="ma-2 py-0"></v-divider
                 ></v-card-title>
@@ -38,24 +38,28 @@
                     <span class="text--primary">{{ projectCreator }}</span>
                   </p>
                 </v-card-text>
-              </v-flex>
+              </v-flex> -->
               <v-flex xs12 md12 lg7
                 ><v-card-title class="ma-2 py-0 subtitle-1 font-weight-bold"
-                  >Job information
+                  >Project information
                   <v-divider class="ma-2 py-0"></v-divider>
                 </v-card-title>
                 <v-card-text>
                   <p class="ma-2">
-                    <span class="text--secondary">Job ID: </span>
+                    <span class="text--secondary">ID: </span>
                     <span class="text--primary">{{ jobid }}</span>
                   </p>
                   <p class="ma-2">
-                    <span class="text--secondary">Create date: </span>
-                    <span class="text--primary">{{ jobCreateDate }}</span>
+                    <span class="text--secondary">Create time: </span>
+                    <span class="text--primary">{{
+                      projectCreateDate || jobCreateDate
+                    }}</span>
                   </p>
                   <p class="ma-2">
                     <span class="text--secondary">Creator: </span>
-                    <span class="text--primary">{{ jobCreator }}</span>
+                    <span class="text--primary">{{
+                      jobCreator || 'Admin'
+                    }}</span>
                   </p>
                   <div v-if="jobid === 'example' && type === 'multiome'">
                     <p class="ma-2">
@@ -103,6 +107,18 @@
                   </div>
                 </v-card-text>
               </v-flex>
+              <v-flex xs12 md12 lg5
+                ><v-card-title class="ma-2 py-0 subtitle-1 font-weight-bold"
+                  >Parameters<v-divider class="ma-2 py-0"></v-divider
+                ></v-card-title>
+
+                <v-card-text>
+                  <p class="ma-2">
+                    <span class="text--secondary">To be added </span>
+                    <span class="text--primary"></span>
+                  </p>
+                </v-card-text>
+              </v-flex>
             </v-layout>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -133,6 +149,12 @@ export default {
       .filter((file) => !!file && file.fieldname === this.type)
       .map((file) => file.species)
       .filter(onlyUnique)
+    this.projectCreateDate = files
+      .filter((file) => !!file && file.fieldname === this.type)
+      .map((file) => file.createTime)[0]
+    this.jobCreator = files
+      .filter((file) => !!file && file.fieldname === this.type)
+      .map((file) => file.creator)[0]
   },
   data() {
     return {
@@ -144,13 +166,11 @@ export default {
       projectId: 'P000001',
       uploadFiles: '',
       species: '',
+      projectCreateDate: '',
     }
   },
 
   computed: {
-    projectCreateDate() {
-      return new Date().toISOString().split('T')[0]
-    },
     jobCreateDate() {
       return new Date().toISOString().split('T')[0]
     },
@@ -161,7 +181,7 @@ export default {
       return await this.$axios
         .get('deepmaps/api/file/upload/' + this.jobid)
         .then((res) => {
-          console.log(res.data.map((file) => file.originalname))
+          console.log(res.data.map((file) => file))
           return res.data.map((file) => file.originalname)
         })
     },

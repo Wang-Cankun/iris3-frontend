@@ -31,12 +31,12 @@
                 </span>
                 <span class="text-h6 text--primary">{{ newsletter }}</span>
               </p>
-              <v-btn color="primary" @click="isModify = true"
-                >Modify Profile</v-btn
+              <!-- <v-btn color="primary" @click="isModify = true"
+                >Update Profile</v-btn
               >
               <v-btn color="primary" @click="isChangePassword = true"
                 >Change Password</v-btn
-              >
+              >-->
             </v-card-text>
             <v-card-text v-show="isChangePassword">
               <v-form
@@ -158,13 +158,6 @@
               </v-form>
             </v-card-text>
           </v-card>
-          <v-card class="my-5">
-            <v-card-title class="text-h4 font-weight-regular">
-              Jobs
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text> </v-card-text>
-          </v-card>
         </v-col>
       </v-row>
     </section>
@@ -174,9 +167,6 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 export default {
-  async fetch() {
-    await this.$store.dispatch('fetchProfile', this.loggedInUser.info)
-  },
   data() {
     return {
       valid: true,
@@ -218,17 +208,23 @@ export default {
       return JSON.parse(JSON.stringify(this.profile))
     },
   },
+  beforeCreate() {
+    this.$store.dispatch('fetchProfile', this.$store.getters.loggedInUser)
+  },
   methods: {
     async modifyProfile() {
       if (!this.$refs.form.validate()) return
       try {
-        await this.$axios.patch('users/update/' + this.profile.email, {
-          email: this.formProfile.email,
-          firstName: this.formProfile.firstName,
-          lastName: this.formProfile.lastName,
-          institution: this.formProfile.institution,
-          newsletter: this.formProfile.newsletter,
-        })
+        await this.$axios.patch(
+          'deepmaps/api/users/update/' + this.profile.email,
+          {
+            email: this.formProfile.email,
+            firstName: this.formProfile.firstName,
+            lastName: this.formProfile.lastName,
+            institution: this.formProfile.institution,
+            newsletter: this.formProfile.newsletter,
+          }
+        )
         this.$notifier.showMessage({
           content: 'Profile updated!',
           color: 'success',
@@ -247,7 +243,7 @@ export default {
     async changePassword() {
       if (!this.$refs.form.validate()) return
       try {
-        await this.$axios.post('auth/password/change', {
+        await this.$axios.post('deepmaps/api/auth/password/change', {
           email: this.formProfile.email,
           currentPassword: this.oldPassword,
           newPassword: this.newPassword,

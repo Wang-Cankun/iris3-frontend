@@ -34,7 +34,7 @@ export const mutations = {
 }
 export const actions = {
   async fetchProfile({ commit }, email) {
-    const profile = await this.$axios.$get('/users/' + email)
+    const profile = await this.$axios.$get('deepmaps/api/users/' + email)
     commit('SET_PROFILE', profile)
   },
 }

@@ -200,7 +200,7 @@
                 color="Primary"
                 width="120"
                 class="mb-2"
-                @click="runPreProcess()"
+                @click="branchData()"
                 >Calculate</v-btn
               >
             </v-row>
@@ -247,15 +247,20 @@
         </v-col>
       </v-row>
     </v-card>
+    <branch-dialog
+      :dialog.sync="branchDialog"
+      :branch.sync="branch"
+      @close="branchDialog = false"
+    ></branch-dialog>
   </v-col>
 </template>
 <script>
+import BranchDialog from '~/components/utils/ConfirmDialog'
 import VarGenesTable from '~/components/tables/VarGenesTable'
 import PieChart from '~/components/figures/PieChart'
 import Boxplot from '~/components/figures/Boxplot'
 import Barplot from '~/components/figures/Barplot'
 import GeneCorrelationScatter from '~/components/figures/GeneCorrelationScatter'
-
 import ApiService from '~/services/ApiService.js'
 export const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -268,6 +273,7 @@ export default {
     boxplot: Boxplot,
     barplot: Barplot,
     'gene-correlation-scatter': GeneCorrelationScatter,
+    'branch-dialog': BranchDialog,
   },
   props: {
     idx: { type: Number, required: true, default: 0 },
@@ -276,6 +282,8 @@ export default {
   },
   data() {
     return {
+      branchDialog: false,
+      branch: false,
       layout: [
         {
           x: 0,
@@ -513,8 +521,8 @@ export default {
 
     async runPreProcess() {
       this.metadata = []
-
       this.$nuxt.$loading.start()
+
       if (this.idx === 0 && this.type === 'single_rna') {
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load/',
@@ -532,9 +540,9 @@ export default {
         )
       } else if (this.type === 'multi_rna') {
         if (this.$route.params.id === 'example') {
-          await sleep(6000)
+          await sleep(3000)
         } else {
-          await sleep(9000)
+          await sleep(3000)
         }
         this.qcResult = await ApiService.postCommand(
           'deepmaps/api/queue/load-multi-rna/',
@@ -594,6 +602,72 @@ export default {
       this.$store.dispatch('calc/updateFlag', 'RNA')
       this.$nuxt.$loading.finish()
       this.qcComplete = true
+    },
+    async branchData() {
+      function dataURLtoFile(dataurl, filename) {
+        const arr = dataurl.split(',')
+        const mime = arr[0].match(/:(.*?);/)[1]
+        const bstr = atob(arr[1])
+        let n = bstr.length
+        const u8arr = new Uint8Array(n)
+
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n)
+        }
+
+        return new File([u8arr], filename, { type: mime })
+      }
+
+      if (
+        this.cellFilter !== '3' ||
+        this.geneFilter !== '200' ||
+        this.mitoFilter !== '10'
+      ) {
+        this.branchDialog = true
+        if (this.branch) {
+          this.runPreProcess()
+          this.branchDialog = false
+          const formData = new FormData()
+          formData.append('method', 'post')
+          formData.append('name', 'list')
+          formData.append('title', 'Example multiome')
+          formData.append('email', this.$store.getters.loggedInUser)
+          formData.append('jobid', new Date().getTime())
+          formData.append('status', 'created')
+          formData.append('species', 'Human')
+          formData.append('description', 'Modified from example data')
+          formData.append('private', true)
+          formData.append(
+            'multiome',
+            dataURLtoFile(
+              'data:text/plain;base64,aGVsbG8gd29ybGQ=',
+              'Branch: 10X Human PBMC granulocyte 3k cells'
+            )
+          )
+
+          formData.append('labelFile-multiome', 'labelFile-multiome')
+          formData.append(
+            'creator',
+            this.$store.getters.loggedInUser || 'guest'
+          )
+
+          formData.append('tags', this.speciesSelect)
+          await this.$axios.post('deepmaps/api/file/upload/', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: (progressEvent) => {
+              const uploadPercentage = parseInt(
+                Math.round((progressEvent.loaded / progressEvent.total) * 100)
+              )
+
+              this.$store.commit('socket/SET_UPLOAD_PROGRESS', uploadPercentage)
+            },
+          })
+        }
+      } else {
+        this.runPreProcess()
+      }
     },
   },
 }

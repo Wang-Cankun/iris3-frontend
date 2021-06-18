@@ -479,7 +479,7 @@ export default {
         x: 3,
         y: 4,
         w: 3,
-        h: 2,
+        h: 3,
         i: '5',
       },
     ],

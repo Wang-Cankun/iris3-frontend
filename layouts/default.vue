@@ -94,26 +94,24 @@
 
       <v-spacer></v-spacer>
 
-      <v-toolbar-items v-show="false" class="hidden-xs-only mx-5">
+      <v-toolbar-items class="hidden-xs-only mx-5">
         <v-text-field
           v-model="searchJobId"
           solo-inverted
           flat
           clearable
           hide-details
-          label="Search Job ID"
+          label="Search project ID"
           type="search"
           prepend-inner-icon="mdi-magnify"
-          class="shrink"
+          class="shrink mt-2"
         />
-        <v-btn
+        <a
           v-if="searchJobId"
-          color="primary"
-          clearable
-          @click="openJobUrl(searchJobId)"
-        >
-          Search</v-btn
-        >
+          class="text-decoration-none"
+          :href="'/submit/multiome/' + searchJobId"
+          ><v-btn clearable color="primary" class="mt-3">Search</v-btn>
+        </a>
 
         <template v-if="isAuthenticated">
           <v-btn to="/profile" text>
@@ -279,20 +277,12 @@ export default {
       searchJobId: '',
       exploreMenu: [
         {
-          title: 'Single scRNA-seq',
+          title: 'New project',
           path: '/upload/single-rna',
         },
         {
-          title: 'Multiple scRNA-seq',
-          path: '/upload/multiple-rna',
-        },
-        {
-          title: 'scRNA-seq and scATAC-seq',
-          path: '/upload/multiome',
-        },
-        {
-          title: 'Featured project',
-          path: '/public',
+          title: 'Browse projects',
+          path: '/projects',
         },
       ],
       helpmenu: [
@@ -348,6 +338,9 @@ export default {
       title: 'DeepMAPS',
     }
   },
+  computed: {
+    ...mapGetters(['isAuthenticated', 'loggedInUser']),
+  },
   mounted() {
     this.socket = this.$nuxtSocket({ name: 'main' })
     this.socket.on('jobProgress', (msg) => {
@@ -356,14 +349,11 @@ export default {
       // this.progress = msg
     })
   },
-  computed: {
-    ...mapGetters(['isAuthenticated', 'loggedInUser']),
-  },
   methods: {
     async logout() {
       this.$notifier.showMessage({
         content: 'Logged out.',
-        color: '',
+        color: 'success',
       })
       await this.$auth.logout()
     },
@@ -374,7 +364,7 @@ export default {
       this.registerDialog = true
     },
     openJobUrl(url) {
-      this.$router.push(`submit/${url}`)
+      this.$router.push(`submit/multiome/${url}`)
     },
   },
 }
