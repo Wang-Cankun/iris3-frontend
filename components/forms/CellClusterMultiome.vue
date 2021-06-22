@@ -746,6 +746,7 @@ export default {
       this.clusterResult = await ApiService.postCommand(
         'deepmaps/api/queue/cluster-multiome/',
         {
+          jobid: this.jobid,
           method: this.integrationSelect,
           nPCs: this.nPCs,
           resolution: this.resolution,
