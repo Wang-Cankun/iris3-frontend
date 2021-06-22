@@ -53,7 +53,7 @@
                         <v-card-actions class="mx-2">
                           <a
                             class="text-decoration-none"
-                            href="/submit/single-rna/example"
+                            href="submit/single-rna/example"
                             ><v-btn>Browse</v-btn>
                           </a>
                         </v-card-actions>
@@ -96,7 +96,7 @@
                         <v-card-actions class="mx-2">
                           <a
                             class="text-decoration-none"
-                            href="/submit/multiple-rna/example"
+                            href="submit/multiple-rna/example"
                             ><v-btn>Browse</v-btn>
                           </a>
                         </v-card-actions>
@@ -138,7 +138,7 @@
                         <v-card-actions class="mx-2">
                           <a
                             class="text-decoration-none"
-                            href="/submit/multiome/example"
+                            href="submit/multiome/example"
                             ><v-btn>Browse</v-btn>
                           </a>
                         </v-card-actions>
