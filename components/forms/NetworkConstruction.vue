@@ -60,6 +60,7 @@
               </network>
               <differential-regulon
                 :genes="tfList"
+                :ident-items="ctList"
                 :setting="layout[1]"
               ></differential-regulon>
               <regulon-table

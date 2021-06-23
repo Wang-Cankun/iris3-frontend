@@ -48,7 +48,7 @@
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="ident1"
-                  :items="identLevels1"
+                  :items="identItems"
                   return-object
                   dense
                   label="Clusters group 1"
@@ -69,7 +69,7 @@
                         <v-icon
                           :color="ident1.length > 0 ? 'indigo darken-4' : ''"
                         >
-                          {{ iconSelect(ident1, identLevels1) }}
+                          {{ iconSelect(ident1, identItems) }}
                         </v-icon>
                       </v-list-item-action>
                       <v-list-item-content>
@@ -90,7 +90,7 @@
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="ident2"
-                  :items="identLevels2"
+                  :items="identItems"
                   return-object
                   dense
                   label="Clusters group 2"
@@ -111,7 +111,7 @@
                         <v-icon
                           :color="ident2.length > 0 ? 'indigo darken-4' : ''"
                         >
-                          {{ iconSelect(ident2, identLevels2) }}
+                          {{ iconSelect(ident2, identItems) }}
                         </v-icon>
                       </v-list-item-action>
                       <v-list-item-content>
@@ -133,6 +133,8 @@
         <div v-if="result.length">
           <v-data-table
             dense
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             :height="tableHeight"
             :headers="headers"
             :items="result"
@@ -151,6 +153,7 @@ import ApiService from '~/services/ApiService.js'
 export default {
   props: {
     genes: { type: Array, required: true },
+    identItems: { type: Array, required: true },
     setting: {
       type: Object,
       required: true,
@@ -162,14 +165,16 @@ export default {
       hover: false,
       headers: [
         { text: 'TF', value: 'tf' },
-        { text: 'logFC', value: 'logfc' },
-        { text: 'p-value', value: 'pvalue' },
+        { text: 'logFC', value: 'avg_log2FC' },
+        { text: 'p-value', value: 'p_val_adj' },
       ],
+      sortBy: 'p-value',
+      sortDesc: true,
       result: [],
       ident1: [],
       ident2: [],
-      identLevels1: [0, 1, 2, 3, 4, 5, 6, 7],
-      identLevels2: [0, 1, 2, 3, 4, 5, 6, 7],
+      identItems1: [0, 1, 2, 3, 4, 5, 6, 7],
+      identItems2: [0, 1, 2, 3, 4, 5, 6, 7],
       tableHeight: 380,
       footerHeight: 180,
     }
@@ -183,18 +188,7 @@ export default {
           'deepmaps/api/queue/run-r/',
           {
             type: 'dr',
-            tf: [
-              'CTCF',
-              'DEAF1',
-              'IKZF1',
-              'TP53',
-              'SREBF2',
-              'ESR1',
-              'ZNF740',
-              'ZBTB7A',
-              'SMAD3',
-              'AHR',
-            ],
+            tf: this.genes,
             ct1: this.ident1,
             ct2: this.ident2,
           }
@@ -227,7 +221,7 @@ export default {
         if (this.ident1.length > 0) {
           this.ident1 = []
         } else {
-          this.ident1 = this.identLevels1
+          this.ident1 = this.identItems
         }
       })
     },
@@ -236,7 +230,7 @@ export default {
         if (this.ident2.length > 0) {
           this.ident2 = []
         } else {
-          this.ident2 = this.identLevels2
+          this.ident2 = this.identItems
         }
       })
     },
