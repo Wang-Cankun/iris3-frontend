@@ -133,6 +133,17 @@ export default {
             name: 'boxplot',
             type: 'boxplot',
             datasetIndex: 1,
+            tooltip: {
+              formatter(param) {
+                return [
+                  'upper: ' + param.data[5].toFixed(3),
+                  '75th percentile: ' + param.data[4].toFixed(3),
+                  'median: ' + param.data[3].toFixed(3),
+                  '25th percentile: ' + param.data[2].toFixed(3),
+                  'lower: ' + param.data[1].toFixed(3),
+                ].join('<br/>')
+              },
+            },
           },
           {
             name: 'outlier',
