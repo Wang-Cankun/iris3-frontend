@@ -7,6 +7,14 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+## [0.10.1] - 06/23/2021
+ 
+### Added
+
+- Detailed tooltip on box plots
+- saving violin plot will add gene name
+- hint to provide valid input for violin plots
+
 ## [0.10.0] - 06/17/2021
  
 ### Added

@@ -56,12 +56,12 @@
               <span>TODO</span>
             </v-tooltip></v-col
           >
-          <v-col cols="3"
+          <v-col v-if="identItems.length > 2" cols="3"
             ><v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="violinSplit"
-                  :items="idents"
+                  :items="identItems"
                   label="Split by"
                   dense
                   @mouseenter.native="on.mouseenter"
@@ -76,7 +76,7 @@
               <template v-slot:activator="{ on }">
                 <v-select
                   v-model="violinGroup"
-                  :items="idents"
+                  :items="identItems"
                   label="Group by"
                   dense
                   @mouseenter.native="on.mouseenter"
@@ -132,7 +132,11 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    identItems() {
+      return [this.idents]
+    },
+  },
   methods: {
     changeSize(i, newH, newW, newHPx, newWPx) {
       this.windowSize.x = newWPx
@@ -148,7 +152,8 @@ export default {
       } else {
         const link = document.createElement('a')
         link.href = src
-        link.setAttribute('download', 'coverage_plot.png')
+        const filename = `${this.gene}_violin.png`
+        link.setAttribute('download', filename)
         document.body.appendChild(link)
         link.click()
       }
@@ -158,16 +163,35 @@ export default {
     },
 
     async runGeneViolin() {
+      if (!this.violinSplit) {
+        this.violinSplit = 'None'
+      }
+      if (!this.violinGroup) {
+        this.violinGroup = 'None'
+      }
       this.$nuxt.$loading.start()
-      this.geneViolin = await await ApiService.postCommand(
-        'deepmaps/api/queue/run-r-static/',
-        {
-          type: 'violin-gene',
-          gene: this.gene || 'CTCF',
-          split: this.violinSplit,
-          group: this.violinGroup,
-        }
-      )
+      if (!this.gene) {
+        this.$notifier.showMessage({
+          content: 'Please select a gene',
+          color: 'error',
+        })
+      } else if (this.violinSplit === 'None' && this.violinGroup === 'None') {
+        this.$notifier.showMessage({
+          content: 'Please specify split or group items',
+          color: 'error',
+        })
+      } else {
+        this.geneViolin = await await ApiService.postCommand(
+          'deepmaps/api/queue/run-r-static/',
+          {
+            type: 'violin-gene',
+            gene: this.gene || 'CTCF1',
+            split: this.violinSplit,
+            group: this.violinGroup,
+          }
+        )
+      }
+
       this.$nuxt.$loading.finish()
     },
   },
