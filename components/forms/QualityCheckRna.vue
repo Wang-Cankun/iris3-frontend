@@ -98,8 +98,7 @@
                     ></v-text-field>
                   </template>
                   <span
-                    >Cells with zero values in less than # cells are
-                    removed</span
+                    >Include genes detected in at least this many cells</span
                   >
                 </v-tooltip></v-col
               >
@@ -115,8 +114,8 @@
                     ></v-text-field>
                   </template>
                   <span>
-                    Cells with zero values in less than # genes are
-                    removed</span
+                    Include cells where at least this many genes are
+                    detected</span
                   >
                 </v-tooltip></v-col
               >
@@ -307,7 +306,7 @@ export default {
           w: 2,
           h: 1,
           i: '2',
-          title: 'Mitocondrial genes percent',
+          title: 'Ribosome genes percent',
         },
         {
           x: 2,
@@ -315,7 +314,7 @@ export default {
           w: 2,
           h: 1,
           i: '3',
-          title: 'Ribosome genes percent',
+          title: 'Mitocondrial genes percent',
         },
         {
           x: 4,
