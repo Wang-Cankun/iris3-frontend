@@ -182,7 +182,7 @@
                     <v-card-actions class="mx-2">
                       <a
                         class="text-decoration-none"
-                        :href="'/submit/multiome/' + item.jobid"
+                        :href="'submit/multiome/' + item.jobid"
                         ><v-btn>Browse</v-btn>
                       </a>
                     </v-card-actions>

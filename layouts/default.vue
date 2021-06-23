@@ -109,12 +109,12 @@
         <a
           v-if="searchJobId"
           class="text-decoration-none"
-          :href="'/submit/multiome/' + searchJobId"
+          :href="'submit/multiome/' + searchJobId"
           ><v-btn clearable color="primary" class="mt-3">Search</v-btn>
         </a>
 
         <template v-if="isAuthenticated">
-          <v-btn to="/profile" text>
+          <v-btn to="profile" text>
             <v-icon left dark>mdi-face</v-icon>
             My Profile
           </v-btn>
