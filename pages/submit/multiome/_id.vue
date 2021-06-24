@@ -100,7 +100,6 @@ export default {
       this.$store.dispatch('calc/updateFlag', 2)
     },
     afterPage(page) {
-      console.log(page)
       const uniqueFlag = new Set(this.flag).size
       if (uniqueFlag >= 2) {
         this.e1 = page

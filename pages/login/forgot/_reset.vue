@@ -33,7 +33,7 @@
                 id="password"
                 v-model="password"
                 name="password"
-                label="Password"
+                label="New password"
                 type="password"
                 required
                 :rules="passwordRules"
@@ -43,7 +43,7 @@
               <v-text-field
                 id="confirmPassword"
                 name="confirmPassword"
-                label="Confirm Password"
+                label="Confirm new password"
                 type="password"
                 :rules="confirmPasswordRules"
                 required
@@ -96,7 +96,7 @@ export default {
     async register() {
       if (!this.$refs.form.validate()) return
       try {
-        await this.$axios.post('auth/password/forgot', {
+        await this.$axios.post('deepmaps/api/auth/password/forgot', {
           email: this.email,
           password: this.password,
           token: this.token,

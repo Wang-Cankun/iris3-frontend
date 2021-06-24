@@ -62,7 +62,7 @@ export default {
     async sendEmail() {
       if (!this.$refs.form.validate()) return
       try {
-        await this.$axios.post('auth/forgot', {
+        await this.$axios.post('deepmaps/api/auth/forgot', {
           email: this.email,
         })
 

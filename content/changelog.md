@@ -7,6 +7,17 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+## [0.11.0] - 06/24/2021
+ 
+### Added
+
+- Include gene names when exporting images
+- Email services
+### Fixed
+
+- Differential regulon calculation when selecting multiple cell clusters/types
+- 
+
 ## [0.10.1] - 06/23/2021
  
 ### Added

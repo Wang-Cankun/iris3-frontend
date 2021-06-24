@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" max-width="700">
+    <v-dialog v-model="computedDialog" max-width="700">
       <v-card>
         <v-card-title>Sign up</v-card-title>
         <v-divider class="my-2 py-2"></v-divider>
@@ -52,6 +52,8 @@
                   name="firstName"
                   label="First Name"
                   type="string"
+                  :rules="nameRules"
+                  required
                 ></v-text-field>
                 <v-text-field
                   id="lastName"
@@ -59,6 +61,8 @@
                   name="lastName"
                   label="Last Name"
                   type="string"
+                  :rules="nameRules"
+                  required
                 ></v-text-field>
                 <v-text-field
                   id="institution"
@@ -66,6 +70,8 @@
                   name="institution"
                   label="Institution"
                   type="string"
+                  :rules="nameRules"
+                  required
                 ></v-text-field>
                 <v-checkbox v-model="newsletter">
                   <template v-slot:label>
@@ -142,10 +148,22 @@ export default {
       ],
     }
   },
-  computed: {},
+  computed: {
+    url() {
+      return this.$route.params
+    },
+    computedDialog: {
+      get() {
+        return this.dialog
+      },
+      set(val) {
+        !val && this.$emit('close')
+      },
+    },
+  },
   watch: {
-    dialog(val) {
-      !val && this.$emit('close')
+    url() {
+      this.$emit('close')
     },
   },
   methods: {

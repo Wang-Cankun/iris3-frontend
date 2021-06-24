@@ -154,7 +154,7 @@ export default {
     async register() {
       if (!this.$refs.form.validate()) return
       try {
-        await this.$axios.post('auth/register', {
+        await this.$axios.post('deepmaps/api/auth/register', {
           username: this.username,
           email: this.email,
           password: this.password,

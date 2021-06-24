@@ -114,7 +114,7 @@
         </a>
 
         <template v-if="isAuthenticated">
-          <v-btn to="profile" text>
+          <v-btn to="/profile" text>
             <v-icon left dark>mdi-face</v-icon>
             My Profile
           </v-btn>
