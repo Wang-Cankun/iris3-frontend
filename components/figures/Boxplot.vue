@@ -136,11 +136,11 @@ export default {
             tooltip: {
               formatter(param) {
                 return [
-                  'upper: ' + param.data[5].toFixed(3),
+                  'Upper: ' + param.data[5].toFixed(3),
                   '75th percentile: ' + param.data[4].toFixed(3),
-                  'median: ' + param.data[3].toFixed(3),
+                  'Median: ' + param.data[3].toFixed(3),
                   '25th percentile: ' + param.data[2].toFixed(3),
-                  'lower: ' + param.data[1].toFixed(3),
+                  'Lower: ' + param.data[1].toFixed(3),
                 ].join('<br/>')
               },
             },

@@ -330,7 +330,7 @@ export default {
           w: 2,
           h: 1,
           i: '5',
-          title: 'Gene expression histogram',
+          title: 'Number of genes per cell',
         },
         {
           x: 2,
@@ -338,7 +338,7 @@ export default {
           w: 2,
           h: 1,
           i: '6',
-          title: 'Read counts histogram',
+          title: 'Number of read counts per cell',
         },
         {
           x: 4,

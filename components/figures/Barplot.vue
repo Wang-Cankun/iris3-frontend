@@ -79,6 +79,10 @@ export default {
           axisPointer: {
             type: 'shadow',
           },
+          formatter(params) {
+            console.log(params[0])
+            return `Y-axis value: ${params[0].data}<br/>X-axis value: ${params[0].axisValueLabel}`
+          },
         },
         xAxis: {
           type: 'category',
@@ -95,13 +99,22 @@ export default {
             name: this.title,
             data: this.src.map((item) => item.counts),
             type: 'bar',
+            markPoint: {
+              data: [
+                { type: 'max', name: 'Max' },
+                { type: 'min', name: 'Min' },
+              ],
+            },
+            markLine: {
+              data: [{ type: 'average', name: 'Mean' }],
+            },
           },
         ],
       }
     },
   },
   mounted() {
-    // this.$refs.chart.inst.on('mousemove', (params) => {
+    // this.$refs.chart.inst.on('mousemove', (params) => {2
     //   this.doSomething()
     //   this.$notifier.showMessage({
     //     content: `Current type: ${params.seriesType}; name: ${params.name};
