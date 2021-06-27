@@ -13,14 +13,19 @@ All notable changes to DeepMAPS will be documented in this page.
 
 - Include gene names when exporting images
 - Provide email services when resitering accounts, forgot password, create jobs, and jobs completed
-- Barplots showing max, min, average of the data
 
 ### Fixed
 
 - Differential regulon calculation when selecting multiple cell clusters/types
 - Removed dummy values in violin plots
 
-## [0.10.1] - 06/23/2021
+## [0.10.2] - 06/22/2021
+### Added
+
+- Barplots showing max, min, average of the data
+### Fixed
+- Add UI boundary when making violin plots
+## [0.10.1] - 06/20/2021
 ### Added
 
 - Detailed tooltip on box plots

@@ -43,7 +43,7 @@
       >
       <div class="no-drag">
         <v-row class="mx-4 mt-2">
-          <v-col cols="6" class="my-0">
+          <v-col cols="4" class="my-0">
             <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-select
@@ -85,7 +85,7 @@
               >
             </v-tooltip>
           </v-col>
-          <v-col cols="6" class="my-0">
+          <v-col cols="4" class="my-0">
             <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-select
@@ -125,6 +125,27 @@
                 >Select one or more clusters for differential gene expression
                 analysis</span
               >
+            </v-tooltip>
+          </v-col>
+          <v-col cols="4" class="my-0">
+            <v-tooltip top max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-select
+                  v-model="selectedDirection"
+                  class="px-0"
+                  dense
+                  :items="allDirections"
+                  label="Direction"
+                  return-object
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
+                >
+                </v-select>
+              </template>
+              <p>
+                Only return positive markers, negative markers, or all
+                directions (all directions by default)
+              </p>
             </v-tooltip>
           </v-col>
           <v-col cols="3" class="my-0 py-0"
@@ -191,6 +212,7 @@
               <p>Default: 0.25</p>
             </v-tooltip>
           </v-col>
+
           <v-col cols="3" class="my-0 py-0"
             ><v-btn small class="mx-2 mb-2 mt-0" @click="run()"
               >Calculate</v-btn
@@ -239,6 +261,9 @@ export default {
         { text: 'adjusted p-value', value: 'p_val_adj' },
       ],
       // DEG
+      search: '',
+      selectedDirection: 'all',
+      allDirections: ['up', 'down', 'all'],
       ident1: [],
       ident2: [],
       minPct: 0.1,
@@ -270,13 +295,12 @@ export default {
             min_lfc: this.minLfc,
             assay: this.degAssay,
             pvalue: this.degPvalue,
+            direction: this.selectedDirection,
           }
         )
+
         await ApiService.sleep(1000)
-        this.$store.dispatch(
-          'calc/updateDeg',
-          this.deResult.map((item) => item.gene)
-        )
+        this.$store.dispatch('calc/updateDeg', this.deResult)
         this.$nuxt.$loading.finish()
       } else {
         this.$notifier.showMessage({

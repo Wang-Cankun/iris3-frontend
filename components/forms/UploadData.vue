@@ -572,22 +572,6 @@ export default {
       (v) => (/.+@.+\..+/.test(v) && v.length > 0) || 'E-mail must be valid',
     ],
   }),
-  mounted() {
-    switch (this.type) {
-      case 'single-rna':
-        this.tab = 0
-        break
-      case 'multiple-rna':
-        this.tab = 1
-        break
-      case 'multiome':
-        this.tab = 2
-        break
-      default:
-        this.tab = 0
-    }
-    this.email = this.$store.getters.loggedInUser
-  },
   computed: {
     checkboxErrors() {
       const errors = []
@@ -616,6 +600,22 @@ export default {
       !this.$v.email.required && errors.push('E-mail is required')
       return errors
     },
+  },
+  mounted() {
+    switch (this.type) {
+      case 'single-rna':
+        this.tab = 0
+        break
+      case 'multiple-rna':
+        this.tab = 1
+        break
+      case 'multiome':
+        this.tab = 2
+        break
+      default:
+        this.tab = 0
+    }
+    this.email = this.$store.getters.loggedInUser
   },
 
   methods: {

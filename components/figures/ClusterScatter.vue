@@ -206,12 +206,17 @@ export default {
             const value = obj.value
             return (
               '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-              ' ' +
+              'Label: ' +
               value[4] +
               '</div><div>' +
+              'Identifier: ' +
               value[0] +
               '</div><div>' +
-              '<br>'
+              '[' +
+              value[1] +
+              ', ' +
+              value[2] +
+              ']<br>'
             )
           },
         },

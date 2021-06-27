@@ -33,7 +33,7 @@
 
             <v-list>
               <v-list-item @click="1">
-                <download-excel class="mr-4" :data="enrichResult[0]" type="csv">
+                <download-excel class="mr-4" :data="enrichResult" type="csv">
                   <v-list-item-title>Download file (CSV)</v-list-item-title>
                 </download-excel>
               </v-list-item>
@@ -43,7 +43,50 @@
       >
       <div class="no-drag">
         <v-row class="mt-2">
-          <v-col cols="6">
+          <v-col cols="3">
+            <v-tooltip top max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-autocomplete
+                  v-model="selectedTool"
+                  class="ml-4"
+                  dense
+                  :items="allTools"
+                  label="Tool"
+                  return-object
+                  item-text="name"
+                  item-value="value"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
+                >
+                </v-autocomplete>
+              </template>
+              <span>Select tool</span>
+            </v-tooltip>
+          </v-col>
+          <v-col v-show="selectedTool === 'GSEA'" cols="4">
+            <v-tooltip top max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-autocomplete
+                  v-model="gseaDatabase"
+                  class="ml-4"
+                  dense
+                  :items="allGseaDatabases"
+                  label="MSigDB database"
+                  return-object
+                  item-text="name"
+                  item-value="value"
+                  @mouseenter.native="on.mouseenter"
+                  @mouseleave.native="on.mouseleave"
+                >
+                </v-autocomplete>
+              </template>
+              <span
+                >Molecular Signatures Database (MSigDB) is a collection of
+                annotated gene sets for use with GSEA software</span
+              >
+            </v-tooltip>
+          </v-col>
+          <v-col v-show="selectedTool === 'Enrichr'" cols="4">
             <v-tooltip top max-width="500px">
               <template v-slot:activator="{ on }">
                 <v-autocomplete
@@ -52,6 +95,7 @@
                   dense
                   :items="allDatabases"
                   label="Database"
+                  :search="search"
                   return-object
                   item-text="name"
                   item-value="value"
@@ -72,7 +116,7 @@
             </v-tooltip>
           </v-col>
           <v-col cols="4"
-            ><v-btn small @click="run()">Calculate</v-btn></v-col
+            ><v-btn small @click="runEnrichment()">Calculate</v-btn></v-col
           ></v-row
         >
         <div v-if="enrichResult.length">
@@ -80,7 +124,7 @@
             dense
             :height="tableHeight"
             :headers="headers"
-            :items="enrichResult[0]"
+            :items="enrichResult"
             item-key="Term"
             :items-per-page="10"
             class="elevation-0"
@@ -114,6 +158,7 @@ export default {
   data() {
     return {
       hover: false,
+      search: '',
       tableHeight: 435,
       footerHeight: 180,
       headers: [
@@ -123,6 +168,14 @@ export default {
         { text: 'Combined score', value: 'Combined.Score' },
         { text: 'Genes', value: 'data-table-expand' },
       ],
+      gseaHeaders: [
+        { text: 'pathway', value: 'pathway' },
+        { text: 'Adjusted p-value', value: 'padj' },
+        { text: 'NES', value: 'NES' },
+        { text: 'size', value: 'size' },
+        { text: '', value: 'data-table-expand' },
+      ],
+      gseaResult: [],
       enrichResult: [],
       selectedDatabase: '',
       expanded: [],
@@ -132,14 +185,46 @@ export default {
         { name: 'GO: cellular component', value: 'GO_Cellular_Component_2018' },
         { name: 'GO: biological process', value: 'GO_Biological_Process_2018' },
       ],
+      allTools: ['Enrichr', 'GSEA'],
+      selectedTool: 'GSEA',
+      gseaDatabase: '',
+      allGseaDatabases: [
+        { name: 'Hallmark gene sets (H)', value: 'H' },
+        { name: 'Positional gene sets (C1)', value: 'C1' },
+        { name: 'Curated gene sets (C2)', value: 'C2' },
+        { name: 'Regulatory target gene sets (C3)', value: 'C3' },
+        { name: 'Computational gene sets (C4)', value: 'C4' },
+        { name: 'Ontology gene sets (C5)', value: 'C5' },
+        { name: 'Oncogenic signature gene sets (C6)', value: 'C6' },
+        { name: 'Immunologic signature gene sets (C7)', value: 'C7' },
+      ],
     }
   },
 
   methods: {
-    async run() {
+    async runGSEA() {
       if (!this.genes.length) {
         this.$notifier.showMessage({
-          content: 'Please select regulon',
+          content: 'Please select regulon first',
+          color: 'error',
+        })
+      } else {
+        this.$nuxt.$loading.start()
+        this.gseaResult = await ApiService.postCommand(
+          'deepmaps/api/queue/gsea-table/',
+          {
+            genes: '1',
+            database: this.gseaDatabase.value,
+          }
+        )
+        await ApiService.sleep(1000)
+        this.$nuxt.$loading.finish()
+      }
+    },
+    async runEnrichr() {
+      if (!this.genes.length) {
+        this.$notifier.showMessage({
+          content: 'Please select regulon first',
           color: 'error',
         })
       } else {
@@ -154,6 +239,11 @@ export default {
         await ApiService.sleep(2000)
         this.$nuxt.$loading.finish()
       }
+    },
+    async runEnrichment() {
+      this.gseaResult = this.enrichResult = []
+      this.selectedTool === 'Enrichr' && (await this.runEnrichr())
+      this.selectedTool === 'GSEA' && (await this.runGSEA())
     },
     changeSize(i, newH, newW, newHPx, newWPx) {
       this.tableHeight = newHPx - this.footerHeight

@@ -134,7 +134,7 @@ export default {
 
   computed: {
     identItems() {
-      return [this.idents]
+      return [...this.idents]
     },
   },
   methods: {

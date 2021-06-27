@@ -330,7 +330,7 @@ export default {
           w: 2,
           h: 1,
           i: '5',
-          title: 'Number of genes per cell',
+          title: 'Number of expressed genes per cell',
         },
         {
           x: 2,
@@ -346,7 +346,7 @@ export default {
           w: 2,
           h: 1,
           i: '7',
-          title: 'Number of expressed genes among cells',
+          title: 'Number of cells among each expressed gene',
         },
 
         {
