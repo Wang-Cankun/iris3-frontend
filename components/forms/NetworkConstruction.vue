@@ -139,7 +139,8 @@
 import RegulonNetwork from '~/components/network/RegulonNetwork'
 import RegulonSelection from '~/components/network/RegulonSelection'
 
-import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
+// import RegulonHeatmap from '~/components/figures/RegulonHeatmap'
+import RegulonHeatmap from '~/components/figures/Clustergrammer'
 import ClusterScatter from '~/components/figures/ClusterScatter'
 import RegulonGeneScatter from '~/components/figures/RegulonGeneScatter'
 import RegulonActivityScatter from '~/components/figures/RegulonActivityScatter'

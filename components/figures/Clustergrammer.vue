@@ -1,5 +1,5 @@
 <template>
-  <v-card class="ma-0"
+  <v-card class="ma-0" @mouseover="hover = true" @mouseleave="hover = false"
     ><grid-item
       :w="setting.w"
       :h="setting.h"
@@ -8,13 +8,10 @@
       :i="setting.i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
+      @resized="changeSize"
     >
-      <v-card-title
-        class="grey lighten-3 font-weight-bold caption px-2 py-1"
-        @mouseover="hover = true"
-        @mouseleave="hover = false"
-        >{{ setting.title }}
-        <v-spacer></v-spacer>
+      <v-card-title class="grey lighten-3 font-weight-bold caption px-2 py-1"
+        >Regulon heatmap <v-spacer></v-spacer>
         <div>
           <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
@@ -22,8 +19,27 @@
                 >mdi-help-circle-outline</v-icon
               >
             </template>
-            <p>Boxplot: to be updated</p>
+            <p>TODO</p>
           </v-tooltip>
+          <v-menu bottom left :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon v-show="hover === true">mdi-cog</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item>
+                <div id="create">
+                  <div fluid>
+                    <p class="subtitle-1 font-weight-bold text-center">
+                      Settings: todo
+                    </p>
+                  </div>
+                </div></v-list-item
+              >
+            </v-list>
+          </v-menu>
           <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
@@ -38,132 +54,60 @@
               <v-list-item @click="downloadPDF">
                 <v-list-item-title>Download JPG</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="downloadCSV">
-                <download-excel class="mr-4" :data="src" type="csv">
+              <v-list-item @click="1">
+                <download-excel class="mr-4" data="" type="csv">
                   <v-list-item-title>Download file (CSV)</v-list-item-title>
                 </download-excel>
               </v-list-item>
             </v-list>
           </v-menu>
-        </div>
-      </v-card-title>
-      <ECharts ref="chart" class="no-drag" :option="option" /> </grid-item
+        </div></v-card-title
+      >
+      <no-ssr>
+        <iframe :src="frame" height="800" width="100%"></iframe
+      ></no-ssr> </grid-item
   ></v-card>
 </template>
 
 <script>
-import { createComponent } from 'echarts-for-vue'
-import * as echarts from 'echarts'
-import EchartsService from '~/services/EchartsService.js'
-
 export default {
-  components: {
-    ECharts: createComponent({ echarts }), // use as a component
-  },
   props: {
-    src: { type: Array, required: true },
+    src: { type: Object, required: true },
     setting: {
       type: Object,
       required: true,
       default: () => ({ title: '', h: 2, x: 0, y: 0, i: '0' }),
     },
   },
+
   data() {
     return {
       hover: false,
+      heatmap: '',
     }
   },
   computed: {
-    option() {
-      return {
-        title: [
-          {
-            text: '',
-            left: 'center',
-          },
-        ],
-
-        dataset: [
-          {
-            source: [this.src],
-          },
-          {
-            transform: {
-              type: 'boxplot',
-              config: { itemNameFormatter: '' },
-            },
-          },
-          {
-            fromDatasetIndex: 1,
-            fromTransformResult: 1,
-          },
-        ],
-        tooltip: {
-          trigger: 'item',
-          axisPointer: {
-            type: 'shadow',
-          },
-        },
-        grid: {
-          left: '12%',
-          right: '5%',
-          bottom: '15%',
-        },
-        xAxis: {
-          type: 'category',
-          name: '',
-          boundaryGap: true,
-          nameGap: 30,
-          splitArea: {
-            show: false,
-          },
-          splitLine: {
-            show: false,
-          },
-        },
-        yAxis: {
-          type: 'value',
-          name: '',
-          splitArea: {
-            show: true,
-          },
-        },
-        series: [
-          {
-            name: 'boxplot',
-            type: 'boxplot',
-            datasetIndex: 1,
-            tooltip: {
-              formatter(param) {
-                return [
-                  'Upper: ' + param.data[5].toFixed(3),
-                  '75th percentile: ' + param.data[4].toFixed(3),
-                  'Median: ' + param.data[3].toFixed(3),
-                  '25th percentile: ' + param.data[2].toFixed(3),
-                  'Lower: ' + param.data[1].toFixed(3),
-                ].join('<br/>')
-              },
-            },
-          },
-          {
-            name: 'outlier',
-            type: 'scatter',
-            datasetIndex: 2,
-          },
-        ],
-      }
+    frame() {
+      return 'https://maayanlab.cloud/clustergrammer/viz/60de3be2fe6520000f4c4247/small_38x29_clustergrammer_matrix.txt'
     },
   },
-
+  watch: {},
   methods: {
     downloadPNG() {
-      EchartsService.downloadImg(this.$refs.chart.inst, 'png')
+      return 1
     },
     downloadPDF() {
-      EchartsService.downloadImg(this.$refs.chart.inst, 'jpg')
-    },
-    downloadCSV() {
       return 1
+    },
+    downloadTable() {
+      this.$notifier.showMessage({
+        content: 'Downloading table...',
+        color: 'Success',
+      })
+    },
+    changeSize(i, newH, newW, newHPx, newWPx) {
+      this.windowSize.x = newWPx
+      this.windowSize.y = newHPx
     },
     resizeEvent(i, newH, newW, newHPx, newWPx) {
       console.log(
@@ -178,9 +122,6 @@ export default {
           ', W(px)=' +
           newWPx
       )
-    },
-    doSomething() {
-      this.$refs.chart.inst.getWidth() // call the method of ECharts instance
     },
   },
 }

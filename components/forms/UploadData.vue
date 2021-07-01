@@ -35,12 +35,15 @@
         </v-tooltip>
       </v-tabs>
 
-      <v-tabs-items v-model="tab">
+      <v-tabs-items v-model="tab" style="background-color: grey lighten-5">
         <v-card-title class="mx-0 my-4 py-0 subtitle-1 font-weight-bold">
           Data upload
           <v-divider class="mx-0 my-0 py-0"></v-divider>
         </v-card-title>
-        <v-tab-item>
+        <v-tab-item
+          background-color="grey lighten-5"
+          style="background-color: grey lighten-5"
+        >
           <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
               <v-file-input

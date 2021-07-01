@@ -1,5 +1,5 @@
 <template>
-  <v-card class="ma-0"
+  <v-card class="ma-0" @mouseover="hover = true" @mouseleave="hover = false"
     ><grid-item
       :w="setting.w"
       :h="setting.h"
@@ -9,10 +9,7 @@
       class="grid-item-border"
       drag-ignore-from=".no-drag"
     >
-      <v-card-title
-        class="grey lighten-3 font-weight-bold caption px-2 py-1"
-        @mouseover="hover = true"
-        @mouseleave="hover = false"
+      <v-card-title class="grey lighten-3 font-weight-bold caption px-2 py-1"
         >{{ setting.title }} <v-spacer></v-spacer>
         <div>
           <v-tooltip top max-width="500px">
