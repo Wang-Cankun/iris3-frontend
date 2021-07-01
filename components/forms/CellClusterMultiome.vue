@@ -412,7 +412,7 @@
                   :setting="layout[5]"
                   :active-ident="currentIdent"
                 ></cell-chat>
-                <div v-if="jobid === 'example'">
+                <div v-if="true">
                   <coverage-plot
                     :genes="genes"
                     :setting="layout[6]"
