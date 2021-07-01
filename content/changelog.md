@@ -7,6 +7,27 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+## [0.112.0] - 07/01/2021
+ 
+### Added
+
+- New homepage design
+- New heatmap library: Clustergrammer
+- Add enrichment analysis using both Enrichr and GSEA
+- Add enrichment plots: dot plot, bar plot, GSEA plot 
+
+### Fixed
+
+- Coverage plot not showing when uploading data
+
+### Changes
+
+- Support only show positive DEGs
+- Support perform enrichment analysis on DEG directions
+- Support full screen for cetain types of plots
+- Support cursor hint on certain types of plots
+- The title settings will be displayed when hover over the grid rather than just the grid title
+
 ## [0.11.0] - 06/24/2021
  
 ### Added
