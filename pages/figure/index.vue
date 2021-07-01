@@ -11,6 +11,7 @@
     <v-btn to="/figure/sankey">sankey</v-btn>
     <v-btn to="/figure/violin">violin</v-btn>
     <v-btn to="/figure/particle">particle</v-btn>
+    <v-btn to="/figure/clustergrammer">clustergrammer</v-btn>
   </v-container>
 </template>
 

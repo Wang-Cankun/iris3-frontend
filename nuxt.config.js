@@ -131,7 +131,6 @@ export default {
     defaultAssets: {
       font: {
         family: 'Poppins',
-        size: '18px',
       },
     },
     theme: {

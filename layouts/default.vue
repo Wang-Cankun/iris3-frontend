@@ -134,120 +134,48 @@
           </v-btn>
         </template>
       </v-toolbar-items>
-
-      <!-- <v-menu open-on-hover offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" elevation="0" v-on="on"> News </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              v-for="item in newsmenu"
-              :key="item.title"
-              :to="item.path"
-              link
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu> -->
     </v-app-bar>
 
-    <v-main>
+    <v-main class="grey lighten-5">
       <alert top></alert>
       <nuxt />
     </v-main>
 
     <!--footer start here-->
 
-    <v-footer app inset class="font-weight-light" absolute padless>
+    <v-footer
+      app
+      inset
+      class="font-weight-light grey lighten-3"
+      absolute
+      padless
+    >
       <v-container fluid>
-        <v-row>
-          <v-col cols="8" offset="2">
-            <v-row>
-              <v-col col="1">
-                <p class="font-weight-bold" style="">EXPLORE</p>
-                <p v-for="item in exploreMenu" :key="item.title">
-                  <nuxt-link
-                    :to="item.path"
-                    style="color: black; text-decoration: none; font-size: 12px"
-                  >
-                    {{ item.title }}</nuxt-link
-                  >
-                </p>
-              </v-col>
-              <v-col col="1">
-                <p class="font-weight-bold" style="">HELP</p>
-                <p v-for="item in helpmenu" :key="item.title">
-                  <nuxt-link
-                    :to="item.path"
-                    style="color: black; text-decoration: none; font-size: 12px"
-                  >
-                    {{ item.title }}</nuxt-link
-                  >
-                </p>
-                <p><v-spacer></v-spacer></p>
-              </v-col>
-              <v-col col="1">
-                <p class="font-weight-bold" style="">NEWS</p>
-                <p v-for="item in newsmenu" :key="item.title">
-                  <nuxt-link
-                    :to="item.path"
-                    style="color: black; text-decoration: none; font-size: 12px"
-                  >
-                    {{ item.title }}</nuxt-link
-                  >
-                </p>
-              </v-col>
-              <v-col col="1">
-                <p class="font-weight-bold" style="">DEVELOPMENT</p>
-                <p v-for="item in developmenu" :key="item.title">
-                  <nuxt-link
-                    :to="item.path"
-                    style="color: black; text-decoration: none; font-size: 12px"
-                  >
-                    {{ item.title }}</nuxt-link
-                  >
-                </p>
-              </v-col>
-
-              <v-col col="1">
-                <p class="font-weight-bold" style="">SOCIAL</p>
-                <div v-for="icon in icons" :key="icon.name" icon left>
-                  <v-btn text>
-                    <a
-                      class="text-decoration-none"
-                      :href="icon.url"
-                      :target="icon.url"
-                      ><v-icon size="24px">{{ icon.name }}</v-icon></a
-                    >
-                  </v-btn>
-                </div>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row class="mt-2">
-          <!-- Version and Data information -->
-          <v-col class="lighten-2 py-4 text-center" cols="12">
-            DeepMAPS (v{{ $store.getters.appVersion }}) is developed by
-            <a class="text-decoration-none" href="https://u.osu.edu/bmbl/"
-              >BMBL</a
-            >, it is free and open to all users. |
-            {{ new Date().getFullYear() }}
-          </v-col>
-          <login-dialog
-            :dialog.sync="loginDialog"
-            @close="loginDialog = false"
-          ></login-dialog>
-          <register-dialog
-            :dialog.sync="registerDialog"
-            @close="registerDialog = false"
-          ></register-dialog>
-        </v-row>
+        <span>
+          DeepMAPS (v{{ $store.getters.appVersion }}) is developed by
+          <a class="text-decoration-none" href="https://u.osu.edu/bmbl/">BMBL</a
+          >, it is free and open to all users. | {{ new Date().getFullYear() }}
+        </span>
+        <span v-for="icon in icons" :key="icon.name" icon>
+          <a class="text-decoration-none" :href="icon.url" :target="icon.url"
+            ><v-btn text
+              ><v-icon color="primary" size="2em">{{
+                icon.name
+              }}</v-icon></v-btn
+            ></a
+          >
+        </span>
       </v-container>
-      <fab></fab>
     </v-footer>
-
+    <fab></fab>
+    <login-dialog
+      :dialog.sync="loginDialog"
+      @close="loginDialog = false"
+    ></login-dialog>
+    <register-dialog
+      :dialog.sync="registerDialog"
+      @close="registerDialog = false"
+    ></register-dialog>
     <snackbar></snackbar>
   </v-app>
 </template>

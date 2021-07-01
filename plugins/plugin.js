@@ -8,7 +8,6 @@ import VueCytoscape from 'vue-cytoscape'
 import Particles from 'particles.vue'
 
 Vue.use(Particles)
-
 Vue.use(plugin, { echarts })
 Vue.use(VueCytoscape)
 Vue.use(Vuelidate)

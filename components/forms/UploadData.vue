@@ -509,8 +509,7 @@ export default {
       },
       {
         item: 'Download gene expression matrix (Yan et al, 2013) ',
-        link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_expression.csv',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/Yan_2013_expression.csv',
       },
       {
         item: 'Download metadata file (Yan et al, 2013)',
@@ -523,13 +522,11 @@ export default {
       },
       {
         item: 'Download gene expression matrix: Human IFNB (sample 1)',
-        link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_sample1_expr.csv',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_sample1_expr.csv',
       },
       {
         item: 'Download gene expression matrix: Human IFNB (sample 2)',
-        link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_sample2_expr.csv',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/human_ifnb_sample2_expr.csv',
       },
       {
         item: 'Download metadata file: Human IFNB',
@@ -540,18 +537,15 @@ export default {
       { item: 'Load example (10X Human PBMC granulocyte 3k cells)' },
       {
         item: 'Download data: PBMC granulocyte sorted 3k cells',
-        link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_granulocyte_sorted_3k_filtered_feature_bc_matrix.h5',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_granulocyte_sorted_3k_filtered_feature_bc_matrix.h5',
       },
       {
         item: 'Download data: Human PBMC unsorted 3k cell',
-        link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_unsorted_3k_filtered_feature_bc_matrix.h5',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/pbmc_unsorted_3k_filtered_feature_bc_matrix.h5',
       },
       {
         item: 'Download data: Human brain 3k cell',
-        link:
-          'https://bmbl.bmi.osumc.edu/iris3/storage/human_brain_3k_filtered_feature_bc_matrix.h5',
+        link: 'https://bmbl.bmi.osumc.edu/iris3/storage/human_brain_3k_filtered_feature_bc_matrix.h5',
       },
     ],
     email: '',
