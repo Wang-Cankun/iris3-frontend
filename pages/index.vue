@@ -142,50 +142,58 @@
     >
       <v-row>
         <v-col cols="6"
-          ><v-card><v-img src="img/abstract_workflow.jpg"></v-img> </v-card
+          ><v-card elevation="1" background-color="grey lighten-5"
+            ><v-img src="img/abstract_workflow.jpg"></v-img> </v-card
         ></v-col>
         <v-col cols="6"
-          ><v-card><v-img src="img/abstract_workflow.jpg"></v-img></v-card
+          ><v-card elevation="1"
+            ><v-img src="img/abstract_workflow.jpg"></v-img></v-card
         ></v-col>
         <v-col cols="6"
-          ><v-carousel
-            cycle
-            height="12em"
-            hide-delimiter-background
-            show-arrows-on-hover
-          >
-            <v-carousel-item v-for="(slide, i) in slides" :key="i">
-              <v-row class="fill-height" align="center" justify="center">
-                <v-col cols="6" align="right" justify="center"
-                  ><v-icon color="primary" size="5em">
-                    {{ slide.icon }}</v-icon
-                  ></v-col
-                >
-                <v-col cols="6">
-                  <p class="text-h3 my-0">
-                    {{ slide.number }}
+          ><v-card elevation="1">
+            <v-carousel
+              cycle
+              height="12em"
+              hide-delimiter-background
+              show-arrows-on-hover
+            >
+              <v-carousel-item v-for="(slide, i) in slides" :key="i">
+                <v-row class="fill-height" align="center" justify="center">
+                  <v-col cols="6" align="right" justify="center"
+                    ><v-icon color="primary" size="5em">
+                      {{ slide.icon }}</v-icon
+                    ></v-col
+                  >
+                  <v-col cols="6">
+                    <p class="text-h3 my-0">
+                      {{ slide.number }}
+                    </p>
+                    <p class="text-h5 my-0">{{ slide.name }}</p>
+                  </v-col>
+                </v-row>
+                <template v-if="slide.name !== 'jobs running'">
+                  <p class="text-body-1 px-2" align="right">
+                    as of
+                    {{ currentDate }}
                   </p>
-                  <p class="text-h5 my-0">{{ slide.name }}</p>
-                </v-col>
-              </v-row>
-              <template v-if="slide.name !== 'jobs running'">
-                <p class="text-body-1 px-2" align="right">
-                  as of
-                  {{ currentDate }}
-                </p>
-              </template>
-            </v-carousel-item>
-          </v-carousel></v-col
+                </template>
+              </v-carousel-item>
+            </v-carousel></v-card
+          ></v-col
         >
         <v-col cols="6">
-          <client-only>
-            <div style="overflow-y: auto; height: 12em" class="viewer_options">
-              <script
-                type="text/javascript"
-                id="clustrmaps"
-                src="//cdn.clustrmaps.com/map_v2.js?cl=2d78ad&w=300&t=tt&d=y6edmNGXh1CPbChW0tW9Ahz11iiWoeE4HDc-yFfav5Y&co=fafafa&ct=2d78ad&cmo=3acc3a&cmn=ff5353"
-              ></script>
-            </div> </client-only
+          <v-card elevation="1">
+            <client-only>
+              <div
+                style="overflow-y: auto; height: 12em"
+                class="viewer_options"
+              >
+                <script
+                  id="clustrmaps"
+                  type="text/javascript"
+                  src="//cdn.clustrmaps.com/map_v2.js?cl=2d78ad&w=a&t=tt&d=y6edmNGXh1CPbChW0tW9Ahz11iiWoeE4HDc-yFfav5Y&cmo=3acc3a&cmn=ff5353&ct=1565C0&co=ffffff"
+                ></script>
+              </div> </client-only></v-card
         ></v-col>
       </v-row>
     </v-col>
