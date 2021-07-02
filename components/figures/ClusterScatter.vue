@@ -15,12 +15,15 @@
         <div>
           <v-tooltip top max-width="500px">
             <template v-slot:activator="{ on }">
-              <v-icon v-show="hover === true" v-on="on"
-                >mdi-help-circle-outline</v-icon
-              >
+              <v-btn text @click="openFullscreen"
+                ><v-icon v-show="hover === true" v-on="on"
+                  >mdi-open-in-new</v-icon
+                >
+              </v-btn>
             </template>
-            <p>Cell cluster scatter plot: to be updated</p>
+            <p>Full screen</p>
           </v-tooltip>
+
           <v-menu bottom left :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
@@ -78,8 +81,24 @@
           </v-menu>
         </div>
       </v-card-title>
-      <ECharts ref="chart" :option="option2d" class="no-drag" /> </grid-item
-  ></v-card>
+      <ECharts ref="chart" :option="option2d" class="no-drag" />
+      <v-dialog v-model="fullscreen">
+        <v-card height="100%">
+          <v-card-title class="grey lighten-3 font-weight-bold">
+            {{ setting.title }} {{ count }}
+          </v-card-title>
+          <ECharts :option="option2d" class="no-drag" />
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="fullscreen = false">
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </grid-item>
+  </v-card>
 </template>
 
 <script>
@@ -107,6 +126,8 @@ export default {
   data() {
     return {
       hover: false,
+      fullscreen: false,
+      count: 0,
       theme: 'light',
       themeList: ['light', 'dark'],
       pointSize: 4,
@@ -278,6 +299,10 @@ export default {
     },
     doSomething() {
       this.$refs.chart.inst.getWidth() // call the method of ECharts instance
+    },
+    openFullscreen() {
+      this.fullscreen = true
+      this.count++
     },
   },
 }
