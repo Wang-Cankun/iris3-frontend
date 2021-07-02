@@ -24,7 +24,6 @@ All notable changes to DeepMAPS will be documented in this page.
 
 - Support only show positive DEGs
 - Support perform enrichment analysis on DEG directions
-- Support full screen for cetain types of plots
 - Support cursor hint on certain types of plots
 - The title settings will be displayed when hover over the grid rather than just the grid title
 

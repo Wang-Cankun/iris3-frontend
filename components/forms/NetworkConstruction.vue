@@ -99,7 +99,7 @@
                 ></enrichment-table>
                 <regulon-heatmap
                   :setting="layout[9]"
-                  :src="riHeatmapData"
+                  :src="selectedRegulon.tf"
                 ></regulon-heatmap>
                 <!--
                 <div v-if="false">

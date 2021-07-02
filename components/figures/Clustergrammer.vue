@@ -8,7 +8,6 @@
       :i="setting.i"
       class="grid-item-border"
       drag-ignore-from=".no-drag"
-      @resized="changeSize"
     >
       <v-card-title class="grey lighten-3 font-weight-bold caption px-2 py-1"
         >Regulon heatmap <v-spacer></v-spacer>
@@ -63,6 +62,11 @@
           </v-menu>
         </div></v-card-title
       >
+      <a :href="frame" target="_blank" class="text-decoration-none">
+        <v-btn
+          >Full screen <v-icon color="primary">mdi-open-in-new</v-icon></v-btn
+        >
+      </a>
       <no-ssr>
         <iframe :src="frame" height="800" width="100%"></iframe
       ></no-ssr> </grid-item
@@ -72,7 +76,7 @@
 <script>
 export default {
   props: {
-    src: { type: Object, required: true },
+    name: { type: String, required: true, default: 'SP1' },
     setting: {
       type: Object,
       required: true,
@@ -88,7 +92,7 @@ export default {
   },
   computed: {
     frame() {
-      return 'https://maayanlab.cloud/clustergrammer/viz/60de3be2fe6520000f4c4247/small_38x29_clustergrammer_matrix.txt'
+      return `https://bmbl.bmi.osumc.edu/iris3/heatmap_simple.php?file=${this.name}.json`
     },
   },
   watch: {},
@@ -104,24 +108,6 @@ export default {
         content: 'Downloading table...',
         color: 'Success',
       })
-    },
-    changeSize(i, newH, newW, newHPx, newWPx) {
-      this.windowSize.x = newWPx
-      this.windowSize.y = newHPx
-    },
-    resizeEvent(i, newH, newW, newHPx, newWPx) {
-      console.log(
-        'RESIZE i=' +
-          i +
-          ', H=' +
-          newH +
-          ', W=' +
-          newW +
-          ', H(px)=' +
-          newHPx +
-          ', W(px)=' +
-          newWPx
-      )
     },
   },
 }

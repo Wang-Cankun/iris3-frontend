@@ -45,7 +45,7 @@
                       </div>
                     </v-expand-transition>
                     <v-icon color="primary" size="2em"
-                      >mdi-open-in-new</v-icon
+                      >mdi-arrow-right</v-icon
                     ></v-btn
                   >
                 </a>
@@ -83,7 +83,7 @@
                       </div>
                     </v-expand-transition>
                     <v-icon color="primary" size="2em"
-                      >mdi-open-in-new</v-icon
+                      >mdi-arrow-right</v-icon
                     ></v-btn
                   >
                 </a>
@@ -99,7 +99,7 @@
                 style="overflow-y: auto; height: 12em"
                 class="body-1 font-weight-regular"
               >
-                <p>Access all public datasets collected in DeepMAPS</p>
+                <p>Access all public datasets collected in DeepMAPS.</p>
               </v-card-text>
               <v-card-actions class="mx-2">
                 <v-spacer /><a class="text-decoration-none" href="projects"
@@ -110,7 +110,7 @@
                       </div>
                     </v-expand-transition>
                     <v-icon color="primary" size="2em"
-                      >mdi-open-in-new</v-icon
+                      >mdi-arrow-right</v-icon
                     ></v-btn
                   >
                 </a>
@@ -127,11 +127,15 @@
         </a>
       </p>
       <v-row class="mt-6">
-        <v-col cols="8">
-          <p>
-            <span class="justify-left font-weight-bold">Cite us: </span>
-            {{ citeus }}
-          </p>
+        <v-col cols="9">
+          <span class="justify-left font-weight-bold">Cite us: </span>
+          <a
+            href="https://doi.org/10.1093/nar/gkaa394"
+            target="_blank"
+            class="text-decoration-none black--text"
+          >
+            {{ citeus }} <v-icon>mdi-open-in-new</v-icon>
+          </a>
         </v-col></v-row
       >
     </v-col>
@@ -142,12 +146,12 @@
     >
       <v-row>
         <v-col cols="6"
-          ><v-card elevation="1" background-color="grey lighten-5"
-            ><v-img src="img/abstract_workflow.jpg"></v-img> </v-card
+          ><v-card height="24em" elevation="1" background-color="grey lighten-5"
+            ><v-img contain src="img/abstract1.jpg"></v-img> </v-card
         ></v-col>
         <v-col cols="6"
-          ><v-card elevation="1"
-            ><v-img src="img/abstract_workflow.jpg"></v-img></v-card
+          ><v-card height="24em" elevation="1"
+            ><v-img contain src="img/abstract2.png"></v-img></v-card
         ></v-col>
         <v-col cols="6"
           ><v-card elevation="1">
@@ -209,7 +213,7 @@ export default {
       password: '',
       slides: [
         { number: '1.1M', name: 'cells', icon: 'mdi-circle-double' },
-        { number: '12', name: 'tissues', icon: 'mdi-human-greeting' },
+        { number: '12', name: 'tissues', icon: 'mdi-brain' },
         { number: '19', name: 'projects', icon: 'mdi-clipboard-list-outline' },
         { number: '6', name: 'jobs running', icon: 'mdi-calendar-check' },
       ],
