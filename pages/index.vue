@@ -123,7 +123,7 @@
       <p class="text-h6 font-weight-regular mt-6">
         <a href="tutorial" class="text-decoration-none">
           Find how-to's, documentation, video tutorials, and discussion forums
-          <v-icon color="primary">mdi-open-in-new</v-icon>
+          <v-icon color="primary" size="1.2em">mdi-open-in-new</v-icon>
         </a>
       </p>
       <v-row class="mt-6">
@@ -134,14 +134,14 @@
             target="_blank"
             class="text-decoration-none black--text"
           >
-            {{ citeus }} <v-icon>mdi-open-in-new</v-icon>
+            {{ citeus }} <v-icon size="1.2em">mdi-open-in-new</v-icon>
           </a>
         </v-col></v-row
       >
     </v-col>
     <v-col
       cols="4"
-      offset="2"
+      offset="1"
       class="d-flex flex-column justify-space-around align-left"
     >
       <v-row>

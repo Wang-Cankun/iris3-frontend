@@ -7,8 +7,8 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
-## [0.112.0] - 07/01/2021
- 
+## [0.12.0] - 07/01/2021
+
 ### Added
 
 - New homepage design
