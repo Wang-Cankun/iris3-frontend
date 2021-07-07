@@ -61,13 +61,12 @@
                     ></v-autocomplete
                   ></v-col>
                 </v-row>
-
                 <div v-if="filteredAllRegulons.length">
                   <v-data-table
                     dense
                     :headers="searchRegulonsHeader"
                     :items="filteredAllRegulons"
-                    item-key="tf"
+                    item-key="id"
                     :items-per-page="10"
                     class="elevation-0"
                   >
