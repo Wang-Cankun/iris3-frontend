@@ -125,21 +125,21 @@ export default {
 
       return {
         hover: true,
-        dataZoom: [
-          {
-            id: 'dataZoomX',
-            type: 'slider',
-            xAxisIndex: [0],
-            filterMode: 'filter',
-          },
-          {
-            id: 'dataZoomY',
-            type: 'slider',
-            yAxisIndex: [0],
-            filterMode: 'empty',
-            left: 10,
-          },
-        ],
+        // dataZoom: [
+        //   {
+        //     id: 'dataZoomX',
+        //     type: 'slider',
+        //     xAxisIndex: [0],
+        //     filterMode: 'filter',
+        //   },
+        //   {
+        //     id: 'dataZoomY',
+        //     type: 'slider',
+        //     yAxisIndex: [0],
+        //     filterMode: 'empty',
+        //     left: 10,
+        //   },
+        // ],
         visualMap: {
           min: this.src.legend[0],
           max: this.src.legend[1],
@@ -151,6 +151,16 @@ export default {
           calculable: true,
           inRange: {
             color: [this.lowColor, this.highColor],
+          },
+        },
+        toolbox: {
+          show: true,
+
+          feature: {
+            dataZoom: {},
+            // restore: {},
+            // dataView: { readOnly: false },
+            // saveAsImage: {},
           },
         },
         tooltip: {

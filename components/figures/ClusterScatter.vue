@@ -72,11 +72,11 @@
               <v-list-item @click="downloadPDF">
                 <v-list-item-title>Download JPG</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="1">
+              <v-list-item @click="2">
                 <download-excel class="mr-4" :data="src.embedding" type="csv">
-                  <v-list-item-title>Download file (CSV)</v-list-item-title>
-                </download-excel>
-              </v-list-item>
+                  Download data (CSV)
+                </download-excel></v-list-item
+              >
             </v-list>
           </v-menu>
         </div>
@@ -186,21 +186,21 @@ export default {
       }
       return {
         hover: true,
-        dataZoom: [
-          {
-            id: 'dataZoomX',
-            type: 'slider',
-            xAxisIndex: [0],
-            filterMode: 'filter',
-          },
-          {
-            id: 'dataZoomY',
-            type: 'slider',
-            yAxisIndex: [0],
-            filterMode: 'empty',
-            left: 10,
-          },
-        ],
+        // dataZoom: [
+        //   {
+        //     id: 'dataZoomX',
+        //     type: 'slider',
+        //     xAxisIndex: [0],
+        //     filterMode: 'filter',
+        //   },
+        //   {
+        //     id: 'dataZoomY',
+        //     type: 'slider',
+        //     yAxisIndex: [0],
+        //     filterMode: 'empty',
+        //     left: 10,
+        //   },
+        // ],
         visualMap: {
           type: 'piecewise',
           top: 'center',
@@ -215,6 +215,16 @@ export default {
           padding: 5,
           inverse: false,
           pieces,
+        },
+        toolbox: {
+          show: true,
+
+          feature: {
+            dataZoom: {},
+            // restore: {},
+            // dataView: { readOnly: false },
+            // saveAsImage: {},
+          },
         },
         tooltip: {
           position: 'top',

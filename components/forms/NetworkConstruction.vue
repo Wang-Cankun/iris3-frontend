@@ -5,11 +5,11 @@
       <v-row>
         <v-col cols="3">
           <v-card outlined class="mt-2">
-            <p class="subtitle-1 font-weight-bold text-center">
-              Gene Regulatory Network
-            </p>
+            <div class="ma-2">
+              <p class="subtitle-1 font-weight-bold text-center">
+                Gene Regulatory Network
+              </p>
 
-            <v-col>
               <v-row justify="center">
                 <v-btn
                   class="mx-2 my-4"
@@ -33,8 +33,48 @@
                     :selected.sync="selectedTf"
                   ></selection>
                 </div>
+                <p>Search genes of interest</p>
+
+                <v-row>
+                  <v-col cols="6"
+                    ><v-autocomplete
+                      v-model="searchTfName"
+                      label="TF"
+                      :items="allTfs"
+                      placeholder="Name"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                      @change="clearSearchGene"
+                    ></v-autocomplete
+                  ></v-col>
+                  <v-col cols="6"
+                    ><v-autocomplete
+                      v-model="searchGeneName"
+                      label="Target genes"
+                      :items="allGenes"
+                      placeholder="Name"
+                      class="px-1"
+                      dense
+                      background-color="white"
+                      @change="clearSearchTf"
+                    ></v-autocomplete
+                  ></v-col>
+                </v-row>
+
+                <div v-if="filteredAllRegulons.length">
+                  <v-data-table
+                    dense
+                    :headers="searchRegulonsHeader"
+                    :items="filteredAllRegulons"
+                    item-key="tf"
+                    :items-per-page="10"
+                    class="elevation-0"
+                  >
+                  </v-data-table>
+                </div>
               </div>
-            </v-col>
+            </div>
           </v-card>
         </v-col>
         <v-col cols="9">
@@ -271,6 +311,18 @@ export default {
     idents: ['hgt_cluster', 'None'],
     rasData: { axis: [0, 1], legend: [0, 1], dimension: 1 },
     riHeatmapData: { column: [], row: [], data: [], legend: [0, 1] },
+
+    // Search from all regulons
+    allRegulons: [],
+    allTfs: [],
+    allGenes: [],
+    searchTfName: '',
+    searchGeneName: '',
+    searchRegulonsHeader: [
+      { text: 'TF', value: 'tf' },
+      { text: 'Gene', value: 'target' },
+      { text: 'Cluster', value: 'ct' },
+    ],
   }),
   computed: {
     selectedNodes() {
@@ -314,6 +366,17 @@ export default {
       // eslint-disable-next-line eqeqeq
       return this.RegulonList.filter((i) => i.ct == this.selectedCt)
     },
+    filteredAllRegulons() {
+      if (this.searchGeneName) {
+        return this.allRegulons.filter((i) => i.target === this.searchGeneName)
+      } else if (this.searchTfName) {
+        return this.allRegulons.filter((i) => i.tf === this.searchTfName)
+      } else if (!this.searchGeneName && !this.searchTfName) {
+        return []
+      } else {
+        return this.allRegulons
+      }
+    },
   },
   watch: {
     selectedRegulon() {
@@ -333,6 +396,14 @@ export default {
           cluster: this.selectedCt,
         }
       )
+      this.allRegulons = await ApiService.postCommand(
+        'deepmaps/api/queue/run-r/',
+        {
+          type: 'all-regulon',
+        }
+      )
+      this.allTfs = [...new Set(this.allRegulons.map((i) => i.tf))]
+      this.allGenes = [...new Set(this.allRegulons.map((i) => i.target))]
       await ApiService.sleep(1000)
       this.RegulonList = this.regulonData.regulons
       this.ExampleNodes = this.regulonData.nodes
@@ -351,6 +422,7 @@ export default {
       this.allIdents = await this.$axios
         .post('deepmaps/api/queue/idents/')
         .then((response) => response.data)
+      this.selectedCt = this.ctList[0]
       this.$nuxt.$loading.finish()
     },
     async updateSelectedRegulon() {
@@ -383,6 +455,12 @@ export default {
 
         this.$nuxt.$loading.finish()
       }
+    },
+    clearSearchGene() {
+      this.searchGeneName = ''
+    },
+    clearSearchTf() {
+      this.searchTfName = ''
     },
   },
 }

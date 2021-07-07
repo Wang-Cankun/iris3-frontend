@@ -218,8 +218,23 @@
         </v-row>
 
         <div v-if="deResult.length">
+          <v-row>
+            <v-col cols="6"
+              ><v-text-field
+                v-model="search"
+                prepend-icon="mdi-magnify"
+                label="Search"
+                single-line
+                dense
+              ></v-text-field
+            ></v-col>
+            <v-col cols="6"
+              ><v-btn small @click="dialog = true">Visualize</v-btn></v-col
+            >
+          </v-row>
           <v-data-table
             dense
+            :search="search"
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
             :height="tableHeight"
@@ -232,13 +247,63 @@
           >
           </v-data-table>
         </div></div></grid-item
-  ></v-card>
+    ><v-dialog v-model="dialog" max-width="75vw" height="90vh">
+      <v-card>
+        <v-card-title class="grey lighten-3 font-weight-bold">
+          Visualize differentially expressed genes
+        </v-card-title>
+
+        <v-card-text class="mt-4">
+          <v-row>
+            <v-col cols="3">
+              <v-tooltip top max-width="500px">
+                <template v-slot:activator="{ on }">
+                  <v-select
+                    v-model="selectedPlot"
+                    class="px-0"
+                    dense
+                    :items="allPlots"
+                    label="Plot type"
+                    return-object
+                    item-text="name"
+                    item-value="value"
+                    @mouseenter.native="on.mouseenter"
+                    @mouseleave.native="on.mouseleave"
+                  >
+                  </v-select>
+                </template>
+                <p>Plot type</p>
+              </v-tooltip>
+            </v-col>
+            <v-col cols="3"
+              ><v-btn small @click="setEcharts()">Plot</v-btn></v-col
+            >
+          </v-row>
+        </v-card-text>
+
+        <v-card height="65vh" elevation="0">
+          <v-divider></v-divider>
+          <ECharts ref="chart2" height="65vh" :option="optionVolcano" />
+        </v-card>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="dialog = false"> Close </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog></v-card
+  >
 </template>
 
 <script>
+import * as echarts from 'echarts'
+import { createComponent } from 'echarts-for-vue'
 import ApiService from '~/services/ApiService.js'
 
 export default {
+  components: {
+    ECharts: createComponent({ echarts }), // use as a component
+  },
   props: {
     idents: { type: Array, required: true },
     setting: {
@@ -250,6 +315,8 @@ export default {
   data() {
     return {
       hover: false,
+      dialog: false,
+      showPlot: false,
       headers: [
         { text: 'Gene', value: 'gene' },
         { text: 'pct.1', value: 'pct.1' },
@@ -270,17 +337,99 @@ export default {
       degAssay: 'RNA',
       degPvalue: 0.05,
       degPvalueList: [0.01, 0.05, 0.1],
-      tableHeight: 350,
+      tableHeight: 320,
       footerHeight: 240,
       sortBy: 'avg_log2FC',
       sortDesc: true,
       maxHeight: 300,
+      selectedPlot: { name: 'Volcano plot', value: 'volcano' },
+      allPlots: [{ name: 'Volcano plot', value: 'volcano' }],
     }
   },
 
+  computed: {
+    volcanoSrc() {
+      return this.deResult.map((item) => [
+        item.avg_log2FC,
+        -1 * Math.log10(item.p_val_adj).toFixed(3),
+        item.gene,
+        item.p_val_adj,
+      ])
+    },
+    optionVolcano() {
+      return {
+        hover: true,
+        toolbox: {
+          show: true,
+          feature: {
+            dataZoom: {},
+          },
+        },
+        tooltip: {
+          position: 'top',
+          backgroundColor: ['rgba(255,255,255,0.7)'],
+
+          formatter(obj) {
+            const value = obj.value
+            return (
+              '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+              'Gene: ' +
+              value[2] +
+              '</div><div>' +
+              'log2 Foldchange: ' +
+              value[0] +
+              '</div><div>' +
+              'adj. p-value: ' +
+              value[3] +
+              '<br>'
+            )
+          },
+        },
+        grid: {
+          left: 20,
+          right: 100,
+          bottom: 20,
+          containLabel: true,
+        },
+        xAxis: {
+          show: true,
+          name: 'log2 foldchange',
+          type: 'value',
+          nameGap: 16,
+          nameTextStyle: {
+            fontSize: 12,
+          },
+          splitLine: {
+            show: false,
+          },
+        },
+        yAxis: {
+          show: true,
+          name: '-log10(adj. p-value)',
+          type: 'value',
+          nameGap: 16,
+          nameTextStyle: {
+            fontSize: 12,
+          },
+          splitLine: {
+            show: false,
+          },
+        },
+        series: {
+          data: this.volcanoSrc,
+          type: 'scatter',
+          emphasis: {
+            focus: 'self',
+          },
+          encode: { x: 0, y: 1 },
+          symbolSize: 20,
+        },
+      }
+    },
+  },
   methods: {
     async run() {
-      if (this.ident1 !== this.ident2) {
+      if (this.ident1 !== this.ident2 && !this.ident1 && !this.ident2) {
         this.$nuxt.$loading.start()
         this.deResult = await ApiService.postCommand(
           'deepmaps/api/queue/run-r/',
@@ -301,7 +450,7 @@ export default {
         this.$nuxt.$loading.finish()
       } else {
         this.$notifier.showMessage({
-          content: 'Please select two different cell clusters',
+          content: 'Please select two different groups',
           color: 'error',
         })
       }
@@ -338,6 +487,22 @@ export default {
           this.ident2 = this.idents
         }
       })
+    },
+    setEcharts() {
+      this.showPlot = true
+      const dat = this.volcanoSrc.slice(0, 100)
+      this.$refs.chart2.inst.setOption({
+        series: [
+          {
+            type: 'scatter',
+            name: 'test',
+            data: dat,
+            showAllSymbol: false,
+            encode: { x: 0, y: 1 },
+          },
+        ],
+      })
+      this.$refs.chart2.inst.resize()
     },
   },
 }

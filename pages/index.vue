@@ -17,30 +17,18 @@
         <v-col cols="4"
           ><v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 8 : 2">
-              <v-card-title class="primary--text">View workspaces</v-card-title>
+              <v-card-title class="primary--text">New project</v-card-title>
               <v-card-text
                 style="overflow-y: auto; height: 12em"
                 class="body-1 font-weight-regular"
               >
-                <p>
-                  Workspaces connect your data to private projects powered by
-                  the cloud. Use Workspaces to save data, code, and results
-                  easily and securely.
-                </p>
+                <p>Create new analysis project.</p>
               </v-card-text>
               <v-card-actions class="mx-2">
                 <v-spacer /><a class="text-decoration-none" href="projects"
                   ><v-btn text>
                     <v-expand-transition>
-                      <div
-                        v-if="hover"
-                        class="
-                          d-flex
-                          transition-fast-in-fast-out
-                          v-card--reveal
-                        "
-                        style="height: 100%"
-                      >
+                      <div v-if="hover" class="d-flex" style="height: 100%">
                         Open
                       </div>
                     </v-expand-transition>
@@ -94,18 +82,30 @@
         <v-col cols="4"
           ><v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 8 : 2">
-              <v-card-title class="primary--text">Browse data</v-card-title>
+              <v-card-title class="primary--text">View workspaces</v-card-title>
               <v-card-text
                 style="overflow-y: auto; height: 12em"
                 class="body-1 font-weight-regular"
               >
-                <p>Access all public datasets collected in DeepMAPS.</p>
+                <p>
+                  Workspaces connect your data to private projects powered by
+                  the cloud. Use Workspaces to save data, code, and results
+                  easily and securely.
+                </p>
               </v-card-text>
               <v-card-actions class="mx-2">
                 <v-spacer /><a class="text-decoration-none" href="projects"
                   ><v-btn text>
                     <v-expand-transition>
-                      <div v-if="hover" class="d-flex" style="height: 100%">
+                      <div
+                        v-if="hover"
+                        class="
+                          d-flex
+                          transition-fast-in-fast-out
+                          v-card--reveal
+                        "
+                        style="height: 100%"
+                      >
                         Open
                       </div>
                     </v-expand-transition>

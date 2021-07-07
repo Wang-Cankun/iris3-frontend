@@ -32,7 +32,7 @@
     ></v-select>
 
     <div v-show="true">
-      <v-slider
+      <v-range-slider
         v-model="centralityThres"
         :max="centralityMinMax[1]"
         :min="centralityMinMax[0]"
@@ -40,7 +40,7 @@
         thumb-label
         label="Filter regulons by centrality"
         @change="updateSelectedByCentrality"
-      ></v-slider>
+      ></v-range-slider>
     </div>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       selected: [],
-      centralityThres: 0.2,
+      centralityThres: [0.2, 0.8],
     }
   },
   computed: {
@@ -69,17 +69,10 @@ export default {
       if (max === Infinity) {
         max = 1
       }
+      console.log(this.regulonList)
+      return [0, 1]
+    },
 
-      return [min, max]
-    },
-    meanCentrality() {
-      const mean = (this.centralityMinMax[0] + this.centralityMinMax[1]) * 0.5
-      if (mean < 0.5 && this.centralityMinMax[1] > 0.5) {
-        return 0.5
-      } else {
-        return mean
-      }
-    },
     all() {
       return this.regulonList.map((i) => i.tf)
     },
@@ -98,8 +91,13 @@ export default {
     },
   },
   mounted() {
-    this.updateSelectedByCentrality()
-    // this.selected = this.all.length > 10 ? this.all.slice(0, 5) : this.all
+    // this.updateSelectedByCentrality()
+    setTimeout(
+      () =>
+        (this.selected =
+          this.all.length > 10 ? this.all.slice(0, 5) : this.all),
+      600
+    )
   },
   methods: {
     iconSelect() {
@@ -127,7 +125,11 @@ export default {
     },
     updateSelectedByCentrality() {
       this.selected = this.regulonList
-        .filter((item) => item.centrality > this.centralityThres)
+        .filter(
+          (item) =>
+            item.centrality > this.centralityThres[0] &&
+            item.centrality < this.centralityThres[1]
+        )
         .map((item) => item.tf)
     },
   },
