@@ -276,7 +276,7 @@
               </v-tooltip>
             </v-col>
             <v-col cols="3"
-              ><v-btn small @click="setEcharts()">Plot</v-btn></v-col
+              ><v-btn small @click="setEcharts()">Draw</v-btn></v-col
             >
           </v-row>
         </v-card-text>
@@ -429,7 +429,17 @@ export default {
   },
   methods: {
     async run() {
-      if (this.ident1 !== this.ident2 && !this.ident1 && !this.ident2) {
+      // eslint-disable-next-line eqeqeq
+
+      const new1 = JSON.stringify(this.ident1)
+      const new2 = JSON.stringify(this.ident2)
+
+      if (!this.ident1.length || !this.ident2.length) {
+        this.$notifier.showMessage({
+          content: 'Please select two different groups',
+          color: 'error',
+        })
+      } else if (new1 !== new2) {
         this.$nuxt.$loading.start()
         this.deResult = await ApiService.postCommand(
           'deepmaps/api/queue/run-r/',
@@ -490,6 +500,7 @@ export default {
     },
     setEcharts() {
       this.showPlot = true
+      console.log(this.volcanoSrc)
       const dat = this.volcanoSrc.slice(0, 100)
       this.$refs.chart2.inst.setOption({
         series: [

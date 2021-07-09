@@ -219,7 +219,7 @@
             </v-col>
             <template v-if="selectedPlot.value === 'gsea'">
               <v-col v-if="selectedPlot.value === 'gsea'" cols="3"
-                ><v-btn small @click="runGseaPlot()">Calculate</v-btn></v-col
+                ><v-btn small @click="runGseaPlot()">Draw</v-btn></v-col
               >
               <v-card-text
                 ><v-row>
@@ -433,7 +433,7 @@ export default {
       allPlots: [
         { name: 'Dot plot', value: 'dot' },
         { name: 'Bar plot', value: 'bar' },
-        { name: 'GSEA enrichment plot', value: 'gsea' },
+        // { name: 'GSEA enrichment plot', value: 'gsea' },
       ],
       topN: 10,
       selectedPlotNumber: { name: 'Top N', value: 'top' },

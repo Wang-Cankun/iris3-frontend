@@ -7,6 +7,17 @@ description: 'DeepMAPS Changes'
 
 All notable changes to DeepMAPS will be documented in this page.
 
+
+## [0.13.0] - 07/08/2021
+
+### Added
+
+- New public dataset design
+- Search genes in regulon
+### Fixed
+
+- Coverage plot not showing when uploading data
+
 ## [0.12.0] - 07/01/2021
 
 ### Added

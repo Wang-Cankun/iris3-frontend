@@ -1,8 +1,9 @@
 <template>
   <v-row align="center" class="mt-12 mx-6">
     <v-col
-      cols="5"
-      offset="1"
+      lg="5"
+      md="12"
+      offset-lg="1"
       class="d-flex flex-column justify-start align-left"
     >
       <p class="text-h2 black--text font-weight-bold text-no-wrap">
@@ -14,18 +15,20 @@
       </p>
       <v-spacer />
       <v-row class="my-6">
-        <v-col cols="4"
+        <v-col xl="4" lg="12" md="4" sm="12"
           ><v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 8 : 2">
               <v-card-title class="primary--text">New project</v-card-title>
               <v-card-text
-                style="overflow-y: auto; height: 12em"
+                style="overflow-y: auto; max-height: 12em"
                 class="body-1 font-weight-regular"
               >
                 <p>Create new analysis project.</p>
               </v-card-text>
               <v-card-actions class="mx-2">
-                <v-spacer /><a class="text-decoration-none" href="projects"
+                <v-spacer /><a
+                  class="text-decoration-none"
+                  href="upload/single-rna"
                   ><v-btn text>
                     <v-expand-transition>
                       <div v-if="hover" class="d-flex" style="height: 100%">
@@ -41,21 +44,20 @@
             </v-card></v-hover
           ></v-col
         >
-        <v-col cols="4"
+        <v-col xl="4" lg="12" md="4" sm="12"
           ><v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 8 : 2">
               <v-card-title class="primary--text">View Examples</v-card-title>
               <v-card-text
-                style="overflow-y: auto; height: 12em"
+                style="overflow-y: auto; max-height: 12em"
                 class="body-1 font-weight-regular"
               >
-                <p>
-                  Browse our gallery of showcase datasets to see DeepMAPS
-                  functions.
-                </p>
+                <p>Browse our gallery of showcase datasets.</p>
               </v-card-text>
               <v-card-actions class="mx-2">
-                <v-spacer /><a class="text-decoration-none" href="projects"
+                <v-spacer /><a
+                  class="text-decoration-none"
+                  href="projects/examples"
                   ><v-btn text>
                     <v-expand-transition>
                       <div
@@ -79,19 +81,15 @@
             </v-card></v-hover
           ></v-col
         >
-        <v-col cols="4"
+        <v-col xl="4" lg="12" md="4" sm="12"
           ><v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 8 : 2">
               <v-card-title class="primary--text">View workspaces</v-card-title>
               <v-card-text
-                style="overflow-y: auto; height: 12em"
+                style="overflow-y: auto; max-height: 12em"
                 class="body-1 font-weight-regular"
               >
-                <p>
-                  Workspaces connect your data to private projects powered by
-                  the cloud. Use Workspaces to save data, code, and results
-                  easily and securely.
-                </p>
+                <p>Use workspaces to save private data and results.</p>
               </v-card-text>
               <v-card-actions class="mx-2">
                 <v-spacer /><a class="text-decoration-none" href="projects"
@@ -140,20 +138,20 @@
       >
     </v-col>
     <v-col
-      cols="4"
-      offset="1"
+      lg="4"
+      md="12"
+      offset-lg="1"
       class="d-flex flex-column justify-space-around align-left"
     >
       <v-row>
-        <v-col cols="6"
-          ><v-card height="24em" elevation="1" background-color="grey lighten-5"
-            ><v-img contain src="img/abstract1.jpg"></v-img> </v-card
+        <v-col xl="6" lg="12" md="6" sm="6"
+          ><v-card elevation="1" background-color="grey lighten-5"
+            ><v-img src="img/abstract1.jpg"></v-img> </v-card
         ></v-col>
-        <v-col cols="6"
-          ><v-card height="24em" elevation="1"
-            ><v-img contain src="img/abstract2.png"></v-img></v-card
+        <v-col xl="6" lg="12" md="6" sm="6"
+          ><v-card elevation="1"><v-img src="img/abstract2.png"></v-img></v-card
         ></v-col>
-        <v-col cols="6"
+        <v-col xl="6" lg="12" md="6" sm="6"
           ><v-card elevation="1">
             <v-carousel
               cycle
@@ -185,11 +183,11 @@
             </v-carousel></v-card
           ></v-col
         >
-        <v-col cols="6">
+        <v-col xl="6" lg="12" md="6" sm="6">
           <v-card elevation="1">
             <client-only>
               <div
-                style="overflow-y: auto; height: 12em"
+                style="overflow-y: auto; max-height: 12em"
                 class="viewer_options"
               >
                 <script

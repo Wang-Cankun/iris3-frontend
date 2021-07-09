@@ -13,6 +13,7 @@
     <v-btn to="/figure/particle">particle</v-btn>
     <v-btn to="/figure/clustergrammer">clustergrammer</v-btn>
     <v-btn to="/figure/volcano">volcano</v-btn>
+    <v-btn to="/figure/anatomogram">anatomogram</v-btn>
   </v-container>
 </template>
 
